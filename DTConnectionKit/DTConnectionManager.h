@@ -10,6 +10,8 @@
 #import "DTURLConnection.h"
 #import "DTQueue.h"
 
+@protocol DTConnectionManagerDelegate;
+
 @interface DTConnectionManager : NSObject {
 	NSMutableDictionary *connectionDictionary;
 	NSMutableArray *internalConnections;
@@ -25,8 +27,8 @@
 + (NSArray *)connections;
 + (id)delegateForConnection:(DTURLConnection *)connection;
 
-+ (DTURLConnection *)makeRequest:(NSURLRequest *)request delegate:(NSObject *)delegate;
-- (DTURLConnection *)makeRequest:(NSURLRequest *)request delegate:(NSObject *)delegate;
++ (DTURLConnection *)makeRequest:(NSURLRequest *)request delegate:(id<DTConnectionManagerDelegate>)delegate;
+- (DTURLConnection *)makeRequest:(NSURLRequest *)request delegate:(id<DTConnectionManagerDelegate>)delegate;
 - (void)connectionsCountChanged;
 
 - (BOOL)isConnectingToURL:(NSURL *)aUrl;
@@ -39,4 +41,6 @@
 - (void)connectionManager:(DTConnectionManager *)connectionManager connectionDidFinishLoading:(DTURLConnection *)connection;
 @optional
 - (void)connectionManager:(DTConnectionManager *)connectionManager connection:(DTURLConnection *)connection didReceiveResponse:(NSURLResponse *)response;
+- (void)connectionManager:(DTConnectionManager *)connectionManager didQueueRequest:(NSURLRequest *)request;
+- (void)connectionManager:(DTConnectionManager *)connectionManager didStartConnection:(DTURLConnection *)connection;
 @end

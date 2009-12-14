@@ -19,20 +19,25 @@ NSString *const DTConnectionControllerCompletedNotification = @"DTConnectionCont
 NSString *const DTConnectionControllerFailedNotification = @"DTConnectionControllerFailedNotification";
 NSString *const DTConnectionControllerResponseNotification = @"DTConnectionControllerResponseNotification";
 
+
+@interface DTConnectionController ()
+@property (nonatomic, readwrite) DTConnectionStatus status;
+@end
+
+
 @implementation DTConnectionController
 
-@synthesize delegate, type, returnedObject, returnedError, returnedResponse, isComplete;
+@synthesize delegate, type, returnedObject, returnedError, returnedResponse, status;
 
 - (id)init {
 	return [self initWithType:DTConnectionTypeGet];
 }
 
 - (id)initWithType:(DTConnectionType)aType {
-	return [self initWithDelegate:nil type:aType];	
+	return [self initWithType:aType delegate:nil];	
 }
 
-
-- (id)initWithDelegate:(NSObject<DTConnectionControllerDelegate> *)aDelegate type:(DTConnectionType)aType {
+- (id)initWithType:(DTConnectionType)aType delegate:(NSObject<DTConnectionControllerDelegate> *)aDelegate {
 	
 	if (!(self = [super init])) return nil;
 	
@@ -54,7 +59,7 @@ NSString *const DTConnectionControllerResponseNotification = @"DTConnectionContr
 	NSURLRequest *request = [self newRequest];
 	[DTConnectionManager makeRequest:request delegate:self];
 	[request release];
-	status = DTConnectionStatusStarted;
+	//self.status = DTConnectionStatusStarted;
 }
 
 #pragma mark -
@@ -68,7 +73,7 @@ NSString *const DTConnectionControllerResponseNotification = @"DTConnectionContr
 
 - (void)notifyDelegateAndObserversOfReturnedObject:(NSObject *)object {
 	
-	status = DTConnectionStatusComplete;
+	self.status = DTConnectionStatusComplete;
 	
 	if (!object) return;
 	
@@ -83,7 +88,7 @@ NSString *const DTConnectionControllerResponseNotification = @"DTConnectionContr
 
 - (void)notifyDelegateAndObserversOfReturnedError:(NSError *)error {
 	
-	status = DTConnectionStatusFailed;
+	self.status = DTConnectionStatusFailed;
 	
 	if (!error) return;
 	
@@ -98,7 +103,7 @@ NSString *const DTConnectionControllerResponseNotification = @"DTConnectionContr
 
 - (void)notifyDelegateAndObserversOfResponse:(NSURLResponse *)response {
 	
-	status = DTConnectionStatusResponded;
+	self.status = DTConnectionStatusResponded;
 	
 	if (!response) return;
 	
@@ -124,6 +129,14 @@ NSString *const DTConnectionControllerResponseNotification = @"DTConnectionContr
 
 - (void)connectionManager:(DTConnectionManager *)connectionManager connectionDidFinishLoading:(DTURLConnection *)connection {
 	[self notifyDelegateAndObserversOfReturnedObject:connection.data];
+}
+
+- (void)connectionManager:(DTConnectionManager *)connectionManager didStartConnection:(DTURLConnection *)connection {
+	self.status = DTConnectionStatusStarted;
+}
+
+- (void)connectionManager:(DTConnectionManager *)connectionManager didQueueRequest:(NSURLRequest *)request {
+	self.status = DTConnectionStatusQueued;
 }
 
 @end

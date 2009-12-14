@@ -18,6 +18,7 @@ typedef enum {
 
 typedef enum {
 	DTConnectionStatusNotStarted = 0,
+	DTConnectionStatusQueued,
 	DTConnectionStatusStarted,
 	DTConnectionStatusResponded,
 	DTConnectionStatusComplete,
@@ -54,7 +55,7 @@ extern NSString *const DTConnectionControllerResponseNotification;
 #pragma mark -
 #pragma mark For external classes to use
 
-- (id)initWithDelegate:(NSObject<DTConnectionControllerDelegate> *)aDelegate type:(DTConnectionType)aType;
+- (id)initWithType:(DTConnectionType)aType delegate:(NSObject<DTConnectionControllerDelegate> *)aDelegate;
 - (id)initWithType:(DTConnectionType)aType;
 - (void)start;
 

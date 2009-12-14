@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface DTConnectionKitAppDelegate : NSObject <UIApplicationDelegate> {
+	UINavigationController *nav;
     UIWindow *window;
 }
 
