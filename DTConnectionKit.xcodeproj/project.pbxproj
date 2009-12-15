@@ -12,8 +12,6 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		24083D4310CF9A07009B758E /* DTConnectionManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 24083D3C10CF9A07009B758E /* DTConnectionManager.m */; };
-		24083D4410CF9A07009B758E /* DTGenericRestCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 24083D3E10CF9A07009B758E /* DTGenericRestCommand.m */; };
-		24083D4510CF9A07009B758E /* DTRestCommand.m in Sources */ = {isa = PBXBuildFile; fileRef = 24083D4010CF9A07009B758E /* DTRestCommand.m */; };
 		24083D4610CF9A07009B758E /* DTURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 24083D4210CF9A07009B758E /* DTURLConnection.m */; };
 		249AC73210D511B300A757BB /* DTOrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 249AC71F10D511B300A757BB /* DTOrderedDictionary.m */; };
 		249AC73310D511B300A757BB /* DTQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 249AC72110D511B300A757BB /* DTQueue.m */; };
@@ -41,10 +39,6 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		24083D3B10CF9A07009B758E /* DTConnectionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTConnectionManager.h; sourceTree = "<group>"; };
 		24083D3C10CF9A07009B758E /* DTConnectionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConnectionManager.m; sourceTree = "<group>"; };
-		24083D3D10CF9A07009B758E /* DTGenericRestCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTGenericRestCommand.h; sourceTree = "<group>"; };
-		24083D3E10CF9A07009B758E /* DTGenericRestCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTGenericRestCommand.m; sourceTree = "<group>"; };
-		24083D3F10CF9A07009B758E /* DTRestCommand.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTRestCommand.h; sourceTree = "<group>"; };
-		24083D4010CF9A07009B758E /* DTRestCommand.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTRestCommand.m; sourceTree = "<group>"; };
 		24083D4110CF9A07009B758E /* DTURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTURLConnection.h; sourceTree = "<group>"; };
 		24083D4210CF9A07009B758E /* DTURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTURLConnection.m; sourceTree = "<group>"; };
 		249AC71E10D511B300A757BB /* DTOrderedDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTOrderedDictionary.h; sourceTree = "<group>"; };
@@ -117,10 +111,6 @@
 			children = (
 				24083D3B10CF9A07009B758E /* DTConnectionManager.h */,
 				24083D3C10CF9A07009B758E /* DTConnectionManager.m */,
-				24083D3D10CF9A07009B758E /* DTGenericRestCommand.h */,
-				24083D3E10CF9A07009B758E /* DTGenericRestCommand.m */,
-				24083D3F10CF9A07009B758E /* DTRestCommand.h */,
-				24083D4010CF9A07009B758E /* DTRestCommand.m */,
 				24083D4110CF9A07009B758E /* DTURLConnection.h */,
 				24083D4210CF9A07009B758E /* DTURLConnection.m */,
 				249AC75E10D5137A00A757BB /* DTConnectionController.h */,
@@ -269,8 +259,6 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* DTConnectionKitAppDelegate.m in Sources */,
 				24083D4310CF9A07009B758E /* DTConnectionManager.m in Sources */,
-				24083D4410CF9A07009B758E /* DTGenericRestCommand.m in Sources */,
-				24083D4510CF9A07009B758E /* DTRestCommand.m in Sources */,
 				24083D4610CF9A07009B758E /* DTURLConnection.m in Sources */,
 				249AC73210D511B300A757BB /* DTOrderedDictionary.m in Sources */,
 				249AC73310D511B300A757BB /* DTQueue.m in Sources */,
