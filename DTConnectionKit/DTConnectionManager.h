@@ -16,11 +16,26 @@
 	NSMutableDictionary *connectionDictionary;
 	NSMutableArray *internalConnections;
 	DTQueue *requestQueue, *delegateQueue;
-	NSInteger maxConnections;
+	NSInteger maxConnections, externalConnections;
 }
 @property (nonatomic, assign) NSInteger maxConnections;
 @property (nonatomic, readonly) NSArray *delegates;
 @property (nonatomic, readonly) NSArray *connections;
+
+/*!
+ Removes one from the external connections counter.
+ 
+ If you perform connections outside of the connection manager, use this method to make the manger
+ keep track of these, so that the activity indicator displays for these separate connections.
+ */
+- (void)addExternalConnection;
+
+/*!
+ Removes one from the external connections counter.
+ 
+ @see -(void)addExternalConnection
+ */
+- (void)removeExternalConnection;
 
 /*!
  Returns the shared connection manager object for the system.

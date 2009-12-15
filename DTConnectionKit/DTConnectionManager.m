@@ -135,7 +135,7 @@ static DTConnectionManager *sharedInstance = nil;
 	if (self.maxConnections != 0 && [requestQueue count] > 0 && [internalConnections count] < self.maxConnections)
 		[self makeRequest:[requestQueue pop] delegate:[delegateQueue pop]];
 	
-	if ([[connectionDictionary allKeys] count] > 0)
+	if (([[connectionDictionary allKeys] count] + externalConnections) > 0)
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	else
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -147,6 +147,18 @@ static DTConnectionManager *sharedInstance = nil;
 			return YES;
 	
 	return NO;
+}
+
+- (void)addExternalConnection {
+	externalConnections++;
+	[self connectionsCountChanged];
+}
+
+- (void)removeExternalConnection {
+	if (externalConnections > 0) {
+		externalConnections--;
+		[self connectionsCountChanged];
+	}
 }
 
 #pragma mark -
