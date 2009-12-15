@@ -12,8 +12,9 @@
 
 @interface DTConnectionManager ()
 - (NSArray *)delegates;
-- (id)delegateForConnection:(DTURLConnection *)connection;
 - (NSArray *)connections;
+- (id<DTConnectionManagerDelegate>)delegateForConnection:(DTURLConnection *)connection;
+- (void)connectionsCountChanged;
 @end
 
 static DTConnectionManager *sharedInstance = nil;
@@ -85,11 +86,11 @@ static DTConnectionManager *sharedInstance = nil;
 	return [connectionDictionary allValues];
 }
 
-+ (id)delegateForConnection:(DTURLConnection *)connection {
++ (id<DTConnectionManagerDelegate>)delegateForConnection:(DTURLConnection *)connection {
 	return [[DTConnectionManager sharedConnectionManager] delegateForConnection:connection];
 }
 
-- (id)delegateForConnection:(DTURLConnection *)connection {
+- (id<DTConnectionManagerDelegate>)delegateForConnection:(DTURLConnection *)connection {
 	return [connectionDictionary objectForKey:connection.identifier];
 }
 
