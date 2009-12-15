@@ -17,7 +17,7 @@
 
 @implementation DTConnectionKitExampleViewController
 
-@synthesize textView;
+@synthesize textView, addButton, removeButton, spacer;
 
 - (id)init {
 	if (!(self = [self initWithNibName:@"DTConnectionKitExampleView" bundle:nil])) return nil;
@@ -34,6 +34,8 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+	
+	self.navigationController.toolbarHidden = NO;
 	
 	[[DTConnectionManager sharedConnectionManager] setMaxConnections:5];
 	
@@ -61,6 +63,8 @@
 		[connection start];
 		[connection release];
 	}
+	
+	self.toolbarItems = [NSArray arrayWithObjects:self.addButton, self.spacer, self.removeButton, nil];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -114,6 +118,15 @@
 	urlString = [urlString stringByReplacingOccurrencesOfString:@".co.uk" withString:@""];
 	return urlString;
 	
+}
+
+
+- (IBAction)addConnection:(id)sender {
+	[[DTConnectionManager sharedConnectionManager] addExternalConnection];
+}
+
+- (IBAction)removeConnection:(id)sender {
+	[[DTConnectionManager sharedConnectionManager] removeExternalConnection];
 }
 
 #pragma mark -

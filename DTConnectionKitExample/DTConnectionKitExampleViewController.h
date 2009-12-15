@@ -11,6 +11,10 @@
 
 @interface DTConnectionKitExampleViewController : UIViewController <DTConnectionControllerDelegate> {
 	UITextView *textView;
+	UIBarButtonItem *addButton, *removeButton, *spacer;
 }
 @property (nonatomic, retain) IBOutlet UITextView *textView;
+@property (nonatomic, retain) IBOutlet UIBarButtonItem *addButton, *removeButton, *spacer;
+- (IBAction)addConnection:(id)sender;
+- (IBAction)removeConnection:(id)sender;
 @end
