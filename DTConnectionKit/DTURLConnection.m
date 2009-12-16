@@ -22,11 +22,7 @@
 		return nil;
 	
 	data = [[NSData alloc] init];
-	
-	CFUUIDRef uuidObj = CFUUIDCreate(nil);
-	identifier = (NSString*)CFUUIDCreateString(nil, uuidObj);
-	CFRelease(uuidObj);
-	
+	identifier = [[[NSProcessInfo processInfo] globallyUniqueString] copy];
 	URL = [[request URL] retain];
 		
 	return self;
