@@ -12,8 +12,8 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="29"/>
 			<integer value="1"/>
+			<integer value="16"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -83,7 +83,7 @@
 							<object class="IBUILabel" id="102002071">
 								<reference key="NSNextResponder" ref="959478509"/>
 								<int key="NSvFlags">274</int>
-								<string key="NSFrameSize">{120, 15}</string>
+								<string key="NSFrameSize">{120, 40}</string>
 								<reference key="NSSuperview" ref="959478509"/>
 								<bool key="IBUIOpaque">NO</bool>
 								<bool key="IBUIClipsSubviews">YES</bool>
@@ -100,7 +100,7 @@
 								<float key="IBUIMinimumFontSize">10</float>
 							</object>
 						</object>
-						<string key="NSFrame">{{12, 15}, {120, 15}}</string>
+						<string key="NSFrame">{{12, 2}, {120, 40}}</string>
 						<reference key="NSSuperview" ref="1023736483"/>
 						<object class="NSColor" key="IBUIBackgroundColor">
 							<int key="NSColorSpace">3</int>
@@ -128,7 +128,7 @@
 						<reference key="IBUIToolbar" ref="1023736483"/>
 					</object>
 					<object class="IBUIBarButtonItem" id="594969676">
-						<float key="IBUIWidth">30</float>
+						<float key="IBUIWidth">25</float>
 						<reference key="IBUIToolbar" ref="1023736483"/>
 						<int key="IBUISystemItemIdentifier">6</int>
 					</object>

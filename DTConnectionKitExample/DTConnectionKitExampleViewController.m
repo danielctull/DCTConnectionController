@@ -125,6 +125,10 @@
 	
 }
 
+- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
+	return YES;
+}
+
 - (void)connectionCountChanged:(NSNotification *)notification {
 	self.connectionsLabel.text = [NSString stringWithFormat:@"Connections: %i", [DTConnectionManager sharedConnectionManager].connectionCount];
 }
