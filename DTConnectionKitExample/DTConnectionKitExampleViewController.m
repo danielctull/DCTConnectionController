@@ -17,7 +17,7 @@
 
 @implementation DTConnectionKitExampleViewController
 
-@synthesize textView, addButton, removeButton, spacer;
+@synthesize textView, toolbar;
 
 - (id)init {
 	if (!(self = [self initWithNibName:@"DTConnectionKitExampleView" bundle:nil])) return nil;
@@ -64,7 +64,7 @@
 		[connection release];
 	}
 	
-	self.toolbarItems = [NSArray arrayWithObjects:self.addButton, self.spacer, self.removeButton, nil];
+	self.toolbarItems = self.toolbar.items;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
