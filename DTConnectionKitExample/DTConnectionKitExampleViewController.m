@@ -80,10 +80,8 @@
 	//[df setDateFormat:@"YYYY-MM-dd HH:mm:ss.SSS"];
 	[df setDateFormat:@"HH:mm:ss.SSS"];
 	NSString *dateString = [df stringFromDate:[NSDate date]]; 
-	
-	NSString *urlString = [[connectionController.URL absoluteString] substringFromIndex:11];
-	urlString = [urlString substringToIndex:[urlString length]-1];
-	
+	[df release];
+		
 	NSString *newLine = @"";
 	if ([self.textView.text length] > 0) {
 		newLine = @"\n";

@@ -115,10 +115,6 @@ static DTConnectionManager *sharedInstance = nil;
 
 - (DTURLConnection *)makeRequest:(NSURLRequest *)request delegate:(id<DTConnectionManagerDelegate>)delegate {
 	
-	DTConnectionController *connectionController;
-	if ([(NSObject *)delegate isKindOfClass:[DTConnectionController class]])
-		connectionController = (DTConnectionController *)delegate;
-	
 	if (self.maxConnections != 0 && [internalConnections count] >= self.maxConnections) {
 		[requestQueue push:request];
 		[delegateQueue push:delegate];
