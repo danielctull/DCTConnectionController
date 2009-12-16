@@ -10,7 +10,15 @@
 #import "DTURLConnection.h"
 #import "DTQueue.h"
 
+#pragma mark Notification Names
+
+extern NSString *const DTConnectionManagerConnectionCountChangedNotification;
+
+#pragma mark -
+
 @protocol DTConnectionManagerDelegate;
+
+#pragma mark -
 
 @interface DTConnectionManager : NSObject {
 	NSMutableDictionary *connectionDictionary;
@@ -21,7 +29,7 @@
 @property (nonatomic, assign) NSInteger maxConnections;
 @property (nonatomic, readonly) NSArray *delegates;
 @property (nonatomic, readonly) NSArray *connections;
-@property (nonatomic, readonly) NSInteger externalConnectionsCount;
+@property (nonatomic, readonly) NSInteger connectionCount;
 
 /*!
  Removes one from the external connections counter.

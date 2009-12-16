@@ -28,6 +28,7 @@
 }
 
 - (void)dealloc {
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	[textView release];
     [super dealloc];
 }
@@ -38,6 +39,11 @@
 	self.navigationController.toolbarHidden = NO;
 	
 	[[DTConnectionManager sharedConnectionManager] setMaxConnections:5];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(connectionCountChanged:) 
+												 name:DTConnectionManagerConnectionCountChangedNotification 
+											   object:nil];
 	
 	NSArray *urls = [NSArray arrayWithObjects:
 					 @"http://www.bbc.co.uk/", 
@@ -65,6 +71,7 @@
 	}
 	
 	self.toolbarItems = self.toolbar.items;
+	
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
@@ -120,17 +127,17 @@
 	
 }
 
+- (void)connectionCountChanged:(NSNotification *)notification {
+	self.connectionsLabel.text = [NSString stringWithFormat:@"Connections: %i", [DTConnectionManager sharedConnectionManager].connectionCount];
+}
+
 
 - (IBAction)addConnection:(id)sender {
-	DTConnectionManager *connectionManager = [DTConnectionManager sharedConnectionManager];
-	[connectionManager addExternalConnection];
-	self.connectionsLabel.text = [NSString stringWithFormat:@"External Connections: %i", connectionManager.externalConnectionsCount];
+	[[DTConnectionManager sharedConnectionManager] addExternalConnection];
 }
 
 - (IBAction)removeConnection:(id)sender {
-	DTConnectionManager *connectionManager = [DTConnectionManager sharedConnectionManager];
-	[connectionManager removeExternalConnection];
-	self.connectionsLabel.text = [NSString stringWithFormat:@"External Connections: %i", connectionManager.externalConnectionsCount];
+	[[DTConnectionManager sharedConnectionManager] removeExternalConnection];
 }
 
 #pragma mark -

@@ -10,6 +10,9 @@
 #import "DTConnectionManager.h"
 #import "DTConnectionController.h"
 
+
+NSString *const DTConnectionManagerConnectionCountChangedNotification = @"DTConnectionManagerConnectionCountChangedNotification";
+
 @interface DTConnectionManager ()
 - (NSArray *)delegates;
 - (NSArray *)connections;
@@ -21,7 +24,7 @@ static DTConnectionManager *sharedInstance = nil;
 
 @implementation DTConnectionManager
 
-@synthesize maxConnections, externalConnectionsCount;
+@synthesize maxConnections;
 
 #pragma mark -
 #pragma mark Methods for Singleton use
@@ -102,6 +105,10 @@ static DTConnectionManager *sharedInstance = nil;
 	return [NSArray arrayWithArray:internalConnections];
 }
 
+- (NSInteger)connectionCount {
+	return [self.connections count] + externalConnectionsCount;
+}
+
 + (DTURLConnection *)makeRequest:(NSURLRequest *)request delegate:(id<DTConnectionManagerDelegate>)delegate {
 	return [[DTConnectionManager sharedConnectionManager] makeRequest:request delegate:delegate];
 }
@@ -139,6 +146,8 @@ static DTConnectionManager *sharedInstance = nil;
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	else
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionManagerConnectionCountChangedNotification object:self];
 }
 
 - (BOOL)isConnectingToURL:(NSURL *)aUrl {
