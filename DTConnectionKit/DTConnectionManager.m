@@ -21,7 +21,7 @@ static DTConnectionManager *sharedInstance = nil;
 
 @implementation DTConnectionManager
 
-@synthesize maxConnections;
+@synthesize maxConnections, externalConnectionsCount;
 
 #pragma mark -
 #pragma mark Methods for Singleton use
@@ -135,7 +135,7 @@ static DTConnectionManager *sharedInstance = nil;
 	if (self.maxConnections != 0 && [requestQueue count] > 0 && [internalConnections count] < self.maxConnections)
 		[self makeRequest:[requestQueue pop] delegate:[delegateQueue pop]];
 	
-	if (([[connectionDictionary allKeys] count] + externalConnections) > 0)
+	if (([[connectionDictionary allKeys] count] + externalConnectionsCount) > 0)
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	else
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
@@ -150,13 +150,13 @@ static DTConnectionManager *sharedInstance = nil;
 }
 
 - (void)addExternalConnection {
-	externalConnections++;
+	externalConnectionsCount++;
 	[self connectionsCountChanged];
 }
 
 - (void)removeExternalConnection {
-	if (externalConnections > 0) {
-		externalConnections--;
+	if (externalConnectionsCount > 0) {
+		externalConnectionsCount--;
 		[self connectionsCountChanged];
 	}
 }

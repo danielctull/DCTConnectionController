@@ -17,7 +17,7 @@
 
 @implementation DTConnectionKitExampleViewController
 
-@synthesize textView, toolbar;
+@synthesize textView, toolbar, connectionsLabel;
 
 - (id)init {
 	if (!(self = [self initWithNibName:@"DTConnectionKitExampleView" bundle:nil])) return nil;
@@ -122,11 +122,15 @@
 
 
 - (IBAction)addConnection:(id)sender {
-	[[DTConnectionManager sharedConnectionManager] addExternalConnection];
+	DTConnectionManager *connectionManager = [DTConnectionManager sharedConnectionManager];
+	[connectionManager addExternalConnection];
+	self.connectionsLabel.text = [NSString stringWithFormat:@"External Connections: %i", connectionManager.externalConnectionsCount];
 }
 
 - (IBAction)removeConnection:(id)sender {
-	[[DTConnectionManager sharedConnectionManager] removeExternalConnection];
+	DTConnectionManager *connectionManager = [DTConnectionManager sharedConnectionManager];
+	[connectionManager removeExternalConnection];
+	self.connectionsLabel.text = [NSString stringWithFormat:@"External Connections: %i", connectionManager.externalConnectionsCount];
 }
 
 #pragma mark -

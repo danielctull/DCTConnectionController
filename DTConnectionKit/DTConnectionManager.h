@@ -16,11 +16,12 @@
 	NSMutableDictionary *connectionDictionary;
 	NSMutableArray *internalConnections;
 	DTQueue *requestQueue, *delegateQueue;
-	NSInteger maxConnections, externalConnections;
+	NSInteger maxConnections, externalConnectionsCount;
 }
 @property (nonatomic, assign) NSInteger maxConnections;
 @property (nonatomic, readonly) NSArray *delegates;
 @property (nonatomic, readonly) NSArray *connections;
+@property (nonatomic, readonly) NSInteger externalConnectionsCount;
 
 /*!
  Removes one from the external connections counter.
