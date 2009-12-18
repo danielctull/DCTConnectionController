@@ -16,7 +16,11 @@ typedef enum {
 	DTConnectionTypeGet = 0,	/*!< Uses a GET connection. */
 	DTConnectionTypePost,		/*!< Uses a POST connection. */
 	DTConnectionTypePut,		/*!< Uses a PUT connection. */
-	DTConnectionTypeDelete		/*!< Uses a DELETE connection. */
+	DTConnectionTypeDelete,		/*!< Uses a DELETE connection. */
+	DTConnectionTypeOptions,	/*!< Uses a OPTIONS connection. */
+	DTConnectionTypeHead,		/*!< Uses a HEAD connection. */
+	DTConnectionTypeTrace,		/*!< Uses a TRACE connection. */
+	DTConnectionTypeConnect		/*!< Uses a CONNECT connection. */
 } DTConnectionType;
 
 /*!
@@ -98,90 +102,92 @@ extern NSString *const DTConnectionControllerResponseNotification;
 #pragma mark -
 #pragma mark For external classes to use
 
-/*!
- Initialises a newly created DTConnectionController with the given type and delegate.
- @return A DTConnectionController object initialised with aType and aDelegate.
+/** Initialises a newly created DTConnectionController with the given type and delegate.
+
+ jdsfkljskldfjsjfklsjf
+
  @param aType The type required for the connection.
  @param aDelegate The delegate for the connection.
+ @return A DTConnectionController object initialised with type, aType and delegate, aDelegate.
+
  */
 - (id)initWithType:(DTConnectionType)aType delegate:(NSObject<DTConnectionControllerDelegate> *)aDelegate;
 
-/*!
- Initialises a newly created DTConnectionController with the given type.
- @return A DTConnectionController object initialised with aType.
+/** Initialises a newly created DTConnectionController with the given type.
+ 
  @param aType The type required for the connection.
+ @return A DTConnectionController object initialised with aType.
+ 
  */
 - (id)initWithType:(DTConnectionType)aType;
 
-/*!
- This method starts the connection.
+/** This method starts the connection.
  
  Calling this uses the request returned from -newRequest to pass to DTConnectionManager. 
+
  */
 - (void)start;
 
 #pragma mark -
 #pragma mark For subclasses to use
 
-/*!
+/**
  This method should be used in subclasses to give custom requests.
- @return A URL request which will form the connection.
  
  Calling super from the subclass will give a mutable request of type 'type', this is the prefered way 
  to get the request object in subclasses.
+ 
+ @return A URL request which will form the connection.
  */
 - (NSMutableURLRequest *)newRequest;
 
-/*!
- Sends the delegate a message that the conenction has returned this object and sends out a notification.
+/** Sends the delegate a message that the conenction has returned this object and sends out a notification.￼
 
- Subclasses should handle the incoming data, creating a wrapper or data object for it for the delegate
- and observers to use and then call this method with that created object.
+ Subclasses should handle the incoming data, creating a wrapper or data object for it for the delegate and observers to use and then call this method with that created object.
+
  @param object The object to be sent to the delegate and stored in returnedObject.
- */
+
+*/
 - (void)notifyDelegateAndObserversOfReturnedObject:(NSObject *)object;
 
-/*!
- Sends the delegate a message that the conenction has failed, with the given error.
+/** Sends the delegate a message that the conenction has failed, with the given error.
  
  By default this is called when an error returns from DTConnectionManager. Subclasses could utilise this
  by interpretating the error from the connection and packaging an error more meaningful to the delegate and observers.
+ 
  @param error The error to be sent to the delegate and stored in returnedError.
  */
 - (void)notifyDelegateAndObserversOfReturnedError:(NSError *)error;
 
-/*!
- Sends the delegate a message that the conenction has received a response, with the given URL response.
+/** Sends the delegate a message that the conenction has received a response, with the given URL response.
+ 
+By default this is called when a response returns from DTConnectionManager.
  @param response The URL response to be sent to the delegate and stored in returnedResponse.
  
- By default this is called when a response returns from DTConnectionManager.
  */
 - (void)notifyDelegateAndObserversOfResponse:(NSURLResponse *)response;
 
 @end
 
 #pragma mark -
-/*!
- The delegate of DTConnectionController must adopt the DTConnectionControllerDelegate protocol, although all the methods 
+/** The delegate of DTConnectionController must adopt the DTConnectionControllerDelegate protocol, although all the methods 
  are optional. They allow the delegate to handle only certain types of events, although connectionController:didSucceedWithObject: 
  and connectionController:didFailWithError: should both be handled to take advantage of the data and handle any occuring errors.
  */
 @protocol DTConnectionControllerDelegate
 @optional
-/*!
- Tells the delegate the connection has succeeded.
+/** Tells the delegate the connection has succeeded.
  @param connectionController The connection controller informing the delegate of the event.
  @param object The object returned by the connection.
  */
 - (void)connectionController:(DTConnectionController *)connectionController didSucceedWithObject:(id)object;
-/*!
- Tells the delegate the connection has failed.
+/** Tells the delegate the connection has failed.
+ 
  @param connectionController The connection controller informing the delegate of the event.
  @param error The error received from the server.
  */
 - (void)connectionController:(DTConnectionController *)connectionController	didFailWithError:(NSError *)error;
-/*!
- Tells the delegate a response has been received from the server.
+/** Tells the delegate a response has been received from the server.
  
  @param connectionController The connection controller informing the delegate of the event.
  @param response The received response.

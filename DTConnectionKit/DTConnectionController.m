@@ -12,7 +12,11 @@ NSString * const DTConnectionTypeStrings[] = {
 	@"GET",
 	@"POST",
 	@"PUT",
-	@"DELETE"
+	@"DELETE",
+	@"OPTIONS",
+	@"HEAD",
+	@"TRACE",
+	@"CONNECT"
 };
 
 NSString *const DTConnectionControllerCompletedNotification = @"DTConnectionControllerCompletedNotification";
