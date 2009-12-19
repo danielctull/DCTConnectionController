@@ -89,8 +89,8 @@ static DTConnectionManager *sharedInstance = nil;
 	return [connectionDictionary count] + externalConnectionsCount;
 }
 
-- (NSData *)cachedDataForURL:(NSURL *)URL {
-	return nil;
+- (NSString *)makeRequest:(NSURLRequest *)request delegate:(id<DTConnectionManagerDelegate>)delegate {
+	return [self makeRequest:request delegate:delegate identifier:nil];
 }
 
 - (void)cancelConnectionWithID:(NSString *)connectionID {
@@ -109,9 +109,46 @@ static DTConnectionManager *sharedInstance = nil;
 	}
 }
 
-- (NSString *)makeRequest:(NSURLRequest *)request delegate:(id<DTConnectionManagerDelegate>)delegate {
-	return [self makeRequest:request delegate:delegate identifier:nil];
+- (NSURL *)URLForConnectionID:(NSString *)connectionID {
+	NSURL *URL = ((DTURLConnection *)[connectionDictionary objectForKey:connectionID]).URL;
+	
+	if (URL) return URL;
+	
+	return [(NSURLRequest *)[queuedRequests objectForKey:connectionID] URL];
 }
+
+- (BOOL)isConnectingToURL:(NSURL *)aUrl {
+	for (DTURLConnection *conn in [connectionDictionary allValues])
+		if ([[conn.URL absoluteString] isEqualToString:[aUrl absoluteString]])
+			return YES;
+	
+	return NO;
+}
+
+#pragma mark -
+#pragma mark External Connections methods
+
+- (void)addExternalConnection {
+	externalConnectionsCount++;
+	[self connectionsCountChanged];
+}
+
+- (void)removeExternalConnection {
+	if (externalConnectionsCount > 0) {
+		externalConnectionsCount--;
+		[self connectionsCountChanged];
+	}
+}
+
+#pragma mark -
+#pragma mark Caching methods
+
+- (NSData *)cachedDataForURL:(NSURL *)URL {
+	return nil;
+}
+
+#pragma mark -
+#pragma mark Private methods
 
 - (NSString *)makeRequest:(NSURLRequest *)request delegate:(id<DTConnectionManagerDelegate>)delegate identifier:(NSString *)identifier {
 	
@@ -145,13 +182,15 @@ static DTConnectionManager *sharedInstance = nil;
 		
 		NSString *identifier = [requestQueue pop];
 		
-		NSURLRequest *request = [queuedRequests objectForKey:identifier];
+		NSURLRequest *request = [[queuedRequests objectForKey:identifier] retain];
 		[queuedRequests removeObjectForKey:identifier];
 		
-		id<DTConnectionManagerDelegate> delegate = [queuedDelegates objectForKey:identifier];
+		id<DTConnectionManagerDelegate> delegate = [[queuedDelegates objectForKey:identifier] retain];
 		[queuedDelegates removeObjectForKey:identifier];
 		
 		[self makeRequest:request delegate:delegate];		
+		[request release];
+		[delegate release];
 	}
 	
 	if (([[connectionDictionary allKeys] count] + externalConnectionsCount) > 0)
@@ -160,34 +199,6 @@ static DTConnectionManager *sharedInstance = nil;
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionManagerConnectionCountChangedNotification object:self];
-}
-
-- (NSURL *)URLForConnectionID:(NSString *)connectionID {
-	NSURL *URL = ((DTURLConnection *)[connectionDictionary objectForKey:connectionID]).URL;
-	
-	if (URL) return URL;
-	
-	return [(NSURLRequest *)[queuedRequests objectForKey:connectionID] URL];
-}
-
-- (BOOL)isConnectingToURL:(NSURL *)aUrl {
-	for (DTURLConnection *conn in [connectionDictionary allValues])
-		if ([[conn.URL absoluteString] isEqualToString:[aUrl absoluteString]])
-			return YES;
-	
-	return NO;
-}
-
-- (void)addExternalConnection {
-	externalConnectionsCount++;
-	[self connectionsCountChanged];
-}
-
-- (void)removeExternalConnection {
-	if (externalConnectionsCount > 0) {
-		externalConnectionsCount--;
-		[self connectionsCountChanged];
-	}
 }
 
 #pragma mark -

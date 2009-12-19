@@ -65,15 +65,19 @@ NSString *const DTConnectionHeaderCacheControl = @"Cache-Control";
 #pragma mark For subclasses to use
 
 - (void)didReceiveConnectionError:(NSError *)error {
+	[self notifyDelegateAndObserversOfReturnedError:error];
 }
 
 - (void)didReceiveConnectionResponse:(NSURLResponse *)response {
+	[self notifyDelegateAndObserversOfResponse:response];
 }
 
 - (void)didReceiveConnectionData:(NSData *)data {
+	[self notifyDelegateAndObserversOfReturnedObject:data];
 }
 
 - (void)didRecieveCachedData:(NSData *)data {
+	[self notifyDelegateAndObserversOfReturnedObject:data];
 }
 
 - (NSMutableURLRequest *)newRequest {
