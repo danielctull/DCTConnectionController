@@ -10,6 +10,7 @@
 
 @interface DTURLConnection ()
 @property (readwrite, copy) NSData *data;
+@property (readwrite, copy) NSString *identifier;
 @end
 
 @implementation DTURLConnection
@@ -18,15 +19,21 @@
 
 - (id)initWithRequest:(NSURLRequest *)request delegate:(id)delegate startImmediately:(BOOL)startImmediately {
 	
-	if (!(self = [super initWithRequest:request delegate:delegate startImmediately:startImmediately]))
-		return nil;
+	if (!(self = [super initWithRequest:request delegate:delegate startImmediately:startImmediately])) return nil;
 	
 	data = [[NSData alloc] init];
-	identifier = [[[NSProcessInfo processInfo] globallyUniqueString] copy];
+	self.identifier = [[NSProcessInfo processInfo] globallyUniqueString];
 	URL = [[request URL] retain];
 		
 	return self;
+}
+
+- (id)initWithRequest:(NSURLRequest *)request delegate:(id)delegate identifier:(NSString *)anIdentifier {
+	if (!(self = [self initWithRequest:request delegate:delegate startImmediately:YES])) return nil;
 	
+	if (anIdentifier) self.identifier = anIdentifier;
+	
+	return self;
 }
 
 - (id)initWithRequest:(NSURLRequest *)request delegate:(id)delegate {

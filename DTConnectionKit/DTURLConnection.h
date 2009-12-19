@@ -21,6 +21,8 @@
 @property (readonly, copy) NSString *identifier;
 @property (readonly, retain) NSURL *URL;
 
+- (id)initWithRequest:(NSURLRequest *)request delegate:(id)delegate identifier:(NSString *)anIdentifier;
+
 - (void)resetDataLength;
 - (void)appendData:(NSData *)someData;
 

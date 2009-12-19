@@ -23,12 +23,6 @@ NSString *const DTConnectionControllerCompletedNotification = @"DTConnectionCont
 NSString *const DTConnectionControllerFailedNotification = @"DTConnectionControllerFailedNotification";
 NSString *const DTConnectionControllerResponseNotification = @"DTConnectionControllerResponseNotification";
 
-
-
-
-
-
-
 NSString *const DTConnectionHeaderIfModifiedSince = @"If-Modified-Since";
 NSString *const DTConnectionHeaderIfNoneMatch = @"If-None-Match";
 NSString *const DTConnectionHeaderEtag = @"Etag";
@@ -140,11 +134,11 @@ NSString *const DTConnectionHeaderCacheControl = @"Cache-Control";
 #pragma mark -
 #pragma mark DTConnectionManagerDelegate methods
 
-- (void)connectionManager:(DTConnectionManager *)connectionManager connection:(DTURLConnection *)connection didFailWithError:(NSError *)anError {
-	[self didReceiveConnectionError:anError];
+- (void)connectionManager:(DTConnectionManager *)connectionManager connectionID:(NSString *)connectionID didFailWithError:(NSError *)error {
+	[self didReceiveConnectionError:error];
 }
 
-- (void)connectionManager:(DTConnectionManager *)connectionManager connection:(DTURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+- (void)connectionManager:(DTConnectionManager *)connectionManager connectionID:(NSString *)connectionID didReceiveResponse:(NSURLResponse *)response {
 	[self didReceiveConnectionResponse:response];
 	
 	NSHTTPURLResponse *theResponse = (NSHTTPURLResponse *)response;
@@ -152,7 +146,7 @@ NSString *const DTConnectionHeaderCacheControl = @"Cache-Control";
 	if (enableCaching && [theResponse statusCode] == 304) {
 		
 		//[connectionManager cancelConnection:connection];
-		NSData *data = [connectionManager cachedDataForURL:connection.URL];
+		NSData *data = [connectionManager cachedDataForURL:[connectionManager URLForConnectionID:connectionID]];
 		[self didRecieveCachedData:data];
 		
 	} else if (self.type == DTConnectionTypeGet && enableCaching) {
@@ -162,20 +156,19 @@ NSString *const DTConnectionHeaderCacheControl = @"Cache-Control";
 	}
 }
 
-- (void)connectionManager:(DTConnectionManager *)connectionManager connectionDidFinishLoading:(DTURLConnection *)connection {
-	
-	[self didReceiveConnectionData:connection.data];
+- (void)connectionManager:(DTConnectionManager *)connectionManager connectionID:(NSString *)connectionID didFinishLoadingData:(NSData *)data {
+	[self didReceiveConnectionData:data];
 	
 	if (httpResponse) {
 		
 	}
 }
 
-- (void)connectionManager:(DTConnectionManager *)connectionManager didStartConnection:(DTURLConnection *)connection {
+- (void)connectionManager:(DTConnectionManager *)connectionManager didStartConnectionID:(NSString *)connectionID {
 	self.status = DTConnectionStatusStarted;
 }
 
-- (void)connectionManager:(DTConnectionManager *)connectionManager didQueueRequest:(NSURLRequest *)request {
+- (void)connectionManager:(DTConnectionManager *)connectionManager connectionID:(NSString *)connectionID didQueueRequest:(NSURLRequest *)request {
 	self.status = DTConnectionStatusQueued;
 }
 

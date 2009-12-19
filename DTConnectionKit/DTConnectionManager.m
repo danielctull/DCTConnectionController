@@ -14,10 +14,9 @@
 NSString *const DTConnectionManagerConnectionCountChangedNotification = @"DTConnectionManagerConnectionCountChangedNotification";
 
 @interface DTConnectionManager ()
-- (NSArray *)delegates;
-- (NSArray *)connections;
 - (id<DTConnectionManagerDelegate>)delegateForConnection:(DTURLConnection *)connection;
 - (void)connectionsCountChanged;
+- (NSString *)makeRequest:(NSURLRequest *)request delegate:(id<DTConnectionManagerDelegate>)delegate identifier:(NSString *)identifier;
 @end
 
 static DTConnectionManager *sharedInstance = nil;
@@ -61,7 +60,8 @@ static DTConnectionManager *sharedInstance = nil;
 	connectionDictionary = [[NSMutableDictionary alloc] init];
 	internalConnections = [[NSMutableArray alloc] init];
 	requestQueue = [[DTQueue alloc] init];
-	delegateQueue = [[DTQueue alloc] init];
+	queuedDelegates = [[NSMutableDictionary alloc] init];
+	queuedRequests = [[NSMutableDictionary alloc] init];
 	maxConnections = 0;
 	dataStore = [[DTDataStore alloc] initWithName:@"DTConnectionCache"];
 	
@@ -77,18 +77,11 @@ static DTConnectionManager *sharedInstance = nil;
 	
 	[dataStore release];
 	[requestQueue release];
-	[delegateQueue release];
+	[queuedRequests release];
+	[queuedDelegates release];
 	[internalConnections release];
 	[connectionDictionary release];
 	[super dealloc];
-}
-
-+ (NSArray *)delegates {
-	return [[DTConnectionManager sharedConnectionManager] delegates];
-}
-
-- (NSArray *)delegates {
-	return [connectionDictionary allValues];
 }
 
 + (id<DTConnectionManagerDelegate>)delegateForConnection:(DTURLConnection *)connection {
@@ -99,16 +92,8 @@ static DTConnectionManager *sharedInstance = nil;
 	return [connectionDictionary objectForKey:connection.identifier];
 }
 
-+ (NSArray *)connections {
-	return [[DTConnectionManager sharedConnectionManager] connections];
-}
-
-- (NSArray *)connections {
-	return [NSArray arrayWithArray:internalConnections];
-}
-
 - (NSInteger)connectionCount {
-	return [self.connections count] + externalConnectionsCount;
+	return [internalConnections count] + externalConnectionsCount;
 }
 
 + (NSData *)cachedDataForURL:(NSURL *)URL {
@@ -119,35 +104,74 @@ static DTConnectionManager *sharedInstance = nil;
 	return nil;
 }
 
+- (void)cancelConnectionWithID:(NSString *)connectionID {
+	DTURLConnection *connection = [connectionDictionary objectForKey:connectionID];
+	
+	if (connection) {
+		[connection cancel];
+		[connectionDictionary removeObjectForKey:connectionID];
+		[internalConnections removeObject:connection];
+	}
+	
+	NSURLRequest *request = [queuedRequests objectForKey:connectionID];
+	
+	if (request) {
+		[queuedDelegates removeObjectForKey:connectionID];
+		[queuedRequests removeObjectForKey:connectionID];
+	}
+}
 
-+ (DTURLConnection *)makeRequest:(NSURLRequest *)request delegate:(id<DTConnectionManagerDelegate>)delegate {
++ (NSString *)makeRequest:(NSURLRequest *)request delegate:(id<DTConnectionManagerDelegate>)delegate {
 	return [[DTConnectionManager sharedConnectionManager] makeRequest:request delegate:delegate];
 }
 
-- (DTURLConnection *)makeRequest:(NSURLRequest *)request delegate:(id<DTConnectionManagerDelegate>)delegate {
+- (NSString *)makeRequest:(NSURLRequest *)request delegate:(id<DTConnectionManagerDelegate>)delegate {
+	return [self makeRequest:request delegate:delegate identifier:nil];
+}
+
+- (NSString *)makeRequest:(NSURLRequest *)request delegate:(id<DTConnectionManagerDelegate>)delegate identifier:(NSString *)identifier {
 	
 	if (self.maxConnections != 0 && [internalConnections count] >= self.maxConnections) {
-		[requestQueue push:request];
-		[delegateQueue push:delegate];
-		if ([(NSObject *)delegate respondsToSelector:@selector(connectionManager:didQueueRequest:)])
-			[delegate connectionManager:self didQueueRequest:request];
-		return nil;
+		
+		if (!identifier) identifier = [[NSProcessInfo processInfo] globallyUniqueString];
+		
+		[requestQueue push:identifier];
+		[queuedRequests setObject:request forKey:identifier];
+		[queuedDelegates setObject:delegate forKey:identifier];
+		
+		if ([(NSObject *)delegate respondsToSelector:@selector(connectionManager:connectionID:didQueueRequest:)])
+			[delegate connectionManager:self connectionID:identifier didQueueRequest:request];
+		
+		return identifier;
 	}
 	
-	DTURLConnection *connection = [[DTURLConnection alloc] initWithRequest:request delegate:self];
-	if ([(NSObject *)delegate respondsToSelector:@selector(connectionManager:didStartConnection:)])
-		[delegate connectionManager:self didStartConnection:connection];
+	DTURLConnection *connection = [[[DTURLConnection alloc] initWithRequest:request delegate:self identifier:identifier] autorelease];
+	
+	[identifierDictionary setObject:identifier forKey:connection.identifier];
+	
+	if ([(NSObject *)delegate respondsToSelector:@selector(connectionManager:didStartConnectionID:)])
+		[delegate connectionManager:self didStartConnectionID:connection.identifier];
 	
 	[connectionDictionary setObject:delegate forKey:connection.identifier];
 	[internalConnections addObject:connection];
 	[self connectionsCountChanged];
-	return [connection autorelease];
+	return connection.identifier;
 }
 
 - (void)connectionsCountChanged {
 	
-	if (self.maxConnections != 0 && [requestQueue count] > 0 && [internalConnections count] < self.maxConnections)
-		[self makeRequest:[requestQueue pop] delegate:[delegateQueue pop]];
+	if (self.maxConnections != 0 && [requestQueue count] > 0 && [internalConnections count] < self.maxConnections) {
+		
+		NSString *identifier = [requestQueue pop];
+		
+		NSURLRequest *request = [queuedRequests objectForKey:identifier];
+		[queuedRequests removeObjectForKey:identifier];
+		
+		id<DTConnectionManagerDelegate> delegate = [queuedDelegates objectForKey:identifier];
+		[queuedDelegates removeObjectForKey:identifier];
+		
+		[self makeRequest:request delegate:delegate];		
+	}
 	
 	if (([[connectionDictionary allKeys] count] + externalConnectionsCount) > 0)
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
@@ -157,8 +181,16 @@ static DTConnectionManager *sharedInstance = nil;
 	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionManagerConnectionCountChangedNotification object:self];
 }
 
+- (NSURL *)URLForConnectionID:(NSString *)connectionID {
+	NSURL *URL = ((DTURLConnection *)[connectionDictionary objectForKey:connectionID]).URL;
+	
+	if (URL) return URL;
+	
+	return [(NSURLRequest *)[queuedRequests objectForKey:connectionID] URL];
+}
+
 - (BOOL)isConnectingToURL:(NSURL *)aUrl {
-	for (DTURLConnection *conn in self.connections)
+	for (DTURLConnection *conn in internalConnections)
 		if ([[conn.URL absoluteString] isEqualToString:[aUrl absoluteString]])
 			return YES;
 	
@@ -184,8 +216,8 @@ static DTConnectionManager *sharedInstance = nil;
 	DTURLConnection *dtconnection = (DTURLConnection *)connection;
 	
 	id theDelegate = [connectionDictionary objectForKey:dtconnection.identifier];
-	if ([theDelegate respondsToSelector:@selector(connectionManager:connection:didReceiveResponse:)])
-		[theDelegate connectionManager:self connection:dtconnection didReceiveResponse:response];
+	if ([theDelegate respondsToSelector:@selector(connectionManager:connectionID:didReceiveResponse:)])
+		[theDelegate connectionManager:self connectionID:dtconnection.identifier didReceiveResponse:response];
 }
 
 - (void)connection:(NSURLConnection *)aConnection didReceiveData:(NSData *)someData {
@@ -200,8 +232,8 @@ static DTConnectionManager *sharedInstance = nil;
 	[connectionDictionary removeObjectForKey:dtconnection.identifier];
 	[internalConnections removeObject:dtconnection];
 	
-	if ([theDelegate respondsToSelector:@selector(connectionManager:connection:didFailWithError:)])
-		[theDelegate connectionManager:self connection:dtconnection didFailWithError:error];
+	if ([theDelegate respondsToSelector:@selector(connectionManager:connectionID:didFailWithError:)])
+		[theDelegate connectionManager:self connectionID:dtconnection.identifier didFailWithError:error];
 	
 	[theDelegate release];
 	[self connectionsCountChanged];
@@ -214,8 +246,8 @@ static DTConnectionManager *sharedInstance = nil;
 	id theDelegate = [[connectionDictionary objectForKey:dtconnection.identifier] retain];
 	[connectionDictionary removeObjectForKey:dtconnection.identifier];
 	[internalConnections removeObject:dtconnection];
-	if ([theDelegate respondsToSelector:@selector(connectionManager:connectionDidFinishLoading:)])
-		[theDelegate connectionManager:self connectionDidFinishLoading:dtconnection];	
+	if ([theDelegate respondsToSelector:@selector(connectionManager:connectionID:didFinishLoadingData:)])
+		[theDelegate connectionManager:self connectionID:dtconnection.identifier didFinishLoadingData:dtconnection.data];	
 	
 	[theDelegate release];
 	[self connectionsCountChanged];
