@@ -51,18 +51,6 @@ extern NSString *const DTConnectionManagerConnectionCountChangedNotification;
  */
 + (DTConnectionManager *)sharedConnectionManager;
 
-
-+ (id<DTConnectionManagerDelegate>)delegateForConnection:(DTURLConnection *)connection;
-
-/** Initialises a newly created DTConnectionController with the given type and delegate.
- 
- DTConnectionManager handles many delegates (one for each connection), so making a new connection will assign this delegate to 
- the returned connection object.
- 
- @return A DTURLConnection object initialised with the request. This can return nil in the case where the request has been queued.
- */
-+ (NSString *)makeRequest:(NSURLRequest *)request delegate:(id<DTConnectionManagerDelegate>)delegate;
-
 /** Initialises a newly created DTConnectionController with the given type and delegate.
  
  DTConnectionManager handles many delegates (one for each connection), so making a new connection will assign this delegate to 
@@ -87,7 +75,6 @@ extern NSString *const DTConnectionManagerConnectionCountChangedNotification;
 - (BOOL)isConnectingToURL:(NSURL *)aUrl;
 - (NSURL *)URLForConnectionID:(NSString *)connectionID;
 
-+ (NSData *)cachedDataForURL:(NSURL *)URL;
 - (NSData *)cachedDataForURL:(NSURL *)URL;
 @end
 

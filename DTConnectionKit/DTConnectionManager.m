@@ -14,7 +14,6 @@
 NSString *const DTConnectionManagerConnectionCountChangedNotification = @"DTConnectionManagerConnectionCountChangedNotification";
 
 @interface DTConnectionManager ()
-- (id<DTConnectionManagerDelegate>)delegateForConnection:(DTURLConnection *)connection;
 - (void)connectionsCountChanged;
 - (NSString *)makeRequest:(NSURLRequest *)request delegate:(id<DTConnectionManagerDelegate>)delegate identifier:(NSString *)identifier;
 @end
@@ -59,10 +58,14 @@ static DTConnectionManager *sharedInstance = nil;
 	
 	connectionDictionary = [[NSMutableDictionary alloc] init];
 	internalConnections = [[NSMutableArray alloc] init];
+	
+	// QUEUE
 	requestQueue = [[DTQueue alloc] init];
 	queuedDelegates = [[NSMutableDictionary alloc] init];
 	queuedRequests = [[NSMutableDictionary alloc] init];
 	maxConnections = 0;
+	
+	// CACHE
 	dataStore = [[DTDataStore alloc] initWithName:@"DTConnectionCache"];
 	
 	return self;
@@ -84,20 +87,8 @@ static DTConnectionManager *sharedInstance = nil;
 	[super dealloc];
 }
 
-+ (id<DTConnectionManagerDelegate>)delegateForConnection:(DTURLConnection *)connection {
-	return [[DTConnectionManager sharedConnectionManager] delegateForConnection:connection];
-}
-
-- (id<DTConnectionManagerDelegate>)delegateForConnection:(DTURLConnection *)connection {
-	return [connectionDictionary objectForKey:connection.identifier];
-}
-
 - (NSInteger)connectionCount {
 	return [internalConnections count] + externalConnectionsCount;
-}
-
-+ (NSData *)cachedDataForURL:(NSURL *)URL {
-	return [[self sharedConnectionManager] cachedDataForURL:URL];
 }
 
 - (NSData *)cachedDataForURL:(NSURL *)URL {
@@ -119,10 +110,6 @@ static DTConnectionManager *sharedInstance = nil;
 		[queuedDelegates removeObjectForKey:connectionID];
 		[queuedRequests removeObjectForKey:connectionID];
 	}
-}
-
-+ (NSString *)makeRequest:(NSURLRequest *)request delegate:(id<DTConnectionManagerDelegate>)delegate {
-	return [[DTConnectionManager sharedConnectionManager] makeRequest:request delegate:delegate];
 }
 
 - (NSString *)makeRequest:(NSURLRequest *)request delegate:(id<DTConnectionManagerDelegate>)delegate {

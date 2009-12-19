@@ -50,12 +50,14 @@ NSString *const DTConnectionHeaderCacheControl = @"Cache-Control";
 - (void)start {
 	NSURLRequest *request = [self newRequest];
 	
+	DTConnectionManager *connectionManager = [DTConnectionManager sharedConnectionManager];
+	
 	if (self.type == DTConnectionTypeGet) {
-		NSData *data = [DTConnectionManager cachedDataForURL:[request URL]];	
+		NSData *data = [connectionManager cachedDataForURL:[request URL]];	
 		if (data) [self didRecieveCachedData:data];
 	}
 	
-	[DTConnectionManager makeRequest:request delegate:self];
+	[connectionManager makeRequest:request delegate:self];
 	[request release];
 }
 
