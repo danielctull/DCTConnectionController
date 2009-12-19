@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "DTURLConnection.h"
 #import "DTQueue.h"
+#import "DTDataStore.h"
 
 #pragma mark Notification Names
 
@@ -25,6 +26,7 @@ extern NSString *const DTConnectionManagerConnectionCountChangedNotification;
 	NSMutableArray *internalConnections;
 	DTQueue *requestQueue, *delegateQueue;
 	NSInteger maxConnections, externalConnectionsCount;
+	DTDataStore *dataStore;
 }
 @property (nonatomic, assign) NSInteger maxConnections;
 @property (nonatomic, readonly) NSArray *delegates;
@@ -97,6 +99,8 @@ extern NSString *const DTConnectionManagerConnectionCountChangedNotification;
  */
 - (BOOL)isConnectingToURL:(NSURL *)aUrl;
 
++ (NSData *)cachedDataForURL:(NSURL *)URL;
+- (NSData *)cachedDataForURL:(NSURL *)URL;
 @end
 
 #pragma mark -

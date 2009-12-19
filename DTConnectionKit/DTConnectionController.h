@@ -54,13 +54,15 @@ extern NSString *const DTConnectionControllerResponseNotification;
 @protocol DTConnectionControllerDelegate;
 
 #pragma mark -
-@interface DTConnectionController : NSObject <DTConnectionManagerDelegate> {
+@interface DTConnectionController : NSObject {
 	NSObject<DTConnectionControllerDelegate> *delegate;
 	DTConnectionType type;
 	NSObject *returnedObject;
 	NSError *returnedError;
 	NSURLResponse *returnedResponse;
+	NSHTTPURLResponse *httpResponse;
 	DTConnectionStatus status;
+	BOOL enableCaching;
 }
 
 /*!
@@ -97,29 +99,10 @@ extern NSString *const DTConnectionControllerResponseNotification;
  */
 @property (nonatomic, readonly) DTConnectionStatus status;
 
-
+@property (nonatomic, assign) BOOL enableCaching;
 
 #pragma mark -
 #pragma mark For external classes to use
-
-/** Initialises a newly created DTConnectionController with the given type and delegate.
-
- jdsfkljskldfjsjfklsjf
-
- @param aType The type required for the connection.
- @param aDelegate The delegate for the connection.
- @return A DTConnectionController object initialised with type, aType and delegate, aDelegate.
-
- */
-- (id)initWithType:(DTConnectionType)aType delegate:(NSObject<DTConnectionControllerDelegate> *)aDelegate;
-
-/** Initialises a newly created DTConnectionController with the given type.
- 
- @param aType The type required for the connection.
- @return A DTConnectionController object initialised with aType.
- 
- */
-- (id)initWithType:(DTConnectionType)aType;
 
 /** This method starts the connection.
  
@@ -130,6 +113,25 @@ extern NSString *const DTConnectionControllerResponseNotification;
 
 #pragma mark -
 #pragma mark For subclasses to use
+
+
+
+- (void)didReceiveConnectionError:(NSError *)error;
+- (void)didReceiveConnectionResponse:(NSURLResponse *)response;
+- (void)didReceiveConnectionData:(NSData *)data;
+- (void)didRecieveCachedData:(NSData *)data;
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  This method should be used in subclasses to give custom requests.

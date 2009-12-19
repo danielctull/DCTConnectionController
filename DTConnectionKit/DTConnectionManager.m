@@ -63,6 +63,7 @@ static DTConnectionManager *sharedInstance = nil;
 	requestQueue = [[DTQueue alloc] init];
 	delegateQueue = [[DTQueue alloc] init];
 	maxConnections = 0;
+	dataStore = [[DTDataStore alloc] initWithName:@"DTConnectionCache"];
 	
 	return self;
 }
@@ -74,6 +75,7 @@ static DTConnectionManager *sharedInstance = nil;
 	for (DTURLConnection *connection in internalConnections)
 		[connection cancel];
 	
+	[dataStore release];
 	[requestQueue release];
 	[delegateQueue release];
 	[internalConnections release];
@@ -108,6 +110,15 @@ static DTConnectionManager *sharedInstance = nil;
 - (NSInteger)connectionCount {
 	return [self.connections count] + externalConnectionsCount;
 }
+
++ (NSData *)cachedDataForURL:(NSURL *)URL {
+	return [[self sharedConnectionManager] cachedDataForURL:URL];
+}
+
+- (NSData *)cachedDataForURL:(NSURL *)URL {
+	return nil;
+}
+
 
 + (DTURLConnection *)makeRequest:(NSURLRequest *)request delegate:(id<DTConnectionManagerDelegate>)delegate {
 	return [[DTConnectionManager sharedConnectionManager] makeRequest:request delegate:delegate];

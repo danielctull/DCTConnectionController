@@ -63,7 +63,8 @@
 					 nil];
 	
 	for (NSString *s in urls) {
-		DTURLConnectionController *connection = [[DTURLConnectionController alloc] initWithType:DTConnectionTypeGet delegate:self];
+		DTURLConnectionController *connection = [[DTURLConnectionController alloc] init];
+		connection.delegate = self;
 		connection.URL = [NSURL URLWithString:s];
 		[connection addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 		[connection start];

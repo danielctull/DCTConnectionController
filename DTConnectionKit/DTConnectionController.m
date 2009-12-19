@@ -24,34 +24,28 @@ NSString *const DTConnectionControllerFailedNotification = @"DTConnectionControl
 NSString *const DTConnectionControllerResponseNotification = @"DTConnectionControllerResponseNotification";
 
 
-@interface DTConnectionController ()
+
+
+
+
+
+NSString *const DTConnectionHeaderIfModifiedSince = @"If-Modified-Since";
+NSString *const DTConnectionHeaderIfNoneMatch = @"If-None-Match";
+NSString *const DTConnectionHeaderEtag = @"Etag";
+NSString *const DTConnectionHeaderLastModified = @"Last-Modified";
+NSString *const DTConnectionHeaderCacheControl = @"Cache-Control";
+
+@interface DTConnectionController () <DTConnectionManagerDelegate>
 @property (nonatomic, readwrite) DTConnectionStatus status;
 @end
 
 
 @implementation DTConnectionController
 
-@synthesize delegate, type, returnedObject, returnedError, returnedResponse, status;
-
-- (id)init {
-	return [self initWithType:DTConnectionTypeGet];
-}
-
-- (id)initWithType:(DTConnectionType)aType {
-	return [self initWithType:aType delegate:nil];	
-}
-
-- (id)initWithType:(DTConnectionType)aType delegate:(NSObject<DTConnectionControllerDelegate> *)aDelegate {
-	
-	if (!(self = [super init])) return nil;
-	
-	type = aType;
-	delegate = [aDelegate retain];
-	
-	return self;	
-}
+@synthesize delegate, type, returnedObject, returnedError, returnedResponse, status, enableCaching;
 
 - (void)dealloc {
+	[httpResponse release];
 	[returnedResponse release];
 	[returnedError release];
 	[returnedObject release];
@@ -61,17 +55,40 @@ NSString *const DTConnectionControllerResponseNotification = @"DTConnectionContr
 
 - (void)start {
 	NSURLRequest *request = [self newRequest];
+	
+	if (self.type == DTConnectionTypeGet) {
+		NSData *data = [DTConnectionManager cachedDataForURL:[request URL]];	
+		if (data) [self didRecieveCachedData:data];
+	}
+	
 	[DTConnectionManager makeRequest:request delegate:self];
 	[request release];
-	//self.status = DTConnectionStatusStarted;
 }
 
 #pragma mark -
 #pragma mark For subclasses to use
 
+- (void)didReceiveConnectionError:(NSError *)error {
+}
+
+- (void)didReceiveConnectionResponse:(NSURLResponse *)response {
+}
+
+- (void)didReceiveConnectionData:(NSData *)data {
+}
+
+- (void)didRecieveCachedData:(NSData *)data {
+}
+
 - (NSMutableURLRequest *)newRequest {
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-	[request setHTTPMethod:DTConnectionTypeStrings[type]];
+	
+	if (enableCaching) {
+		[request addValue:@"" forHTTPHeaderField:DTConnectionHeaderIfModifiedSince];
+		[request addValue:@"etag" forHTTPHeaderField:DTConnectionHeaderIfNoneMatch];
+	}
+	
+	[request setHTTPMethod:DTConnectionTypeStrings[type]];	
 	return request;
 }
 
@@ -124,15 +141,34 @@ NSString *const DTConnectionControllerResponseNotification = @"DTConnectionContr
 #pragma mark DTConnectionManagerDelegate methods
 
 - (void)connectionManager:(DTConnectionManager *)connectionManager connection:(DTURLConnection *)connection didFailWithError:(NSError *)anError {
-	[self notifyDelegateAndObserversOfReturnedError:anError];
+	[self didReceiveConnectionError:anError];
 }
 
 - (void)connectionManager:(DTConnectionManager *)connectionManager connection:(DTURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-	[self notifyDelegateAndObserversOfResponse:response];
+	[self didReceiveConnectionResponse:response];
+	
+	NSHTTPURLResponse *theResponse = (NSHTTPURLResponse *)response;
+	
+	if (enableCaching && [theResponse statusCode] == 304) {
+		
+		//[connectionManager cancelConnection:connection];
+		NSData *data = [connectionManager cachedDataForURL:connection.URL];
+		[self didRecieveCachedData:data];
+		
+	} else if (self.type == DTConnectionTypeGet && enableCaching) {
+		
+		httpResponse = [theResponse retain];
+		
+	}
 }
 
 - (void)connectionManager:(DTConnectionManager *)connectionManager connectionDidFinishLoading:(DTURLConnection *)connection {
-	[self notifyDelegateAndObserversOfReturnedObject:connection.data];
+	
+	[self didReceiveConnectionData:connection.data];
+	
+	if (httpResponse) {
+		
+	}
 }
 
 - (void)connectionManager:(DTConnectionManager *)connectionManager didStartConnection:(DTURLConnection *)connection {
