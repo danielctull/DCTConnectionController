@@ -22,11 +22,14 @@ extern NSString *const DTConnectionManagerConnectionCountChangedNotification;
 #pragma mark -
 
 @interface DTConnectionManager : NSObject {
+	
 	NSMutableDictionary *connectionDictionary;
-	NSMutableArray *internalConnections;
+	
 	DTQueue *requestQueue;
-	NSMutableDictionary *queuedDelegates, *queuedRequests, *identifierDictionary;
+	NSMutableDictionary *queuedDelegates, *queuedRequests;
+	
 	NSInteger maxConnections, externalConnectionsCount;
+	
 	DTDataStore *dataStore;
 }
 @property (nonatomic, assign) NSInteger maxConnections;

@@ -57,7 +57,6 @@ static DTConnectionManager *sharedInstance = nil;
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
 	
 	connectionDictionary = [[NSMutableDictionary alloc] init];
-	internalConnections = [[NSMutableArray alloc] init];
 	
 	// QUEUE
 	requestQueue = [[DTQueue alloc] init];
@@ -75,20 +74,19 @@ static DTConnectionManager *sharedInstance = nil;
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
-	for (DTURLConnection *connection in internalConnections)
+	for (DTURLConnection *connection in [connectionDictionary allValues])
 		[connection cancel];
 	
 	[dataStore release];
 	[requestQueue release];
 	[queuedRequests release];
 	[queuedDelegates release];
-	[internalConnections release];
 	[connectionDictionary release];
 	[super dealloc];
 }
 
 - (NSInteger)connectionCount {
-	return [internalConnections count] + externalConnectionsCount;
+	return [connectionDictionary count] + externalConnectionsCount;
 }
 
 - (NSData *)cachedDataForURL:(NSURL *)URL {
@@ -101,7 +99,6 @@ static DTConnectionManager *sharedInstance = nil;
 	if (connection) {
 		[connection cancel];
 		[connectionDictionary removeObjectForKey:connectionID];
-		[internalConnections removeObject:connection];
 	}
 	
 	NSURLRequest *request = [queuedRequests objectForKey:connectionID];
@@ -118,7 +115,7 @@ static DTConnectionManager *sharedInstance = nil;
 
 - (NSString *)makeRequest:(NSURLRequest *)request delegate:(id<DTConnectionManagerDelegate>)delegate identifier:(NSString *)identifier {
 	
-	if (self.maxConnections != 0 && [internalConnections count] >= self.maxConnections) {
+	if (self.maxConnections != 0 && [connectionDictionary count] >= self.maxConnections) {
 		
 		if (!identifier) identifier = [[NSProcessInfo processInfo] globallyUniqueString];
 		
@@ -134,20 +131,17 @@ static DTConnectionManager *sharedInstance = nil;
 	
 	DTURLConnection *connection = [[[DTURLConnection alloc] initWithRequest:request delegate:self identifier:identifier] autorelease];
 	
-	[identifierDictionary setObject:identifier forKey:connection.identifier];
-	
 	if ([(NSObject *)delegate respondsToSelector:@selector(connectionManager:didStartConnectionID:)])
 		[delegate connectionManager:self didStartConnectionID:connection.identifier];
 	
 	[connectionDictionary setObject:delegate forKey:connection.identifier];
-	[internalConnections addObject:connection];
 	[self connectionsCountChanged];
 	return connection.identifier;
 }
 
 - (void)connectionsCountChanged {
 	
-	if (self.maxConnections != 0 && [requestQueue count] > 0 && [internalConnections count] < self.maxConnections) {
+	if (self.maxConnections != 0 && [requestQueue count] > 0 && [connectionDictionary count] < self.maxConnections) {
 		
 		NSString *identifier = [requestQueue pop];
 		
@@ -177,7 +171,7 @@ static DTConnectionManager *sharedInstance = nil;
 }
 
 - (BOOL)isConnectingToURL:(NSURL *)aUrl {
-	for (DTURLConnection *conn in internalConnections)
+	for (DTURLConnection *conn in [connectionDictionary allValues])
 		if ([[conn.URL absoluteString] isEqualToString:[aUrl absoluteString]])
 			return YES;
 	
@@ -217,7 +211,6 @@ static DTConnectionManager *sharedInstance = nil;
 	
 	id theDelegate = [[connectionDictionary objectForKey:dtconnection.identifier] retain];
 	[connectionDictionary removeObjectForKey:dtconnection.identifier];
-	[internalConnections removeObject:dtconnection];
 	
 	if ([theDelegate respondsToSelector:@selector(connectionManager:connectionID:didFailWithError:)])
 		[theDelegate connectionManager:self connectionID:dtconnection.identifier didFailWithError:error];
@@ -232,7 +225,6 @@ static DTConnectionManager *sharedInstance = nil;
 	
 	id theDelegate = [[connectionDictionary objectForKey:dtconnection.identifier] retain];
 	[connectionDictionary removeObjectForKey:dtconnection.identifier];
-	[internalConnections removeObject:dtconnection];
 	if ([theDelegate respondsToSelector:@selector(connectionManager:connectionID:didFinishLoadingData:)])
 		[theDelegate connectionManager:self connectionID:dtconnection.identifier didFinishLoadingData:dtconnection.data];	
 	
