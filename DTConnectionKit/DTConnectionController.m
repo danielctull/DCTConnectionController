@@ -23,17 +23,38 @@ NSString *const DTConnectionControllerCompletedNotification = @"DTConnectionCont
 NSString *const DTConnectionControllerFailedNotification = @"DTConnectionControllerFailedNotification";
 NSString *const DTConnectionControllerResponseNotification = @"DTConnectionControllerResponseNotification";
 
-NSString *const DTConnectionHeaderIfModifiedSince = @"If-Modified-Since";
-NSString *const DTConnectionHeaderIfNoneMatch = @"If-None-Match";
-NSString *const DTConnectionHeaderEtag = @"Etag";
-NSString *const DTConnectionHeaderLastModified = @"Last-Modified";
-NSString *const DTConnectionHeaderCacheControl = @"Cache-Control";
-
 @interface DTConnectionController () <DTConnectionManagerDelegate>
 @property (nonatomic, readwrite) DTConnectionStatus status;
+
+/* @brief Sends the delegate a message that the conenction has returned this object and sends out a notification.￼
+ 
+ Subclasses should handle the incoming data, creating a wrapper or data object for it for the delegate and observers to use and then call this method with that created object.
+ 
+ @param object The object to be sent to the delegate and stored in returnedObject.
+ 
+ */
+- (void)notifyDelegateAndObserversOfReturnedObject:(NSObject *)object;
+
+/* @brief Sends the delegate a message that the conenction has failed, with the given error.
+ 
+ By default this is called when an error returns from DTConnectionManager. Subclasses could utilise this
+ by interpretating the error from the connection and packaging an error more meaningful to the delegate and observers.
+ 
+ @param error The error to be sent to the delegate and stored in returnedError.
+ */
+- (void)notifyDelegateAndObserversOfReturnedError:(NSError *)error;
+
+/* @brief Sends the delegate a message that the conenction has received a response, with the given URL response.
+ 
+ This is called when a response returns from DTConnectionManager. Subclasses should override this method to handle errors,
+ calling the superclass implementation
+ 
+ @param response The URL response to be sent to the delegate and stored in returnedResponse.
+ 
+ */
+- (void)notifyDelegateAndObserversOfResponse:(NSURLResponse *)response;
 @end
-
-
+#pragma mark -
 @implementation DTConnectionController
 
 @synthesize delegate, type, returnedObject, returnedError, returnedResponse, status, enableCaching;
@@ -47,50 +68,51 @@ NSString *const DTConnectionHeaderCacheControl = @"Cache-Control";
 	[super dealloc];
 }
 
+#pragma mark -
+#pragma mark For external classes to use
+
 - (void)start {
 	NSURLRequest *request = [self newRequest];
 	
 	DTConnectionManager *connectionManager = [DTConnectionManager sharedConnectionManager];
-	
+	/*
 	if (self.type == DTConnectionTypeGet) {
 		NSData *data = [connectionManager cachedDataForURL:[request URL]];	
 		if (data) [self didRecieveCachedData:data];
-	}
-	
+	}*/	
 	[connectionManager makeRequest:request delegate:self];
 	[request release];
 }
 
 #pragma mark -
-#pragma mark For subclasses to use
-
-- (void)didReceiveConnectionError:(NSError *)error {
-	[self notifyDelegateAndObserversOfReturnedError:error];
-}
-
-- (void)didReceiveConnectionResponse:(NSURLResponse *)response {
-	[self notifyDelegateAndObserversOfResponse:response];
-}
-
-- (void)didReceiveConnectionData:(NSData *)data {
-	[self notifyDelegateAndObserversOfReturnedObject:data];
-}
-
-- (void)didRecieveCachedData:(NSData *)data {
-	[self notifyDelegateAndObserversOfReturnedObject:data];
-}
+#pragma mark For subclasses to override
 
 - (NSMutableURLRequest *)newRequest {
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-	
+	/*
 	if (enableCaching) {
 		[request addValue:@"" forHTTPHeaderField:DTConnectionHeaderIfModifiedSince];
 		[request addValue:@"etag" forHTTPHeaderField:DTConnectionHeaderIfNoneMatch];
 	}
-	
+	*/
 	[request setHTTPMethod:DTConnectionTypeStrings[type]];	
 	return request;
 }
+
+- (void)receivedObject:(NSObject *)object {
+	[self notifyDelegateAndObserversOfReturnedObject:object];
+}
+
+- (void)receivedResponse:(NSURLResponse *)response {
+	[self notifyDelegateAndObserversOfResponse:response];
+}
+
+- (void)receivedError:(NSError *)error {
+	[self notifyDelegateAndObserversOfReturnedError:error];
+}
+
+#pragma mark -
+#pragma mark Internal methods
 
 - (void)notifyDelegateAndObserversOfReturnedObject:(NSObject *)object {
 	
@@ -141,12 +163,12 @@ NSString *const DTConnectionHeaderCacheControl = @"Cache-Control";
 #pragma mark DTConnectionManagerDelegate methods
 
 - (void)connectionManager:(DTConnectionManager *)connectionManager connectionID:(NSString *)connectionID didFailWithError:(NSError *)error {
-	[self didReceiveConnectionError:error];
+	[self receivedError:error];
 }
 
 - (void)connectionManager:(DTConnectionManager *)connectionManager connectionID:(NSString *)connectionID didReceiveResponse:(NSURLResponse *)response {
-	[self didReceiveConnectionResponse:response];
-	
+	[self receivedResponse:response];
+	/*
 	NSHTTPURLResponse *theResponse = (NSHTTPURLResponse *)response;
 	
 	if (enableCaching && [theResponse statusCode] == 304) {
@@ -159,15 +181,15 @@ NSString *const DTConnectionHeaderCacheControl = @"Cache-Control";
 		
 		httpResponse = [theResponse retain];
 		
-	}
+	}*/
 }
 
 - (void)connectionManager:(DTConnectionManager *)connectionManager connectionID:(NSString *)connectionID didFinishLoadingData:(NSData *)data {
-	[self didReceiveConnectionData:data];
-	
+	[self receivedObject:data];
+	/*
 	if (httpResponse) {
 		
-	}
+	}*/
 }
 
 - (void)connectionManager:(DTConnectionManager *)connectionManager didStartConnectionID:(NSString *)connectionID {

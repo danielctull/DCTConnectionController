@@ -7,11 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DTConnectionManager.h"
+//#import "DTConnectionManager.h"
 #import "DTConnectionController.h"
 
 
 NSString *const DTConnectionManagerConnectionCountChangedNotification = @"DTConnectionManagerConnectionCountChangedNotification";
+
+NSString *const DTConnectionHeaderIfModifiedSince = @"If-Modified-Since";
+NSString *const DTConnectionHeaderIfNoneMatch = @"If-None-Match";
+NSString *const DTConnectionHeaderEtag = @"Etag";
+NSString *const DTConnectionHeaderLastModified = @"Last-Modified";
+NSString *const DTConnectionHeaderCacheControl = @"Cache-Control";
 
 @interface DTConnectionManager ()
 - (void)connectionsCountChanged;
@@ -55,6 +61,7 @@ static DTConnectionManager *sharedInstance = nil;
 	if (!([super init])) return nil;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillTerminate:) name:UIApplicationWillTerminateNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidReceiveMemoryWarning:) name:UIApplicationDidReceiveMemoryWarningNotification object:nil];
 	
 	connectionDictionary = [[NSMutableDictionary alloc] init];
 	
@@ -190,7 +197,7 @@ static DTConnectionManager *sharedInstance = nil;
 		
 		[self makeRequest:request delegate:delegate];		
 		[request release];
-		[delegate release];
+		[(NSObject *)delegate release];
 	}
 	
 	if (([[connectionDictionary allKeys] count] + externalConnectionsCount) > 0)
@@ -241,6 +248,10 @@ static DTConnectionManager *sharedInstance = nil;
 	
 	[theDelegate release];
 	[self connectionsCountChanged];
+}
+
+
+- (void)applicationDidReceiveMemoryWarning:(id)sender {
 }
 
 - (void)applicationWillTerminate:(id)sender {
