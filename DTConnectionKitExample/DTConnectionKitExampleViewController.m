@@ -7,8 +7,8 @@
 //
 
 #import "DTConnectionKitExampleViewController.h"
-#import "DTURLConnectionController.h"
-#import "DTConnectionManager.h"
+#import "DTURLLoadingConnection.h"
+#import "DTConnectionQueue.h"
 
 @interface DTConnectionKitExampleViewController ()
 - (NSString *)stringFromURL:(NSURL *)url;
@@ -38,11 +38,11 @@
 	
 	self.navigationController.toolbarHidden = NO;
 	
-	[[DTConnectionManager sharedConnectionManager] setMaxConnections:5];
-	
+	//[[DTConnectionManager sharedConnectionManager] setMaxConnections:5];
+	[[DTConnectionQueue sharedConnectionQueue] setMaxConnections:3];
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(connectionCountChanged:) 
-												 name:DTConnectionManagerConnectionCountChangedNotification 
+												 name:DTConnectionQueueConnectionCountChangedNotification 
 											   object:nil];
 	
 	NSArray *urls = [NSArray arrayWithObjects:
@@ -62,12 +62,20 @@
 					 @"http://www.play.com/",
 					 nil];
 	
-	for (NSString *s in urls) {
+	for (NSString *s in urls) {/*
 		DTURLConnectionController *connection = [[DTURLConnectionController alloc] init];
 		connection.delegate = self;
 		connection.URL = [NSURL URLWithString:s];
 		[connection addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 		[connection start];
+		[connection release];*/
+		
+		
+		DTURLLoadingConnection *connection = [[DTURLLoadingConnection alloc] init];
+		connection.delegate = self;
+		connection.URL = [NSURL URLWithString:s];
+		[connection addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+		[connection connect];
 		[connection release];
 	}
 	
@@ -76,9 +84,15 @@
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	DTURLConnectionController *connectionController = (DTURLConnectionController *)object;
+	
+	DTURLLoadingConnection *connectionController = (DTURLLoadingConnection *)object;
+	
+	[self performSelectorOnMainThread:@selector(statusUpdate:) withObject:connectionController waitUntilDone:NO];
+	
+}
+	
+- (void)statusUpdate:(DTURLLoadingConnection *)connectionController {
 	NSDateFormatter *df = [[NSDateFormatter alloc] init];
-	//[df setDateFormat:@"YYYY-MM-dd HH:mm:ss.SSS"];
 	[df setDateFormat:@"HH:mm:ss.SSS"];
 	NSString *dateString = [df stringFromDate:[NSDate date]]; 
 	[df release];
@@ -131,26 +145,26 @@
 }
 
 - (void)connectionCountChanged:(NSNotification *)notification {
-	self.connectionsLabel.text = [NSString stringWithFormat:@"Connections: %i", [DTConnectionManager sharedConnectionManager].connectionCount];
+	self.connectionsLabel.text = [NSString stringWithFormat:@"Connections: %i", [DTConnectionQueue sharedConnectionQueue].connectionCount];
 }
 
 
 - (IBAction)addConnection:(id)sender {
-	[[DTConnectionManager sharedConnectionManager] addExternalConnection];
+	//[[DTConnectionManager sharedConnectionManager] addExternalConnection];
 }
 
 - (IBAction)removeConnection:(id)sender {
-	[[DTConnectionManager sharedConnectionManager] removeExternalConnection];
+	//[[DTConnectionManager sharedConnectionManager] removeExternalConnection];
 }
 
 #pragma mark -
 #pragma mark DTConnectionControllerDelegate methods
 
-- (void)connectionController:(DTConnectionController *)connectionController didSucceedWithObject:(id)object {
+- (void)dtconnection:(DTConnection *)connectionController didSucceedWithObject:(id)object {
 	[connectionController removeObserver:self forKeyPath:@"status"];
 }
 
-- (void)connectionController:(DTConnectionController *)connectionController didFailWithError:(NSError *)error {
+- (void)dtconnection:(DTConnection *)connectionController didFailWithError:(NSError *)error {
 	[connectionController removeObserver:self forKeyPath:@"status"];
 }
 
