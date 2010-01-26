@@ -40,6 +40,8 @@
 
 - (void)receivedObject:(NSObject *)object {
 	
+	[self saveThreadedContext];
+	
 	if ([object isKindOfClass:[NSArray class]]) {
 		
 		NSArray *array = (NSArray *)object;
@@ -53,17 +55,14 @@
 				[idArray addObject:[mo objectID]];	
 			}
 		}
-		[self saveThreadedContext];
 		[self performSelectorOnMainThread:@selector(receivedObjectIDArray:) withObject:idArray waitUntilDone:YES];
 		
 	} else if ([object isKindOfClass:[NSManagedObject class]]) {
 		
 		NSManagedObject *mo = (NSManagedObject *)object;
-		[self saveThreadedContext];
 		[self performSelectorOnMainThread:@selector(receivedObjectID:) withObject:[mo objectID] waitUntilDone:YES];
 		
 	} else {
-		
 		[super receivedObject:object];
 		
 	}
@@ -75,8 +74,10 @@
 	
 	[threadedContext lock];
 	
-	NSError *error;	
-    if (![threadedContext save:&error]) NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+	if ([threadedContext hasChanges]) {
+		NSError *error;
+		if (![threadedContext save:&error]) NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+	}
 	
 	[threadedContext unlock];
 	
