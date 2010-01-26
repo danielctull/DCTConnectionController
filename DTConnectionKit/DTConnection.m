@@ -9,7 +9,7 @@
 #import "DTConnection.h"
 #import "DTConnectionQueue.h"
 
-NSString * const DTConnectionTypeStrings[] = {
+NSString * const DTConnectionTypeString[] = {
 	@"GET",
 	@"POST",
 	@"PUT",
@@ -82,7 +82,7 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 
 - (NSMutableURLRequest *)newRequest {
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-	[request setHTTPMethod:DTConnectionTypeStrings[type]];	
+	[request setHTTPMethod:DTConnectionTypeString[type]];	
 	return request;
 }
 
