@@ -116,7 +116,7 @@ extern NSString *const DTConnectionResponseNotification;
  This is because DTConnectionController uses DTConnectionManager to perform the connection and the connection manager
  must retain its delegates. Because of this the delegate should never retain the connection controller.
  */
-@property (nonatomic, assign) NSObject<DTConnectionDelegate> *delegate;
+@property (nonatomic, retain) NSObject<DTConnectionDelegate> *delegate;
 
 /**
  @}
