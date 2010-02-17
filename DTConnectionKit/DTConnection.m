@@ -32,6 +32,10 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 @property (nonatomic, retain, readwrite) NSObject *returnedObject;
 @property (nonatomic, retain, readwrite) NSError *returnedError;
 @property (nonatomic, retain, readwrite) NSURLResponse *returnedResponse;
+
+- (void)notifyDelegateAndObserversOfReturnedObject:(NSObject *)object;
+- (void)notifyDelegateAndObserversOfReturnedError:(NSError *)error;
+- (void)notifyDelegateAndObserversOfResponse:(NSURLResponse *)response;
 @end
 
 @implementation DTConnection
