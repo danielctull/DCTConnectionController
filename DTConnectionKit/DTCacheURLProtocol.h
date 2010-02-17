@@ -10,7 +10,7 @@
 
 
 @interface DTCacheURLProtocol : NSURLProtocol {
-
+	BOOL connectionHasReturned;
 }
 
 @end
