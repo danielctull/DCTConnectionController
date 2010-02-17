@@ -64,6 +64,8 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 	
 	NSURLRequest *request = [self newRequest];
 	
+	if (!request) return;
+	
 	NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
 	
 	[request release];

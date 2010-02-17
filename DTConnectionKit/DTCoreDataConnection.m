@@ -75,8 +75,26 @@
 	[threadedContext lock];
 	
 	if ([threadedContext hasChanges]) {
+		
+		
+		NSError* error;
+        if(![threadedContext save:&error]) {
+			NSLog(@"Failed to save to data store: %@", [error localizedDescription]);
+			NSArray* detailedErrors = [[error userInfo] objectForKey:NSDetailedErrorsKey];
+			if(detailedErrors != nil && [detailedErrors count] > 0) {
+				for(NSError* detailedError in detailedErrors) {
+					NSLog(@"  DetailedError: %@", [detailedError userInfo]);
+				}
+			}
+			else {
+				NSLog(@"  %@", [error userInfo]);
+			}
+        }/*
+		
+		
+		
 		NSError *error;
-		if (![threadedContext save:&error]) NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+		if (![threadedContext save:&error]) NSLog(@"Unresolved error %@, %@", error, [error userInfo]);*/
 	}
 	
 	[threadedContext unlock];
