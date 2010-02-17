@@ -89,4 +89,31 @@ static DTConnectionQueue *sharedInstance = nil;
 	return count;
 }
 
+- (BOOL)isConnectingToURL:(NSURL *)URL {
+	for (DTConnection *c in self.operations)
+		if (c.isExecuting)
+			if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
+				return YES;
+	
+	return NO;
+}
+
+- (BOOL)hasQueuedConnectionToURL:(NSURL *)URL {
+	for (DTConnection *c in self.operations)
+		if (!c.isExecuting)
+			if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
+				return YES;
+	
+	return NO;
+}
+
+- (DTConnection *)queuedConnectionToURL:(NSURL *)URL {
+	for (DTConnection *c in self.operations)
+		if (!c.isExecuting)
+			if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
+				return c;
+	
+	return nil;
+}
+
 @end

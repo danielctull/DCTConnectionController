@@ -26,6 +26,7 @@ NSString *const DTConnectionFailedNotification = @"DTConnectionFailedNotificatio
 NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotification";
 
 @interface DTConnection ()
+@property (nonatomic, retain, readwrite) NSURL *URL;
 @property (nonatomic, retain, readwrite) NSString *identifier;
 @property (nonatomic, readwrite) DTConnectionStatus status;
 @property (nonatomic, retain, readwrite) NSObject *returnedObject;
@@ -35,7 +36,7 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 
 @implementation DTConnection
 
-@synthesize identifier, status, delegate, type, returnedObject, returnedError, returnedResponse;
+@synthesize identifier, status, delegate, type, returnedObject, returnedError, returnedResponse, URL;
 
 - (id)init {
 	
@@ -48,6 +49,7 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 
 
 - (void)dealloc {
+	[URL release];
 	[identifier release];
 	[returnedResponse release];
 	[returnedError release];
@@ -63,6 +65,8 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 	NSError *error = nil;
 	
 	NSURLRequest *request = [self newRequest];
+	
+	self.URL = [request URL];
 	
 	if (!request) return;
 	

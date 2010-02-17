@@ -15,6 +15,7 @@
 		2456D8EC110B7C91009A4F1E /* DTConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 2456D8EB110B7C91009A4F1E /* DTConnectionQueue.m */; };
 		2456D8F1110B7C9A009A4F1E /* DTConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 2456D8F0110B7C9A009A4F1E /* DTConnection.m */; };
 		24626813112C8D680046D38E /* DTFileCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 24626812112C8D680046D38E /* DTFileCache.m */; };
+		2462681D112C8E860046D38E /* DTURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 24083D4210CF9A07009B758E /* DTURLConnection.m */; };
 		247A219C110CC40500227E44 /* DTCoreDataConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 247A219B110CC40500227E44 /* DTCoreDataConnection.m */; };
 		247A21EC110D1C7D00227E44 /* DTURLLoadingConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 247A21EB110D1C7D00227E44 /* DTURLLoadingConnection.m */; };
 		249AC73210D511B300A757BB /* DTOrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 249AC71F10D511B300A757BB /* DTOrderedDictionary.m */; };
@@ -311,6 +312,7 @@
 				247A21EC110D1C7D00227E44 /* DTURLLoadingConnection.m in Sources */,
 				24AD415C112195CE0089D1E7 /* DTCacheURLProtocol.m in Sources */,
 				24626813112C8D680046D38E /* DTFileCache.m in Sources */,
+				2462681D112C8E860046D38E /* DTURLConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

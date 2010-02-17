@@ -14,7 +14,6 @@
 @synthesize URL;
 
 - (void)dealloc {
-	[URL release];
 	[super dealloc];
 }
 

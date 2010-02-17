@@ -10,9 +10,8 @@
 #import "DTConnection.h"
 
 @interface DTURLLoadingConnection : DTConnection {
-	NSURL *URL;
 }
 
-@property (nonatomic, retain) NSURL *URL;
+@property (nonatomic, retain, readwrite) NSURL *URL;
 
 @end

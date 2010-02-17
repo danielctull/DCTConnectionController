@@ -57,6 +57,7 @@ extern NSString *const DTConnectionResponseNotification;
 	NSError *returnedError;
 	NSURLResponse *returnedResponse;	
 	NSObject<DTConnectionDelegate> *delegate;
+	NSURL *URL;
 }
 
 #pragma mark -
@@ -215,6 +216,8 @@ extern NSString *const DTConnectionResponseNotification;
  */
 @property (nonatomic, retain, readonly) NSString *identifier;
 
+
+@property (nonatomic, retain, readonly) NSURL *URL;
 
 /*
  @}
