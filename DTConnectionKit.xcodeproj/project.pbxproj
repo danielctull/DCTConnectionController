@@ -18,20 +18,9 @@
 		2462681D112C8E860046D38E /* DTURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 24083D4210CF9A07009B758E /* DTURLConnection.m */; };
 		247A219C110CC40500227E44 /* DTCoreDataConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 247A219B110CC40500227E44 /* DTCoreDataConnection.m */; };
 		247A21EC110D1C7D00227E44 /* DTURLLoadingConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 247A21EB110D1C7D00227E44 /* DTURLLoadingConnection.m */; };
-		249AC73210D511B300A757BB /* DTOrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 249AC71F10D511B300A757BB /* DTOrderedDictionary.m */; };
-		249AC73310D511B300A757BB /* DTQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 249AC72110D511B300A757BB /* DTQueue.m */; };
-		249AC73410D511B300A757BB /* DTSortedArray.m in Sources */ = {isa = PBXBuildFile; fileRef = 249AC72310D511B300A757BB /* DTSortedArray.m */; };
-		249AC73510D511B300A757BB /* DTStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 249AC72510D511B300A757BB /* DTStack.m */; };
-		249AC73610D511B300A757BB /* DTTraversableDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = 249AC72710D511B300A757BB /* DTTraversableDictionary.m */; };
-		249AC73710D511B300A757BB /* NSArray+DTExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 249AC72910D511B300A757BB /* NSArray+DTExtras.m */; };
-		249AC73810D511B300A757BB /* NSDate+DTComponentExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 249AC72B10D511B300A757BB /* NSDate+DTComponentExtension.m */; };
-		249AC73910D511B300A757BB /* NSNumber+DTMaths.m in Sources */ = {isa = PBXBuildFile; fileRef = 249AC72D10D511B300A757BB /* NSNumber+DTMaths.m */; };
-		249AC73A10D511B300A757BB /* NSSet+DTExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 249AC72F10D511B300A757BB /* NSSet+DTExtras.m */; };
-		249AC73B10D511B300A757BB /* NSString+DTPrefixString.m in Sources */ = {isa = PBXBuildFile; fileRef = 249AC73110D511B300A757BB /* NSString+DTPrefixString.m */; };
 		24AD415C112195CE0089D1E7 /* DTCacheURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 24AD415B112195CE0089D1E7 /* DTCacheURLProtocol.m */; };
 		24E0F62410D6490C00F03AD8 /* DTConnectionKitExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E0F62210D6490C00F03AD8 /* DTConnectionKitExampleViewController.m */; };
 		24E0F62510D6490C00F03AD8 /* DTConnectionKitExampleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24E0F62310D6490C00F03AD8 /* DTConnectionKitExampleView.xib */; };
-		24ECCC4110DC1A8300AB1388 /* DTDataStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 24ECCC4010DC1A8300AB1388 /* DTDataStore.m */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 /* End PBXBuildFile section */
@@ -55,33 +44,11 @@
 		247A219B110CC40500227E44 /* DTCoreDataConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTCoreDataConnection.m; sourceTree = "<group>"; };
 		247A21EA110D1C7D00227E44 /* DTURLLoadingConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTURLLoadingConnection.h; sourceTree = "<group>"; };
 		247A21EB110D1C7D00227E44 /* DTURLLoadingConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTURLLoadingConnection.m; sourceTree = "<group>"; };
-		249AC71E10D511B300A757BB /* DTOrderedDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTOrderedDictionary.h; sourceTree = "<group>"; };
-		249AC71F10D511B300A757BB /* DTOrderedDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTOrderedDictionary.m; sourceTree = "<group>"; };
-		249AC72010D511B300A757BB /* DTQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTQueue.h; sourceTree = "<group>"; };
-		249AC72110D511B300A757BB /* DTQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTQueue.m; sourceTree = "<group>"; };
-		249AC72210D511B300A757BB /* DTSortedArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTSortedArray.h; sourceTree = "<group>"; };
-		249AC72310D511B300A757BB /* DTSortedArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTSortedArray.m; sourceTree = "<group>"; };
-		249AC72410D511B300A757BB /* DTStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTStack.h; sourceTree = "<group>"; };
-		249AC72510D511B300A757BB /* DTStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTStack.m; sourceTree = "<group>"; };
-		249AC72610D511B300A757BB /* DTTraversableDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTTraversableDictionary.h; sourceTree = "<group>"; };
-		249AC72710D511B300A757BB /* DTTraversableDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTTraversableDictionary.m; sourceTree = "<group>"; };
-		249AC72810D511B300A757BB /* NSArray+DTExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+DTExtras.h"; sourceTree = "<group>"; };
-		249AC72910D511B300A757BB /* NSArray+DTExtras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+DTExtras.m"; sourceTree = "<group>"; };
-		249AC72A10D511B300A757BB /* NSDate+DTComponentExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+DTComponentExtension.h"; sourceTree = "<group>"; };
-		249AC72B10D511B300A757BB /* NSDate+DTComponentExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+DTComponentExtension.m"; sourceTree = "<group>"; };
-		249AC72C10D511B300A757BB /* NSNumber+DTMaths.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSNumber+DTMaths.h"; sourceTree = "<group>"; };
-		249AC72D10D511B300A757BB /* NSNumber+DTMaths.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSNumber+DTMaths.m"; sourceTree = "<group>"; };
-		249AC72E10D511B300A757BB /* NSSet+DTExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSSet+DTExtras.h"; sourceTree = "<group>"; };
-		249AC72F10D511B300A757BB /* NSSet+DTExtras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSSet+DTExtras.m"; sourceTree = "<group>"; };
-		249AC73010D511B300A757BB /* NSString+DTPrefixString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+DTPrefixString.h"; sourceTree = "<group>"; };
-		249AC73110D511B300A757BB /* NSString+DTPrefixString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+DTPrefixString.m"; sourceTree = "<group>"; };
 		24AD415A112195CE0089D1E7 /* DTCacheURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTCacheURLProtocol.h; sourceTree = "<group>"; };
 		24AD415B112195CE0089D1E7 /* DTCacheURLProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTCacheURLProtocol.m; sourceTree = "<group>"; };
 		24E0F62110D6490C00F03AD8 /* DTConnectionKitExampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTConnectionKitExampleViewController.h; sourceTree = "<group>"; };
 		24E0F62210D6490C00F03AD8 /* DTConnectionKitExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConnectionKitExampleViewController.m; sourceTree = "<group>"; };
 		24E0F62310D6490C00F03AD8 /* DTConnectionKitExampleView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DTConnectionKitExampleView.xib; sourceTree = "<group>"; };
-		24ECCC3F10DC1A8300AB1388 /* DTDataStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTDataStore.h; sourceTree = "<group>"; };
-		24ECCC4010DC1A8300AB1388 /* DTDataStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTDataStore.m; sourceTree = "<group>"; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		28AD733E0D9D9553002E5188 /* MainWindow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -142,36 +109,6 @@
 			path = DTConnectionKit;
 			sourceTree = "<group>";
 		};
-		249AC71D10D511B300A757BB /* DTFoundation */ = {
-			isa = PBXGroup;
-			children = (
-				249AC71E10D511B300A757BB /* DTOrderedDictionary.h */,
-				249AC71F10D511B300A757BB /* DTOrderedDictionary.m */,
-				249AC72010D511B300A757BB /* DTQueue.h */,
-				249AC72110D511B300A757BB /* DTQueue.m */,
-				249AC72210D511B300A757BB /* DTSortedArray.h */,
-				249AC72310D511B300A757BB /* DTSortedArray.m */,
-				249AC72410D511B300A757BB /* DTStack.h */,
-				249AC72510D511B300A757BB /* DTStack.m */,
-				249AC72610D511B300A757BB /* DTTraversableDictionary.h */,
-				249AC72710D511B300A757BB /* DTTraversableDictionary.m */,
-				249AC72810D511B300A757BB /* NSArray+DTExtras.h */,
-				249AC72910D511B300A757BB /* NSArray+DTExtras.m */,
-				249AC72A10D511B300A757BB /* NSDate+DTComponentExtension.h */,
-				249AC72B10D511B300A757BB /* NSDate+DTComponentExtension.m */,
-				249AC72C10D511B300A757BB /* NSNumber+DTMaths.h */,
-				249AC72D10D511B300A757BB /* NSNumber+DTMaths.m */,
-				249AC72E10D511B300A757BB /* NSSet+DTExtras.h */,
-				249AC72F10D511B300A757BB /* NSSet+DTExtras.m */,
-				249AC73010D511B300A757BB /* NSString+DTPrefixString.h */,
-				249AC73110D511B300A757BB /* NSString+DTPrefixString.m */,
-				24ECCC3F10DC1A8300AB1388 /* DTDataStore.h */,
-				24ECCC4010DC1A8300AB1388 /* DTDataStore.m */,
-			);
-			name = DTFoundation;
-			path = ../DTFoundation/DTFoundation;
-			sourceTree = SOURCE_ROOT;
-		};
 		24E0F61E10D648F400F03AD8 /* DTConnectionKitExample */ = {
 			isa = PBXGroup;
 			children = (
@@ -185,7 +122,6 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				249AC71D10D511B300A757BB /* DTFoundation */,
 				24083D3A10CF9A07009B758E /* DTConnectionKit */,
 				24E0F61E10D648F400F03AD8 /* DTConnectionKitExample */,
 				080E96DDFE201D6D7F000001 /* Classes */,
@@ -282,18 +218,7 @@
 			files = (
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* DTConnectionKitAppDelegate.m in Sources */,
-				249AC73210D511B300A757BB /* DTOrderedDictionary.m in Sources */,
-				249AC73310D511B300A757BB /* DTQueue.m in Sources */,
-				249AC73410D511B300A757BB /* DTSortedArray.m in Sources */,
-				249AC73510D511B300A757BB /* DTStack.m in Sources */,
-				249AC73610D511B300A757BB /* DTTraversableDictionary.m in Sources */,
-				249AC73710D511B300A757BB /* NSArray+DTExtras.m in Sources */,
-				249AC73810D511B300A757BB /* NSDate+DTComponentExtension.m in Sources */,
-				249AC73910D511B300A757BB /* NSNumber+DTMaths.m in Sources */,
-				249AC73A10D511B300A757BB /* NSSet+DTExtras.m in Sources */,
-				249AC73B10D511B300A757BB /* NSString+DTPrefixString.m in Sources */,
 				24E0F62410D6490C00F03AD8 /* DTConnectionKitExampleViewController.m in Sources */,
-				24ECCC4110DC1A8300AB1388 /* DTDataStore.m in Sources */,
 				2456D8EC110B7C91009A4F1E /* DTConnectionQueue.m in Sources */,
 				2456D8F1110B7C9A009A4F1E /* DTConnection.m in Sources */,
 				247A219C110CC40500227E44 /* DTCoreDataConnection.m in Sources */,
