@@ -33,9 +33,14 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 @property (nonatomic, retain, readwrite) NSError *returnedError;
 @property (nonatomic, retain, readwrite) NSURLResponse *returnedResponse;
 
-- (void)notifyDelegateAndObserversOfReturnedObject:(NSObject *)object;
-- (void)notifyDelegateAndObserversOfReturnedError:(NSError *)error;
-- (void)notifyDelegateAndObserversOfResponse:(NSURLResponse *)response;
+- (void)notifyDelegateOfObject:(NSObject *)object;
+- (void)notifyObserversOfObject:(NSObject *)object;
+
+- (void)notifyDelegateOfReturnedError:(NSError *)error;
+- (void)notifyObserversOfReturnedError:(NSError *)error;
+
+- (void)notifyDelegateOfResponse:(NSURLResponse *)response;
+- (void)notifyObserversOfResponse:(NSURLResponse *)response;
 @end
 
 @implementation DTConnection
@@ -99,53 +104,57 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 }
 
 - (void)receivedObject:(NSObject *)object {
-	[self performSelector:@selector(notifyDelegateAndObserversOfReturnedObject:) onThread:originatingThread withObject:object waitUntilDone:YES];
+	self.returnedObject = object;
+	self.status = DTConnectionStatusComplete;
+	[self performSelector:@selector(notifyDelegateOfObject:) onThread:originatingThread withObject:object waitUntilDone:YES];
+	[self performSelectorOnMainThread:@selector(notifyObserversOfObject:) withObject:object waitUntilDone:YES];
 }
 
 - (void)receivedResponse:(NSURLResponse *)response {
-	[self performSelector:@selector(notifyDelegateAndObserversOfResponse:) onThread:originatingThread withObject:response waitUntilDone:YES];
+	self.returnedResponse = response;
+	self.status = DTConnectionStatusResponded;
+	[self performSelector:@selector(notifyDelegateOfResponse:) onThread:originatingThread withObject:response waitUntilDone:YES];
+	[self performSelectorOnMainThread:@selector(notifyObserversOfResponse:) withObject:response waitUntilDone:YES];
 }
 
 - (void)receivedError:(NSError *)error {
-	[self performSelector:@selector(notifyDelegateAndObserversOfReturnedError:) onThread:originatingThread withObject:error waitUntilDone:YES];
+	self.returnedError = error;
+	self.status = DTConnectionStatusFailed;
+	[self performSelector:@selector(notifyDelegateOfReturnedError:) onThread:originatingThread withObject:error waitUntilDone:YES];
+	[self performSelectorOnMainThread:@selector(notifyObserversOfReturnedError:) withObject:error waitUntilDone:YES];
 }	 
 		 
 #pragma mark -
 #pragma mark Internal methods
 
-- (void)notifyDelegateAndObserversOfReturnedObject:(NSObject *)object {
-	
-	self.returnedObject = object;
-	
-	self.status = DTConnectionStatusComplete;
-	
+- (void)notifyDelegateOfObject:(NSObject *)object {	
 	if ([self.delegate respondsToSelector:@selector(dtconnection:didSucceedWithObject:)])
 		[self.delegate dtconnection:self didSucceedWithObject:object];
-	
+}
+
+- (void)notifyObserversOfObject:(NSObject *)object {
 	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionCompletedNotification object:self];
 }
 
-- (void)notifyDelegateAndObserversOfReturnedError:(NSError *)error {
-	
-	self.returnedError = error;
-	
-	self.status = DTConnectionStatusFailed;
-		
+
+
+- (void)notifyDelegateOfReturnedError:(NSError *)error {
 	if ([self.delegate respondsToSelector:@selector(dtconnection:didFailWithError:)])
 		[self.delegate dtconnection:self didFailWithError:error];
-	
+}
+
+- (void)notifyObserversOfReturnedError:(NSError *)error {
 	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionFailedNotification object:self];
 }
 
-- (void)notifyDelegateAndObserversOfResponse:(NSURLResponse *)response {
-	
-	self.returnedResponse = response;
-	
-	self.status = DTConnectionStatusResponded;
-	
+
+
+- (void)notifyDelegateOfResponse:(NSURLResponse *)response {
 	if ([self.delegate respondsToSelector:@selector(dtconnection:didReceiveResponse:)])
 		[self.delegate dtconnection:self didReceiveResponse:response];
-	
+}
+
+- (void)notifyObserversOfResponse:(NSURLResponse *)response {
 	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionResponseNotification object:self];
 }
 
