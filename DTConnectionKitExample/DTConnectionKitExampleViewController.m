@@ -38,7 +38,6 @@
 	
 	self.navigationController.toolbarHidden = NO;
 	
-	//[[DTConnectionManager sharedConnectionManager] setMaxConnections:5];
 	[[DTConnectionQueue sharedConnectionQueue] setMaxConnections:3];
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(connectionCountChanged:) 
@@ -62,15 +61,7 @@
 					 @"http://www.play.com/",
 					 nil];
 	
-	for (NSString *s in urls) {/*
-		DTURLConnectionController *connection = [[DTURLConnectionController alloc] init];
-		connection.delegate = self;
-		connection.URL = [NSURL URLWithString:s];
-		[connection addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
-		[connection start];
-		[connection release];*/
-		
-		
+	for (NSString *s in urls) {		
 		DTURLLoadingConnection *connection = [[DTURLLoadingConnection alloc] init];
 		connection.delegate = self;
 		connection.URL = [NSURL URLWithString:s];
@@ -146,15 +137,6 @@
 
 - (void)connectionCountChanged:(NSNotification *)notification {
 	self.connectionsLabel.text = [NSString stringWithFormat:@"Connections: %i", [DTConnectionQueue sharedConnectionQueue].connectionCount];
-}
-
-
-- (IBAction)addConnection:(id)sender {
-	//[[DTConnectionManager sharedConnectionManager] addExternalConnection];
-}
-
-- (IBAction)removeConnection:(id)sender {
-	//[[DTConnectionManager sharedConnectionManager] removeExternalConnection];
 }
 
 #pragma mark -

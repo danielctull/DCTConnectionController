@@ -17,6 +17,4 @@
 @property (nonatomic, retain) IBOutlet UITextView *textView;
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
 @property (nonatomic, retain) IBOutlet UILabel *connectionsLabel;
-- (IBAction)addConnection:(id)sender;
-- (IBAction)removeConnection:(id)sender;
 @end
