@@ -42,8 +42,6 @@
 		1D3623250D0F684500981E51 /* DTConnectionKitAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConnectionKitAppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* DTConnectionKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DTConnectionKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		24083D3B10CF9A07009B758E /* DTConnectionManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTConnectionManager.h; sourceTree = "<group>"; };
-		24083D3C10CF9A07009B758E /* DTConnectionManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConnectionManager.m; sourceTree = "<group>"; };
 		24083D4110CF9A07009B758E /* DTURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTURLConnection.h; sourceTree = "<group>"; };
 		24083D4210CF9A07009B758E /* DTURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTURLConnection.m; sourceTree = "<group>"; };
 		2456D8E0110B6F54009A4F1E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -77,12 +75,8 @@
 		249AC72F10D511B300A757BB /* NSSet+DTExtras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSSet+DTExtras.m"; sourceTree = "<group>"; };
 		249AC73010D511B300A757BB /* NSString+DTPrefixString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+DTPrefixString.h"; sourceTree = "<group>"; };
 		249AC73110D511B300A757BB /* NSString+DTPrefixString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+DTPrefixString.m"; sourceTree = "<group>"; };
-		249AC75E10D5137A00A757BB /* DTConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTConnectionController.h; sourceTree = "<group>"; };
-		249AC75F10D5137A00A757BB /* DTConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConnectionController.m; sourceTree = "<group>"; };
 		24AD415A112195CE0089D1E7 /* DTCacheURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTCacheURLProtocol.h; sourceTree = "<group>"; };
 		24AD415B112195CE0089D1E7 /* DTCacheURLProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTCacheURLProtocol.m; sourceTree = "<group>"; };
-		24E0F5E010D6466700F03AD8 /* DTURLConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTURLConnectionController.h; sourceTree = "<group>"; };
-		24E0F5E110D6466700F03AD8 /* DTURLConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTURLConnectionController.m; sourceTree = "<group>"; };
 		24E0F62110D6490C00F03AD8 /* DTConnectionKitExampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTConnectionKitExampleViewController.h; sourceTree = "<group>"; };
 		24E0F62210D6490C00F03AD8 /* DTConnectionKitExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConnectionKitExampleViewController.m; sourceTree = "<group>"; };
 		24E0F62310D6490C00F03AD8 /* DTConnectionKitExampleView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DTConnectionKitExampleView.xib; sourceTree = "<group>"; };
@@ -130,14 +124,8 @@
 		24083D3A10CF9A07009B758E /* DTConnectionKit */ = {
 			isa = PBXGroup;
 			children = (
-				24083D3B10CF9A07009B758E /* DTConnectionManager.h */,
-				24083D3C10CF9A07009B758E /* DTConnectionManager.m */,
 				24083D4110CF9A07009B758E /* DTURLConnection.h */,
 				24083D4210CF9A07009B758E /* DTURLConnection.m */,
-				249AC75E10D5137A00A757BB /* DTConnectionController.h */,
-				249AC75F10D5137A00A757BB /* DTConnectionController.m */,
-				24E0F5E010D6466700F03AD8 /* DTURLConnectionController.h */,
-				24E0F5E110D6466700F03AD8 /* DTURLConnectionController.m */,
 				2456D8EA110B7C91009A4F1E /* DTConnectionQueue.h */,
 				2456D8EB110B7C91009A4F1E /* DTConnectionQueue.m */,
 				2456D8EF110B7C9A009A4F1E /* DTConnection.h */,
