@@ -53,13 +53,14 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 	
 	self.identifier = [[NSProcessInfo processInfo] globallyUniqueString];
 	
-	originatingThread = [NSThread currentThread];
+	originatingThread = [[NSThread currentThread] retain];
 	
 	return self;
 }
 
 
 - (void)dealloc {
+	[originatingThread release];
 	[URL release];
 	[identifier release];
 	[returnedResponse release];
