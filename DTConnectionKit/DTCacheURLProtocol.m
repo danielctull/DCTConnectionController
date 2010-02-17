@@ -12,12 +12,20 @@
 
 NSString *const DTCacheURLProtocolString = @"dtcache";
 
+static NSMutableArray *consultedAboutURLs = nil;
+
 @implementation DTCacheURLProtocol
 
 + (BOOL)canInitWithRequest:(NSURLRequest *)request {
 	
-	if ([[[request URL] scheme] hasPrefix:DTCacheURLProtocolString]) 
-		return YES; 
+	if (!consultedAboutURLs) consultedAboutURLs = [[NSMutableArray alloc] init];
+	
+	NSString *urlString = [[request URL] absoluteString];
+	
+	if ([consultedAboutURLs containsObject:urlString]) return NO;
+		
+	if ([urlString hasSuffix:@"jpg"] || [urlString hasSuffix:@"gif"] || [urlString hasSuffix:@"png"] || [urlString hasSuffix:@"jpeg"])
+		return YES;
 	
 	return NO;
 }
@@ -26,74 +34,42 @@ NSString *const DTCacheURLProtocolString = @"dtcache";
 }
 
 - (void)startLoading {
-	
-	NSURL *URL = [[self request] URL];
-	
-	NSString *urlStringToLoad = [NSString stringWithFormat:@"http:%@", [URL resourceSpecifier]];
-	
+		
+	NSString *urlStringToLoad = [[[self request] URL] absoluteString];
+		
 	NSData *data = [DTFileCache dataForKey:urlStringToLoad];
 	
-	if (data) {
+	NSURLResponse *response = nil;
+	NSError *error = nil;
 	
-		NSURLResponse *response = [[NSURLResponse alloc] initWithURL:nil MIMEType:@"" expectedContentLength:-1 textEncodingName:nil];
+	if (!data) {
 		
-		[[self client] URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageNotAllowed];
+		[consultedAboutURLs addObject:urlStringToLoad];
+		data = [NSURLConnection sendSynchronousRequest:[self request] returningResponse:&response error:&error];		
+		[consultedAboutURLs removeObject:urlStringToLoad];
 		
-		[response release];
+		[response retain];
 		
-		[[self client] URLProtocol:self didLoadData:data];
-		
-		[[self client] URLProtocolDidFinishLoading:self];
-		
-		return;	
+		[DTFileCache setData:data forKey:urlStringToLoad];
 	}
 	
+	response = [[NSURLResponse alloc] initWithURL:nil MIMEType:@"" expectedContentLength:-1 textEncodingName:nil];
 	
-	DTURLLoadingConnection *connection = [[DTURLLoadingConnection alloc] init];
-	connection.URL = [NSURL URLWithString:urlStringToLoad];
-	[connection connect];
-	[connection release];	
+	[[self client] URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageNotAllowed];	
+
+	[response release];
+		
+	if (error) 
+		[[self client] URLProtocol:self didFailWithError:error];
+	else
+		[[self client] URLProtocol:self didLoadData:data];
 	
-	NSPort *aPort = [NSPort port];
-	NSRunLoop *currentRunLoop = [NSRunLoop currentRunLoop];
-    [currentRunLoop addPort:aPort forMode:NSRunLoopCommonModes];
-    
-	while (!connectionHasReturned)
-		[[NSRunLoop currentRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:0.1]];
+	[[self client] URLProtocolDidFinishLoading:self];
 }
 
 + (NSURLRequest *)canonicalRequestForRequest:(NSURLRequest *)request {
-	NSString *newURLString = [NSString stringWithFormat:@"http:%@", [[request URL] resourceSpecifier]];
-	NSURL *newURL = [NSURL URLWithString:newURLString];
-	
-	NSURLRequest *newRequest = [[NSURLRequest alloc] initWithURL:newURL];
-	
-	return [newRequest autorelease];
+	return request;
 }
-
-
-#pragma mark -
-#pragma mark DTConnection delegates
-
-- (void)dtconnection:(DTConnection *)connection didSucceedWithObject:(NSObject *)object {
-	
-	if (![object isKindOfClass:[NSData class]]) return;
-	
-	NSData *data = (NSData *)object;
-	
-	[[self client] URLProtocol:self didLoadData:data];
-	
-	connectionHasReturned = YES;
-}
-
-- (void)dtconnection:(DTConnection *)connection didFailWithError:(NSError *)error {
-	[[self client] URLProtocol:self didFailWithError:error];
-}
-
-- (void)dtconnection:(DTConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-	[[self client] URLProtocol:self didReceiveResponse:response cacheStoragePolicy:NSURLCacheStorageNotAllowed];
-}
-
 
 @end
 
