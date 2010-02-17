@@ -58,6 +58,7 @@ extern NSString *const DTConnectionResponseNotification;
 	NSURLResponse *returnedResponse;	
 	NSObject<DTConnectionDelegate> *delegate;
 	NSURL *URL;
+	NSThread *originatingThread;
 }
 
 #pragma mark -

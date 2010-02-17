@@ -48,6 +48,8 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 	
 	self.identifier = [[NSProcessInfo processInfo] globallyUniqueString];
 	
+	originatingThread = [NSThread currentThread];
+	
 	return self;
 }
 
@@ -97,15 +99,15 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 }
 
 - (void)receivedObject:(NSObject *)object {
-	[self performSelectorOnMainThread:@selector(notifyDelegateAndObserversOfReturnedObject:) withObject:object waitUntilDone:YES];
+	[self performSelector:@selector(notifyDelegateAndObserversOfReturnedObject:) onThread:originatingThread withObject:object waitUntilDone:YES];
 }
 
 - (void)receivedResponse:(NSURLResponse *)response {
-	[self performSelectorOnMainThread:@selector(notifyDelegateAndObserversOfResponse:) withObject:response waitUntilDone:YES];
+	[self performSelector:@selector(notifyDelegateAndObserversOfResponse:) onThread:originatingThread withObject:response waitUntilDone:YES];
 }
 
 - (void)receivedError:(NSError *)error {
-	[self performSelectorOnMainThread:@selector(notifyDelegateAndObserversOfReturnedError:) withObject:error waitUntilDone:YES];
+	[self performSelector:@selector(notifyDelegateAndObserversOfReturnedError:) onThread:originatingThread withObject:error waitUntilDone:YES];
 }	 
 		 
 #pragma mark -
