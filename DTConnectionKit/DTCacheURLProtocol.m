@@ -9,6 +9,7 @@
 #import "DTCacheURLProtocol.h"
 #import "DTFileCache.h"
 #import "DTURLLoadingConnection.h"
+#import "DTConnectionQueue.h"
 
 NSString *const DTCacheURLProtocolString = @"dtcache";
 
@@ -23,7 +24,7 @@ static NSMutableArray *consultedAboutURLs = nil;
 	NSString *urlString = [[request URL] absoluteString];
 	
 	if ([consultedAboutURLs containsObject:urlString]) return NO;
-		
+	
 	if ([urlString hasSuffix:@"jpg"] || [urlString hasSuffix:@"gif"] || [urlString hasSuffix:@"png"] || [urlString hasSuffix:@"jpeg"])
 		return YES;
 	
@@ -43,9 +44,12 @@ static NSMutableArray *consultedAboutURLs = nil;
 	NSError *error = nil;
 	
 	if (!data) {
+		DTConnectionQueue *connectionQueue = [DTConnectionQueue sharedConnectionQueue];
 		
 		[consultedAboutURLs addObject:urlStringToLoad];
+		[connectionQueue incrementExternalConnectionCount];
 		data = [NSURLConnection sendSynchronousRequest:[self request] returningResponse:&response error:&error];		
+		[connectionQueue decrementExternalConnectionCount];
 		[consultedAboutURLs removeObject:urlStringToLoad];
 		
 		[response retain];
