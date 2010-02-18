@@ -109,8 +109,8 @@ NSString *const DTFileCacheDictionaryPath = @"DTDiskCacheDictionary";
 
 + (NSString *)baseDirectoryPath {
 	
-	NSString *path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:DTFileCachePath];
-	
+	NSString *path = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:DTFileCachePath];
+		
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	
 	if (![fileManager fileExistsAtPath:path])
