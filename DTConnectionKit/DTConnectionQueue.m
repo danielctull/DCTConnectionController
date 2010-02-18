@@ -12,6 +12,11 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 
 static DTConnectionQueue *sharedInstance = nil;
 
+
+@interface DTConnectionQueue ()
+- (void)updateConnectionCounter;
+@end
+
 @implementation DTConnectionQueue
 
 
@@ -60,14 +65,18 @@ static DTConnectionQueue *sharedInstance = nil;
                        context:(void *)context {
 	
 	if ([keyPath isEqualToString:@"operations"]) {
-		if ([self.operations count] > 0)
-			[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-		else
-			[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-	}
-	
+		[self updateConnectionCounter];
+	}	
+}
+
+- (void)updateConnectionCounter {
+	if (([self.operations count] + externalConnections) > 0)
+		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+	else
+		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+
+
 	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionQueueConnectionCountChangedNotification object:self];
-	
 }
 
 - (void)setMaxConnections:(NSInteger)max {
@@ -76,6 +85,16 @@ static DTConnectionQueue *sharedInstance = nil;
 
 - (NSInteger)maxConnections {
 	return [super maxConcurrentOperationCount];
+}
+
+- (void)incrementExternalConnectionCount {
+	externalConnections++;
+	[self updateConnectionCounter];
+}
+
+- (void)decrementExternalConnectionCount {
+	externalConnections--;
+	[self performSelector:@selector(updateConnectionCounter) withObject:nil afterDelay:0.01];
 }
 
 - (NSInteger)connectionCount {

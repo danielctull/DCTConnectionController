@@ -12,7 +12,7 @@
 extern NSString *const DTConnectionQueueConnectionCountChangedNotification;
 
 @interface DTConnectionQueue : NSOperationQueue {
-	
+	NSInteger externalConnections;
 }
 
 + (DTConnectionQueue *)sharedConnectionQueue;
@@ -22,6 +22,9 @@ extern NSString *const DTConnectionQueueConnectionCountChangedNotification;
 - (BOOL)isConnectingToURL:(NSURL *)URL;
 - (BOOL)hasQueuedConnectionToURL:(NSURL *)URL;
 - (DTConnection *)queuedConnectionToURL:(NSURL *)URL;
+
+- (void)incrementExternalConnectionCount;
+- (void)decrementExternalConnectionCount;
 
 @property (nonatomic, assign) NSInteger maxConnections;
 @property (nonatomic, readonly) NSInteger connectionCount;
