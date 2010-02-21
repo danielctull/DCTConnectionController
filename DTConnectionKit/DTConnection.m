@@ -45,7 +45,7 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 
 @implementation DTConnection
 
-@synthesize identifier, status, delegate, type, returnedObject, returnedError, returnedResponse, URL;
+@synthesize identifier, status, delegate, type, returnedObject, returnedError, returnedResponse, URL, originatingThread;
 
 - (id)init {
 	

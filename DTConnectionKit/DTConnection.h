@@ -220,6 +220,8 @@ extern NSString *const DTConnectionResponseNotification;
 
 @property (nonatomic, retain, readonly) NSURL *URL;
 
+@property (nonatomic, retain, readonly) NSThread *originatingThread;
+
 /*
  @}
  */

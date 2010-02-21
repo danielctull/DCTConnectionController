@@ -16,6 +16,8 @@
 
 @implementation DTCoreDataConnection
 
+@synthesize mergePolicy;
+
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext {
 	
 	if (!(self = [super init])) return nil;
@@ -55,12 +57,11 @@
 				[idArray addObject:[mo objectID]];	
 			}
 		}
-		[self performSelectorOnMainThread:@selector(receivedObjectIDArray:) withObject:idArray waitUntilDone:YES];
-		
+		[self performSelector:@selector(receivedObjectIDArray:) onThread:self.originatingThread withObject:idArray waitUntilDone:YES];
 	} else if ([object isKindOfClass:[NSManagedObject class]]) {
 		
 		NSManagedObject *mo = (NSManagedObject *)object;
-		[self performSelectorOnMainThread:@selector(receivedObjectID:) withObject:[mo objectID] waitUntilDone:YES];
+		[self performSelector:@selector(receivedObjectID:) onThread:self.originatingThread withObject:[mo objectID] waitUntilDone:YES];
 		
 	} else {
 		[super receivedObject:object];
@@ -103,8 +104,12 @@
 }
 
 - (void)threadedContextDidSave:(NSNotification *)notification {
-	[mainContext setMergePolicy:NSMergeByPropertyStoreTrumpMergePolicy];
-	[mainContext mergeChangesFromContextDidSaveNotification:notification];
+	if (mergePolicy) [mainContext setMergePolicy:mergePolicy]; // NSMergeByPropertyStoreTrumpMergePolicy
+	
+	[mainContext performSelector:@selector(mergeChangesFromContextDidSaveNotification:) 
+						onThread:self.originatingThread 
+					  withObject:notification 
+				   waitUntilDone:YES];
 }
 
 - (void)receivedObjectIDArray:(NSArray *)array {

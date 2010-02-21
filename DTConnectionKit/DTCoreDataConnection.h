@@ -13,8 +13,10 @@
 @interface DTCoreDataConnection : DTConnection {
 	NSManagedObjectContext *mainContext;
 	NSManagedObjectContext *threadedContext;
+	id mergePolicy;
 }
 
+@property (nonatomic, assign) id mergePolicy;
 @property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
 
 
