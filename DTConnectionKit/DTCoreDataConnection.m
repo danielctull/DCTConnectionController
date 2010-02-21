@@ -37,7 +37,7 @@
 }
 
 - (NSManagedObjectContext *)managedObjectContext {
-	return threadedContext;
+	return [[threadedContext retain] autorelease];
 }
 
 - (void)receivedObject:(NSObject *)object {
