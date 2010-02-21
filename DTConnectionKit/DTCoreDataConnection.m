@@ -73,33 +73,29 @@
 	NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
 	[defaultCenter addObserver:self selector:@selector(threadedContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:threadedContext];
 	
-	[threadedContext lock];
-	
 	if ([threadedContext hasChanges]) {
+			
+		NSError *error;
 		
+		BOOL contextDidSave = [threadedContext save:&error];
 		
-		NSError* error;
-        if(![threadedContext save:&error]) {
+		if (!contextDidSave) {
 			NSLog(@"Failed to save to data store: %@", [error localizedDescription]);
+			
 			NSArray* detailedErrors = [[error userInfo] objectForKey:NSDetailedErrorsKey];
+			
 			if(detailedErrors != nil && [detailedErrors count] > 0) {
-				for(NSError* detailedError in detailedErrors) {
+				
+				for(NSError* detailedError in detailedErrors)
 					NSLog(@"  DetailedError: %@", [detailedError userInfo]);
-				}
-			}
-			else {
+				
+			} else {
 				NSLog(@"  %@", [error userInfo]);
 			}
-        }/*
-		
-		
-		
-		NSError *error;
-		if (![threadedContext save:&error]) NSLog(@"Unresolved error %@, %@", error, [error userInfo]);*/
+			
+        }
 	}
-	
-	[threadedContext unlock];
-	
+		
 	[defaultCenter removeObserver:self name:NSManagedObjectContextDidSaveNotification object:threadedContext];	
 }
 
