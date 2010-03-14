@@ -46,6 +46,7 @@ NSString *const DTConnectionIsFinishedKey = @"isFinished";
 - (void)notifyObserversOfResponse:(NSURLResponse *)response;
 
 - (void)finish;
+- (void)inQueueCheck;
 @end
 
 @implementation DTConnection
@@ -78,6 +79,9 @@ NSString *const DTConnectionIsFinishedKey = @"isFinished";
 	return isExecuting;
 }
 - (BOOL)isFinished {
+	if (self.status == DTConnectionStatusNotStarted)
+		[self performSelector:@selector(inQueueCheck) withObject:nil afterDelay:0.0];
+	
 	return isFinished;
 }
 
@@ -102,47 +106,18 @@ NSString *const DTConnectionIsFinishedKey = @"isFinished";
 	CFRunLoopRun();
 }
 
-- (void)finish {
-	CFRunLoopStop([[NSRunLoop currentRunLoop] getCFRunLoop]);
-	[self willChangeValueForKey:DTConnectionIsExecutingKey];
-    [self willChangeValueForKey:DTConnectionIsFinishedKey];
-    isExecuting = NO;
-    isFinished = YES;
-    [self didChangeValueForKey:DTConnectionIsExecutingKey];
-    [self didChangeValueForKey:DTConnectionIsFinishedKey];
-	[pool drain];
-}
-
 - (void)cancel {
 	[super cancel];
 	[urlConnection cancel];
 	[self finish];
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    [data release];
-    data = [[NSMutableData alloc] init];
-	
-	[self receivedResponse:response];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)somedata {
-    [data appendData:somedata];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    [self receivedObject:data];
-	[self finish];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-    [self receivedError:error];
-	[self finish];
-}
-
 - (void)connect {
 	[[DTConnectionQueue sharedConnectionQueue] addConnection:self];
 }
+
+#pragma mark -
+#pragma mark Subclass methods
 
 - (NSMutableURLRequest *)newRequest {
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
@@ -169,7 +144,31 @@ NSString *const DTConnectionIsFinishedKey = @"isFinished";
 	self.status = DTConnectionStatusFailed;
 	[self performSelector:@selector(notifyDelegateOfReturnedError:) onThread:originatingThread withObject:error waitUntilDone:YES];
 	[self performSelectorOnMainThread:@selector(notifyObserversOfReturnedError:) withObject:error waitUntilDone:YES];
-}	 
+}
+
+#pragma mark -
+#pragma mark NSURLConnection delegate methods
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    [data release];
+    data = [[NSMutableData alloc] init];
+	
+	[self receivedResponse:response];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)somedata {
+    [data appendData:somedata];
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    [self receivedObject:data];
+	[self finish];
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    [self receivedError:error];
+	[self finish];
+}
 		 
 #pragma mark -
 #pragma mark Internal methods
@@ -203,6 +202,22 @@ NSString *const DTConnectionIsFinishedKey = @"isFinished";
 
 - (void)notifyObserversOfResponse:(NSURLResponse *)response {
 	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionResponseNotification object:self];
+}
+
+- (void)finish {
+	CFRunLoopStop([[NSRunLoop currentRunLoop] getCFRunLoop]);
+	[self willChangeValueForKey:DTConnectionIsExecutingKey];
+    [self willChangeValueForKey:DTConnectionIsFinishedKey];
+    isExecuting = NO;
+    isFinished = YES;
+    [self didChangeValueForKey:DTConnectionIsExecutingKey];
+    [self didChangeValueForKey:DTConnectionIsFinishedKey];
+	[pool drain];
+}
+
+- (void)inQueueCheck {
+	if (![self isExecuting])
+		self.status = DTConnectionStatusQueued;
 }
 
 @end
