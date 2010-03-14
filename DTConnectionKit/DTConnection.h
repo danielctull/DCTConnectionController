@@ -59,6 +59,9 @@ extern NSString *const DTConnectionResponseNotification;
 	NSObject<DTConnectionDelegate> *delegate;
 	NSURL *URL;
 	NSThread *originatingThread;
+	BOOL isExecuting, isFinished;
+	NSURLConnection *urlConnection;
+	NSMutableData *data;
 }
 
 #pragma mark -

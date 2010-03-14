@@ -41,6 +41,8 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 
 - (void)notifyDelegateOfResponse:(NSURLResponse *)response;
 - (void)notifyObserversOfResponse:(NSURLResponse *)response;
+
+- (void)finish;
 @end
 
 @implementation DTConnection
@@ -69,6 +71,64 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 	[super dealloc];
 }
 
+- (BOOL)isConcurrent {
+	return YES;
+}
+- (BOOL)isExecuting {
+	return isExecuting;
+}
+- (BOOL)isFinished {
+	return isFinished;
+}
+
+- (void)start {
+	
+	
+	
+	NSLog(@"%@:%s current:%@ originating:%@", self, _cmd, [NSThread currentThread], originatingThread);
+	[self willChangeValueForKey:@"isExecuting"];
+    isExecuting = YES;
+    [self didChangeValueForKey:@"isExecuting"];
+	
+	NSURLRequest *request = [self newRequest];
+	
+	urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	
+	[request release];
+	
+	if (!urlConnection) [self finish];
+	
+}
+
+- (void)finish {
+	[self willChangeValueForKey:@"isExecuting"];
+	[self willChangeValueForKey:@"isFinished"];
+    isExecuting = NO;
+	isFinished = YES;
+    [self didChangeValueForKey:@"isExecuting"];
+	[self didChangeValueForKey:@"isFinished"];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+    [data release];
+    data = [[NSMutableData alloc] init];
+	
+	[self receivedResponse:response];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)somedata {
+    [data appendData:somedata];
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+    [self receivedObject:data];
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+    [self receivedError:error];
+}
+
+/*
 - (void)main {
 	
 	self.status = DTConnectionStatusStarted;
@@ -82,6 +142,16 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 	
 	if (!request) return;
 	
+	NSRunLoop *runLoop = [NSRunLoop currentRunLoop];
+	
+	//[runLoop addPort: forMode:NSConnectionReplyMode];
+	
+	NSPort *aPort = [NSPort port];
+    [runLoop addPort:aPort forMode:NSDefaultRunLoopMode];
+    
+    // Run the runLoop for a few seconds to give the connection request a chance
+    [runLoop runUntilDate:[NSDate dateWithTimeIntervalSinceNow:10]];
+	
 	NSData *data = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
 	
 	[request release];
@@ -92,7 +162,7 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 		[self receivedError:error];
 	else
 		[self receivedObject:data];
-}
+}*/
 
 - (void)connect {
 	[[DTConnectionQueue sharedConnectionQueue] addConnection:self];
@@ -109,6 +179,7 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 	self.status = DTConnectionStatusComplete;
 	[self performSelector:@selector(notifyDelegateOfObject:) onThread:originatingThread withObject:object waitUntilDone:YES];
 	[self performSelectorOnMainThread:@selector(notifyObserversOfObject:) withObject:object waitUntilDone:YES];
+	[self finish];
 }
 
 - (void)receivedResponse:(NSURLResponse *)response {
@@ -123,6 +194,7 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 	self.status = DTConnectionStatusFailed;
 	[self performSelector:@selector(notifyDelegateOfReturnedError:) onThread:originatingThread withObject:error waitUntilDone:YES];
 	[self performSelectorOnMainThread:@selector(notifyObserversOfReturnedError:) withObject:error waitUntilDone:YES];
+	[self finish];
 }	 
 		 
 #pragma mark -
