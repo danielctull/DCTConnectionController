@@ -66,12 +66,13 @@ NSString *const DTConnectionIsFinishedKey = @"isFinished";
 
 
 - (void)dealloc {
-	[originatingThread release];
-	[URL release];
-	[identifier release];
-	[returnedResponse release];
-	[returnedError release];
-	[returnedObject release];
+	[originatingThread release]; originatingThread = nil;
+	[URL release]; URL = nil;
+	[identifier release]; identifier = nil;
+	[returnedResponse release]; returnedResponse = nil;
+	[returnedError release]; returnedError = nil;
+	[returnedObject release]; returnedObject = nil;
+	[urlConnection release]; urlConnection = nil;
 	[super dealloc];
 }
 
