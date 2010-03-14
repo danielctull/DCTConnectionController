@@ -75,11 +75,10 @@
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-	NSLog(@"%@:%s", self, _cmd);
+	
 	DTURLLoadingConnection *connectionController = (DTURLLoadingConnection *)object;
 	
 	[self performSelectorOnMainThread:@selector(statusUpdate:) withObject:connectionController waitUntilDone:NO];
-	
 }
 	
 - (void)statusUpdate:(DTURLLoadingConnection *)connectionController {
