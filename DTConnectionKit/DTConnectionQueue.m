@@ -99,7 +99,7 @@ static DTConnectionQueue *sharedInstance = nil;
 
 - (NSInteger)connectionCount {
 	
-	NSInteger count = 0;
+	NSInteger count = externalConnections;
 	
 	for (NSOperation *o in self.operations)
 		if (o.isExecuting)
