@@ -31,7 +31,7 @@
 }
 
 - (void)dealloc {
-	[mergePolicy release]; mergePolicy = nil;
+	mergePolicy = nil;
 	[mainContext release]; mainContext = nil;
 	[threadedContext release]; threadedContext = nil;
 	[super dealloc];
