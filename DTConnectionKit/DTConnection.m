@@ -96,7 +96,7 @@ NSString *const DTConnectionIsFinishedKey = @"isFinished";
 	if (!request) [self finish];
 	
 	self.URL = [request URL];
-	urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	urlConnection = [[DTURLConnection alloc] initWithRequest:request delegate:self];
 	[request release];
 	
 	self.status = DTConnectionStatusStarted;
@@ -150,18 +150,15 @@ NSString *const DTConnectionIsFinishedKey = @"isFinished";
 #pragma mark NSURLConnection delegate methods
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-    [data release];
-    data = [[NSMutableData alloc] init];
-	
-	[self receivedResponse:response];
+    [self receivedResponse:response];
 }
 
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)somedata {
-    [data appendData:somedata];
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+	[(DTURLConnection *)connection appendData:data];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-    [self receivedObject:data];
+    [self receivedObject:((DTURLConnection *)connection).data];
 	[self finish];
 }
 

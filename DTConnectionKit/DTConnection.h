@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DTURLConnection.h"
 
 /** @brief Specifies the type of connection to use.
  */
@@ -60,8 +61,7 @@ extern NSString *const DTConnectionResponseNotification;
 	NSURL *URL;
 	NSThread *originatingThread;
 	BOOL isExecuting, isFinished;
-	NSURLConnection *urlConnection;
-	NSMutableData *data;
+	DTURLConnection *urlConnection;
 	NSAutoreleasePool *pool;
 }
 
