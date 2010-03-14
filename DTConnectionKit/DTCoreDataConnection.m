@@ -100,7 +100,8 @@
 }
 
 - (void)threadedContextDidSave:(NSNotification *)notification {
-	if (mergePolicy) [mainContext setMergePolicy:mergePolicy]; // NSMergeByPropertyStoreTrumpMergePolicy
+	id theMergePolicy = self.mergePolicy;
+	if (theMergePolicy) [mainContext setMergePolicy:theMergePolicy]; // NSMergeByPropertyStoreTrumpMergePolicy
 	
 	[mainContext performSelector:@selector(mergeChangesFromContextDidSaveNotification:) 
 						onThread:self.originatingThread 
