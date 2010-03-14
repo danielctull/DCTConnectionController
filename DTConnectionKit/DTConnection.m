@@ -174,7 +174,7 @@ NSString *const DTConnectionIsFinishedKey = @"isFinished";
 #pragma mark Internal methods
 
 - (void)notifyDelegateOfObject:(NSObject *)object {	
-	if ([self.delegate respondsToSelector:@selector(dtconnection:didSucceedWithObject:)])
+	if ([(NSObject *)self.delegate respondsToSelector:@selector(dtconnection:didSucceedWithObject:)])
 		[self.delegate dtconnection:self didSucceedWithObject:object];
 }
 
@@ -185,7 +185,7 @@ NSString *const DTConnectionIsFinishedKey = @"isFinished";
 
 
 - (void)notifyDelegateOfReturnedError:(NSError *)error {
-	if ([self.delegate respondsToSelector:@selector(dtconnection:didFailWithError:)])
+	if ([(NSObject *)self.delegate respondsToSelector:@selector(dtconnection:didFailWithError:)])
 		[self.delegate dtconnection:self didFailWithError:error];
 }
 
@@ -196,7 +196,7 @@ NSString *const DTConnectionIsFinishedKey = @"isFinished";
 
 
 - (void)notifyDelegateOfResponse:(NSURLResponse *)response {
-	if ([self.delegate respondsToSelector:@selector(dtconnection:didReceiveResponse:)])
+	if ([(NSObject *)self.delegate respondsToSelector:@selector(dtconnection:didReceiveResponse:)])
 		[self.delegate dtconnection:self didReceiveResponse:response];
 }
 

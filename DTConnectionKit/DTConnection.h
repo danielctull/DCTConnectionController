@@ -55,8 +55,8 @@ extern NSString *const DTConnectionResponseNotification;
 	NSString *identifier;
 	NSObject *returnedObject;
 	NSError *returnedError;
-	NSURLResponse *returnedResponse;	
-	NSObject<DTConnectionDelegate> *delegate;
+	NSURLResponse *returnedResponse;
+	id<DTConnectionDelegate> delegate;
 	NSURL *URL;
 	NSThread *originatingThread;
 	BOOL isExecuting, isFinished;
@@ -122,7 +122,7 @@ extern NSString *const DTConnectionResponseNotification;
  This is because DTConnectionController uses DTConnectionManager to perform the connection and the connection manager
  must retain its delegates. Because of this the delegate should never retain the connection controller.
  */
-@property (nonatomic, retain) NSObject<DTConnectionDelegate> *delegate;
+@property (nonatomic, retain) id<DTConnectionDelegate> delegate;
 
 /**
  @}
