@@ -62,6 +62,7 @@ extern NSString *const DTConnectionResponseNotification;
 	BOOL isExecuting, isFinished;
 	NSURLConnection *urlConnection;
 	NSMutableData *data;
+	NSAutoreleasePool *pool;
 }
 
 #pragma mark -
