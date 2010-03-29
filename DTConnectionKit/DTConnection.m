@@ -94,7 +94,11 @@ NSString *const DTConnectionIsFinishedKey = @"isFinished";
 	
 	NSURLRequest *request = [self newRequest];
 	
-	if (!request) [self finish];
+	if (!request) {
+		[self finish];
+		return;
+	}
+	
 	
 	self.URL = [request URL];
 	urlConnection = [[DTURLConnection alloc] initWithRequest:request delegate:self];
