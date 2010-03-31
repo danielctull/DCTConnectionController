@@ -12,7 +12,6 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		24306A9B114E894B008BBE38 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24306A9A114E894B008BBE38 /* MainWindow-iPad.xib */; };
-		24306C44114ED730008BBE38 /* DTFireConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 24306C43114ED730008BBE38 /* DTFireConnection.m */; };
 		24451D4E11622F5B0090D07F /* NSObject+Casting.m in Sources */ = {isa = PBXBuildFile; fileRef = 24451D4D11622F5B0090D07F /* NSObject+Casting.m */; };
 		2456D8E1110B6F54009A4F1E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2456D8E0110B6F54009A4F1E /* CoreData.framework */; };
 		2456D8EC110B7C91009A4F1E /* DTConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 2456D8EB110B7C91009A4F1E /* DTConnectionQueue.m */; };
@@ -37,8 +36,6 @@
 		24083D4110CF9A07009B758E /* DTURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTURLConnection.h; sourceTree = "<group>"; };
 		24083D4210CF9A07009B758E /* DTURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTURLConnection.m; sourceTree = "<group>"; };
 		24306A9A114E894B008BBE38 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "Resources-iPad/MainWindow-iPad.xib"; sourceTree = "<group>"; };
-		24306C42114ED730008BBE38 /* DTFireConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTFireConnection.h; sourceTree = "<group>"; };
-		24306C43114ED730008BBE38 /* DTFireConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTFireConnection.m; sourceTree = "<group>"; };
 		24451D4C11622F5B0090D07F /* NSObject+Casting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+Casting.h"; sourceTree = "<group>"; };
 		24451D4D11622F5B0090D07F /* NSObject+Casting.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+Casting.m"; sourceTree = "<group>"; };
 		2456D8E0110B6F54009A4F1E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -131,8 +128,6 @@
 				24E0F62110D6490C00F03AD8 /* DTConnectionKitExampleViewController.h */,
 				24E0F62210D6490C00F03AD8 /* DTConnectionKitExampleViewController.m */,
 				24E0F62310D6490C00F03AD8 /* DTConnectionKitExampleView.xib */,
-				24306C42114ED730008BBE38 /* DTFireConnection.h */,
-				24306C43114ED730008BBE38 /* DTFireConnection.m */,
 			);
 			path = DTConnectionKitExample;
 			sourceTree = "<group>";
@@ -248,7 +243,6 @@
 				24AD415C112195CE0089D1E7 /* DTCacheURLProtocol.m in Sources */,
 				24626813112C8D680046D38E /* DTFileCache.m in Sources */,
 				2462681D112C8E860046D38E /* DTURLConnection.m in Sources */,
-				24306C44114ED730008BBE38 /* DTFireConnection.m in Sources */,
 				24451D4E11622F5B0090D07F /* NSObject+Casting.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
