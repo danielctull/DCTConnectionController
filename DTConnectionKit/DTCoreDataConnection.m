@@ -71,6 +71,7 @@
 }
 
 - (void)saveThreadedContext {
+	//[threadedContext lock];
 	NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
 	[defaultCenter addObserver:self selector:@selector(threadedContextDidSave:) name:NSManagedObjectContextDidSaveNotification object:threadedContext];
 	
@@ -78,9 +79,13 @@
 			
 		NSError *error;
 		
+		// Don't need to lock the thread as the merge happens on the originating thread.
+		// See -threadedContextDidSave: for how this happens.
 		BOOL contextDidSave = [threadedContext save:&error];
 		
 		if (!contextDidSave) {
+			
+			// If the context failed to save, log out as many details as possible.
 			NSLog(@"Failed to save to data store: %@", [error localizedDescription]);
 			
 			NSArray* detailedErrors = [[error userInfo] objectForKey:NSDetailedErrorsKey];
@@ -96,8 +101,9 @@
 			
         }
 	}
-		
-	[defaultCenter removeObserver:self name:NSManagedObjectContextDidSaveNotification object:threadedContext];	
+	
+	[defaultCenter removeObserver:self name:NSManagedObjectContextDidSaveNotification object:threadedContext];
+	//[threadedContext unlock];
 }
 
 - (void)threadedContextDidSave:(NSNotification *)notification {
