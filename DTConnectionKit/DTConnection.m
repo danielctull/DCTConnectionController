@@ -55,7 +55,7 @@ NSString *const DTConnectionIsFinishedKey = @"isFinished";
 
 - (id)init {
 	
-	if (!(self = [super init])) return nil;
+	if (!(self = [self init])) return nil;
 	
 	self.identifier = [[NSProcessInfo processInfo] globallyUniqueString];
 	
