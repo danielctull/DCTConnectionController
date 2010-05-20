@@ -12,6 +12,7 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		24306A9B114E894B008BBE38 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24306A9A114E894B008BBE38 /* MainWindow-iPad.xib */; };
+		244C084C11A19F3B00D960A4 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 244C084B11A19F3B00D960A4 /* NSData+Base64.m */; };
 		2456D8E1110B6F54009A4F1E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2456D8E0110B6F54009A4F1E /* CoreData.framework */; };
 		2456D8EC110B7C91009A4F1E /* DTConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 2456D8EB110B7C91009A4F1E /* DTConnectionQueue.m */; };
 		2456D8F1110B7C9A009A4F1E /* DTConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 2456D8F0110B7C9A009A4F1E /* DTConnection.m */; };
@@ -35,6 +36,8 @@
 		24083D4110CF9A07009B758E /* DTURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTURLConnection.h; sourceTree = "<group>"; };
 		24083D4210CF9A07009B758E /* DTURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTURLConnection.m; sourceTree = "<group>"; };
 		24306A9A114E894B008BBE38 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "Resources-iPad/MainWindow-iPad.xib"; sourceTree = "<group>"; };
+		244C084A11A19F3B00D960A4 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
+		244C084B11A19F3B00D960A4 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
 		2456D8E0110B6F54009A4F1E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		2456D8EA110B7C91009A4F1E /* DTConnectionQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTConnectionQueue.h; sourceTree = "<group>"; };
 		2456D8EB110B7C91009A4F1E /* DTConnectionQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConnectionQueue.m; sourceTree = "<group>"; };
@@ -93,6 +96,8 @@
 		24083D3A10CF9A07009B758E /* DTConnectionKit */ = {
 			isa = PBXGroup;
 			children = (
+				244C084A11A19F3B00D960A4 /* NSData+Base64.h */,
+				244C084B11A19F3B00D960A4 /* NSData+Base64.m */,
 				24083D4110CF9A07009B758E /* DTURLConnection.h */,
 				24083D4210CF9A07009B758E /* DTURLConnection.m */,
 				2456D8EA110B7C91009A4F1E /* DTConnectionQueue.h */,
@@ -238,6 +243,7 @@
 				24AD415C112195CE0089D1E7 /* DTCacheURLProtocol.m in Sources */,
 				24626813112C8D680046D38E /* DTFileCache.m in Sources */,
 				2462681D112C8E860046D38E /* DTURLConnection.m in Sources */,
+				244C084C11A19F3B00D960A4 /* NSData+Base64.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -256,7 +262,7 @@
 				GCC_PREFIX_HEADER = DTConnectionKit_Prefix.pch;
 				INFOPLIST_FILE = "DTConnectionKit-Info.plist";
 				PRODUCT_NAME = DTConnectionKit;
-				SDKROOT = iphoneos3.2;
+				SDKROOT = iphoneos3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
