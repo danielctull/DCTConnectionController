@@ -20,6 +20,8 @@
 		2462681D112C8E860046D38E /* DTURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 24083D4210CF9A07009B758E /* DTURLConnection.m */; };
 		247A219C110CC40500227E44 /* DTCoreDataConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 247A219B110CC40500227E44 /* DTCoreDataConnection.m */; };
 		247A21EC110D1C7D00227E44 /* DTURLLoadingConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 247A21EB110D1C7D00227E44 /* DTURLLoadingConnection.m */; };
+		24A4807211C03BF800F75C55 /* DTConnectionQueue2.m in Sources */ = {isa = PBXBuildFile; fileRef = 24A4807111C03BF800F75C55 /* DTConnectionQueue2.m */; };
+		24A4808711C03CD500F75C55 /* DTConnection2.m in Sources */ = {isa = PBXBuildFile; fileRef = 24A4808611C03CD500F75C55 /* DTConnection2.m */; };
 		24AD415C112195CE0089D1E7 /* DTCacheURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 24AD415B112195CE0089D1E7 /* DTCacheURLProtocol.m */; };
 		24E0F62410D6490C00F03AD8 /* DTConnectionKitExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E0F62210D6490C00F03AD8 /* DTConnectionKitExampleViewController.m */; };
 		24E0F62510D6490C00F03AD8 /* DTConnectionKitExampleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24E0F62310D6490C00F03AD8 /* DTConnectionKitExampleView.xib */; };
@@ -49,6 +51,10 @@
 		247A219B110CC40500227E44 /* DTCoreDataConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTCoreDataConnection.m; sourceTree = "<group>"; };
 		247A21EA110D1C7D00227E44 /* DTURLLoadingConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTURLLoadingConnection.h; sourceTree = "<group>"; };
 		247A21EB110D1C7D00227E44 /* DTURLLoadingConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTURLLoadingConnection.m; sourceTree = "<group>"; };
+		24A4807011C03BF800F75C55 /* DTConnectionQueue2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTConnectionQueue2.h; sourceTree = "<group>"; };
+		24A4807111C03BF800F75C55 /* DTConnectionQueue2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConnectionQueue2.m; sourceTree = "<group>"; };
+		24A4808511C03CD500F75C55 /* DTConnection2.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTConnection2.h; sourceTree = "<group>"; };
+		24A4808611C03CD500F75C55 /* DTConnection2.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConnection2.m; sourceTree = "<group>"; };
 		24AD415A112195CE0089D1E7 /* DTCacheURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTCacheURLProtocol.h; sourceTree = "<group>"; };
 		24AD415B112195CE0089D1E7 /* DTCacheURLProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTCacheURLProtocol.m; sourceTree = "<group>"; };
 		24E0F62110D6490C00F03AD8 /* DTConnectionKitExampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTConnectionKitExampleViewController.h; sourceTree = "<group>"; };
@@ -112,6 +118,10 @@
 				24AD415B112195CE0089D1E7 /* DTCacheURLProtocol.m */,
 				24626811112C8D680046D38E /* DTFileCache.h */,
 				24626812112C8D680046D38E /* DTFileCache.m */,
+				24A4807011C03BF800F75C55 /* DTConnectionQueue2.h */,
+				24A4807111C03BF800F75C55 /* DTConnectionQueue2.m */,
+				24A4808511C03CD500F75C55 /* DTConnection2.h */,
+				24A4808611C03CD500F75C55 /* DTConnection2.m */,
 			);
 			path = DTConnectionKit;
 			sourceTree = "<group>";
@@ -244,6 +254,8 @@
 				24626813112C8D680046D38E /* DTFileCache.m in Sources */,
 				2462681D112C8E860046D38E /* DTURLConnection.m in Sources */,
 				244C084C11A19F3B00D960A4 /* NSData+Base64.m in Sources */,
+				24A4807211C03BF800F75C55 /* DTConnectionQueue2.m in Sources */,
+				24A4808711C03CD500F75C55 /* DTConnection2.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -291,7 +303,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				PREBINDING = NO;
-				SDKROOT = iphoneos3.1.2;
+				SDKROOT = iphoneos4.0;
 			};
 			name = Debug;
 		};
