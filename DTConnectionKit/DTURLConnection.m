@@ -66,7 +66,7 @@
 }
 
 - (NSString *)description {
-	return [NSString stringWithFormat:@"<DTURLConnection> (id: %@ url: %@)", self.identifier, self.URL];
+	return [NSString stringWithFormat:@"<%@ id:%@ url:%@>", [self class], self.identifier, self.URL];
 }
 
 - (NSObject *)copyWithZone:(NSObject *)ob {
