@@ -46,6 +46,8 @@ extern NSString *const DTConnectionFailedNotification;
  */
 extern NSString *const DTConnectionResponseNotification;
 
+extern NSString *const DTConnectionTypeString[];
+
 #pragma mark -
 @protocol DTConnectionDelegate;
 

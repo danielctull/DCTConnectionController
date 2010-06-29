@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "DTConnection.h"
 
 typedef enum {
 	DTConnectionPriorityVeryHigh = 0,
@@ -18,14 +19,23 @@ typedef enum {
 
 @interface DTConnection2 : NSObject {
 	DTConnectionPriority priority;
-	NSArray *dependencies;
+	NSMutableArray *dependencies;
+	DTConnectionType type;
+	DTConnectionStatus status;
+	DTURLConnection *urlConnection;
 }
+
+@property (nonatomic, readonly) DTConnectionStatus status;
+@property (nonatomic, assign) DTConnectionType type;
 
 @property (nonatomic, readonly) NSArray *dependencies;
 - (void)addDependency:(DTConnection2 *)connection;
 - (void)removeDependency:(DTConnection2 *)connection;
 
 - (void)connect;
-- (void)addToConnectionQueue;
+
+- (void)start;
+- (void)finish;
+- (NSMutableURLRequest *)newRequest;
 
 @end
