@@ -8,13 +8,27 @@
 
 #import "DTConnectionQueue2.h"
 
+NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2){
+	
+	if (![obj1 isKindOfClass:[DTConnection2 class]] || ![obj2 isKindOfClass:[DTConnection2 class]]) return (NSComparisonResult)NSOrderedSame;
+	
+	DTConnection2 *con1 = (DTConnection2 *)obj1;
+	DTConnection2 *con2 = (DTConnection2 *)obj2;
+	
+	if (con1.priority > con2.priority) return (NSComparisonResult)NSOrderedDescending;
+	
+	if (con1.priority < con2.priority) return (NSComparisonResult)NSOrderedAscending;
+	
+	return (NSComparisonResult)NSOrderedSame;
+};
 
 NSString *const DTConnectionQueue2ConnectionCountChangedNotification = @"DTConnectionQueueConnectionCountChangedNotification";
 
 static DTConnectionQueue2 *sharedInstance = nil;
 
 @interface DTConnectionQueue2 ()
-- (void)checkAndRunConnections;
+- (void)runNextConnection;
+- (void)tryToRunConnection:(DTConnection2 *)connection;
 @end
 
 @implementation DTConnectionQueue2
@@ -66,36 +80,51 @@ static DTConnectionQueue2 *sharedInstance = nil;
 
 #pragma mark -
 
-- (NSInteger)connectionCount {
+- (NSInteger)activeConnectionsCount {
 	return [activeConnections count];
 }
 
+- (NSInteger)queuedConnectionsCount {
+	return [queuedConnections count];
+}
+
 - (NSArray *)connections {	
-    return [[activeConnections copy] autorelease];
+    return [activeConnections arrayByAddingObjectsFromArray:queuedConnections];
 }
 
 - (void)addConnection:(DTConnection2 *)connection {
 	[queuedConnections addObject:connection];
-	[self checkAndRunConnections];
+	
+	[queuedConnections sortUsingComparator:compareConnections];
+	
+	[self runNextConnection];
 }
 
-- (void)checkAndRunConnections {
+- (void)runNextConnection {
 	
-	if (self.connectionCount >= self.maxConnections) return;
+	if (self.activeConnectionsCount >= self.maxConnections) return;
 	
 	if ([queuedConnections count] < 1) return;
 	
 	DTConnection2 *connection = [queuedConnections objectAtIndex:0];
 	
-	[queuedConnections removeObject:connection];
-	
-	[activeConnections addObject:connection];
-	
-	[connection start];
+	[self tryToRunConnection:connection];
 }
 
 
-
+- (void)tryToRunConnection:(DTConnection2 *)connection {
+	
+	if ([connection.dependencies count] == 0) {
+		[queuedConnections removeObject:connection];
+		[activeConnections addObject:connection];
+		[connection start];
+		return;
+	}
+		
+	NSArray *sortedDependencies = [connection.dependencies sortedArrayUsingComparator:compareConnections];
+	
+	[self tryToRunConnection:[sortedDependencies objectAtIndex:0]];
+}
 
 
 

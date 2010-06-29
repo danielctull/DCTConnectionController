@@ -26,7 +26,8 @@ extern NSString *const DTConnectionQueue2ConnectionCountChangedNotification;
 - (DTConnection2 *)queuedConnectionToURL:(NSURL *)URL;*/
 
 @property (nonatomic, assign) NSInteger maxConnections;
-@property (nonatomic, readonly) NSInteger connectionCount;
+@property (nonatomic, readonly) NSInteger activeConnectionsCount;
+@property (nonatomic, readonly) NSInteger queuedConnectionsCount;
 
 // DECREMENTED
 - (void)incrementExternalConnectionCount;
