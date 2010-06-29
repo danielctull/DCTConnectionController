@@ -1,5 +1,5 @@
 //
-//  DTConnectionQueue2.h
+//  DTNetworkQueue.h
 //  DTConnectionKit
 //
 //  Created by Daniel Tull on 09.06.2010.
@@ -9,8 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "DTConnection2.h"
 
-@interface DTConnectionQueue2 : NSObject {
+extern NSString *const DTConnectionQueue2ConnectionCountChangedNotification;
 
+@interface DTConnectionQueue2 : NSObject {
+    NSMutableArray *connections;
+	NSMutableArray *queue;
 }
 + (DTConnectionQueue2 *)sharedConnectionQueue;
 
@@ -22,10 +25,11 @@
 - (BOOL)hasQueuedConnectionToURL:(NSURL *)URL;
 - (DTConnection2 *)queuedConnectionToURL:(NSURL *)URL;
 
-- (void)incrementExternalConnectionCount;
-- (void)decrementExternalConnectionCount;
-
 @property (nonatomic, assign) NSInteger maxConnections;
 @property (nonatomic, readonly) NSInteger connectionCount;
+
+// DECREMENTED
+- (void)incrementExternalConnectionCount;
+- (void)decrementExternalConnectionCount;
 
 @end

@@ -1,5 +1,5 @@
 //
-//  DTConnection2.m
+//  DTURLConnectionJob.m
 //  DTConnectionKit
 //
 //  Created by Daniel Tull on 09.06.2010.

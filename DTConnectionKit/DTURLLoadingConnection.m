@@ -11,7 +11,7 @@
 
 @implementation DTURLLoadingConnection
 
-@synthesize URL;
+@dynamic URL;
 
 - (void)dealloc {
 	[super dealloc];
