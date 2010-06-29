@@ -27,6 +27,7 @@ typedef enum {
 
 @property (nonatomic, readonly) DTConnectionStatus status;
 @property (nonatomic, assign) DTConnectionType type;
+@property (nonatomic, assign) DTConnectionPriority priority;
 
 @property (nonatomic, readonly) NSArray *dependencies;
 - (void)addDependency:(DTConnection2 *)connection;

@@ -17,7 +17,7 @@
 
 @implementation DTConnection2
 
-@synthesize status, type;
+@synthesize status, type, priority;
 
 - (id)init {
 	if (!(self = [super init])) return nil;
