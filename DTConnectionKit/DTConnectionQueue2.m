@@ -27,8 +27,9 @@ NSString *const DTConnectionQueue2ConnectionCountChangedNotification = @"DTConne
 static DTConnectionQueue2 *sharedInstance = nil;
 
 @interface DTConnectionQueue2 ()
-- (void)runNextConnection;
-- (void)tryToRunConnection:(DTConnection2 *)connection;
+- (void)dt_runNextConnection;
+- (void)dt_tryToRunConnection:(DTConnection2 *)connection;
+- (void)dt_removeConnection:(DTConnection2 *)connection;
 @end
 
 @implementation DTConnectionQueue2
@@ -97,10 +98,27 @@ static DTConnectionQueue2 *sharedInstance = nil;
 	
 	[queuedConnections sortUsingComparator:compareConnections];
 	
-	[self runNextConnection];
+	[connection addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+	
+	[self dt_runNextConnection];
 }
 
-- (void)runNextConnection {
+- (void)observeValueForKeyPath:(NSString *)keyPath
+					  ofObject:(id)object
+						change:(NSDictionary *)change
+					   context:(void *)context {
+	
+	if (![object isKindOfClass:[DTConnection2 class]]) return;
+	
+	DTConnection2 *connection = (DTConnection2 *)object;
+	
+	if (connection.status == DTConnectionStatusComplete || connection.status == DTConnectionStatusFailed) {
+		[self dt_removeConnection:connection];
+		[self dt_runNextConnection];
+	}
+}
+
+- (void)dt_runNextConnection {
 	
 	if (self.activeConnectionsCount >= self.maxConnections) return;
 	
@@ -108,11 +126,11 @@ static DTConnectionQueue2 *sharedInstance = nil;
 	
 	DTConnection2 *connection = [queuedConnections objectAtIndex:0];
 	
-	[self tryToRunConnection:connection];
+	[self dt_tryToRunConnection:connection];
 }
 
 
-- (void)tryToRunConnection:(DTConnection2 *)connection {
+- (void)dt_tryToRunConnection:(DTConnection2 *)connection {
 	
 	if ([connection.dependencies count] == 0) {
 		[queuedConnections removeObject:connection];
@@ -123,14 +141,12 @@ static DTConnectionQueue2 *sharedInstance = nil;
 		
 	NSArray *sortedDependencies = [connection.dependencies sortedArrayUsingComparator:compareConnections];
 	
-	[self tryToRunConnection:[sortedDependencies objectAtIndex:0]];
+	[self dt_tryToRunConnection:[sortedDependencies objectAtIndex:0]];
 }
 
-
-
-
-
-
+- (void)dt_removeConnection:(DTConnection2 *)connection {
+	[activeConnections removeObject:connection];
+}
 
 // DECREMENTED
 - (void)incrementExternalConnectionCount {}
