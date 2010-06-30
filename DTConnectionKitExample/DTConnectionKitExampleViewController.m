@@ -46,13 +46,8 @@
 											   object:nil];
 	NSLog(@"%@", self);
 	NSArray *urls = [NSArray arrayWithObjects:
-					 @"http://www.bbc.co.uk/", 
-					 @"http://www.google.co.uk/", 
-					 @"http://www.tesco.com/", 
-					 @"http://www.apple.com/", 
-					 @"http://www.ebay.com/", 
-					 @"http://www.nike.com/", 
-					 @"http://www.engadget.com/",
+					 @"http://www.tesco.com/",
+					 @"http://www.nike.com/",
 					 @"http://www.coca-cola.com/",
 					 @"http://www.no.danieltull.co.uk/", 
 					 @"http://www.oakley.com/",
@@ -62,14 +57,46 @@
 					 @"http://www.play.com/",
 					 nil];
 	
-	for (NSString *s in urls) {		
-		DTURLLoadingConnection *connection = [[DTURLLoadingConnection alloc] init];
+	for (NSString *s in urls) {
+		DTURLLoadingConnection *connection = [DTURLLoadingConnection connection];
 		connection.delegate = self;
 		connection.URL = [NSURL URLWithString:s];
 		[connection addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 		[connection connect];
-		[connection release];
 	}
+	
+	DTURLLoadingConnection *engadget = [DTURLLoadingConnection connection];
+	engadget.URL = [NSURL URLWithString:@"http://www.engadget.com/"];
+	engadget.priority = DTConnectionPriorityHigh;
+	[engadget addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+	[engadget connect];
+	
+	DTURLLoadingConnection *ebay = [DTURLLoadingConnection connection];
+	ebay.URL = [NSURL URLWithString:@"http://www.ebay.com/"];
+	ebay.priority = DTConnectionPriorityLow;
+	[ebay addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+	[ebay connect];
+	
+	DTURLLoadingConnection *google = [DTURLLoadingConnection connection];
+	google.URL = [NSURL URLWithString:@"http://www.google.com/"];
+	google.priority = DTConnectionPriorityLow;
+	[google addDependency:ebay];
+	[google addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+	[google connect];
+	
+	DTURLLoadingConnection *apple = [DTURLLoadingConnection connection];
+	apple.URL = [NSURL URLWithString:@"http://www.apple.com/"];
+	apple.priority = DTConnectionPriorityLow;
+	[apple addDependency:google];
+	[apple addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+	[apple connect];
+	
+	DTURLLoadingConnection *bbc = [DTURLLoadingConnection connection];
+	bbc.URL = [NSURL URLWithString:@"http://www.bbc.co.uk/"];
+	bbc.priority = DTConnectionPriorityHigh;
+	[bbc addDependency:apple];
+	[bbc addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+	[bbc connect];
 	
 	self.toolbarItems = self.toolbar.items;
 	
