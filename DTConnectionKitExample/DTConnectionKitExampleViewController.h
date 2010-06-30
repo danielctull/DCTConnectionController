@@ -7,9 +7,9 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DTConnection.h"
+#import "DTConnection2.h"
 
-@interface DTConnectionKitExampleViewController : UIViewController <DTConnectionDelegate> {
+@interface DTConnectionKitExampleViewController : UIViewController <DTConnectionDelegate2> {
 	UITextView *textView;
 	UIToolbar *toolbar;
 	UILabel *connectionsLabel;

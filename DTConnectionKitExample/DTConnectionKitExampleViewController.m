@@ -8,10 +8,11 @@
 
 #import "DTConnectionKitExampleViewController.h"
 #import "DTURLLoadingConnection.h"
-#import "DTConnectionQueue.h"
+#import "DTConnectionQueue2.h"
 
 @interface DTConnectionKitExampleViewController ()
 - (NSString *)stringFromURL:(NSURL *)url;
+- (void)statusUpdate:(DTURLLoadingConnection *)connectionController;
 @end
 
 
@@ -38,12 +39,12 @@
 	
 	self.navigationController.toolbarHidden = NO;
 	
-	[[DTConnectionQueue sharedConnectionQueue] setMaxConnections:3];
+	[[DTConnectionQueue2 sharedConnectionQueue] setMaxConnections:7];
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(connectionCountChanged:) 
-												 name:DTConnectionQueueConnectionCountChangedNotification 
+												 name:DTConnectionQueue2ConnectionCountChangedNotification 
 											   object:nil];
-	
+	NSLog(@"%@", self);
 	NSArray *urls = [NSArray arrayWithObjects:
 					 @"http://www.bbc.co.uk/", 
 					 @"http://www.google.co.uk/", 
@@ -77,8 +78,7 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	
 	DTURLLoadingConnection *connectionController = (DTURLLoadingConnection *)object;
-	
-	[self performSelectorOnMainThread:@selector(statusUpdate:) withObject:connectionController waitUntilDone:NO];
+	[self statusUpdate:connectionController];
 }
 	
 - (void)statusUpdate:(DTURLLoadingConnection *)connectionController {
@@ -102,6 +102,7 @@
 			break;
 		case DTConnectionStatusFailed:
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Failed", prefixString];
+			[connectionController removeObserver:self forKeyPath:@"status"];
 			break;
 		case DTConnectionStatusNotStarted:
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Not Started", prefixString];
@@ -111,6 +112,11 @@
 			break;
 		case DTConnectionStatusComplete:
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Complete", prefixString];
+			[connectionController removeObserver:self forKeyPath:@"status"];
+			break;
+		case DTConnectionStatusCancelled:
+			self.textView.text = [self.textView.text stringByAppendingFormat:@"%Cancelled", prefixString];
+			[connectionController removeObserver:self forKeyPath:@"status"];
 			break;
 		default:
 			break;
@@ -135,18 +141,7 @@
 }
 
 - (void)connectionCountChanged:(NSNotification *)notification {
-	self.connectionsLabel.text = [NSString stringWithFormat:@"Connections: %i", [DTConnectionQueue sharedConnectionQueue].connectionCount];
-}
-
-#pragma mark -
-#pragma mark DTConnectionControllerDelegate methods
-
-- (void)dtconnection:(DTConnection *)connectionController didSucceedWithObject:(id)object {
-	[connectionController removeObserver:self forKeyPath:@"status"];
-}
-
-- (void)dtconnection:(DTConnection *)connectionController didFailWithError:(NSError *)error {
-	[connectionController removeObserver:self forKeyPath:@"status"];
+	self.connectionsLabel.text = [NSString stringWithFormat:@"Connections: %i", [DTConnectionQueue2 sharedConnectionQueue].activeConnectionsCount];
 }
 
 @end
