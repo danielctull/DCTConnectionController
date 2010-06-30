@@ -79,7 +79,7 @@ typedef enum {
 
 @property (nonatomic, retain, readonly) NSURL *URL;
 
-+ (DTConnection *)connection;
++ (id)connection;
 
 - (void)addDependency:(DTConnection *)connection;
 - (void)removeDependency:(DTConnection *)connection;

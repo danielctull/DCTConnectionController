@@ -51,7 +51,7 @@ NSString *const DTConnectionIsFinishedKey = @"isFinished";
 
 @synthesize delegate, status, type, priority, URL, returnedObject, returnedError, returnedResponse;
 
-+ (DTConnection *)connection {
++ (id)connection {
 	return [[[self alloc] init] autorelease];
 }
 
@@ -59,6 +59,7 @@ NSString *const DTConnectionIsFinishedKey = @"isFinished";
 	if (!(self = [super init])) return nil;
 	
 	dependencies = [[NSMutableArray alloc] init];
+	priority = DTConnectionPriorityMedium;
 	
 	return self;
 }
