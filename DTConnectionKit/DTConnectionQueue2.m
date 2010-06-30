@@ -117,7 +117,9 @@ static DTConnectionQueue2 *sharedInstance = nil;
 	
 	DTConnection2 *connection = (DTConnection2 *)object;
 	
-	if (connection.status == DTConnectionStatusComplete || connection.status == DTConnectionStatusFailed) {
+	if (connection.status == DTConnectionStatusComplete 
+		|| connection.status == DTConnectionStatusFailed
+		|| connection.status == DTConnectionStatusCancelled) {
 		[self dt_removeConnection:connection];
 		[self dt_runNextConnection];
 	}

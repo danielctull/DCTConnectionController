@@ -30,7 +30,8 @@ typedef enum {
 	DTConnectionStatusStarted,			/**< The request has been sent and a response is being awaited. */
 	DTConnectionStatusResponded,		/**< A response has been received by the server and the connection is awaiting completion. */
 	DTConnectionStatusComplete,			/**< The connection completed without any errors. */
-	DTConnectionStatusFailed			/**< The connection failed. */
+	DTConnectionStatusFailed,			/**< The connection failed. */
+	DTConnectionStatusCancelled			/**< The connection failed. */
 } DTConnectionStatus;
 
 
