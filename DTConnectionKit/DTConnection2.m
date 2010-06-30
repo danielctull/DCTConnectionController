@@ -15,7 +15,8 @@
 @property (nonatomic, retain, readwrite) NSObject *returnedObject;
 @property (nonatomic, retain, readwrite) NSError *returnedError;
 @property (nonatomic, retain, readwrite) NSURLResponse *returnedResponse;
-- (void)dt_finish;
+- (void)dt_finishWithFailure;
+- (void)dt_finishWithSuccess;
 
 - (void)dt_notifyDelegateOfObject:(NSObject *)object;
 - (void)dt_notifyObserversOfObject:(NSObject *)object;
@@ -81,7 +82,7 @@
 	NSURLRequest *request = [self newRequest];
 	
 	if (!request) {
-		[self dt_finish];
+		[self dt_finishWithFailure];
 		return;
 	}
 	
@@ -91,7 +92,11 @@
 	
 	self.status = DTConnectionStatusStarted;
 	
-	if (!urlConnection) [self dt_finish];
+	if (!urlConnection) [self dt_finishWithFailure];
+}
+
+- (void)setQueued {
+	self.status = DTConnectionStatusQueued;
 }
 
 #pragma mark -
@@ -105,23 +110,23 @@
 
 - (void)receivedObject:(NSObject *)object {
 	self.returnedObject = object;
-	self.status = DTConnectionStatusComplete;
 	[self dt_notifyDelegateOfObject:object];
 	[self dt_notifyObserversOfObject:object];
+	self.status = DTConnectionStatusComplete;
 }
 
 - (void)receivedResponse:(NSURLResponse *)response {
 	self.returnedResponse = response;
-	self.status = DTConnectionStatusResponded;
 	[self dt_notifyDelegateOfResponse:response];
 	[self dt_notifyObserversOfResponse:response];
+	self.status = DTConnectionStatusResponded;
 }
 
 - (void)receivedError:(NSError *)error {
 	self.returnedError = error;
-	self.status = DTConnectionStatusFailed;
 	[self dt_notifyDelegateOfReturnedError:error];
 	[self dt_notifyObserversOfReturnedError:error];
+	self.status = DTConnectionStatusFailed;
 }
 
 #pragma mark -
@@ -137,19 +142,23 @@
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
     [self receivedObject:((DTURLConnection *)connection).data];
-	[self dt_finish];
+	[self dt_finishWithSuccess];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     [self receivedError:error];
-	[self dt_finish];
+	[self dt_finishWithFailure];
 }
 
 #pragma mark -
 #pragma mark Private methods
 
-- (void)dt_finish {
+- (void)dt_finishWithSuccess {
 	self.status = DTConnectionStatusComplete;
+}
+
+- (void)dt_finishWithFailure {
+	self.status = DTConnectionStatusFailed;
 }
 
 #pragma mark -

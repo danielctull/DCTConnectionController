@@ -47,6 +47,8 @@ typedef enum {
 
 - (void)start;
 
+- (void)setQueued;
+
 
 #pragma mark -
 #pragma mark Setting up the connection details
