@@ -39,7 +39,7 @@
 	
 	self.navigationController.toolbarHidden = NO;
 	
-	[[DTConnectionQueue sharedConnectionQueue] setMaxConnections:7];
+	[[DTConnectionQueue sharedConnectionQueue] setMaxConnections:3];
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(connectionCountChanged:) 
 												 name:DTConnectionQueueConnectionCountChangedNotification 
@@ -125,23 +125,29 @@
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Started", prefixString];
 			break;
 		case DTConnectionStatusQueued:
+			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Queued", prefixString];
 			break;
 		case DTConnectionStatusFailed:
+			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Failed", prefixString];
 			[connectionController removeObserver:self forKeyPath:@"status"];
 			break;
 		case DTConnectionStatusNotStarted:
+			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Not Started", prefixString];
 			break;
 		case DTConnectionStatusResponded:
+			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Responded", prefixString];
 			break;
 		case DTConnectionStatusComplete:
+			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Complete", prefixString];
 			[connectionController removeObserver:self forKeyPath:@"status"];
 			break;
 		case DTConnectionStatusCancelled:
+			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%Cancelled", prefixString];
 			[connectionController removeObserver:self forKeyPath:@"status"];
 			break;
