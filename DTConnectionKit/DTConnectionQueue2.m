@@ -89,6 +89,10 @@ static DTConnectionQueue2 *sharedInstance = nil;
 	return [queuedConnections count];
 }
 
+- (NSInteger)connectionCount {
+	return self.activeConnectionsCount + self.queuedConnectionsCount;
+}
+
 - (NSArray *)connections {	
     return [activeConnections arrayByAddingObjectsFromArray:queuedConnections];
 }
