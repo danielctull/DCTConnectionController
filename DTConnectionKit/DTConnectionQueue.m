@@ -29,7 +29,7 @@ static DTConnectionQueue *sharedInstance = nil;
 @interface DTConnectionQueue ()
 - (void)dt_checkConnectionCount;
 - (void)dt_runNextConnection;
-- (void)dt_tryToRunConnection:(DTConnection *)connection;
+- (BOOL)dt_tryToRunConnection:(DTConnection *)connection;
 - (void)dt_removeConnection:(DTConnection *)connection;
 @end
 
@@ -176,25 +176,40 @@ static DTConnectionQueue *sharedInstance = nil;
 		return;
 	}
 	
-	DTConnection *connection = [queuedConnections objectAtIndex:0];
+	// Loop through the queue and try to run the top-most connection.
+	// If it can't be run (eg waiting for dependencies), run the next one down.
 	
-	[self dt_tryToRunConnection:connection];
+	for (DTConnection *connection in queuedConnections)
+		if ([self dt_tryToRunConnection:connection])
+			break;
+	
 	[self dt_checkConnectionCount];
 }
 
 
-- (void)dt_tryToRunConnection:(DTConnection *)connection {
+- (BOOL)dt_tryToRunConnection:(DTConnection *)connection {
 	
-	if ([connection.dependencies count] == 0) {
-		[activeConnections addObject:connection];
-		[queuedConnections removeObject:connection]; 
-		[connection start];
-		return;
-	}
+	if ([connection.dependencies count] > 0) {
 		
-	NSArray *sortedDependencies = [connection.dependencies sortedArrayUsingComparator:compareConnections];
+		// Sort so the dependencies are in order from high to low.
+		NSArray *sortedDependencies = [connection.dependencies sortedArrayUsingComparator:compareConnections];		
 	
-	[self dt_tryToRunConnection:[sortedDependencies objectAtIndex:0]];
+		// Look for connections that are queued at present, if there is one, we can process that one.
+		for (DTConnection *c in sortedDependencies)
+			if (c.status == DTConnectionStatusQueued)
+				return [self dt_tryToRunConnection:c];
+		
+		// Look for connections that are "active" at present, if there is one, we can't proceed.		
+		for (DTConnection *c in sortedDependencies)
+			if (c.status == DTConnectionStatusStarted || c.status == DTConnectionStatusResponded)
+				return NO;
+	}	
+	
+	// There are no dependencies left to be run on this connection, so we can safely run it.	
+	[activeConnections addObject:connection];
+	[queuedConnections removeObject:connection]; 
+	[connection start];
+	return YES;
 }
 
 - (void)dt_removeConnection:(DTConnection *)connection {
