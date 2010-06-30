@@ -19,6 +19,10 @@
 
 @synthesize status, type, priority;
 
++ (DTConnection2 *)connection {
+	return [[[self alloc] init] autorelease];
+}
+
 - (id)init {
 	if (!(self = [super init])) return nil;
 	

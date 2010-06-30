@@ -30,13 +30,15 @@ typedef enum {
 @property (nonatomic, assign) DTConnectionPriority priority;
 
 @property (nonatomic, readonly) NSArray *dependencies;
+
++ (DTConnection2 *)connection;
+
 - (void)addDependency:(DTConnection2 *)connection;
 - (void)removeDependency:(DTConnection2 *)connection;
 
 - (void)connect;
 
 - (void)start;
-- (void)finish;
 - (NSMutableURLRequest *)newRequest;
 
 @end
