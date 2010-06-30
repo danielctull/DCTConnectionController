@@ -14,6 +14,7 @@ extern NSString *const DTConnectionQueue2ConnectionCountChangedNotification;
 @interface DTConnectionQueue2 : NSObject {
     NSMutableArray *activeConnections;
 	NSMutableArray *queuedConnections;
+	NSInteger lastActiveConnectionCount;
 }
 + (DTConnectionQueue2 *)sharedConnectionQueue;
 

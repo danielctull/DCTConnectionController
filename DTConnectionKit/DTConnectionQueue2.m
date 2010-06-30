@@ -27,6 +27,7 @@ NSString *const DTConnectionQueue2ConnectionCountChangedNotification = @"DTConne
 static DTConnectionQueue2 *sharedInstance = nil;
 
 @interface DTConnectionQueue2 ()
+- (void)dt_checkConnectionCount;
 - (void)dt_runNextConnection;
 - (void)dt_tryToRunConnection:(DTConnection2 *)connection;
 - (void)dt_removeConnection:(DTConnection2 *)connection;
@@ -122,6 +123,20 @@ static DTConnectionQueue2 *sharedInstance = nil;
 	}
 }
 
+- (void)dt_checkConnectionCount {
+	
+	if (lastActiveConnectionCount == self.activeConnectionsCount) return;
+		
+	if (self.activeConnectionsCount > 0)
+		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+	else
+		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionQueue2ConnectionCountChangedNotification object:self];
+	
+	lastActiveConnectionCount = self.activeConnectionsCount;
+}
+
 - (void)dt_runNextConnection {
 	
 	if (self.activeConnectionsCount >= self.maxConnections) return;
@@ -131,6 +146,7 @@ static DTConnectionQueue2 *sharedInstance = nil;
 	DTConnection2 *connection = [queuedConnections objectAtIndex:0];
 	
 	[self dt_tryToRunConnection:connection];
+	[self dt_checkConnectionCount];
 }
 
 
