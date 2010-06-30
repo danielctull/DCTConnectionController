@@ -8,7 +8,7 @@
 
 #import "DTConnectionKitExampleViewController.h"
 #import "DTURLLoadingConnection.h"
-#import "DTConnectionQueue2.h"
+#import "DTConnectionQueue.h"
 
 @interface DTConnectionKitExampleViewController ()
 - (NSString *)stringFromURL:(NSURL *)url;
@@ -39,10 +39,10 @@
 	
 	self.navigationController.toolbarHidden = NO;
 	
-	[[DTConnectionQueue2 sharedConnectionQueue] setMaxConnections:7];
+	[[DTConnectionQueue sharedConnectionQueue] setMaxConnections:7];
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(connectionCountChanged:) 
-												 name:DTConnectionQueue2ConnectionCountChangedNotification 
+												 name:DTConnectionQueueConnectionCountChangedNotification 
 											   object:nil];
 	NSLog(@"%@", self);
 	NSArray *urls = [NSArray arrayWithObjects:
@@ -141,7 +141,7 @@
 }
 
 - (void)connectionCountChanged:(NSNotification *)notification {
-	self.connectionsLabel.text = [NSString stringWithFormat:@"Connections: %i", [DTConnectionQueue2 sharedConnectionQueue].activeConnectionsCount];
+	self.connectionsLabel.text = [NSString stringWithFormat:@"Connections: %i", [DTConnectionQueue sharedConnectionQueue].activeConnectionsCount];
 }
 
 @end

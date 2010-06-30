@@ -7,24 +7,24 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DTConnection2.h"
+#import "DTConnection.h"
 
-extern NSString *const DTConnectionQueue2ConnectionCountChangedNotification;
+extern NSString *const DTConnectionQueueConnectionCountChangedNotification;
 
-@interface DTConnectionQueue2 : NSObject {
+@interface DTConnectionQueue : NSObject {
     NSMutableArray *activeConnections;
 	NSMutableArray *queuedConnections;
 	NSInteger lastActiveConnectionCount;
 }
-+ (DTConnectionQueue2 *)sharedConnectionQueue;
++ (DTConnectionQueue *)sharedConnectionQueue;
 
-- (void)addConnection:(DTConnection2 *)connection;
+- (void)addConnection:(DTConnection *)connection;
 
 - (NSArray *)connections;
 
 - (BOOL)isConnectingToURL:(NSURL *)URL;
 - (BOOL)hasQueuedConnectionToURL:(NSURL *)URL;
-- (DTConnection2 *)queuedConnectionToURL:(NSURL *)URL;
+- (DTConnection *)queuedConnectionToURL:(NSURL *)URL;
 
 @property (nonatomic, assign) NSInteger maxConnections;
 @property (nonatomic, readonly) NSInteger activeConnectionsCount;

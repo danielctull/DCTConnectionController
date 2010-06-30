@@ -58,11 +58,11 @@
 				[idArray addObject:[mo objectID]];	
 			}
 		}
-		[self performSelector:@selector(receivedObjectIDArray:) onThread:self.originatingThread withObject:idArray waitUntilDone:YES];
+		[self performSelector:@selector(receivedObjectIDArray:) onThread:[NSThread mainThread] withObject:idArray waitUntilDone:YES];
 	} else if ([object isKindOfClass:[NSManagedObject class]]) {
 		
 		NSManagedObject *mo = (NSManagedObject *)object;
-		[self performSelector:@selector(receivedObjectID:) onThread:self.originatingThread withObject:[mo objectID] waitUntilDone:YES];
+		[self performSelector:@selector(receivedObjectID:) onThread:[NSThread mainThread] withObject:[mo objectID] waitUntilDone:YES];
 		
 	} else {
 		[super receivedObject:object];
@@ -111,7 +111,7 @@
 	if (theMergePolicy) [mainContext setMergePolicy:theMergePolicy]; // NSMergeByPropertyStoreTrumpMergePolicy
 	
 	[mainContext performSelector:@selector(mergeChangesFromContextDidSaveNotification:) 
-						onThread:self.originatingThread 
+						onThread:[NSThread mainThread] 
 					  withObject:notification 
 				   waitUntilDone:YES];
 }

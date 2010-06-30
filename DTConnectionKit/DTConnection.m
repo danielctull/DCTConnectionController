@@ -6,10 +6,29 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTConnection2.h"
-#import "DTConnectionQueue2.h"
+#import "DTConnection.h"
+#import "DTConnectionQueue.h"
 
-@interface DTConnection2 ()
+NSString * const DTConnectionTypeString[] = {
+	@"GET",
+	@"POST",
+	@"PUT",
+	@"DELETE",
+	@"OPTIONS",
+	@"HEAD",
+	@"TRACE",
+	@"CONNECT"
+};
+
+
+NSString *const DTConnectionCompletedNotification = @"DTConnectionCompletedNotification";
+NSString *const DTConnectionFailedNotification = @"DTConnectionFailedNotification";
+NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotification";
+
+NSString *const DTConnectionIsExecutingKey = @"isExecuting";
+NSString *const DTConnectionIsFinishedKey = @"isFinished";
+
+@interface DTConnection ()
 @property (nonatomic, retain, readwrite) NSURL *URL;
 @property (nonatomic, readwrite) DTConnectionStatus status;
 @property (nonatomic, retain, readwrite) NSObject *returnedObject;
@@ -28,11 +47,11 @@
 @end
 
 
-@implementation DTConnection2
+@implementation DTConnection
 
 @synthesize delegate, status, type, priority, URL, returnedObject, returnedError, returnedResponse;
 
-+ (DTConnection2 *)connection {
++ (DTConnection *)connection {
 	return [[[self alloc] init] autorelease];
 }
 
@@ -53,7 +72,7 @@
 #pragma mark Starting the connection
 
 - (void)connect {
-	[[DTConnectionQueue2 sharedConnectionQueue] addConnection:self];
+	[[DTConnectionQueue sharedConnectionQueue] addConnection:self];
 }
 
 #pragma mark -
@@ -63,14 +82,14 @@
 	return [[dependencies copy] autorelease];
 }
 
-- (void)addDependency:(DTConnection2 *)connection {
+- (void)addDependency:(DTConnection *)connection {
 	
 	if (!connection) return;
 	
 	[dependencies addObject:connection];
 }
 
-- (void)removeDependency:(DTConnection2 *)connection {
+- (void)removeDependency:(DTConnection *)connection {
 	
 	if (![dependencies containsObject:connection]) return;
 	

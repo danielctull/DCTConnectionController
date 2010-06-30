@@ -1,19 +1,19 @@
 //
-//  DTConnectionQueue2.m
+//  DTConnectionQueue.m
 //  DTConnectionKit
 //
 //  Created by Daniel Tull on 09.06.2010.
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTConnectionQueue2.h"
+#import "DTConnectionQueue.h"
 
 NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2) {
 	
-	if (![obj1 isKindOfClass:[DTConnection2 class]] || ![obj2 isKindOfClass:[DTConnection2 class]]) return (NSComparisonResult)NSOrderedSame;
+	if (![obj1 isKindOfClass:[DTConnection class]] || ![obj2 isKindOfClass:[DTConnection class]]) return (NSComparisonResult)NSOrderedSame;
 	
-	DTConnection2 *con1 = (DTConnection2 *)obj1;
-	DTConnection2 *con2 = (DTConnection2 *)obj2;
+	DTConnection *con1 = (DTConnection *)obj1;
+	DTConnection *con2 = (DTConnection *)obj2;
 	
 	if (con1.priority > con2.priority) return (NSComparisonResult)NSOrderedDescending;
 	
@@ -22,18 +22,18 @@ NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2)
 	return (NSComparisonResult)NSOrderedSame;
 };
 
-NSString *const DTConnectionQueue2ConnectionCountChangedNotification = @"DTConnectionQueueConnectionCountChangedNotification";
+NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnectionQueueConnectionCountChangedNotification";
 
-static DTConnectionQueue2 *sharedInstance = nil;
+static DTConnectionQueue *sharedInstance = nil;
 
-@interface DTConnectionQueue2 ()
+@interface DTConnectionQueue ()
 - (void)dt_checkConnectionCount;
 - (void)dt_runNextConnection;
-- (void)dt_tryToRunConnection:(DTConnection2 *)connection;
-- (void)dt_removeConnection:(DTConnection2 *)connection;
+- (void)dt_tryToRunConnection:(DTConnection *)connection;
+- (void)dt_removeConnection:(DTConnection *)connection;
 @end
 
-@implementation DTConnectionQueue2
+@implementation DTConnectionQueue
 
 @synthesize maxConnections;
 
@@ -46,7 +46,7 @@ static DTConnectionQueue2 *sharedInstance = nil;
     }
 }
 
-+ (DTConnectionQueue2 *)sharedConnectionQueue {
++ (DTConnectionQueue *)sharedConnectionQueue {
     return sharedInstance;
 }
 
@@ -98,7 +98,7 @@ static DTConnectionQueue2 *sharedInstance = nil;
     return [activeConnections arrayByAddingObjectsFromArray:queuedConnections];
 }
 
-- (void)addConnection:(DTConnection2 *)connection {
+- (void)addConnection:(DTConnection *)connection {
 	
 	[connection addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	
@@ -114,9 +114,9 @@ static DTConnectionQueue2 *sharedInstance = nil;
 						change:(NSDictionary *)change
 					   context:(void *)context {
 	
-	if (![object isKindOfClass:[DTConnection2 class]]) return;
+	if (![object isKindOfClass:[DTConnection class]]) return;
 	
-	DTConnection2 *connection = (DTConnection2 *)object;
+	DTConnection *connection = (DTConnection *)object;
 	
 	if (connection.status == DTConnectionStatusComplete 
 		|| connection.status == DTConnectionStatusFailed
@@ -127,7 +127,7 @@ static DTConnectionQueue2 *sharedInstance = nil;
 }
 
 - (BOOL)isConnectingToURL:(NSURL *)URL {
-	for (DTConnection2 *c in activeConnections)
+	for (DTConnection *c in activeConnections)
 		if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
 			return YES;
 	
@@ -135,15 +135,15 @@ static DTConnectionQueue2 *sharedInstance = nil;
 }
 
 - (BOOL)hasQueuedConnectionToURL:(NSURL *)URL {
-	for (DTConnection2 *c in queuedConnections)
+	for (DTConnection *c in queuedConnections)
 		if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
 			return YES;
 	
 	return NO;
 }
 
-- (DTConnection2 *)queuedConnectionToURL:(NSURL *)URL {
-	for (DTConnection2 *c in queuedConnections)
+- (DTConnection *)queuedConnectionToURL:(NSURL *)URL {
+	for (DTConnection *c in queuedConnections)
 		if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
 			return c;
 	
@@ -162,7 +162,7 @@ static DTConnectionQueue2 *sharedInstance = nil;
 	else
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionQueue2ConnectionCountChangedNotification object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionQueueConnectionCountChangedNotification object:self];
 	
 	lastActiveConnectionCount = self.activeConnectionsCount;
 }
@@ -176,14 +176,14 @@ static DTConnectionQueue2 *sharedInstance = nil;
 		return;
 	}
 	
-	DTConnection2 *connection = [queuedConnections objectAtIndex:0];
+	DTConnection *connection = [queuedConnections objectAtIndex:0];
 	
 	[self dt_tryToRunConnection:connection];
 	[self dt_checkConnectionCount];
 }
 
 
-- (void)dt_tryToRunConnection:(DTConnection2 *)connection {
+- (void)dt_tryToRunConnection:(DTConnection *)connection {
 	
 	if ([connection.dependencies count] == 0) {
 		[activeConnections addObject:connection];
@@ -197,7 +197,7 @@ static DTConnectionQueue2 *sharedInstance = nil;
 	[self dt_tryToRunConnection:[sortedDependencies objectAtIndex:0]];
 }
 
-- (void)dt_removeConnection:(DTConnection2 *)connection {
+- (void)dt_removeConnection:(DTConnection *)connection {
 	[connection removeObserver:self forKeyPath:@"status"];
 	[activeConnections removeObject:connection];
 	[self dt_checkConnectionCount];
