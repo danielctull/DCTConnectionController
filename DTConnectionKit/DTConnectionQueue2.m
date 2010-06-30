@@ -8,7 +8,7 @@
 
 #import "DTConnectionQueue2.h"
 
-NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2){
+NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2) {
 	
 	if (![obj1 isKindOfClass:[DTConnection2 class]] || ![obj2 isKindOfClass:[DTConnection2 class]]) return (NSComparisonResult)NSOrderedSame;
 	
@@ -123,6 +123,9 @@ static DTConnectionQueue2 *sharedInstance = nil;
 	}
 }
 
+#pragma mark -
+#pragma mark Private methods
+
 - (void)dt_checkConnectionCount {
 	
 	if (lastActiveConnectionCount == self.activeConnectionsCount) return;
@@ -168,7 +171,9 @@ static DTConnectionQueue2 *sharedInstance = nil;
 	[activeConnections removeObject:connection];
 }
 
-// DECREMENTED
+#pragma mark -
+#pragma mark Decremented
+
 - (void)incrementExternalConnectionCount {}
 - (void)decrementExternalConnectionCount {}
 
