@@ -10,6 +10,7 @@
 #import "DTConnectionQueue2.h"
 
 @interface DTConnection2 ()
+@property (nonatomic, retain, readwrite) NSURL *URL;
 @property (nonatomic, readwrite) DTConnectionStatus status;
 - (void)dtInternalFinish;
 @end
@@ -17,7 +18,7 @@
 
 @implementation DTConnection2
 
-@synthesize status, type, priority;
+@synthesize status, type, priority, URL;
 
 + (DTConnection2 *)connection {
 	return [[[self alloc] init] autorelease];
@@ -73,6 +74,7 @@
 		return;
 	}
 	
+	self.URL = [request URL];
 	urlConnection = [[DTURLConnection alloc] initWithRequest:request delegate:self];
 	[request release];
 	

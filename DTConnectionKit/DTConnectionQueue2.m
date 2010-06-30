@@ -123,6 +123,30 @@ static DTConnectionQueue2 *sharedInstance = nil;
 	}
 }
 
+- (BOOL)isConnectingToURL:(NSURL *)URL {
+	for (DTConnection2 *c in activeConnections)
+		if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
+			return YES;
+	
+	return NO;
+}
+
+- (BOOL)hasQueuedConnectionToURL:(NSURL *)URL {
+	for (DTConnection2 *c in queuedConnections)
+		if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
+			return YES;
+	
+	return NO;
+}
+
+- (DTConnection2 *)queuedConnectionToURL:(NSURL *)URL {
+	for (DTConnection2 *c in queuedConnections)
+		if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
+			return c;
+	
+	return nil;
+}
+
 #pragma mark -
 #pragma mark Private methods
 

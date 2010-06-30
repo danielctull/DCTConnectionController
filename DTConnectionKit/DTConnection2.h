@@ -23,6 +23,7 @@ typedef enum {
 	DTConnectionType type;
 	DTConnectionStatus status;
 	DTURLConnection *urlConnection;
+	NSURL *URL;
 }
 
 @property (nonatomic, readonly) DTConnectionStatus status;
@@ -30,6 +31,8 @@ typedef enum {
 @property (nonatomic, assign) DTConnectionPriority priority;
 
 @property (nonatomic, readonly) NSArray *dependencies;
+
+@property (nonatomic, retain, readonly) NSURL *URL;
 
 + (DTConnection2 *)connection;
 
