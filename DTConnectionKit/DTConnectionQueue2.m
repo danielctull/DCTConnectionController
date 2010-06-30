@@ -99,12 +99,13 @@ static DTConnectionQueue2 *sharedInstance = nil;
 }
 
 - (void)addConnection:(DTConnection2 *)connection {
-	[queuedConnections addObject:connection];
-	
-	[queuedConnections sortUsingComparator:compareConnections];
 	
 	[connection addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	
+	[queuedConnections addObject:connection];
+	[connection setQueued];
+	[queuedConnections sortUsingComparator:compareConnections];
+		
 	[self dt_runNextConnection];
 }
 
@@ -170,7 +171,10 @@ static DTConnectionQueue2 *sharedInstance = nil;
 	
 	if (self.activeConnectionsCount >= self.maxConnections) return;
 	
-	if ([queuedConnections count] < 1) return;
+	if ([queuedConnections count] < 1) {
+		[self dt_checkConnectionCount];
+		return;
+	}
 	
 	DTConnection2 *connection = [queuedConnections objectAtIndex:0];
 	
@@ -182,8 +186,8 @@ static DTConnectionQueue2 *sharedInstance = nil;
 - (void)dt_tryToRunConnection:(DTConnection2 *)connection {
 	
 	if ([connection.dependencies count] == 0) {
-		[queuedConnections removeObject:connection];
 		[activeConnections addObject:connection];
+		[queuedConnections removeObject:connection]; 
 		[connection start];
 		return;
 	}
@@ -194,11 +198,13 @@ static DTConnectionQueue2 *sharedInstance = nil;
 }
 
 - (void)dt_removeConnection:(DTConnection2 *)connection {
+	[connection removeObserver:self forKeyPath:@"status"];
 	[activeConnections removeObject:connection];
+	[self dt_checkConnectionCount];
 }
 
 #pragma mark -
-#pragma mark Decremented
+#pragma mark Depricated
 
 - (void)incrementExternalConnectionCount {}
 - (void)decrementExternalConnectionCount {}

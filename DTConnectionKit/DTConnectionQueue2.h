@@ -31,7 +31,9 @@ extern NSString *const DTConnectionQueue2ConnectionCountChangedNotification;
 @property (nonatomic, readonly) NSInteger queuedConnectionsCount;
 @property (nonatomic, readonly) NSInteger connectionCount;
 
-// DECREMENTED
+#pragma mark -
+#pragma mark Depricated
+
 - (void)incrementExternalConnectionCount;
 - (void)decrementExternalConnectionCount;
 
