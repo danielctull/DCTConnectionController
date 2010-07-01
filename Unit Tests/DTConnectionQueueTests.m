@@ -14,7 +14,9 @@
 
 - (void)testPriority {
 	
-	[[DTConnectionQueue sharedConnectionQueue] stop];
+	DTConnectionQueue *queue = [[DTConnectionQueue alloc] init];
+	
+	[queue stop];
 	
 	DTConnection *veryHigh = [DTConnection connection];
 	veryHigh.priority = DTConnectionPriorityVeryHigh;
@@ -31,13 +33,13 @@
 	DTConnection *veryLow = [DTConnection connection];
 	veryLow.priority = DTConnectionPriorityVeryLow;
 	
-	[veryLow connect];
-	[low connect];
-	[medium connect];
-	[high connect];
-	[veryHigh connect];
+	[queue addConnection:veryLow];
+	[queue addConnection:low];
+	[queue addConnection:medium];
+	[queue addConnection:high];
+	[queue addConnection:veryHigh];
 	
-	NSArray *connections = [[DTConnectionQueue sharedConnectionQueue] connections];
+	NSArray *connections = [queue connections];
 	
 	STAssertTrue([[connections objectAtIndex:0] isEqual:veryHigh], @"First object should be very high priority");
 	
@@ -48,6 +50,47 @@
 	STAssertTrue([[connections objectAtIndex:3] isEqual:low], @"Fourth object should be low priority");
 	
 	STAssertTrue([[connections objectAtIndex:4] isEqual:veryLow], @"Fifth object should be very low priority");	
+}
+
+- (void)testDependency {
+	
+	DTConnectionQueue *queue = [[DTConnectionQueue alloc] init];
+	
+	[queue stop];
+	
+	DTConnection *veryHigh = [DTConnection connection];
+	veryHigh.priority = DTConnectionPriorityVeryHigh;
+	
+	DTConnection *high = [DTConnection connection];
+	high.priority = DTConnectionPriorityHigh;
+	
+	DTConnection *medium = [DTConnection connection];
+	medium.priority = DTConnectionPriorityMedium;
+	
+	DTConnection *low = [DTConnection connection];
+	low.priority = DTConnectionPriorityLow;
+	
+	DTConnection *veryLow = [DTConnection connection];
+	veryLow.priority = DTConnectionPriorityVeryLow;
+	
+	[queue addConnection:veryLow];
+	[queue addConnection:low];
+	[queue addConnection:medium];
+	[queue addConnection:high];
+	[queue addConnection:veryHigh];
+	
+	NSArray *connections = [queue connections];
+	
+	STAssertTrue([[connections objectAtIndex:0] isEqual:veryHigh], @"First object should be very high priority");
+	
+	STAssertTrue([[connections objectAtIndex:1] isEqual:high], @"Second object should be high priority");
+	
+	STAssertTrue([[connections objectAtIndex:2] isEqual:medium], @"Third object should be medium priority");
+	
+	STAssertTrue([[connections objectAtIndex:3] isEqual:low], @"Fourth object should be low priority");
+	
+	STAssertTrue([[connections objectAtIndex:4] isEqual:veryLow], @"Fifth object should be very low priority");	
+	
 }
 
 @end
