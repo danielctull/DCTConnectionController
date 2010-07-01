@@ -7,30 +7,30 @@
 //
 
 #import "DTConnectionQueueTests.h"
-#import "DTConnection.h"
-#import "DTConnectionQueue.h"
+#import "DTMockConnection.h"
+#import "DTConnectionQueue+DTInternalAccess.h"
 
 @implementation DTConnectionQueueTests
 
 - (void)testPriority {
 	
-	DTConnectionQueue *queue = [[DTConnectionQueue alloc] init];
+	DTConnectionQueue *queue = [[[DTConnectionQueue alloc] init] autorelease];
 	
 	[queue stop];
 	
-	DTConnection *veryHigh = [DTConnection connection];
+	DTMockConnection *veryHigh = [DTMockConnection connection];
 	veryHigh.priority = DTConnectionPriorityVeryHigh;
 	
-	DTConnection *high = [DTConnection connection];
+	DTMockConnection *high = [DTMockConnection connection];
 	high.priority = DTConnectionPriorityHigh;
 	
-	DTConnection *medium = [DTConnection connection];
+	DTMockConnection *medium = [DTMockConnection connection];
 	medium.priority = DTConnectionPriorityMedium;
 	
-	DTConnection *low = [DTConnection connection];
+	DTMockConnection *low = [DTMockConnection connection];
 	low.priority = DTConnectionPriorityLow;
 	
-	DTConnection *veryLow = [DTConnection connection];
+	DTMockConnection *veryLow = [DTMockConnection connection];
 	veryLow.priority = DTConnectionPriorityVeryLow;
 	
 	[queue addConnection:veryLow];
@@ -52,26 +52,70 @@
 	STAssertTrue([[connections objectAtIndex:4] isEqual:veryLow], @"Fifth object should be very low priority");	
 }
 
-- (void)testDependency {
+- (void)testOrderingDependencies {
 	
-	DTConnectionQueue *queue = [[DTConnectionQueue alloc] init];
+	DTConnectionQueue *queue = [[[DTConnectionQueue alloc] init] autorelease];
 	
 	[queue stop];
 	
-	DTConnection *veryHigh = [DTConnection connection];
-	veryHigh.priority = DTConnectionPriorityVeryHigh;
+	DTMockConnection *veryLow = [DTMockConnection connection];
+	veryLow.priority = DTConnectionPriorityVeryLow;
 	
-	DTConnection *high = [DTConnection connection];
-	high.priority = DTConnectionPriorityHigh;
-	
-	DTConnection *medium = [DTConnection connection];
+	DTMockConnection *medium = [DTMockConnection connection];
 	medium.priority = DTConnectionPriorityMedium;
 	
-	DTConnection *low = [DTConnection connection];
-	low.priority = DTConnectionPriorityLow;
+	DTMockConnection *veryHigh = [DTMockConnection connection];
+	veryHigh.priority = DTConnectionPriorityVeryHigh;
+	[veryHigh addDependency:veryLow];
+	[veryHigh addDependency:medium];
 	
-	DTConnection *veryLow = [DTConnection connection];
+	[queue addConnection:veryHigh];
+	[queue addConnection:veryLow];
+	[queue addConnection:medium];
+	
+	STAssertTrue([[queue nextConnection] isEqual:medium], @"Object should be the medium connection.");
+	
+	[queue runNextConnection];
+	
+	STAssertTrue([[queue nextConnection] isEqual:veryLow], @"First object should be the dependant very low connection.");
+	
+	
+	[queue runNextConnection];
+	
+	STAssertNil([queue nextConnection], @"There should be no connections in the queue that are runable, as the dependant connection is not finished.");
+	
+	[veryLow complete];
+	
+	STAssertNil([queue nextConnection], @"There should be no connections in the queue that are runable, as the dependant connection is not finished.");
+	
+	[medium complete];
+	
+	STAssertTrue([[queue nextConnection] isEqual:veryHigh], @"Object should be the very high connection, now its dependencies are complete.");
+}
+
+- (void)testDeepDependency {
+	DTConnectionQueue *queue = [[[DTConnectionQueue alloc] init] autorelease];
+	
+	[queue stop];
+	
+	DTMockConnection *veryLow = [DTMockConnection connection];
 	veryLow.priority = DTConnectionPriorityVeryLow;
+	
+	DTMockConnection *low = [DTMockConnection connection];
+	low.priority = DTConnectionPriorityLow;
+	[low addDependency:veryLow];
+	
+	DTMockConnection *medium = [DTMockConnection connection];
+	medium.priority = DTConnectionPriorityMedium;
+	[medium addDependency:low];
+	
+	DTMockConnection *high = [DTMockConnection connection];
+	high.priority = DTConnectionPriorityHigh;
+	[high addDependency:medium];
+	
+	DTMockConnection *veryHigh = [DTMockConnection connection];
+	veryHigh.priority = DTConnectionPriorityVeryHigh;
+	[veryHigh addDependency:high];
 	
 	[queue addConnection:veryLow];
 	[queue addConnection:low];
@@ -79,18 +123,23 @@
 	[queue addConnection:high];
 	[queue addConnection:veryHigh];
 	
-	NSArray *connections = [queue connections];
+	STAssertTrue([[queue nextConnection] isEqual:veryLow], @"Object should be the veryLow connection.");
+	[queue runNextConnection];
+	[veryLow complete];
 	
-	STAssertTrue([[connections objectAtIndex:0] isEqual:veryHigh], @"First object should be very high priority");
+	STAssertTrue([[queue nextConnection] isEqual:low], @"Object should be the low connection.");
+	[queue runNextConnection];
+	[low complete];
 	
-	STAssertTrue([[connections objectAtIndex:1] isEqual:high], @"Second object should be high priority");
+	STAssertTrue([[queue nextConnection] isEqual:medium], @"Object should be the medium connection.");
+	[queue runNextConnection];
+	[medium complete];
 	
-	STAssertTrue([[connections objectAtIndex:2] isEqual:medium], @"Third object should be medium priority");
+	STAssertTrue([[queue nextConnection] isEqual:high], @"Object should be the high connection.");
+	[queue runNextConnection];
+	[high complete];
 	
-	STAssertTrue([[connections objectAtIndex:3] isEqual:low], @"Fourth object should be low priority");
-	
-	STAssertTrue([[connections objectAtIndex:4] isEqual:veryLow], @"Fifth object should be very low priority");	
-	
+	STAssertTrue([[queue nextConnection] isEqual:veryHigh], @"Object should be the veryHigh connection.");
 }
 
 @end
