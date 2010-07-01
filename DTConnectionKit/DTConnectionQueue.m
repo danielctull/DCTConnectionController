@@ -30,6 +30,9 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 - (void)dt_runNextConnection;
 - (BOOL)dt_tryToRunConnection:(DTConnection *)connection;
 - (void)dt_removeConnection:(DTConnection *)connection;
+
+- (DTConnection *)dt_nextConnection;
+- (DTConnection *)dt_nextConnectionInterator:(DTConnection *)connection;
 @end
 
 @implementation DTConnectionQueue
@@ -54,6 +57,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	activeConnections = [[NSMutableArray alloc] init];
 	queuedConnections = [[NSMutableArray alloc] init];
 	active = YES;
+	self.maxConnections = 5;
 	
 	return self;	
 }
@@ -90,8 +94,9 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	[connection setQueued];
 	[queuedConnections sortUsingComparator:compareConnections];
 		
-	if (active)
-		[self dt_runNextConnection];
+	if (!active) return;
+	
+	[self dt_runNextConnection];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath
@@ -102,6 +107,8 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	if (![object isKindOfClass:[DTConnection class]]) return;
 	
 	DTConnection *connection = (DTConnection *)object;
+	
+	if (!active) return;
 	
 	if (connection.status == DTConnectionStatusComplete 
 		|| connection.status == DTConnectionStatusFailed
@@ -163,14 +170,46 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	
 	// Loop through the queue and try to run the top-most connection.
 	// If it can't be run (eg waiting for dependencies), run the next one down.
+		
+	DTConnection *connection = [self dt_nextConnection];
 	
-	for (DTConnection *connection in queuedConnections)
-		if ([self dt_tryToRunConnection:connection])
-			break;
+	if (connection) {
+		[activeConnections addObject:connection];
+		[queuedConnections removeObject:connection]; 
+		[connection start];		
+	}
 	
 	[self dt_checkConnectionCount];
 }
 
+- (DTConnection *)dt_nextConnection {
+	for (DTConnection *connection in queuedConnections) {
+		DTConnection *c = [self dt_nextConnectionInterator:connection];
+		if (c)
+			return c;
+	}
+	return nil;
+}
+
+- (DTConnection *)dt_nextConnectionInterator:(DTConnection *)connection {
+	if ([connection.dependencies count] > 0) {
+		
+		// Sort so the dependencies are in order from high to low.
+		NSArray *sortedDependencies = [connection.dependencies sortedArrayUsingComparator:compareConnections];		
+		
+		// Look for connections that are queued at present, if there is one, we can process that one.
+		for (DTConnection *c in sortedDependencies)
+			if (c.status == DTConnectionStatusQueued)
+				return [self dt_nextConnectionInterator:c];
+		
+		// Look for connections that are "active" at present, if there is one, we can't proceed.		
+		for (DTConnection *c in sortedDependencies)
+			if (c.status == DTConnectionStatusStarted || c.status == DTConnectionStatusResponded)
+				return nil;
+	}	
+	
+	return connection;
+}
 
 - (BOOL)dt_tryToRunConnection:(DTConnection *)connection {
 	
