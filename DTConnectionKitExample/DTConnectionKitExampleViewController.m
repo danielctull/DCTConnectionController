@@ -8,7 +8,7 @@
 
 #import "DTConnectionKitExampleViewController.h"
 #import "DTURLLoadingConnection.h"
-#import "DTConnectionQueue.h"
+#import "DTConnectionQueue+DTSingleton.h"
 
 @interface DTConnectionKitExampleViewController ()
 - (NSString *)stringFromURL:(NSURL *)url;
