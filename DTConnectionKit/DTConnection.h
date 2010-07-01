@@ -35,6 +35,15 @@ typedef enum {
 	DTConnectionStatusCancelled			/**< The connection failed. */
 } DTConnectionStatus;
 
+/** @brief Specifies the possible priorities for a connection.
+ */
+typedef enum {
+	DTConnectionPriorityVeryHigh = 0,
+	DTConnectionPriorityHigh,
+	DTConnectionPriorityMedium,
+	DTConnectionPriorityLow,
+	DTConnectionPriorityVeryLow
+} DTConnectionPriority;
 
 /** @brief Name of the notification sent out when the connection has successfully completed.
  */
@@ -49,14 +58,6 @@ extern NSString *const DTConnectionFailedNotification;
 extern NSString *const DTConnectionResponseNotification;
 
 extern NSString *const DTConnectionTypeString[];
-
-typedef enum {
-	DTConnectionPriorityVeryHigh = 0,
-	DTConnectionPriorityHigh,
-	DTConnectionPriorityMedium,
-	DTConnectionPriorityLow,
-	DTConnectionPriorityVeryLow
-} DTConnectionPriority;
 
 @protocol DTConnectionDelegate;
 
