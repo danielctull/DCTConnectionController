@@ -7,7 +7,7 @@
 //
 
 #import "DTConnection.h"
-#import "DTConnectionQueue.h"
+#import "DTConnectionQueue+DTSingleton.h"
 
 NSString * const DTConnectionTypeString[] = {
 	@"GET",
