@@ -25,8 +25,6 @@ NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2)
 
 NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnectionQueueConnectionCountChangedNotification";
 
-static DTConnectionQueue *sharedInstance = nil;
-
 @interface DTConnectionQueue ()
 - (void)dt_checkConnectionCount;
 - (void)dt_runNextConnection;
@@ -37,30 +35,6 @@ static DTConnectionQueue *sharedInstance = nil;
 @implementation DTConnectionQueue
 
 @synthesize maxConnections;
-
-#pragma mark -
-#pragma mark Methods for Singleton use
-
-+ (void)initialize {
-    if (!sharedInstance) {
-        sharedInstance = [[self alloc] init];
-    }
-}
-
-+ (DTConnectionQueue *)sharedConnectionQueue {
-    return sharedInstance;
-}
-
-+ (id)allocWithZone:(NSZone *)zone {
-    //Usually already set by +initialize.
-    if (sharedInstance) {
-        //The caller expects to receive a new object, so implicitly retain it to balance out the caller's eventual release message.
-        return [sharedInstance retain];
-    } else {
-        //When not already set, +initialize is our caller—it's creating the shared instance. Let this go through.
-        return [super allocWithZone:zone];
-    }
-}
 
 - (void)start {
 	active = YES;

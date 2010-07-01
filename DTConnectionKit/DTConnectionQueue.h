@@ -17,7 +17,6 @@ extern NSString *const DTConnectionQueueConnectionCountChangedNotification;
 	NSInteger lastActiveConnectionCount;
 	BOOL active;
 }
-+ (DTConnectionQueue *)sharedConnectionQueue;
 
 - (void)addConnection:(DTConnection *)connection;
 
