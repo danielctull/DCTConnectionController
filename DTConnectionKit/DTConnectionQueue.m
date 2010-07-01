@@ -6,6 +6,7 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import "DTConnectionQueue.h"
 
 NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2) {
@@ -61,6 +62,14 @@ static DTConnectionQueue *sharedInstance = nil;
     }
 }
 
+- (void)start {
+	active = YES;
+}
+
+- (void)stop {
+	active = NO;
+}
+
 #pragma mark -
 #pragma mark init/dealloc
 
@@ -70,6 +79,7 @@ static DTConnectionQueue *sharedInstance = nil;
 	
 	activeConnections = [[NSMutableArray alloc] init];
 	queuedConnections = [[NSMutableArray alloc] init];
+	active = YES;
 	
 	return self;	
 }
@@ -106,7 +116,8 @@ static DTConnectionQueue *sharedInstance = nil;
 	[connection setQueued];
 	[queuedConnections sortUsingComparator:compareConnections];
 		
-	[self dt_runNextConnection];
+	if (active)
+		[self dt_runNextConnection];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath

@@ -15,6 +15,7 @@ extern NSString *const DTConnectionQueueConnectionCountChangedNotification;
     NSMutableArray *activeConnections;
 	NSMutableArray *queuedConnections;
 	NSInteger lastActiveConnectionCount;
+	BOOL active;
 }
 + (DTConnectionQueue *)sharedConnectionQueue;
 
@@ -25,6 +26,9 @@ extern NSString *const DTConnectionQueueConnectionCountChangedNotification;
 - (BOOL)isConnectingToURL:(NSURL *)URL;
 - (BOOL)hasQueuedConnectionToURL:(NSURL *)URL;
 - (DTConnection *)queuedConnectionToURL:(NSURL *)URL;
+
+- (void)stop;
+- (void)start;
 
 @property (nonatomic, assign) NSInteger maxConnections;
 @property (nonatomic, readonly) NSInteger activeConnectionsCount;
