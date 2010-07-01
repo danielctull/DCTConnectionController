@@ -28,6 +28,7 @@
 		24BD781E11DCD37B0094DB11 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		24BD782311DCD3870094DB11 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		24BD783511DCD3C30094DB11 /* DTConnectionQueueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD783411DCD3C30094DB11 /* DTConnectionQueueTests.m */; };
+		24BD786211DCD9B30094DB11 /* DTConnectionQueue+DTSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD786111DCD9B30094DB11 /* DTConnectionQueue+DTSingleton.m */; };
 		24E0F62410D6490C00F03AD8 /* DTConnectionKitExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E0F62210D6490C00F03AD8 /* DTConnectionKitExampleViewController.m */; };
 		24E0F62510D6490C00F03AD8 /* DTConnectionKitExampleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24E0F62310D6490C00F03AD8 /* DTConnectionKitExampleView.xib */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
@@ -74,6 +75,8 @@
 		24BD77EC11DCD1090094DB11 /* DTConnectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConnectionTests.m; sourceTree = "<group>"; };
 		24BD783311DCD3C30094DB11 /* DTConnectionQueueTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTConnectionQueueTests.h; sourceTree = "<group>"; };
 		24BD783411DCD3C30094DB11 /* DTConnectionQueueTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConnectionQueueTests.m; sourceTree = "<group>"; };
+		24BD786011DCD9B30094DB11 /* DTConnectionQueue+DTSingleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DTConnectionQueue+DTSingleton.h"; sourceTree = "<group>"; };
+		24BD786111DCD9B30094DB11 /* DTConnectionQueue+DTSingleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DTConnectionQueue+DTSingleton.m"; sourceTree = "<group>"; };
 		24E0F62110D6490C00F03AD8 /* DTConnectionKitExampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTConnectionKitExampleViewController.h; sourceTree = "<group>"; };
 		24E0F62210D6490C00F03AD8 /* DTConnectionKitExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConnectionKitExampleViewController.m; sourceTree = "<group>"; };
 		24E0F62310D6490C00F03AD8 /* DTConnectionKitExampleView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DTConnectionKitExampleView.xib; sourceTree = "<group>"; };
@@ -143,6 +146,8 @@
 				24626812112C8D680046D38E /* DTFileCache.m */,
 				24A4807011C03BF800F75C55 /* DTConnectionQueue.h */,
 				24A4807111C03BF800F75C55 /* DTConnectionQueue.m */,
+				24BD786011DCD9B30094DB11 /* DTConnectionQueue+DTSingleton.h */,
+				24BD786111DCD9B30094DB11 /* DTConnectionQueue+DTSingleton.m */,
 				24A4808511C03CD500F75C55 /* DTConnection.h */,
 				24A4808611C03CD500F75C55 /* DTConnection.m */,
 			);
@@ -333,6 +338,7 @@
 				244C084C11A19F3B00D960A4 /* NSData+Base64.m in Sources */,
 				24A4807211C03BF800F75C55 /* DTConnectionQueue.m in Sources */,
 				24A4808711C03CD500F75C55 /* DTConnection.m in Sources */,
+				24BD786211DCD9B30094DB11 /* DTConnectionQueue+DTSingleton.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
