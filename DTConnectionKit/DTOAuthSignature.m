@@ -23,19 +23,35 @@ NSString * const DTOAuthSignatureTypeString[] = {
 
 - (NSString *)signature {
 	
+	NSLog(@"%@ %@ %@", self, self.secret, self.text);
+	
 	NSData *secretData = [self.secret dataUsingEncoding:NSUTF8StringEncoding];
     NSData *textData = [self.text dataUsingEncoding:NSUTF8StringEncoding];
 	
-	uint8_t result[CC_SHA1_DIGEST_LENGTH] = {0};
+	unsigned char result[20];
+	CCHmac(kCCHmacAlgSHA1, secretData.bytes, secretData.length, textData.bytes, textData.length, result);
 	
-	CCHmacContext hmacContext;
-	CCHmacInit(&hmacContext, kCCHmacAlgSHA1, secretData.bytes, secretData.length);
-	CCHmacUpdate(&hmacContext, textData.bytes, textData.length);
-	CCHmacFinal(&hmacContext, result);
-	
-	NSData *theData = [NSData dataWithBytes:result length:CC_SHA1_DIGEST_LENGTH];
+	NSData *theData = [NSData dataWithBytes:result length:20];
 	
 	return [theData base64EncodedString];
+	/*
+	
+	
+    unsigned char result[20];
+    hmac_sha1((unsigned char *)[clearTextData bytes], [clearTextData length], (unsigned char *)[secretData bytes], [secretData length], result);
+    
+    //Base64 Encoding
+    
+    char base64Result[32];
+    size_t theResultLength = 32;
+    Base64EncodeData(result, 20, base64Result, &theResultLength);
+    NSData *theData = [NSData dataWithBytes:base64Result length:theResultLength];
+    
+    NSString *base64EncodedResult = [[[NSString alloc] initWithData:theData encoding:NSUTF8StringEncoding] autorelease];
+    
+    return base64EncodedResult;*/
+	
+	
 }
 
 @end
