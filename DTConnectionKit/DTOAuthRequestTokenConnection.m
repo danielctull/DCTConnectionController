@@ -42,6 +42,7 @@ NSString *const DTOAuthSignatureKey = @"oauth_signature";
 - (void)dealloc {
 	[keys release];
 	[dictionary release];
+	[super dealloc];
 }
 
 - (void)setNonce:(NSString *)s {
