@@ -25,9 +25,6 @@ NSString *const DTConnectionCompletedNotification = @"DTConnectionCompletedNotif
 NSString *const DTConnectionFailedNotification = @"DTConnectionFailedNotification";
 NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotification";
 
-NSString *const DTConnectionIsExecutingKey = @"isExecuting";
-NSString *const DTConnectionIsFinishedKey = @"isFinished";
-
 @interface DTConnection ()
 @property (nonatomic, retain, readwrite) NSURL *URL;
 @property (nonatomic, readwrite) DTConnectionStatus status;
