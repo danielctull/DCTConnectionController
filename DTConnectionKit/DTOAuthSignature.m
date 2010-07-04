@@ -17,8 +17,8 @@ NSString * const DTOAuthSignatureTypeString[] = {
 @implementation DTOAuthSignature
 @synthesize type, secret, text;
 
-- (id)nameForType:(DTOAuthSignatureType)aType {
-	return DTOAuthSignatureTypeString[aType];
+- (NSString *)typeString {
+	return DTOAuthSignatureTypeString[self.type];
 }
 
 - (NSString *)signature {

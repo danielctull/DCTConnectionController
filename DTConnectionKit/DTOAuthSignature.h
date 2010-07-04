@@ -19,5 +19,5 @@ typedef enum {
 @property (nonatomic, copy) NSString *secret;
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, readonly) NSString *signature;
-
+- (NSString *)typeString;
 @end
