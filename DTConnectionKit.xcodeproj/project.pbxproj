@@ -11,6 +11,7 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		240CE16111E08C7E00DDDE91 /* DTOAuthSignature.m in Sources */ = {isa = PBXBuildFile; fileRef = 240CE16011E08C7E00DDDE91 /* DTOAuthSignature.m */; };
 		24306A9B114E894B008BBE38 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24306A9A114E894B008BBE38 /* MainWindow-iPad.xib */; };
 		244C084C11A19F3B00D960A4 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 244C084B11A19F3B00D960A4 /* NSData+Base64.m */; };
 		2456D8E1110B6F54009A4F1E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2456D8E0110B6F54009A4F1E /* CoreData.framework */; };
@@ -37,16 +38,6 @@
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		24BD780011DCD27A0094DB11 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 29B97313FDCFA39411CA2CEA /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 24BD77D611DCCE340094DB11;
-			remoteInfo = "Unit Tests";
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXFileReference section */
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* DTConnectionKitAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTConnectionKitAppDelegate.h; sourceTree = "<group>"; };
@@ -55,6 +46,8 @@
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		24083D4110CF9A07009B758E /* DTURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTURLConnection.h; sourceTree = "<group>"; };
 		24083D4210CF9A07009B758E /* DTURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTURLConnection.m; sourceTree = "<group>"; };
+		240CE15F11E08C7E00DDDE91 /* DTOAuthSignature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTOAuthSignature.h; sourceTree = "<group>"; };
+		240CE16011E08C7E00DDDE91 /* DTOAuthSignature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTOAuthSignature.m; sourceTree = "<group>"; };
 		24306A9A114E894B008BBE38 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "Resources-iPad/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		244C084A11A19F3B00D960A4 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
 		244C084B11A19F3B00D960A4 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
@@ -156,6 +149,8 @@
 				24BD786111DCD9B30094DB11 /* DTConnectionQueue+DTSingleton.m */,
 				24A4808511C03CD500F75C55 /* DTConnection.h */,
 				24A4808611C03CD500F75C55 /* DTConnection.m */,
+				240CE15F11E08C7E00DDDE91 /* DTOAuthSignature.h */,
+				240CE16011E08C7E00DDDE91 /* DTOAuthSignature.m */,
 			);
 			path = DTConnectionKit;
 			sourceTree = "<group>";
@@ -253,7 +248,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				24BD780111DCD27A0094DB11 /* PBXTargetDependency */,
 			);
 			name = DTConnectionKit;
 			productName = DTConnectionKit;
@@ -349,6 +343,7 @@
 				24A4807211C03BF800F75C55 /* DTConnectionQueue.m in Sources */,
 				24A4808711C03CD500F75C55 /* DTConnection.m in Sources */,
 				24BD786211DCD9B30094DB11 /* DTConnectionQueue+DTSingleton.m in Sources */,
+				240CE16111E08C7E00DDDE91 /* DTOAuthSignature.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,14 +362,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		24BD780111DCD27A0094DB11 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 24BD77D611DCCE340094DB11 /* Unit Tests */;
-			targetProxy = 24BD780011DCD27A0094DB11 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		1D6058940D05DD3E006BFB54 /* Debug */ = {
