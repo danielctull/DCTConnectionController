@@ -21,19 +21,14 @@
  - 1.0*/
 @interface DTOAuthRequestTokenConnection : DTConnection {
 	NSArray *keys;
-	NSDictionary *dictionary;
+	NSMutableDictionary *dictionary;
 }
-@property (nonatomic, copy) NSString *nonce;
-@property (nonatomic, copy) NSString *consumerKey;
-@property (nonatomic, copy) NSString *version;
-
-
-- (NSString *)versionString;
-- (NSString *)nonceString;
-- (NSString *)consumerKeyString;
-- (NSString *)signatureMethodStringForMethod:(NSString *)method;
-- (NSString *)timestampString;
+@property (nonatomic, retain) NSString *nonce;
+@property (nonatomic, retain) NSString *consumerKey;
+@property (nonatomic, retain) NSString *secretConsumerKey;
+@property (nonatomic, retain) NSString *version;
 
 - (NSString *)stringForKey:(NSString *)key value:(NSString *)value;
+- (NSString *)baseStringForKey:(NSString *)key value:(NSString *)value;
 
 @end
