@@ -17,6 +17,8 @@ NSString *const DTOAuthTimestampKey = @"oauth_timestamp";
 NSString *const DTOAuthVersionKey = @"oauth_version";
 NSString *const DTOAuthSignatureKey = @"oauth_signature";
 NSString *const DTOAuthTokenKey = @"oauth_token";
+NSString *const DTOAuthTokenSecretKey = @"oauth_token_secret";
+
 
 @interface DTOAuthConnection ()
 - (NSString *)dt_stringForKey:(NSString *)key value:(NSString *)value;

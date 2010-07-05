@@ -17,6 +17,7 @@ extern NSString *const DTOAuthTimestampKey;
 extern NSString *const DTOAuthVersionKey;
 extern NSString *const DTOAuthSignatureKey;
 extern NSString *const DTOAuthTokenKey;
+extern NSString *const DTOAuthTokenSecretKey;
 
 @interface DTOAuthConnection : DTConnection {
 	NSMutableDictionary *parameters;
