@@ -6,10 +6,10 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTConnection.h"
+#import "DTOAuthConnection.h"
 
-@interface DTOAuthAccessTokenConnection : DTConnection {
-
+@interface DTOAuthAccessTokenConnection : DTOAuthConnection {
 }
-
+@property (nonatomic, retain) NSString *token;
+@property (nonatomic, retain) NSString *verifier;
 @end
