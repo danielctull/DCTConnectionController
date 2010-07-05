@@ -31,13 +31,11 @@ NSString *const DTOAuthSignatureKey = @"oauth_signature";
 - (id)init {
 	if (!(self = [super init])) return nil;
 	
-	NSArray *theKeys = [NSArray arrayWithObjects:DTOAuthConsumerKeyKey, DTOAuthNonceKey, DTOAuthSignatureMethodKey, DTOAuthTimestampKey, DTOAuthVersionKey, nil];
-	keys = [[theKeys sortedArrayUsingSelector:@selector(compare:)] retain];
+	NSArray *keys = [NSArray arrayWithObjects:DTOAuthConsumerKeyKey, DTOAuthNonceKey, DTOAuthSignatureMethodKey, DTOAuthTimestampKey, DTOAuthVersionKey, nil];
 	
-	dictionary = [[NSMutableDictionary alloc] init];
+	parameters = [[NSMutableDictionary alloc] init];
 	
-	for (NSString *key in keys)
-		[dictionary setObject:@"" forKey:key];
+	for (NSString *key in keys) [parameters setObject:@"" forKey:key];
 	
 	self.nonce = [[NSProcessInfo processInfo] globallyUniqueString];
 	self.version = @"1.0";
@@ -46,103 +44,111 @@ NSString *const DTOAuthSignatureKey = @"oauth_signature";
 }
 
 - (void)dealloc {
-	[keys release];
-	[dictionary release];
+	[parameters release];
 	[super dealloc];
 }
 
 - (NSMutableURLRequest *)newRequest {
-	self.type = DTConnectionTypeGet;
 	
-	NSMutableURLRequest *r = [super newRequest];
+	NSMutableURLRequest *request = [super newRequest];
 	
-	[r setURL:[NSURL URLWithString:@"http://api.twitter.com/oauth/request_token"]];
+	[request setURL:self.URL];
 	
 	// Setting up the signature.
 	DTOAuthSignature *signature = [[DTOAuthSignature alloc] init];
 	signature.secret = [NSString stringWithFormat:@"%@&", self.secretConsumerKey];
 	
-	[dictionary setObject:[signature typeString] forKey:DTOAuthSignatureMethodKey];
+	[parameters setObject:[signature typeString] forKey:DTOAuthSignatureMethodKey];
 	
 	NSTimeInterval timeInterval = [[NSDate date] timeIntervalSince1970];
 	NSInteger timeStamp = (NSInteger)timeInterval;
 	
-	[dictionary setObject:[NSString stringWithFormat:@"%i", timeStamp] forKey:DTOAuthTimestampKey];
+	[parameters setObject:[NSString stringWithFormat:@"%i", timeStamp] forKey:DTOAuthTimestampKey];
 	NSMutableString *baseString = [[NSMutableString alloc] init];
 	[baseString appendString:DTConnectionTypeString[self.type]];
 	[baseString appendString:@"&"];
-	[baseString appendString:[[r.URL absoluteString] dt_urlEncodedString]];
+	[baseString appendString:[[request.URL absoluteString] dt_urlEncodedString]];
 	[baseString appendString:@"&"];
 	
+	NSArray *keys = [[parameters allKeys] sortedArrayUsingSelector:@selector(compare:)];
+	
 	for (NSString *key in keys) {
-		if (!([keys indexOfObject:key]==0)) 
-			[baseString appendString:[[NSString stringWithString:@"&"] dt_urlEncodedString]];
 		
-		[baseString appendString:[[self dt_baseStringForKey:key value:[dictionary valueForKey:key]] dt_urlEncodedString]];
+		if ([keys indexOfObject:key]!=0) [baseString appendString:[[NSString stringWithString:@"&"] dt_urlEncodedString]];
+		
+		[baseString appendString:[[self dt_baseStringForKey:key value:[parameters valueForKey:key]] dt_urlEncodedString]];
 	}
 	signature.text = baseString;
-	
 	
 	// Setting up the header string.
 	
 	NSMutableString *oauthString = [NSMutableString stringWithFormat:@"OAuth realm=\"\", "];
 	
 	for (NSString *key in keys) {
-		[oauthString appendString:[self dt_stringForKey:key value:[dictionary objectForKey:key]]];
+		[oauthString appendString:[self dt_stringForKey:key value:[parameters objectForKey:key]]];
 		[oauthString appendString:@", "];
 	}
-	
 	[oauthString appendString:[self dt_stringForKey:DTOAuthSignatureKey value:signature.signature]];
 	
-	[r addValue:oauthString forHTTPHeaderField:@"Authorization"];
-	/*
-	NSLog(@"%@", dictionary);
-	NSLog(@"%@ = %@", DTOAuthSignatureKey, signature.signature);
+	[request addValue:oauthString forHTTPHeaderField:@"Authorization"];
 	
-	NSLog(@"Authorization: %@", oauthString);
-	NSLog(@"base string = %@", baseString);
-	*/
-	return r;
+	return request;
 }
 
 - (void)receivedResponse:(NSURLResponse *)response {
-	
-	NSHTTPURLResponse *r = (NSHTTPURLResponse *)response;
-	NSLog(@"%@", [r allHeaderFields]);
+	//NSHTTPURLResponse *r = (NSHTTPURLResponse *)response;
+	//NSLog(@"%@", [r allHeaderFields]);
 	[super receivedResponse:response];
 }
-										  
+
 - (void)receivedObject:(NSObject *)object {
 	NSString *string = [[NSString alloc] initWithData:(NSData *)object encoding:NSUTF8StringEncoding];
-	NSLog(@"%@", string);
-	[super receivedObject:object];
+	
+	NSArray *parts = [string componentsSeparatedByString:@"&"];
+	
+	NSMutableDictionary *dict = [[[NSMutableDictionary alloc] init] autorelease];
+	
+	for (NSString *s in parts) {
+		NSArray *p = [s componentsSeparatedByString:@"="];
+		
+		if ([p count] == 2) [dict setObject:[p objectAtIndex:1] forKey:[p objectAtIndex:0]];
+	}
+	
+	NSLog(@"%@", dict);
+	[super receivedObject:dict];
 }
 
+#pragma mark -
+#pragma mark Accessor methods
+
 - (void)setNonce:(NSString *)s {
-	[dictionary setObject:s forKey:DTOAuthNonceKey];
+	[parameters setObject:s forKey:DTOAuthNonceKey];
 }
 - (NSString *)nonce {
-	return [dictionary objectForKey:DTOAuthNonceKey];
+	return [parameters objectForKey:DTOAuthNonceKey];
 }
 
 - (void)setVersion:(NSString *)s {
-	[dictionary setObject:s forKey:DTOAuthVersionKey];
+	[parameters setObject:s forKey:DTOAuthVersionKey];
 }
 - (NSString *)version {
-	return [dictionary objectForKey:DTOAuthVersionKey];
+	return [parameters objectForKey:DTOAuthVersionKey];
 }
 - (void)setConsumerKey:(NSString *)s {
-	[dictionary setObject:s forKey:DTOAuthConsumerKeyKey];
+	[parameters setObject:s forKey:DTOAuthConsumerKeyKey];
 }
 - (NSString *)consumerKey {
-	return [dictionary objectForKey:DTOAuthConsumerKeyKey];
+	return [parameters objectForKey:DTOAuthConsumerKeyKey];
 }
+
+#pragma mark -
+#pragma mark Private methods
 
 - (NSString *)dt_stringForKey:(NSString *)key value:(NSString *)value {
 	return [NSString stringWithFormat:@"%@=\"%@\"", key, value];
 }
 
 - (NSString *)dt_baseStringForKey:(NSString *)key value:(NSString *)value {
- return [NSString stringWithFormat:@"%@=%@", key, value];
+	return [NSString stringWithFormat:@"%@=%@", key, value];
 }
 @end

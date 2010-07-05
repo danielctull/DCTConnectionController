@@ -20,8 +20,7 @@
  oauth_version
  - 1.0*/
 @interface DTOAuthRequestTokenConnection : DTConnection {
-	NSArray *keys;
-	NSMutableDictionary *dictionary;
+	NSMutableDictionary *parameters;
 }
 
 @property (nonatomic, retain) NSString *nonce;
