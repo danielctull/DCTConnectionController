@@ -23,12 +23,11 @@
 	NSArray *keys;
 	NSMutableDictionary *dictionary;
 }
+
 @property (nonatomic, retain) NSString *nonce;
 @property (nonatomic, retain) NSString *consumerKey;
 @property (nonatomic, retain) NSString *secretConsumerKey;
 @property (nonatomic, retain) NSString *version;
-
-- (NSString *)stringForKey:(NSString *)key value:(NSString *)value;
-- (NSString *)baseStringForKey:(NSString *)key value:(NSString *)value;
+@property (nonatomic, retain) NSURL *URL;
 
 @end
