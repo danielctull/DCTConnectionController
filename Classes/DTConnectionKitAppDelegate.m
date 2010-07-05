@@ -23,8 +23,10 @@
 	
 	
 	DTOAuthRequestTokenConnection *connection = [[DTOAuthRequestTokenConnection alloc] init];
-	connection.consumerKey = @"HJzYQhwgALirjCKQaZN0Nw";
-	connection.secretConsumerKey = @"MHkk7R4giiVj0qdqvZino1NfbcDjlLeUVkber4URkCA";
+	connection.URL = [NSURL URLWithString:@"http://term.ie/oauth/example/request_token.php"];
+	connection.type = DTConnectionTypeGet;
+	connection.consumerKey = @"key";
+	connection.secretConsumerKey = @"secret";
 	[connection connect];
 	[connection release];
 }
