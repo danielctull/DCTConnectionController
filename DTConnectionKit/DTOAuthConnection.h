@@ -28,6 +28,8 @@ extern NSString *const DTOAuthTokenSecretKey;
 
 - (DTOAuthSignature *)signature;
 
+- (void)receivedOAuthDictionary:(NSDictionary *)dictionary;
+
 
 @property (nonatomic, retain) NSString *nonce;
 @property (nonatomic, retain) NSString *consumerKey;

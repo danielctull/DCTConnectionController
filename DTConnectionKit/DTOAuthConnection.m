@@ -112,8 +112,13 @@ NSString *const DTOAuthTokenSecretKey = @"oauth_token_secret";
 
 - (void)receivedObject:(NSObject *)object {
 	NSString *string = [[NSString alloc] initWithData:(NSData *)object encoding:NSUTF8StringEncoding];
-	//NSLog(@"%@ %@", [self class], string);
+	NSLog(@"%@ %@", [self class], string);
 	NSArray *parts = [string componentsSeparatedByString:@"&"];
+	
+	if ([parts count] == 0) {
+		[super receivedObject:object];
+		return;
+	}
 	
 	NSMutableDictionary *dict = [[[NSMutableDictionary alloc] init] autorelease];
 	
@@ -123,7 +128,7 @@ NSString *const DTOAuthTokenSecretKey = @"oauth_token_secret";
 		if ([p count] == 2) [dict setObject:[p objectAtIndex:1] forKey:[p objectAtIndex:0]];
 	}
 	
-	NSLog(@"%@ %@", [self class], dict);
+	[self receivedOAuthDictionary:dict];
 	[super receivedObject:dict];
 }
 
@@ -169,5 +174,7 @@ NSString *const DTOAuthTokenSecretKey = @"oauth_token_secret";
 - (NSString *)dt_baseStringForKey:(NSString *)key value:(NSString *)value {
 	return [NSString stringWithFormat:@"%@=%@", key, value];
 }
+
+- (void)receivedOAuthDictionary:(NSDictionary *)dictionary {}
 
 @end
