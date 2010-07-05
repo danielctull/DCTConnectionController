@@ -9,7 +9,8 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
-	DTOAuthSignatureTypeHMAC_SHA1 = 0
+	DTOAuthSignatureTypeHMAC_SHA1 = 0,
+	DTOAuthSignatureTypePlaintext
 } DTOAuthSignatureType;
 
 @interface DTOAuthSignature : NSObject {

@@ -12,18 +12,27 @@
 #import <CommonCrypto/CommonHMAC.h>
 
 NSString * const DTOAuthSignatureTypeString[] = {
-	@"HMAC-SHA1"
+	@"HMAC-SHA1",
+	@"PLAINTEXT"
 };
 
 @implementation DTOAuthSignature
 @synthesize type, secret, text;
 
 - (NSString *)typeString {
+	return DTOAuthSignatureTypeString[DTOAuthSignatureTypeHMAC_SHA1];
+	
+	// PLAIN TEXT NOT WORKING
 	return DTOAuthSignatureTypeString[self.type];
 }
 
 - (NSString *)signature {
 	
+	if (self.type == DTOAuthSignatureTypePlaintext) {
+		// NOT WORKING CURRENTLY
+		// return [self.secret dt_urlEncodedString];
+	}
+		
 	NSData *secretData = [self.secret dataUsingEncoding:NSUTF8StringEncoding];
     NSData *textData = [self.text dataUsingEncoding:NSUTF8StringEncoding];
 	
