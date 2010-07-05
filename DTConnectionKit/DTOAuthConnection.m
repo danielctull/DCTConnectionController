@@ -98,8 +98,8 @@ NSString *const DTOAuthTokenSecretKey = @"oauth_token_secret";
 	[request addValue:oauthString forHTTPHeaderField:@"Authorization"];
 	
 	/*NSLog(@"%@ %@", [self class], parameters);
-	NSLog(@"%@ %@\n", [self class], signature.signature);
-	NSLog(@"%@ \n\n%@\n\n", [self class], baseString);*/
+	 NSLog(@"%@ %@\n", [self class], signature.signature);
+	 NSLog(@"%@ \n\n%@\n\n", [self class], baseString);*/
 	
 	return request;
 }
@@ -111,6 +111,9 @@ NSString *const DTOAuthTokenSecretKey = @"oauth_token_secret";
 }
 
 - (void)receivedObject:(NSObject *)object {
+	
+	if (![object isKindOfClass:[NSData class]]) return;
+	
 	NSString *string = [[NSString alloc] initWithData:(NSData *)object encoding:NSUTF8StringEncoding];
 	NSLog(@"%@ %@", [self class], string);
 	NSArray *parts = [string componentsSeparatedByString:@"&"];
