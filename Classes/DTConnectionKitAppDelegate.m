@@ -22,13 +22,12 @@
     */[window makeKeyAndVisible];
 	
 	
-	DTOAuthRequestTokenConnection *connection = [[DTOAuthRequestTokenConnection alloc] init];
+	DTOAuthRequestTokenConnection *connection = [DTOAuthRequestTokenConnection connection];
 	connection.URL = [NSURL URLWithString:@"http://term.ie/oauth/example/request_token.php"];
 	connection.type = DTConnectionTypeGet;
 	connection.consumerKey = @"key";
 	connection.secretConsumerKey = @"secret";
 	[connection connect];
-	[connection release];
 }
 
 
