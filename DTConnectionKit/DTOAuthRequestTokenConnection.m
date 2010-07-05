@@ -10,14 +10,6 @@
 #import "DTOAuthSignature.h"
 #import "NSString+DTURLEncoding.h"
 
-NSString *const DTOAuthCallBackKey = @"oauth_callback";
-NSString *const DTOAuthConsumerKeyKey = @"oauth_consumer_key";
-NSString *const DTOAuthNonceKey = @"oauth_nonce";
-NSString *const DTOAuthSignatureMethodKey = @"oauth_signature_method";
-NSString *const DTOAuthTimestampKey = @"oauth_timestamp";
-NSString *const DTOAuthVersionKey = @"oauth_version";
-NSString *const DTOAuthSignatureKey = @"oauth_signature";
-
 @interface DTOAuthRequestTokenConnection ()
 - (NSString *)dt_stringForKey:(NSString *)key value:(NSString *)value;
 - (NSString *)dt_baseStringForKey:(NSString *)key value:(NSString *)value;
@@ -25,28 +17,6 @@ NSString *const DTOAuthSignatureKey = @"oauth_signature";
 
 
 @implementation DTOAuthRequestTokenConnection
-
-@synthesize secretConsumerKey, URL=d;
-
-- (id)init {
-	if (!(self = [super init])) return nil;
-	
-	NSArray *keys = [NSArray arrayWithObjects:DTOAuthConsumerKeyKey, DTOAuthNonceKey, DTOAuthSignatureMethodKey, DTOAuthTimestampKey, DTOAuthVersionKey, nil];
-	
-	parameters = [[NSMutableDictionary alloc] init];
-	
-	for (NSString *key in keys) [parameters setObject:@"" forKey:key];
-	
-	self.nonce = [[NSProcessInfo processInfo] globallyUniqueString];
-	self.version = @"1.0";
-	
-	return self;
-}
-
-- (void)dealloc {
-	[parameters release];
-	[super dealloc];
-}
 
 - (NSMutableURLRequest *)newRequest {
 	
@@ -116,29 +86,6 @@ NSString *const DTOAuthSignatureKey = @"oauth_signature";
 	
 	NSLog(@"%@", dict);
 	[super receivedObject:dict];
-}
-
-#pragma mark -
-#pragma mark Accessor methods
-
-- (void)setNonce:(NSString *)s {
-	[parameters setObject:s forKey:DTOAuthNonceKey];
-}
-- (NSString *)nonce {
-	return [parameters objectForKey:DTOAuthNonceKey];
-}
-
-- (void)setVersion:(NSString *)s {
-	[parameters setObject:s forKey:DTOAuthVersionKey];
-}
-- (NSString *)version {
-	return [parameters objectForKey:DTOAuthVersionKey];
-}
-- (void)setConsumerKey:(NSString *)s {
-	[parameters setObject:s forKey:DTOAuthConsumerKeyKey];
-}
-- (NSString *)consumerKey {
-	return [parameters objectForKey:DTOAuthConsumerKeyKey];
 }
 
 #pragma mark -
