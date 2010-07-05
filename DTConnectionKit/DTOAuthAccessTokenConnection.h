@@ -11,5 +11,4 @@
 @interface DTOAuthAccessTokenConnection : DTOAuthConnection {
 }
 @property (nonatomic, retain) NSString *token;
-@property (nonatomic, retain) NSString *verifier;
 @end

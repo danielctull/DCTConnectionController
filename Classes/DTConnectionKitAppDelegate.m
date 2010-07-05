@@ -9,6 +9,7 @@
 #import "DTConnectionKitAppDelegate.h"
 #import "DTConnectionKitExampleViewController.h"
 #import "DTOAuthRequestTokenConnection.h"
+#import "DTOAuthAccessTokenConnection.h"
 
 @implementation DTConnectionKitAppDelegate
 
@@ -28,6 +29,17 @@
 	connection.consumerKey = @"key";
 	connection.secretConsumerKey = @"secret";
 	[connection connect];
+	
+	DTOAuthAccessTokenConnection *accessTokenConnection = [DTOAuthAccessTokenConnection connection];
+	accessTokenConnection.URL = [NSURL URLWithString:@"http://term.ie/oauth/example/access_token.php"];
+	accessTokenConnection.type = DTConnectionTypeGet;
+	accessTokenConnection.consumerKey = @"key";
+	accessTokenConnection.secretConsumerKey = @"secret";
+	accessTokenConnection.token = @"requestkey";
+	accessTokenConnection.secretToken = @"requestsecret";
+	[accessTokenConnection connect];
+	
+	
 }
 
 

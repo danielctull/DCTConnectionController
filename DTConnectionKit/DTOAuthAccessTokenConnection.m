@@ -14,9 +14,7 @@
 - (id)init {
 	if (!(self = [super init])) return nil;
 	
-	NSArray *keys = [NSArray arrayWithObjects:DTOAuthConsumerKeyKey, DTOAuthNonceKey, DTOAuthSignatureMethodKey, DTOAuthTimestampKey, DTOAuthVersionKey, DTOAuthVerifierKey, DTOAuthTokenKey, nil];
-	
-	parameters = [[NSMutableDictionary alloc] init];
+	NSArray *keys = [NSArray arrayWithObjects:DTOAuthConsumerKeyKey, DTOAuthNonceKey, DTOAuthSignatureMethodKey, DTOAuthTimestampKey, DTOAuthVersionKey, DTOAuthTokenKey, nil];
 	
 	for (NSString *key in keys) [self setValue:@"" forParameter:key];
 	
@@ -31,12 +29,6 @@
 }
 - (NSString *)token {
 	return [parameters objectForKey:DTOAuthTokenKey];
-}
-- (void)setVerifier:(NSString *)s {
-	[parameters setObject:s forKey:DTOAuthVerifierKey];
-}
-- (NSString *)verifier {
-	return [parameters objectForKey:DTOAuthVerifierKey];
 }
 
 @end

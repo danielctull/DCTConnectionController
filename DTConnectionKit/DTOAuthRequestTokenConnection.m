@@ -15,8 +15,6 @@
 	
 	NSArray *keys = [NSArray arrayWithObjects:DTOAuthConsumerKeyKey, DTOAuthNonceKey, DTOAuthSignatureMethodKey, DTOAuthTimestampKey, DTOAuthVersionKey, nil];
 	
-	parameters = [[NSMutableDictionary alloc] init];
-	
 	for (NSString *key in keys) [self setValue:@"" forParameter:key];
 	
 	return self;

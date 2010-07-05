@@ -17,7 +17,6 @@ NSString *const DTOAuthTimestampKey = @"oauth_timestamp";
 NSString *const DTOAuthVersionKey = @"oauth_version";
 NSString *const DTOAuthSignatureKey = @"oauth_signature";
 NSString *const DTOAuthTokenKey = @"oauth_token";
-NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 
 @interface DTOAuthConnection ()
 - (NSString *)dt_stringForKey:(NSString *)key value:(NSString *)value;
@@ -26,7 +25,7 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 
 @implementation DTOAuthConnection
 
-@synthesize secretConsumerKey, URL=mutableURL;
+@synthesize secretConsumerKey, secretToken, URL=mutableURL;
 
 - (id)init {
 	if (!(self = [super init])) return nil;
@@ -56,7 +55,11 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 	
 	// Setting up the signature.
 	DTOAuthSignature *signature = [self signature];
-	signature.secret = [NSString stringWithFormat:@"%@&", self.secretConsumerKey];
+	
+	if (!self.secretToken) self.secretToken = @"";
+	if (!self.secretConsumerKey) self.secretConsumerKey = @"";
+	
+	signature.secret = [NSString stringWithFormat:@"%@&%@", self.secretConsumerKey, self.secretToken];
 	
 	[parameters setObject:[signature typeString] forKey:DTOAuthSignatureMethodKey];
 	
@@ -92,18 +95,22 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 	
 	[request addValue:oauthString forHTTPHeaderField:@"Authorization"];
 	
+	/*NSLog(@"%@ %@", [self class], parameters);
+	NSLog(@"%@ %@\n", [self class], signature.signature);
+	NSLog(@"%@ \n\n%@\n\n", [self class], baseString);*/
+	
 	return request;
 }
 
 - (void)receivedResponse:(NSURLResponse *)response {
 	//NSHTTPURLResponse *r = (NSHTTPURLResponse *)response;
-	//NSLog(@"%@", [r allHeaderFields]);
+	//NSLog(@"%@ %@", [self class], [r allHeaderFields]);
 	[super receivedResponse:response];
 }
 
 - (void)receivedObject:(NSObject *)object {
 	NSString *string = [[NSString alloc] initWithData:(NSData *)object encoding:NSUTF8StringEncoding];
-	
+	//NSLog(@"%@ %@", [self class], string);
 	NSArray *parts = [string componentsSeparatedByString:@"&"];
 	
 	NSMutableDictionary *dict = [[[NSMutableDictionary alloc] init] autorelease];
@@ -114,7 +121,7 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 		if ([p count] == 2) [dict setObject:[p objectAtIndex:1] forKey:[p objectAtIndex:0]];
 	}
 	
-	NSLog(@"%@", dict);
+	NSLog(@"%@ %@", [self class], dict);
 	[super receivedObject:dict];
 }
 
