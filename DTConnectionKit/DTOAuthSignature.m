@@ -8,6 +8,7 @@
 
 #import "DTOAuthSignature.h"
 #import "NSData+Base64.h"
+#import "NSString+DTURLEncoding.h"
 #import <CommonCrypto/CommonHMAC.h>
 
 NSString * const DTOAuthSignatureTypeString[] = {
@@ -23,8 +24,6 @@ NSString * const DTOAuthSignatureTypeString[] = {
 
 - (NSString *)signature {
 	
-	NSLog(@"%@ %@ %@", self, self.secret, self.text);
-	
 	NSData *secretData = [self.secret dataUsingEncoding:NSUTF8StringEncoding];
     NSData *textData = [self.text dataUsingEncoding:NSUTF8StringEncoding];
 	
@@ -33,7 +32,10 @@ NSString * const DTOAuthSignatureTypeString[] = {
 	
 	NSData *theData = [NSData dataWithBytes:result length:20];
 	
-	return [theData base64EncodedString];
+	return [[theData base64EncodedString] dt_urlEncodedString];
+	
+	
+	
 	/*
 	
 	
