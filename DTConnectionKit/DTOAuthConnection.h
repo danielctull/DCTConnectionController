@@ -31,6 +31,7 @@ extern NSString *const DTOAuthVerifierKey;
 
 - (void)receivedOAuthDictionary:(NSDictionary *)dictionary;
 
++ (NSDictionary *)oauthDictionaryFromString:(NSString *)string;
 
 @property (nonatomic, retain) NSString *nonce;
 @property (nonatomic, retain) NSString *consumerKey;

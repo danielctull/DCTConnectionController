@@ -115,14 +115,25 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 	
 	if (![object isKindOfClass:[NSData class]]) return;
 	
-	NSString *string = [[NSString alloc] initWithData:(NSData *)object encoding:NSUTF8StringEncoding];
+	NSString *string = [[[NSString alloc] initWithData:(NSData *)object encoding:NSUTF8StringEncoding] autorelease];
 	//NSLog(@"%@ %@", [self class], string);
-	NSArray *parts = [string componentsSeparatedByString:@"&"];
 	
-	if ([parts count] == 0) {
-		[super receivedError:nil];
+	NSDictionary *d = [DTOAuthConnection oauthDictionaryFromString:string];
+	
+	if (!d) {
+		[self receivedError:nil];
 		return;
 	}
+	
+	[self receivedOAuthDictionary:d];
+	[super receivedObject:d];
+}
+
++ (NSDictionary *)oauthDictionaryFromString:(NSString *)string {
+	
+	NSArray *parts = [string componentsSeparatedByString:@"&"];
+	
+	if ([parts count] == 0) return nil;
 	
 	NSMutableDictionary *dict = [[[NSMutableDictionary alloc] init] autorelease];
 	
@@ -132,13 +143,10 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 		if ([p count] == 2) [dict setObject:[p objectAtIndex:1] forKey:[p objectAtIndex:0]];
 	}
 	
-	if ([[dict allKeys] count] == 0) {
-		[super receivedError:nil];
-		return;
-	}
+	if ([[dict allKeys] count] == 0) return nil;
 	
-	[self receivedOAuthDictionary:dict];
-	[super receivedObject:dict];
+	return dict;
+	
 }
 
 #pragma mark -

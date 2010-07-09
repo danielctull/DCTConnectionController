@@ -39,9 +39,7 @@
 	accessTokenConnection.token = @"requestkey";
 	accessTokenConnection.secretToken = @"requestsecret";
 	[accessTokenConnection connect];
-	
-	[[[[DTOAuthController alloc] init] autorelease] schemeDefinedInInfoPlist];
-	
+		
 }
 
 

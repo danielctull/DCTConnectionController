@@ -8,11 +8,15 @@
 
 #import "DTOAuthController.h"
 #import "NSString+DTURLEncoding.h"
+#import "NSBundle+DTInfoPlist.h"
 
 NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 
 @interface DTOAuthController ()
 - (void)tryRequestTokenConnection;
+- (void)tryAccessTokenConnectionWithParameters:(NSDictionary *)parameters;
+- (NSString *)schemeDefinedInInfoPlist;
+- (void)url:(NSNotification *)notification;
 @end
 
 
@@ -20,16 +24,13 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 @implementation DTOAuthController
 
 @synthesize canLogin;
-@synthesize consumerKey, secretConsumerKey;
 
-@synthesize requestTokenConnectionType, requestTokenConnectionURL, accessTokenConnectionType, accessTokenConnectionURL;
-
+// Things to provide in a subclass.
+@synthesize consumerKey, secretConsumerKey, requestTokenConnectionType, requestTokenConnectionURL, accessTokenConnectionType, accessTokenConnectionURL, serviceName;
 
 - (id)init {
 	
 	if (!(self = [super init])) return nil;
-	
-	requestTokenConnection = [[DTOAuthRequestTokenConnection alloc] init];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(url:) name:DTOAuthCallBackNotification object:nil];	
 	
@@ -41,31 +42,36 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	[super dealloc];
 }
 
+- (void)url:(NSNotification *)notification {
+	
+	NSURL *url = [notification object];
+	
+	NSString *s = [url query];
+	
+	NSDictionary *d = [DTOAuthConnection oauthDictionaryFromString:s];
+	
+	[self tryAccessTokenConnectionWithParameters:d];	
+	
+}
+
 - (void)dtconnection:(DTConnection *)connection didSucceedWithObject:(NSObject *)object {
 	
 	if ([connection isEqual:requestTokenConnection]) {
 		
+		NSDictionary *d = (NSDictionary *)object;
 		
+		oauthTokenSecret = [[d objectForKey:DTOAuthTokenSecretKey] retain];
 		
-		
-		
-		
-		
-		
-		
+		self.canLogin = YES;
 		
 	}
 	
-	NSDictionary *d = (NSDictionary *)object;
 	
-	NSLog(@"%@", d);
-	/*
-	oAuthToken = [[d objectForKey:DTOAuthTokenKey] retain];
+	if ([connection isEqual:accessTokenConnection]) {
 	
-	[UIView animateWithDuration:0.35 animations:^{
-		self.loginButton.alpha = 1.0;
-	}];
-	*/
+		NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), object);
+	}
+	
 }
 
 - (void)setConsumerKey:(NSString *)s {
@@ -82,7 +88,7 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	
 	if (requestTokenConnection || !self.consumerKey || !self.secretConsumerKey) return;
 	
-	requestTokenConnection = [DTOAuthRequestTokenConnection connection];
+	requestTokenConnection = [[DTOAuthRequestTokenConnection alloc] init];
 	requestTokenConnection.URL = self.requestTokenConnectionURL;
 	requestTokenConnection.type = self.requestTokenConnectionType;
 	requestTokenConnection.consumerKey = self.consumerKey;
@@ -90,10 +96,25 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	
 	[requestTokenConnection setValue:[[NSString stringWithFormat:@"%@://oauth/%@", [self schemeDefinedInInfoPlist], self.serviceName] dt_urlEncodedString] forParameter:DTOAuthCallBackKey];
 	
-	
-	
 	requestTokenConnection.delegate = self;
 	[requestTokenConnection connect];
+	
+}
+
+- (void)tryAccessTokenConnectionWithParameters:(NSDictionary *)parameters {
+	
+	accessTokenConnection = [[DTOAuthAccessTokenConnection alloc] init];
+	
+	for (NSString *key in parameters)
+		[accessTokenConnection setValue:[parameters objectForKey:key] forParameter:key];	
+	
+	accessTokenConnection.URL = self.accessTokenConnectionURL;
+	accessTokenConnection.type = self.accessTokenConnectionType;
+	accessTokenConnection.consumerKey = self.consumerKey;
+	accessTokenConnection.secretConsumerKey = self.secretConsumerKey;
+	accessTokenConnection.secretToken = oauthTokenSecret;
+	
+	[accessTokenConnection connect];
 	
 }
 
@@ -105,41 +126,18 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 }
 
 - (NSString *)schemeDefinedInInfoPlist {
-	
-	
-	NSObject *o = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleURLSchemes"];
-	
-	NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), o);
-	
-
-	NSDictionary *info = [[NSBundle mainBundle] infoDictionary];
-	
-	NSObject *typesObject = [info objectForKey:@"CFBundleURLTypes"];
-	
-	if ([typesObject isKindOfClass:[NSArray class]]) {
-	
-		NSArray *types = (NSArray *)typesObject;
-	
-		for (NSObject *typeObject in types) {
 		
-			if ([typeObject isKindOfClass:[NSDictionary class]]) {
-		
-				NSObject *schemesObject = [(NSDictionary *)typeObject objectForKey:@"CFBundleURLSchemes"];
-			
-				if ([schemesObject isKindOfClass:[NSArray class]]) {
-				
-					NSArray *schemes = (NSArray *)schemesObject;
-			
-					for (NSObject *schemeObject in schemes) {
-						
-						if ([schemeObject isKindOfClass:[NSString class]]) return (NSString *)schemeObject;
-					
-					}
-				}
-			}
-		}
-	}
-	return @"";	
+	NSObject *object = [[NSBundle mainBundle] dt_deepObjectForInfoDictionaryKey:@"CFBundleURLSchemes"];
+	
+	if (![object isKindOfClass:[NSArray class]]) return @"";
+	
+	NSArray *array = (NSArray *)object;
+	
+	for (NSObject *o in array)
+		if ([o isKindOfClass:[NSString class]])
+			return (NSString *)o;
+	
+	return @"";
 }
 
 + (void)postHandledURLNotification:(NSURL *)url {
@@ -148,5 +146,15 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DTOAuthCallBackNotification object:url];
 }
+
+
+
+
+
+
+
+
+
+
 
 @end

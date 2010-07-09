@@ -16,7 +16,16 @@ extern NSString *const DTOAuthCallBackNotification;
 @interface DTOAuthController : NSObject <DTConnectionDelegate> {
 	DTOAuthRequestTokenConnection *requestTokenConnection;
 	DTOAuthAccessTokenConnection *accessTokenConnection;
+	
+	NSString *oauthTokenSecret;
+	
 }
+
+
+
+
+
+// Provie the folling in a subclass.
 
 @property (nonatomic, readonly) NSString *consumerKey;
 @property (nonatomic, readonly) NSString *secretConsumerKey;
