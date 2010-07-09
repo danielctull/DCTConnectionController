@@ -10,6 +10,7 @@
 #import "DTConnectionKitExampleViewController.h"
 #import "DTOAuthRequestTokenConnection.h"
 #import "DTOAuthAccessTokenConnection.h"
+#import "DTOAuthController.h"
 
 @implementation DTConnectionKitAppDelegate
 
@@ -39,6 +40,7 @@
 	accessTokenConnection.secretToken = @"requestsecret";
 	[accessTokenConnection connect];
 	
+	[[[[DTOAuthController alloc] init] autorelease] schemeDefinedInInfoPlist];
 	
 }
 

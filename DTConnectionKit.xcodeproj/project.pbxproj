@@ -36,6 +36,9 @@
 		24BD786211DCD9B30094DB11 /* DTConnectionQueue+DTSingleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD786111DCD9B30094DB11 /* DTConnectionQueue+DTSingleton.m */; };
 		24BD78CC11DCE1630094DB11 /* DTMockConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD78CB11DCE1630094DB11 /* DTMockConnection.m */; };
 		24BD78D511DCE24C0094DB11 /* DTConnectionQueue+DTInternalAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD78D411DCE24C0094DB11 /* DTConnectionQueue+DTInternalAccess.m */; };
+		24C8BB3111E7172E00588182 /* DTOAuthController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24C8BB3011E7172E00588182 /* DTOAuthController.m */; };
+		24C8BBA111E7269400588182 /* NSBundle+DTInfoPlist.m in Sources */ = {isa = PBXBuildFile; fileRef = 24C8BBA011E7269400588182 /* NSBundle+DTInfoPlist.m */; };
+		24C8BBBD11E7283A00588182 /* NSDictionary+DTLocateObjectForKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 24C8BBBC11E7283A00588182 /* NSDictionary+DTLocateObjectForKey.m */; };
 		24E0F62410D6490C00F03AD8 /* DTConnectionKitExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E0F62210D6490C00F03AD8 /* DTConnectionKitExampleViewController.m */; };
 		24E0F62510D6490C00F03AD8 /* DTConnectionKitExampleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24E0F62310D6490C00F03AD8 /* DTConnectionKitExampleView.xib */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
@@ -88,6 +91,12 @@
 		24BD78CB11DCE1630094DB11 /* DTMockConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTMockConnection.m; sourceTree = "<group>"; };
 		24BD78D311DCE24C0094DB11 /* DTConnectionQueue+DTInternalAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DTConnectionQueue+DTInternalAccess.h"; sourceTree = "<group>"; };
 		24BD78D411DCE24C0094DB11 /* DTConnectionQueue+DTInternalAccess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DTConnectionQueue+DTInternalAccess.m"; sourceTree = "<group>"; };
+		24C8BB2F11E7172E00588182 /* DTOAuthController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTOAuthController.h; sourceTree = "<group>"; };
+		24C8BB3011E7172E00588182 /* DTOAuthController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTOAuthController.m; sourceTree = "<group>"; };
+		24C8BB9F11E7269400588182 /* NSBundle+DTInfoPlist.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSBundle+DTInfoPlist.h"; sourceTree = "<group>"; };
+		24C8BBA011E7269400588182 /* NSBundle+DTInfoPlist.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSBundle+DTInfoPlist.m"; sourceTree = "<group>"; };
+		24C8BBBB11E7283A00588182 /* NSDictionary+DTLocateObjectForKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+DTLocateObjectForKey.h"; sourceTree = "<group>"; };
+		24C8BBBC11E7283A00588182 /* NSDictionary+DTLocateObjectForKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+DTLocateObjectForKey.m"; sourceTree = "<group>"; };
 		24E0F62110D6490C00F03AD8 /* DTConnectionKitExampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTConnectionKitExampleViewController.h; sourceTree = "<group>"; };
 		24E0F62210D6490C00F03AD8 /* DTConnectionKitExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConnectionKitExampleViewController.m; sourceTree = "<group>"; };
 		24E0F62310D6490C00F03AD8 /* DTConnectionKitExampleView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DTConnectionKitExampleView.xib; sourceTree = "<group>"; };
@@ -171,6 +180,12 @@
 				2471EB9611E1E6BE008B4C9E /* DTOAuthAccessTokenConnection.m */,
 				240CE28611E0E5A500DDDE91 /* NSString+DTURLEncoding.h */,
 				240CE28711E0E5A500DDDE91 /* NSString+DTURLEncoding.m */,
+				24C8BB2F11E7172E00588182 /* DTOAuthController.h */,
+				24C8BB3011E7172E00588182 /* DTOAuthController.m */,
+				24C8BB9F11E7269400588182 /* NSBundle+DTInfoPlist.h */,
+				24C8BBA011E7269400588182 /* NSBundle+DTInfoPlist.m */,
+				24C8BBBB11E7283A00588182 /* NSDictionary+DTLocateObjectForKey.h */,
+				24C8BBBC11E7283A00588182 /* NSDictionary+DTLocateObjectForKey.m */,
 			);
 			path = DTConnectionKit;
 			sourceTree = "<group>";
@@ -368,6 +383,9 @@
 				240CE28811E0E5A500DDDE91 /* NSString+DTURLEncoding.m in Sources */,
 				2471EB9711E1E6BE008B4C9E /* DTOAuthAccessTokenConnection.m in Sources */,
 				2471EBA511E1E7D2008B4C9E /* DTOAuthConnection.m in Sources */,
+				24C8BB3111E7172E00588182 /* DTOAuthController.m in Sources */,
+				24C8BBA111E7269400588182 /* NSBundle+DTInfoPlist.m in Sources */,
+				24C8BBBD11E7283A00588182 /* NSDictionary+DTLocateObjectForKey.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
