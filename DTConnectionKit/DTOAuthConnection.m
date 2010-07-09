@@ -18,6 +18,7 @@ NSString *const DTOAuthVersionKey = @"oauth_version";
 NSString *const DTOAuthSignatureKey = @"oauth_signature";
 NSString *const DTOAuthTokenKey = @"oauth_token";
 NSString *const DTOAuthTokenSecretKey = @"oauth_token_secret";
+NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 
 
 @interface DTOAuthConnection ()
@@ -98,9 +99,9 @@ NSString *const DTOAuthTokenSecretKey = @"oauth_token_secret";
 	[request addValue:oauthString forHTTPHeaderField:@"Authorization"];
 	
 	/*NSLog(@"%@ %@", [self class], parameters);
-	 NSLog(@"%@ %@\n", [self class], signature.signature);
-	 NSLog(@"%@ \n\n%@\n\n", [self class], baseString);*/
-	
+	NSLog(@"%@ %@\n", [self class], signature.signature);
+	NSLog(@"%@ \n\n%@\n\n", [self class], baseString);
+	*/
 	return request;
 }
 
@@ -115,11 +116,11 @@ NSString *const DTOAuthTokenSecretKey = @"oauth_token_secret";
 	if (![object isKindOfClass:[NSData class]]) return;
 	
 	NSString *string = [[NSString alloc] initWithData:(NSData *)object encoding:NSUTF8StringEncoding];
-	NSLog(@"%@ %@", [self class], string);
+	//NSLog(@"%@ %@", [self class], string);
 	NSArray *parts = [string componentsSeparatedByString:@"&"];
 	
 	if ([parts count] == 0) {
-		[super receivedObject:object];
+		[super receivedError:nil];
 		return;
 	}
 	
@@ -129,6 +130,11 @@ NSString *const DTOAuthTokenSecretKey = @"oauth_token_secret";
 		NSArray *p = [s componentsSeparatedByString:@"="];
 		
 		if ([p count] == 2) [dict setObject:[p objectAtIndex:1] forKey:[p objectAtIndex:0]];
+	}
+	
+	if ([[dict allKeys] count] == 0) {
+		[super receivedError:nil];
+		return;
 	}
 	
 	[self receivedOAuthDictionary:dict];
@@ -142,10 +148,12 @@ NSString *const DTOAuthTokenSecretKey = @"oauth_token_secret";
 	
 	if ([value isEqualToString:@""] && [[parameters allKeys] containsObject:parameterName]) return;
 	
+	//NSLog(@"%@:%@", parameterName, value);
+	
 	[parameters setObject:value forKey:parameterName];
 }
-- (void)valueForParameter:(NSString *)parameterName {
-	[parameters objectForKey:parameterName];
+- (NSString *)valueForParameter:(NSString *)parameterName {
+	return [parameters objectForKey:parameterName];
 }
 
 - (void)setNonce:(NSString *)s {

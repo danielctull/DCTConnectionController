@@ -18,12 +18,13 @@ extern NSString *const DTOAuthVersionKey;
 extern NSString *const DTOAuthSignatureKey;
 extern NSString *const DTOAuthTokenKey;
 extern NSString *const DTOAuthTokenSecretKey;
+extern NSString *const DTOAuthVerifierKey;
 
 @interface DTOAuthConnection : DTConnection {
 	NSMutableDictionary *parameters;
 }
 
-- (void)valueForParameter:(NSString *)parameterName;
+- (NSString *)valueForParameter:(NSString *)parameterName;
 - (void)setValue:(NSString *)value forParameter:(NSString *)parameterName;
 
 - (DTOAuthSignature *)signature;
