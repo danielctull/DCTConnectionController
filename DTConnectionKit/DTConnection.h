@@ -218,7 +218,7 @@ extern NSString *const DTConnectionTypeString[];
  are optional. They allow the delegate to handle only certain types of events, although connectionController:didSucceedWithObject: 
  and connectionController:didFailWithError: should both be handled to take advantage of the data and handle any occuring errors.
  */
-@protocol DTConnectionDelegate
+@protocol DTConnectionDelegate <NSObject>
 @optional
 /** @brief Tells the delegate the connection has succeeded.
  

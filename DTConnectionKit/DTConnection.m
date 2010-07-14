@@ -172,17 +172,19 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 
 - (void)dt_finishWithSuccess {
 	self.status = DTConnectionStatusComplete;
+	[delegate release]; delegate = nil;
 }
 
 - (void)dt_finishWithFailure {
 	self.status = DTConnectionStatusFailed;
+	[delegate release]; delegate = nil;
 }
 
 #pragma mark -
 #pragma mark Private notification methods
 
 - (void)dt_notifyDelegateOfObject:(NSObject *)object {	
-	if ([(NSObject *)self.delegate respondsToSelector:@selector(dtconnection:didSucceedWithObject:)])
+	if ([self.delegate respondsToSelector:@selector(dtconnection:didSucceedWithObject:)])
 		[self.delegate dtconnection:self didSucceedWithObject:object];
 }
 
@@ -193,7 +195,7 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 
 
 - (void)dt_notifyDelegateOfReturnedError:(NSError *)error {
-	if ([(NSObject *)self.delegate respondsToSelector:@selector(dtconnection:didFailWithError:)])
+	if ([self.delegate respondsToSelector:@selector(dtconnection:didFailWithError:)])
 		[self.delegate dtconnection:self didFailWithError:error];
 }
 
@@ -204,7 +206,7 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 
 
 - (void)dt_notifyDelegateOfResponse:(NSURLResponse *)response {
-	if ([(NSObject *)self.delegate respondsToSelector:@selector(dtconnection:didReceiveResponse:)])
+	if ([self.delegate respondsToSelector:@selector(dtconnection:didReceiveResponse:)])
 		[self.delegate dtconnection:self didReceiveResponse:response];
 }
 
