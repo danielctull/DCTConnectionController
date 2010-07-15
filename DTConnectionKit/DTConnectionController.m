@@ -84,18 +84,18 @@ NSString *const DTConnectionControllerResponseNotification = @"DTConnectionContr
 	return [[dependencies copy] autorelease];
 }
 
-- (void)addDependency:(DTConnectionController *)connection {
+- (void)addDependency:(DTConnectionController *)connectionController {
 	
-	if (!connection) return;
+	if (!connectionController) return;
 	
-	[dependencies addObject:connection];
+	[dependencies addObject:connectionController];
 }
 
-- (void)removeDependency:(DTConnectionController *)connection {
+- (void)removeDependency:(DTConnectionController *)connectionController {
 	
-	if (![dependencies containsObject:connection]) return;
+	if (![dependencies containsObject:connectionController]) return;
 	
-	[dependencies removeObject:connection];
+	[dependencies removeObject:connectionController];
 }
 
 - (void)start {

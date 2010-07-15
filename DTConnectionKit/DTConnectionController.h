@@ -82,8 +82,8 @@ extern NSString *const DTConnectionControllerTypeString[];
 
 + (id)connectionController;
 
-- (void)addDependency:(DTConnectionController *)connection;
-- (void)removeDependency:(DTConnectionController *)connection;
+- (void)addDependency:(DTConnectionController *)connectionController;
+- (void)removeDependency:(DTConnectionController *)connectionController;
 
 - (void)connect;
 - (void)cancel;
