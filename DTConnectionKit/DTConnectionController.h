@@ -80,12 +80,13 @@ extern NSString *const DTConnectionControllerTypeString[];
 
 @property (nonatomic, retain, readonly) NSURL *URL;
 
-+ (id)connection;
++ (id)connectionController;
 
 - (void)addDependency:(DTConnectionController *)connection;
 - (void)removeDependency:(DTConnectionController *)connection;
 
 - (void)connect;
+- (void)cancel;
 
 - (void)start;
 

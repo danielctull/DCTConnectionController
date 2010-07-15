@@ -48,7 +48,7 @@ NSString *const DTConnectionControllerResponseNotification = @"DTConnectionContr
 
 @synthesize delegate, status, type, priority, URL, returnedObject, returnedError, returnedResponse;
 
-+ (id)connection {
++ (id)connectionController {
 	return [[[self alloc] init] autorelease];
 }
 
@@ -67,10 +67,14 @@ NSString *const DTConnectionControllerResponseNotification = @"DTConnectionContr
 }
 
 #pragma mark -
-#pragma mark Starting the connection
+#pragma mark Managing the connection
 
 - (void)connect {
-	[[DTConnectionQueue sharedConnectionQueue] addConnection:self];
+	[[DTConnectionQueue sharedConnectionQueue] addConnectionController:self];
+}
+
+- (void)cancel {
+	
 }
 
 #pragma mark -

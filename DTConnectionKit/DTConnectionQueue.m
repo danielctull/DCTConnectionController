@@ -82,16 +82,16 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	return self.activeConnectionsCount + self.queuedConnectionsCount;
 }
 
-- (NSArray *)connections {	
+- (NSArray *)connectionControllers {	
     return [activeConnections arrayByAddingObjectsFromArray:queuedConnections];
 }
 
-- (void)addConnection:(DTConnectionController *)connection {
+- (void)addConnectionController:(DTConnectionController *)connectionController {
 	
-	[connection addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+	[connectionController addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	
-	[queuedConnections addObject:connection];
-	[connection setQueued];
+	[queuedConnections addObject:connectionController];
+	[connectionController setQueued];
 	[queuedConnections sortUsingComparator:compareConnections];
 		
 	if (!active) return;

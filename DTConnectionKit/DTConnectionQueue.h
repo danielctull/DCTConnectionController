@@ -18,9 +18,9 @@ extern NSString *const DTConnectionQueueConnectionCountChangedNotification;
 	BOOL active;
 }
 
-- (void)addConnection:(DTConnectionController *)connectionController;
+- (void)addConnectionController:(DTConnectionController *)connectionController;
 
-- (NSArray *)connections;
+- (NSArray *)connectionControllers;
 
 - (BOOL)isConnectingToURL:(NSURL *)URL;
 - (BOOL)hasQueuedConnectionControllerToURL:(NSURL *)URL;

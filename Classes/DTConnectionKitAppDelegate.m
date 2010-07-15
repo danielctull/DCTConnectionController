@@ -24,14 +24,14 @@
     */[window makeKeyAndVisible];
 	
 	
-	DTOAuthRequestTokenConnection *connection = [DTOAuthRequestTokenConnection connection];
+	DTOAuthRequestTokenConnection *connection = [DTOAuthRequestTokenConnection connectionController];
 	connection.URL = [NSURL URLWithString:@"http://term.ie/oauth/example/request_token.php"];
 	connection.type = DTConnectionControllerTypeGet;
 	connection.consumerKey = @"key";
 	connection.secretConsumerKey = @"secret";
 	[connection connect];
 	
-	DTOAuthAccessTokenConnection *accessTokenConnection = [DTOAuthAccessTokenConnection connection];
+	DTOAuthAccessTokenConnection *accessTokenConnection = [DTOAuthAccessTokenConnection connectionController];
 	accessTokenConnection.URL = [NSURL URLWithString:@"http://term.ie/oauth/example/access_token.php"];
 	accessTokenConnection.type = DTConnectionControllerTypeGet;
 	accessTokenConnection.consumerKey = @"key";
