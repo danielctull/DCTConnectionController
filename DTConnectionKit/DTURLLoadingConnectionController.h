@@ -1,5 +1,5 @@
 //
-//  DTURLLoadingConnection.h
+//  DTURLLoadingConnectionController.h
 //  DTConnectionKit
 //
 //  Created by Daniel Tull on 25.01.2010.
@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "DTConnectionController.h"
 
-@interface DTURLLoadingConnection : DTConnectionController {
+@interface DTURLLoadingConnectionController : DTConnectionController {
 }
 
 @property (nonatomic, retain, readwrite) NSURL *URL;

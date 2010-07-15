@@ -1,15 +1,15 @@
 //
-//  DTURLLoadingConnection.m
+//  DTURLLoadingConnectionController.m
 //  DTConnectionKit
 //
 //  Created by Daniel Tull on 25.01.2010.
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTURLLoadingConnection.h"
+#import "DTURLLoadingConnectionController.h"
 
 
-@implementation DTURLLoadingConnection
+@implementation DTURLLoadingConnectionController
 
 @dynamic URL;
 

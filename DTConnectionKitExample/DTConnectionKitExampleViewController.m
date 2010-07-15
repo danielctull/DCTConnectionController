@@ -7,12 +7,12 @@
 //
 
 #import "DTConnectionKitExampleViewController.h"
-#import "DTURLLoadingConnection.h"
+#import "DTURLLoadingConnectionController.h"
 #import "DTConnectionQueue+DTSingleton.h"
 
 @interface DTConnectionKitExampleViewController ()
 - (NSString *)stringFromURL:(NSURL *)url;
-- (void)statusUpdate:(DTURLLoadingConnection *)connectionController;
+- (void)statusUpdate:(DTURLLoadingConnectionController *)connectionController;
 @end
 
 
@@ -58,40 +58,40 @@
 					 nil];
 	
 	for (NSString *s in urls) {
-		DTURLLoadingConnection *connection = [DTURLLoadingConnection connection];
+		DTURLLoadingConnectionController *connection = [DTURLLoadingConnectionController connection];
 		connection.delegate = self;
 		connection.URL = [NSURL URLWithString:s];
 		[connection addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 		[connection connect];
 	}
 	
-	DTURLLoadingConnection *engadget = [DTURLLoadingConnection connection];
+	DTURLLoadingConnectionController *engadget = [DTURLLoadingConnectionController connection];
 	engadget.URL = [NSURL URLWithString:@"http://www.engadget.com/"];
 	engadget.priority = DTConnectionControllerPriorityHigh;
 	[engadget addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[engadget connect];
 	
-	DTURLLoadingConnection *ebay = [DTURLLoadingConnection connection];
+	DTURLLoadingConnectionController *ebay = [DTURLLoadingConnectionController connection];
 	ebay.URL = [NSURL URLWithString:@"http://www.ebay.com/"];
 	ebay.priority = DTConnectionControllerPriorityLow;
 	[ebay addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[ebay connect];
 	
-	DTURLLoadingConnection *google = [DTURLLoadingConnection connection];
+	DTURLLoadingConnectionController *google = [DTURLLoadingConnectionController connection];
 	google.URL = [NSURL URLWithString:@"http://www.google.com/"];
 	google.priority = DTConnectionControllerPriorityLow;
 	[google addDependency:ebay];
 	[google addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[google connect];
 	
-	DTURLLoadingConnection *apple = [DTURLLoadingConnection connection];
+	DTURLLoadingConnectionController *apple = [DTURLLoadingConnectionController connection];
 	apple.URL = [NSURL URLWithString:@"http://www.apple.com/"];
 	apple.priority = DTConnectionControllerPriorityLow;
 	[apple addDependency:google];
 	[apple addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[apple connect];
 	
-	DTURLLoadingConnection *bbc = [DTURLLoadingConnection connection];
+	DTURLLoadingConnectionController *bbc = [DTURLLoadingConnectionController connection];
 	bbc.URL = [NSURL URLWithString:@"http://www.bbc.co.uk/"];
 	bbc.priority = DTConnectionControllerPriorityHigh;
 	[bbc addDependency:apple];
@@ -104,11 +104,11 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	
-	DTURLLoadingConnection *connectionController = (DTURLLoadingConnection *)object;
+	DTURLLoadingConnectionController *connectionController = (DTURLLoadingConnectionController *)object;
 	[self statusUpdate:connectionController];
 }
 	
-- (void)statusUpdate:(DTURLLoadingConnection *)connectionController {
+- (void)statusUpdate:(DTURLLoadingConnectionController *)connectionController {
 	NSDateFormatter *df = [[NSDateFormatter alloc] init];
 	[df setDateFormat:@"HH:mm:ss.SSS"];
 	NSString *dateString = [df stringFromDate:[NSDate date]]; 
