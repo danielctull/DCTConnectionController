@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DTConnection.h"
+#import "DTConnectionController.h"
 
-@interface DTURLLoadingConnection : DTConnection {
+@interface DTURLLoadingConnection : DTConnectionController {
 }
 
 @property (nonatomic, retain, readwrite) NSURL *URL;

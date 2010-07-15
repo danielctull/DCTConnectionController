@@ -1,5 +1,5 @@
 //
-//  DTConnection.h
+//  DTConnectionController.h
 //  DTConnectionKit
 //
 //  Created by Daniel Tull on 09.06.2010.
@@ -7,65 +7,65 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DTConnection.h"
+#import "DTConnectionController.h"
 #import "DTURLConnection.h"
 
 /** @brief Specifies the type of connection to use.
  */
 typedef enum {
-	DTConnectionTypeGet = 0,	/**< Uses a GET connection. */
-	DTConnectionTypePost,		/**< Uses a POST connection. */
-	DTConnectionTypePut,		/**< Uses a PUT connection. */
-	DTConnectionTypeDelete,		/**< Uses a DELETE connection. */
-	DTConnectionTypeOptions,	/**< Uses a OPTIONS connection. */
-	DTConnectionTypeHead,		/**< Uses a HEAD connection. */
-	DTConnectionTypeTrace,		/**< Uses a TRACE connection. */
-	DTConnectionTypeConnect		/**< Uses a CONNECT connection. */
+	DTConnectionControllerTypeGet = 0,	/**< Uses a GET connection. */
+	DTConnectionControllerTypePost,		/**< Uses a POST connection. */
+	DTConnectionControllerTypePut,		/**< Uses a PUT connection. */
+	DTConnectionControllerTypeDelete,		/**< Uses a DELETE connection. */
+	DTConnectionControllerTypeOptions,	/**< Uses a OPTIONS connection. */
+	DTConnectionControllerTypeHead,		/**< Uses a HEAD connection. */
+	DTConnectionControllerTypeTrace,		/**< Uses a TRACE connection. */
+	DTConnectionControllerTypeConnect		/**< Uses a CONNECT connection. */
 } DTConnectionType;
 
 /** @brief Specifies the different stages of a connection.
  */
 typedef enum {
-	DTConnectionStatusNotStarted = 0,	/**< The connection has not begun yet, and has not been given to the DTConnectionManager object to perform. */
-	DTConnectionStatusQueued,			/**< The connection has been placed in a queue and is awaiting a free slot to perform. */
-	DTConnectionStatusStarted,			/**< The request has been sent and a response is being awaited. */
-	DTConnectionStatusResponded,		/**< A response has been received by the server and the connection is awaiting completion. */
-	DTConnectionStatusComplete,			/**< The connection completed without any errors. */
-	DTConnectionStatusFailed,			/**< The connection failed. */
-	DTConnectionStatusCancelled			/**< The connection failed. */
-} DTConnectionStatus;
+	DTConnectionControllerStatusNotStarted = 0,	/**< The connection has not begun yet, and has not been given to the DTConnectionManager object to perform. */
+	DTConnectionControllerStatusQueued,			/**< The connection has been placed in a queue and is awaiting a free slot to perform. */
+	DTConnectionControllerStatusStarted,			/**< The request has been sent and a response is being awaited. */
+	DTConnectionControllerStatusResponded,		/**< A response has been received by the server and the connection is awaiting completion. */
+	DTConnectionControllerStatusComplete,			/**< The connection completed without any errors. */
+	DTConnectionControllerStatusFailed,			/**< The connection failed. */
+	DTConnectionControllerStatusCancelled			/**< The connection failed. */
+} DTConnectionControllerStatus;
 
 /** @brief Specifies the possible priorities for a connection.
  */
 typedef enum {
-	DTConnectionPriorityVeryHigh = 0,
-	DTConnectionPriorityHigh,
-	DTConnectionPriorityMedium,
-	DTConnectionPriorityLow,
-	DTConnectionPriorityVeryLow
-} DTConnectionPriority;
+	DTConnectionControllerPriorityVeryHigh = 0,
+	DTConnectionControllerPriorityHigh,
+	DTConnectionControllerPriorityMedium,
+	DTConnectionControllerPriorityLow,
+	DTConnectionControllerPriorityVeryLow
+} DTConnectionControllerPriority;
 
 /** @brief Name of the notification sent out when the connection has successfully completed.
  */
-extern NSString *const DTConnectionCompletedNotification;
+extern NSString *const DTConnectionControllerCompletedNotification;
 
 /** @brief Name of the notification sent out when the connection has failed.
  */
-extern NSString *const DTConnectionFailedNotification;
+extern NSString *const DTConnectionControllerFailedNotification;
 
 /** @brief Name of the notification sent out when the connection has recieved a response.
  */
-extern NSString *const DTConnectionResponseNotification;
+extern NSString *const DTConnectionControllerResponseNotification;
 
-extern NSString *const DTConnectionTypeString[];
+extern NSString *const DTConnectionControllerTypeString[];
 
-@protocol DTConnectionDelegate;
+@protocol DTConnectionControllerDelegate;
 
-@interface DTConnection : NSObject {
-	DTConnectionPriority priority;
+@interface DTConnectionController : NSObject {
+	DTConnectionControllerPriority priority;
 	NSMutableArray *dependencies;
 	DTConnectionType type;
-	DTConnectionStatus status;
+	DTConnectionControllerStatus status;
 	DTURLConnection *urlConnection;
 	NSURL *URL;
 	NSObject *returnedObject;
@@ -73,8 +73,8 @@ extern NSString *const DTConnectionTypeString[];
 	NSURLResponse *returnedResponse;
 }
 
-@property (nonatomic, readonly) DTConnectionStatus status;
-@property (nonatomic, assign) DTConnectionPriority priority;
+@property (nonatomic, readonly) DTConnectionControllerStatus status;
+@property (nonatomic, assign) DTConnectionControllerPriority priority;
 
 @property (nonatomic, readonly) NSArray *dependencies;
 
@@ -82,8 +82,8 @@ extern NSString *const DTConnectionTypeString[];
 
 + (id)connection;
 
-- (void)addDependency:(DTConnection *)connection;
-- (void)removeDependency:(DTConnection *)connection;
+- (void)addDependency:(DTConnectionController *)connection;
+- (void)removeDependency:(DTConnectionController *)connection;
 
 - (void)connect;
 
@@ -132,7 +132,7 @@ extern NSString *const DTConnectionTypeString[];
  This is because DTConnectionController uses DTConnectionManager to perform the connection and the connection manager
  must retain its delegates. Because of this the delegate should never retain the connection controller.
  */
-@property (nonatomic, retain) id<DTConnectionDelegate> delegate;
+@property (nonatomic, retain) id<DTConnectionControllerDelegate> delegate;
 
 /**
  @}
@@ -218,24 +218,24 @@ extern NSString *const DTConnectionTypeString[];
  are optional. They allow the delegate to handle only certain types of events, although connectionController:didSucceedWithObject: 
  and connectionController:didFailWithError: should both be handled to take advantage of the data and handle any occuring errors.
  */
-@protocol DTConnectionDelegate <NSObject>
+@protocol DTConnectionControllerDelegate <NSObject>
 @optional
 /** @brief Tells the delegate the connection has succeeded.
  
  @param connectionController The connection controller informing the delegate of the event.
  @param object The object returned by the connection.
  */
-- (void)dtconnection:(DTConnection *)connection didSucceedWithObject:(NSObject *)object;
+- (void)connectionController:(DTConnectionController *)connectionController didSucceedWithObject:(NSObject *)object;
 /** @brief Tells the delegate the connection has failed.
  
  @param connectionController The connection controller informing the delegate of the event.
  @param error The error received from the server.
  */
-- (void)dtconnection:(DTConnection *)connection didFailWithError:(NSError *)error;
+- (void)connectionController:(DTConnectionController *)connectionController didFailWithError:(NSError *)error;
 /** @brief Tells the delegate a response has been received from the server.
  
  @param connectionController The connection controller informing the delegate of the event.
  @param response The received response.
  */
-- (void)dtconnection:(DTConnection *)connection didReceiveResponse:(NSURLResponse *)response;
+- (void)connectionController:(DTConnectionController *)connectionController didReceiveResponse:(NSURLResponse *)response;
 @end

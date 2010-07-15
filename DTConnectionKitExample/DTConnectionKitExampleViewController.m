@@ -67,33 +67,33 @@
 	
 	DTURLLoadingConnection *engadget = [DTURLLoadingConnection connection];
 	engadget.URL = [NSURL URLWithString:@"http://www.engadget.com/"];
-	engadget.priority = DTConnectionPriorityHigh;
+	engadget.priority = DTConnectionControllerPriorityHigh;
 	[engadget addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[engadget connect];
 	
 	DTURLLoadingConnection *ebay = [DTURLLoadingConnection connection];
 	ebay.URL = [NSURL URLWithString:@"http://www.ebay.com/"];
-	ebay.priority = DTConnectionPriorityLow;
+	ebay.priority = DTConnectionControllerPriorityLow;
 	[ebay addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[ebay connect];
 	
 	DTURLLoadingConnection *google = [DTURLLoadingConnection connection];
 	google.URL = [NSURL URLWithString:@"http://www.google.com/"];
-	google.priority = DTConnectionPriorityLow;
+	google.priority = DTConnectionControllerPriorityLow;
 	[google addDependency:ebay];
 	[google addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[google connect];
 	
 	DTURLLoadingConnection *apple = [DTURLLoadingConnection connection];
 	apple.URL = [NSURL URLWithString:@"http://www.apple.com/"];
-	apple.priority = DTConnectionPriorityLow;
+	apple.priority = DTConnectionControllerPriorityLow;
 	[apple addDependency:google];
 	[apple addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[apple connect];
 	
 	DTURLLoadingConnection *bbc = [DTURLLoadingConnection connection];
 	bbc.URL = [NSURL URLWithString:@"http://www.bbc.co.uk/"];
-	bbc.priority = DTConnectionPriorityHigh;
+	bbc.priority = DTConnectionControllerPriorityHigh;
 	[bbc addDependency:apple];
 	[bbc addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[bbc connect];
@@ -121,32 +121,32 @@
 	
 	NSString *prefixString = [NSString stringWithFormat:@"%@%@ %@: ", newLine, dateString, [self stringFromURL:connectionController.URL]];
 	switch (connectionController.status) {
-		case DTConnectionStatusStarted:
+		case DTConnectionControllerStatusStarted:
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Started", prefixString];
 			break;
-		case DTConnectionStatusQueued:
+		case DTConnectionControllerStatusQueued:
 			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Queued", prefixString];
 			break;
-		case DTConnectionStatusFailed:
+		case DTConnectionControllerStatusFailed:
 			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Failed", prefixString];
 			[connectionController removeObserver:self forKeyPath:@"status"];
 			break;
-		case DTConnectionStatusNotStarted:
+		case DTConnectionControllerStatusNotStarted:
 			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Not Started", prefixString];
 			break;
-		case DTConnectionStatusResponded:
+		case DTConnectionControllerStatusResponded:
 			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Responded", prefixString];
 			break;
-		case DTConnectionStatusComplete:
+		case DTConnectionControllerStatusComplete:
 			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Complete", prefixString];
 			[connectionController removeObserver:self forKeyPath:@"status"];
 			break;
-		case DTConnectionStatusCancelled:
+		case DTConnectionControllerStatusCancelled:
 			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%Cancelled", prefixString];
 			[connectionController removeObserver:self forKeyPath:@"status"];

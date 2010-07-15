@@ -71,7 +71,7 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 	
 	[parameters setObject:[NSString stringWithFormat:@"%i", timeStamp] forKey:DTOAuthTimestampKey];
 	NSMutableString *baseString = [[NSMutableString alloc] init];
-	[baseString appendString:DTConnectionTypeString[self.type]];
+	[baseString appendString:DTConnectionControllerTypeString[self.type]];
 	[baseString appendString:@"&"];
 	[baseString appendString:[[request.URL absoluteString] dt_urlEncodedString]];
 	[baseString appendString:@"&"];

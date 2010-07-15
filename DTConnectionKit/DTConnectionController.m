@@ -1,15 +1,15 @@
 //
-//  DTURLConnectionJob.m
+//  DTConnectionController.m
 //  DTConnectionKit
 //
 //  Created by Daniel Tull on 09.06.2010.
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTConnection.h"
+#import "DTConnectionController.h"
 #import "DTConnectionQueue+DTSingleton.h"
 
-NSString * const DTConnectionTypeString[] = {
+NSString * const DTConnectionControllerTypeString[] = {
 	@"GET",
 	@"POST",
 	@"PUT",
@@ -21,13 +21,13 @@ NSString * const DTConnectionTypeString[] = {
 };
 
 
-NSString *const DTConnectionCompletedNotification = @"DTConnectionCompletedNotification";
-NSString *const DTConnectionFailedNotification = @"DTConnectionFailedNotification";
-NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotification";
+NSString *const DTConnectionControllerCompletedNotification = @"DTConnectionControllerCompletedNotification";
+NSString *const DTConnectionControllerFailedNotification = @"DTConnectionControllerFailedNotification";
+NSString *const DTConnectionControllerResponseNotification = @"DTConnectionControllerResponseNotification";
 
-@interface DTConnection ()
+@interface DTConnectionController ()
 @property (nonatomic, retain, readwrite) NSURL *URL;
-@property (nonatomic, readwrite) DTConnectionStatus status;
+@property (nonatomic, readwrite) DTConnectionControllerStatus status;
 @property (nonatomic, retain, readwrite) NSObject *returnedObject;
 @property (nonatomic, retain, readwrite) NSError *returnedError;
 @property (nonatomic, retain, readwrite) NSURLResponse *returnedResponse;
@@ -44,7 +44,7 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 @end
 
 
-@implementation DTConnection
+@implementation DTConnectionController
 
 @synthesize delegate, status, type, priority, URL, returnedObject, returnedError, returnedResponse;
 
@@ -56,7 +56,7 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 	if (!(self = [super init])) return nil;
 	
 	dependencies = [[NSMutableArray alloc] init];
-	priority = DTConnectionPriorityMedium;
+	priority = DTConnectionControllerPriorityMedium;
 	
 	return self;
 }
@@ -80,14 +80,14 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 	return [[dependencies copy] autorelease];
 }
 
-- (void)addDependency:(DTConnection *)connection {
+- (void)addDependency:(DTConnectionController *)connection {
 	
 	if (!connection) return;
 	
 	[dependencies addObject:connection];
 }
 
-- (void)removeDependency:(DTConnection *)connection {
+- (void)removeDependency:(DTConnectionController *)connection {
 	
 	if (![dependencies containsObject:connection]) return;
 	
@@ -107,13 +107,13 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 	urlConnection = [[DTURLConnection alloc] initWithRequest:request delegate:self];
 	[request release];
 	
-	self.status = DTConnectionStatusStarted;
+	self.status = DTConnectionControllerStatusStarted;
 	
 	if (!urlConnection) [self dt_finishWithFailure];
 }
 
 - (void)setQueued {
-	self.status = DTConnectionStatusQueued;
+	self.status = DTConnectionControllerStatusQueued;
 }
 
 #pragma mark -
@@ -121,7 +121,7 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 
 - (NSMutableURLRequest *)newRequest {
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-	[request setHTTPMethod:DTConnectionTypeString[type]];	
+	[request setHTTPMethod:DTConnectionControllerTypeString[type]];	
 	return request;
 }
 
@@ -129,21 +129,21 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 	self.returnedObject = object;
 	[self dt_notifyDelegateOfObject:object];
 	[self dt_notifyObserversOfObject:object];
-	self.status = DTConnectionStatusComplete;
+	self.status = DTConnectionControllerStatusComplete;
 }
 
 - (void)receivedResponse:(NSURLResponse *)response {
 	self.returnedResponse = response;
 	[self dt_notifyDelegateOfResponse:response];
 	[self dt_notifyObserversOfResponse:response];
-	self.status = DTConnectionStatusResponded;
+	self.status = DTConnectionControllerStatusResponded;
 }
 
 - (void)receivedError:(NSError *)error {
 	self.returnedError = error;
 	[self dt_notifyDelegateOfReturnedError:error];
 	[self dt_notifyObserversOfReturnedError:error];
-	self.status = DTConnectionStatusFailed;
+	self.status = DTConnectionControllerStatusFailed;
 }
 
 #pragma mark -
@@ -171,12 +171,12 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 #pragma mark Private methods
 
 - (void)dt_finishWithSuccess {
-	self.status = DTConnectionStatusComplete;
+	self.status = DTConnectionControllerStatusComplete;
 	[delegate release]; delegate = nil;
 }
 
 - (void)dt_finishWithFailure {
-	self.status = DTConnectionStatusFailed;
+	self.status = DTConnectionControllerStatusFailed;
 	[delegate release]; delegate = nil;
 }
 
@@ -184,34 +184,34 @@ NSString *const DTConnectionResponseNotification = @"DTConnectionResponseNotific
 #pragma mark Private notification methods
 
 - (void)dt_notifyDelegateOfObject:(NSObject *)object {	
-	if ([self.delegate respondsToSelector:@selector(dtconnection:didSucceedWithObject:)])
-		[self.delegate dtconnection:self didSucceedWithObject:object];
+	if ([self.delegate respondsToSelector:@selector(connectionController:didSucceedWithObject:)])
+		[self.delegate connectionController:self didSucceedWithObject:object];
 }
 
 - (void)dt_notifyObserversOfObject:(NSObject *)object {
-	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionCompletedNotification object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionControllerCompletedNotification object:self];
 }
 
 
 
 - (void)dt_notifyDelegateOfReturnedError:(NSError *)error {
-	if ([self.delegate respondsToSelector:@selector(dtconnection:didFailWithError:)])
-		[self.delegate dtconnection:self didFailWithError:error];
+	if ([self.delegate respondsToSelector:@selector(connectionController:didFailWithError:)])
+		[self.delegate connectionController:self didFailWithError:error];
 }
 
 - (void)dt_notifyObserversOfReturnedError:(NSError *)error {
-	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionFailedNotification object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionControllerFailedNotification object:self];
 }
 
 
 
 - (void)dt_notifyDelegateOfResponse:(NSURLResponse *)response {
-	if ([self.delegate respondsToSelector:@selector(dtconnection:didReceiveResponse:)])
-		[self.delegate dtconnection:self didReceiveResponse:response];
+	if ([self.delegate respondsToSelector:@selector(connectionController:didReceiveResponse:)])
+		[self.delegate connectionController:self didReceiveResponse:response];
 }
 
 - (void)dt_notifyObserversOfResponse:(NSURLResponse *)response {
-	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionResponseNotification object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionControllerResponseNotification object:self];
 }
 
 @end

@@ -6,7 +6,7 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTConnection.h"
+#import "DTConnectionController.h"
 #import "DTOAuthSignature.h"
 
 extern NSString *const DTOAuthCallBackKey;
@@ -20,7 +20,7 @@ extern NSString *const DTOAuthTokenKey;
 extern NSString *const DTOAuthTokenSecretKey;
 extern NSString *const DTOAuthVerifierKey;
 
-@interface DTOAuthConnection : DTConnection {
+@interface DTOAuthConnection : DTConnectionController {
 	NSMutableDictionary *parameters;
 }
 

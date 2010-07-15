@@ -54,9 +54,9 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	
 }
 
-- (void)dtconnection:(DTConnection *)connection didSucceedWithObject:(NSObject *)object {
+- (void)connectionController:(DTConnectionController *)connectionController didSucceedWithObject:(NSObject *)object {
 	
-	if ([connection isEqual:requestTokenConnection]) {
+	if ([connectionController isEqual:requestTokenConnection]) {
 		
 		NSDictionary *d = (NSDictionary *)object;
 		
@@ -67,7 +67,7 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	}
 	
 	
-	if ([connection isEqual:accessTokenConnection]) {
+	if ([connectionController isEqual:accessTokenConnection]) {
 	
 		NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), object);
 	}
