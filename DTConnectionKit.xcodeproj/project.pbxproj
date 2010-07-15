@@ -20,7 +20,7 @@
 		24626813112C8D680046D38E /* DTFileCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 24626812112C8D680046D38E /* DTFileCache.m */; };
 		2462681D112C8E860046D38E /* DTURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 24083D4210CF9A07009B758E /* DTURLConnection.m */; };
 		2471EB9711E1E6BE008B4C9E /* DTOAuthAccessTokenConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 2471EB9611E1E6BE008B4C9E /* DTOAuthAccessTokenConnection.m */; };
-		2471EBA511E1E7D2008B4C9E /* DTOAuthConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 2471EBA411E1E7D2008B4C9E /* DTOAuthConnection.m */; };
+		2471EBA511E1E7D2008B4C9E /* DTOAuthConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2471EBA411E1E7D2008B4C9E /* DTOAuthConnectionController.m */; };
 		2478E84511EF639E0091217E /* DTRequestConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2478E84411EF639E0091217E /* DTRequestConnectionController.m */; };
 		247A219C110CC40500227E44 /* DTCoreDataConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 247A219B110CC40500227E44 /* DTCoreDataConnectionController.m */; };
 		247A21EC110D1C7D00227E44 /* DTURLLoadingConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 247A21EB110D1C7D00227E44 /* DTURLLoadingConnectionController.m */; };
@@ -68,8 +68,8 @@
 		24626812112C8D680046D38E /* DTFileCache.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTFileCache.m; sourceTree = "<group>"; };
 		2471EB9511E1E6BE008B4C9E /* DTOAuthAccessTokenConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTOAuthAccessTokenConnection.h; sourceTree = "<group>"; };
 		2471EB9611E1E6BE008B4C9E /* DTOAuthAccessTokenConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTOAuthAccessTokenConnection.m; sourceTree = "<group>"; };
-		2471EBA311E1E7D2008B4C9E /* DTOAuthConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTOAuthConnection.h; sourceTree = "<group>"; };
-		2471EBA411E1E7D2008B4C9E /* DTOAuthConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTOAuthConnection.m; sourceTree = "<group>"; };
+		2471EBA311E1E7D2008B4C9E /* DTOAuthConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTOAuthConnectionController.h; sourceTree = "<group>"; };
+		2471EBA411E1E7D2008B4C9E /* DTOAuthConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTOAuthConnectionController.m; sourceTree = "<group>"; };
 		2478E84311EF639E0091217E /* DTRequestConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTRequestConnectionController.h; sourceTree = "<group>"; };
 		2478E84411EF639E0091217E /* DTRequestConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTRequestConnectionController.m; sourceTree = "<group>"; };
 		247A219A110CC40500227E44 /* DTCoreDataConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTCoreDataConnectionController.h; sourceTree = "<group>"; };
@@ -215,8 +215,8 @@
 			children = (
 				240CE15F11E08C7E00DDDE91 /* DTOAuthSignature.h */,
 				240CE16011E08C7E00DDDE91 /* DTOAuthSignature.m */,
-				2471EBA311E1E7D2008B4C9E /* DTOAuthConnection.h */,
-				2471EBA411E1E7D2008B4C9E /* DTOAuthConnection.m */,
+				2471EBA311E1E7D2008B4C9E /* DTOAuthConnectionController.h */,
+				2471EBA411E1E7D2008B4C9E /* DTOAuthConnectionController.m */,
 				240CE1BF11E092A300DDDE91 /* DTOAuthRequestTokenConnection.h */,
 				240CE1C011E092A300DDDE91 /* DTOAuthRequestTokenConnection.m */,
 				2471EB9511E1E6BE008B4C9E /* DTOAuthAccessTokenConnection.h */,
@@ -411,7 +411,7 @@
 				240CE1C111E092A300DDDE91 /* DTOAuthRequestTokenConnection.m in Sources */,
 				240CE28811E0E5A500DDDE91 /* NSString+DTURLEncoding.m in Sources */,
 				2471EB9711E1E6BE008B4C9E /* DTOAuthAccessTokenConnection.m in Sources */,
-				2471EBA511E1E7D2008B4C9E /* DTOAuthConnection.m in Sources */,
+				2471EBA511E1E7D2008B4C9E /* DTOAuthConnectionController.m in Sources */,
 				24C8BB3111E7172E00588182 /* DTOAuthController.m in Sources */,
 				24C8BBA111E7269400588182 /* NSBundle+DTInfoPlist.m in Sources */,
 				24C8BBBD11E7283A00588182 /* NSDictionary+DTLocateObjectForKey.m in Sources */,

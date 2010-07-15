@@ -6,9 +6,9 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTOAuthConnection.h"
+#import "DTOAuthConnectionController.h"
 
-@interface DTOAuthAccessTokenConnection : DTOAuthConnection {
+@interface DTOAuthAccessTokenConnection : DTOAuthConnectionController {
 }
 @property (nonatomic, retain) NSString *token;
 @end

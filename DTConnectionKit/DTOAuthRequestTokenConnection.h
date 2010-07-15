@@ -6,9 +6,9 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTOAuthConnection.h"
+#import "DTOAuthConnectionController.h"
 
-@interface DTOAuthRequestTokenConnection : DTOAuthConnection {
+@interface DTOAuthRequestTokenConnection : DTOAuthConnectionController {
 }
 
 @end

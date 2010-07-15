@@ -48,7 +48,7 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	
 	NSString *s = [url query];
 	
-	NSDictionary *d = [DTOAuthConnection oauthDictionaryFromString:s];
+	NSDictionary *d = [DTOAuthConnectionController oauthDictionaryFromString:s];
 	
 	[self tryAccessTokenConnectionWithParameters:d];	
 	

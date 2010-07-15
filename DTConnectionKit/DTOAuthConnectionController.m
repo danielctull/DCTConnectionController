@@ -1,12 +1,12 @@
 //
-//  DTOAuthConnection.m
+//  DTOAuthConnectionController.m
 //  DTConnectionKit
 //
 //  Created by Daniel Tull on 05.07.2010.
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTOAuthConnection.h"
+#import "DTOAuthConnectionController.h"
 #import "NSString+DTURLEncoding.h"
 
 NSString *const DTOAuthCallBackKey = @"oauth_callback";
@@ -21,12 +21,12 @@ NSString *const DTOAuthTokenSecretKey = @"oauth_token_secret";
 NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 
 
-@interface DTOAuthConnection ()
+@interface DTOAuthConnectionController ()
 - (NSString *)dt_stringForKey:(NSString *)key value:(NSString *)value;
 - (NSString *)dt_baseStringForKey:(NSString *)key value:(NSString *)value;
 @end
 
-@implementation DTOAuthConnection
+@implementation DTOAuthConnectionController
 
 @synthesize secretConsumerKey, secretToken, URL=mutableURL;
 
@@ -118,7 +118,7 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 	NSString *string = [[[NSString alloc] initWithData:(NSData *)object encoding:NSUTF8StringEncoding] autorelease];
 	//NSLog(@"%@ %@", [self class], string);
 	
-	NSDictionary *d = [DTOAuthConnection oauthDictionaryFromString:string];
+	NSDictionary *d = [DTOAuthConnectionController oauthDictionaryFromString:string];
 	
 	if (!d) {
 		[self receivedError:nil];

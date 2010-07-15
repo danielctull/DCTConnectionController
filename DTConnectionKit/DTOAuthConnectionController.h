@@ -1,5 +1,5 @@
 //
-//  DTOAuthConnection.h
+//  DTOAuthConnectionController.h
 //  DTConnectionKit
 //
 //  Created by Daniel Tull on 05.07.2010.
@@ -20,7 +20,7 @@ extern NSString *const DTOAuthTokenKey;
 extern NSString *const DTOAuthTokenSecretKey;
 extern NSString *const DTOAuthVerifierKey;
 
-@interface DTOAuthConnection : DTConnectionController {
+@interface DTOAuthConnectionController : DTConnectionController {
 	NSMutableDictionary *parameters;
 }
 
