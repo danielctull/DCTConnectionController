@@ -1,14 +1,14 @@
 //
-//  DTCoreDataConnection.m
+//  DTCoreDataConnectionController.m
 //  DTConnectionKit
 //
 //  Created by Daniel Tull on 24.01.2010.
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTCoreDataConnection.h"
+#import "DTCoreDataConnectionController.h"
 
-@implementation DTCoreDataConnection
+@implementation DTCoreDataConnectionController
 
 @synthesize managedObjectContext;
 

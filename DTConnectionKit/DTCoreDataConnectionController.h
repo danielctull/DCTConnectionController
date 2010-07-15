@@ -1,5 +1,5 @@
 //
-//  DTCoreDataConnection.h
+//  DTCoreDataConnectionController.h
 //  DTConnectionKit
 //
 //  Created by Daniel Tull on 24.01.2010.
@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 #import "DTConnectionController.h"
 
-@interface DTCoreDataConnection : DTConnectionController {
+@interface DTCoreDataConnectionController : DTConnectionController {
 	NSManagedObjectContext *managedObjectContext;
 }
 
