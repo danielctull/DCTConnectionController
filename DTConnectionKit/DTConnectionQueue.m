@@ -26,6 +26,8 @@ NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2)
 NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnectionQueueConnectionCountChangedNotification";
 
 @interface DTConnectionQueue ()
+
+- (NSMutableArray *)dt_connectionQueue;
 - (void)dt_checkConnectionCount;
 - (void)dt_runNextConnection;
 - (BOOL)dt_tryToRunConnection:(DTConnectionController *)connection;
@@ -36,6 +38,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 
 - (void)dt_didEnterBackground:(NSNotification *)notification;
 - (void)dt_hush;
+- (void)dt_finishedBackgroundConnections;
 @end
 
 @implementation DTConnectionQueue
@@ -68,8 +71,8 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 }
 
 - (void)dealloc {
-	[activeConnections release];
-	[queuedConnections release];
+	[activeConnections release]; activeConnections = nil;
+	[queuedConnections release]; queuedConnections = nil;
 	[super dealloc];
 }
 
@@ -84,7 +87,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 }
 
 - (NSInteger)connectionCount {
-	return self.activeConnectionsCount + self.queuedConnectionsCount;
+	return self.activeConnectionsCount + self.queuedConnectionsCount + [backgroundConnections count];
 }
 
 - (NSArray *)connectionControllers {	
@@ -154,10 +157,13 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	
 	if (lastActiveConnectionCount == self.activeConnectionsCount) return;
 		
-	if (self.activeConnectionsCount > 0)
+	if (self.activeConnectionsCount > 0) {
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-	else
+	} else {
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+		
+		if (inBackground) [self dt_finishedBackgroundConnections];
+	}
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionQueueConnectionCountChangedNotification object:self];
 	
@@ -170,7 +176,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	
 	if (!active) return;
 	
-	if ([queuedConnections count] < 1) {
+	if ([[self dt_connectionQueue] count] < 1) {
 		[self dt_checkConnectionCount];
 		return;
 	}
@@ -191,10 +197,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 
 - (DTConnectionController *)dt_nextConnection {
 	
-	NSArray *arrayToCheck = queuedConnections;
-	if (inBackground) arrayToCheck = backgroundConnections;
-	
-	for (DTConnectionController *connection in arrayToCheck) {
+	for (DTConnectionController *connection in [self dt_connectionQueue]) {
 		DTConnectionController *c = [self dt_nextConnectionInterator:connection];
 		if (c)
 			return c;
@@ -253,6 +256,11 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	[self dt_checkConnectionCount];
 }
 
+- (NSMutableArray *)dt_connectionQueue {
+	if (inBackground) return backgroundConnections;
+	return queuedConnections;
+}
+
 #pragma mark -
 #pragma mark Multitasking
 
@@ -267,6 +275,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 		
 		backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
 			[self dt_hush];
+			[self dt_finishedBackgroundConnections];
 		}];
 		
 		NSMutableArray *nonMultitaskingCurrentlyActive = [[NSMutableArray alloc] init];
@@ -309,6 +318,10 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	[queuedConnections addObjectsFromArray:activeConnections];
 	[queuedConnections sortUsingComparator:compareConnections];
 	[activeConnections removeAllObjects];
+}
+
+- (void)dt_finishedBackgroundConnections {
+	[[UIApplication sharedApplication] endBackgroundTask:backgroundTaskIdentifier];
 }
 
 - (void)dt_willEnterForeground:(NSNotification *)notification {
