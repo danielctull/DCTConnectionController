@@ -296,8 +296,10 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 		[queuedConnections removeObjectsInArray:backgroundConnections];
 		
 		[queuedConnections addObjectsFromArray:nonMultitaskingCurrentlyActive];
-		[queuedConnections sortUsingComparator:compareConnections];
 		[activeConnections removeObjectsInArray:nonMultitaskingCurrentlyActive];
+		
+		[backgroundConnections sortUsingComparator:compareConnections];
+		[queuedConnections sortUsingComparator:compareConnections];
 		
 		[nonMultitaskingCurrentlyActive release], nonMultitaskingCurrentlyActive = nil;
 		
