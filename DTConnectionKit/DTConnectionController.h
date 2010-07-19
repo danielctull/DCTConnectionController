@@ -233,6 +233,13 @@ extern NSString *const DTConnectionControllerTypeString[];
  @param error The error received from the server.
  */
 - (void)connectionController:(DTConnectionController *)connectionController didFailWithError:(NSError *)error;
+
+/** @brief Tells the delegate the connection was cancelled.
+ 
+ @param connectionController The connection controller informing the delegate of the event.
+ */
+- (void)connectionControllerWasCancelled:(DTConnectionController *)connectionController;
+
 /** @brief Tells the delegate a response has been received from the server.
  
  @param connectionController The connection controller informing the delegate of the event.
