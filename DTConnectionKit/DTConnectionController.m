@@ -33,6 +33,7 @@ NSString *const DTConnectionControllerResponseNotification = @"DTConnectionContr
 @property (nonatomic, retain, readwrite) NSURLResponse *returnedResponse;
 - (void)dt_finishWithFailure;
 - (void)dt_finishWithSuccess;
+- (void)dt_finishWithCancelation;
 
 - (void)dt_notifyDelegateOfObject:(NSObject *)object;
 - (void)dt_notifyObserversOfObject:(NSObject *)object;
@@ -74,7 +75,9 @@ NSString *const DTConnectionControllerResponseNotification = @"DTConnectionContr
 }
 
 - (void)cancel {
-	
+	[urlConnection cancel];
+	[urlConnection release]; urlConnection = nil;
+	[self dt_finishWithCancelation];
 }
 
 #pragma mark -
@@ -183,6 +186,11 @@ NSString *const DTConnectionControllerResponseNotification = @"DTConnectionContr
 
 - (void)dt_finishWithFailure {
 	self.status = DTConnectionControllerStatusFailed;
+	[delegate release]; delegate = nil;
+}
+
+- (void)dt_finishWithCancelation {
+	self.status = DTConnectionControllerStatusCancelled;
 	[delegate release]; delegate = nil;
 }
 
