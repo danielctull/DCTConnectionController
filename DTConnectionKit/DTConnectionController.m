@@ -85,6 +85,12 @@ NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionC
 	[urlConnection release]; urlConnection = nil;
 }
 
+- (void)reset {
+	[urlConnection cancel];
+	[urlConnection release]; urlConnection = nil;
+	self.status = DTConnectionControllerStatusNotStarted;
+}
+
 #pragma mark -
 #pragma mark Dependency methods
 
