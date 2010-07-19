@@ -87,7 +87,7 @@ extern NSString *const DTConnectionControllerTypeString[];
 
 - (void)connect;
 - (void)cancel;
-- (void)reset
+- (void)reset;
 
 - (void)start;
 
