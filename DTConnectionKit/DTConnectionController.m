@@ -108,6 +108,8 @@ NSString *const DTConnectionControllerResponseNotification = @"DTConnectionContr
 	}
 	
 	self.URL = [request URL];
+	[urlConnection release];
+	urlConnection = nil;
 	urlConnection = [[DTURLConnection alloc] initWithRequest:request delegate:self];
 	[request release];
 	
