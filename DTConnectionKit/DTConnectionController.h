@@ -93,6 +93,7 @@ extern NSString *const DTConnectionControllerTypeString[];
 
 - (void)setQueued;
 
+@property (nonatomic, assign) BOOL multitaskEnabled;
 
 #pragma mark -
 #pragma mark Setting up the connection details

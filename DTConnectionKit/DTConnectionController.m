@@ -52,7 +52,7 @@ NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionC
 
 @implementation DTConnectionController
 
-@synthesize delegate, status, type, priority, URL, returnedObject, returnedError, returnedResponse;
+@synthesize delegate, status, type, priority, multitaskEnabled, URL, returnedObject, returnedError, returnedResponse;
 
 + (id)connectionController {
 	return [[[self alloc] init] autorelease];
