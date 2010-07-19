@@ -261,9 +261,9 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dt_willEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
 	
+	inBackground = YES;
+	
 	if (multitaskEnabled) {
-		
-		inBackground = YES;
 		
 		backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
 			[self dt_hush];
