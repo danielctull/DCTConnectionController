@@ -39,6 +39,9 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 - (void)dt_didEnterBackground:(NSNotification *)notification;
 - (void)dt_hush;
 - (void)dt_finishedBackgroundConnections;
+
+- (void)dt_addConnectionControllerToQueue:(DTConnectionController *)connectionController;
+- (void)dt_removeConnectionFromQueue:(DTConnectionController *)connectionController;
 @end
 
 @implementation DTConnectionQueue
@@ -64,6 +67,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	queuedConnections = [[NSMutableArray alloc] init];
 	active = YES;
 	self.maxConnections = 5;
+	self.multitaskEnabled = YES;
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dt_didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
@@ -98,9 +102,8 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	
 	[connectionController addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	
-	[queuedConnections addObject:connectionController];
+	[self dt_addConnectionControllerToQueue:connectionController];
 	[connectionController setQueued];
-	[queuedConnections sortUsingComparator:compareConnections];
 		
 	if (!active) return;
 	
@@ -135,15 +138,18 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 }
 
 - (BOOL)hasQueuedConnectionControllerToURL:(NSURL *)URL {
-	for (DTConnectionController *c in queuedConnections)
-		if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
-			return YES;
+	if ([self queuedConnectionControllerToURL:URL])
+		return YES;
 	
 	return NO;
 }
 
 - (DTConnectionController *)queuedConnectionControllerToURL:(NSURL *)URL {
 	for (DTConnectionController *c in queuedConnections)
+		if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
+			return c;
+	
+	for (DTConnectionController *c in backgroundConnections)
 		if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
 			return c;
 	
@@ -188,8 +194,8 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	
 	if (connection) {
 		[activeConnections addObject:connection];
-		[queuedConnections removeObject:connection]; 
-		[connection start];		
+		[self dt_removeConnectionFromQueue:connection]; 
+		[connection start];	
 	}
 	
 	[self dt_checkConnectionCount];
@@ -245,7 +251,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	
 	// There are no dependencies left to be run on this connection, so we can safely run it.	
 	[activeConnections addObject:connection];
-	[queuedConnections removeObject:connection]; 
+	[self dt_removeConnectionFromQueue:connection]; 
 	[connection start];
 	return YES;
 }
@@ -253,7 +259,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 - (void)dt_removeConnection:(DTConnectionController *)connection {
 	[connection removeObserver:self forKeyPath:@"status"];
 	[activeConnections removeObject:connection];
-	[self dt_checkConnectionCount];
+	//[self dt_checkConnectionCount];
 }
 
 - (NSMutableArray *)dt_connectionQueue {
@@ -318,18 +324,44 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 		[c reset];
 	
 	[queuedConnections addObjectsFromArray:activeConnections];
-	[queuedConnections sortUsingComparator:compareConnections];
 	[activeConnections removeAllObjects];
 }
 
 - (void)dt_finishedBackgroundConnections {
+	
+	for (DTConnectionController *c in backgroundConnections)
+		[c reset];
+	[queuedConnections addObjectsFromArray:backgroundConnections];
+	
+	[backgroundConnections release]; backgroundConnections = nil;
 	[[UIApplication sharedApplication] endBackgroundTask:backgroundTaskIdentifier];
 }
 
 - (void)dt_willEnterForeground:(NSNotification *)notification {
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
+	[queuedConnections sortUsingComparator:compareConnections];
 	active = YES;
 	[self dt_runNextConnection];
+}
+
+
+#pragma mark -
+#pragma mark Queue methods
+
+- (void)dt_addConnectionControllerToQueue:(DTConnectionController *)connectionController {
+	if (inBackground && connectionController.multitaskEnabled) {
+		[backgroundConnections addObject:connectionController];
+		[backgroundConnections sortUsingComparator:compareConnections];
+	} else {
+		[queuedConnections addObject:connectionController];
+		[queuedConnections sortUsingComparator:compareConnections];
+	}
+}
+
+- (void)dt_removeConnectionFromQueue:(DTConnectionController *)connectionController {
+	// backgroundConnections will be nil for normal running time, so this is ok.
+	[backgroundConnections removeObject:connectionController];
+	[queuedConnections removeObject:connectionController];
 }
 
 #pragma mark -
