@@ -258,6 +258,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 
 - (void)dt_didEnterBackground:(NSNotification *)notification {
 	
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dt_willEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
 	
 	if (multitaskEnabled) {
@@ -310,7 +311,8 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	[activeConnections removeAllObjects];
 }
 
-- (void)dt_willEnterForeground:(NSNotification *)notification {	
+- (void)dt_willEnterForeground:(NSNotification *)notification {
+	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
 	active = YES;
 	[self dt_runNextConnection];
 }
