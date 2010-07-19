@@ -88,6 +88,9 @@ NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionC
 - (void)reset {
 	[urlConnection cancel];
 	[urlConnection release]; urlConnection = nil;
+	self.returnedResponse = nil;
+	self.returnedError = nil;
+	self.returnedObject = nil;
 	self.status = DTConnectionControllerStatusNotStarted;
 }
 
