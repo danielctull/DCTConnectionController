@@ -33,11 +33,14 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 
 - (DTConnectionController *)dt_nextConnection;
 - (DTConnectionController *)dt_nextConnectionInterator:(DTConnectionController *)connection;
+
+- (void)dt_didEnterBackground:(NSNotification *)notification;
+- (void)dt_hush;
 @end
 
 @implementation DTConnectionQueue
 
-@synthesize maxConnections;
+@synthesize maxConnections, multitaskEnabled;
 
 - (void)start {
 	active = YES;
@@ -58,6 +61,8 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	queuedConnections = [[NSMutableArray alloc] init];
 	active = YES;
 	self.maxConnections = 5;
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dt_didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
 	return self;	
 }
@@ -163,6 +168,8 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	
 	if (self.activeConnectionsCount >= self.maxConnections) return;
 	
+	if (!active) return;
+	
 	if ([queuedConnections count] < 1) {
 		[self dt_checkConnectionCount];
 		return;
@@ -183,7 +190,11 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 }
 
 - (DTConnectionController *)dt_nextConnection {
-	for (DTConnectionController *connection in queuedConnections) {
+	
+	NSArray *arrayToCheck = queuedConnections;
+	if (inBackground) arrayToCheck = backgroundConnections;
+	
+	for (DTConnectionController *connection in arrayToCheck) {
 		DTConnectionController *c = [self dt_nextConnectionInterator:connection];
 		if (c)
 			return c;
@@ -240,6 +251,68 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	[connection removeObserver:self forKeyPath:@"status"];
 	[activeConnections removeObject:connection];
 	[self dt_checkConnectionCount];
+}
+
+#pragma mark -
+#pragma mark Multitasking
+
+- (void)dt_didEnterBackground:(NSNotification *)notification {
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dt_willEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
+	
+	if (multitaskEnabled) {
+		
+		inBackground = YES;
+		
+		backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+			[self dt_hush];
+		}];
+		
+		NSMutableArray *nonMultitaskingCurrentlyActive = [[NSMutableArray alloc] init];
+		
+		for (DTConnectionController *c in activeConnections)  {
+			if (!c.multitaskEnabled) {
+				[c reset];
+				[nonMultitaskingCurrentlyActive addObject:c];
+			}
+		}
+		
+		backgroundConnections = [[NSMutableArray alloc] init];
+		
+		for (DTConnectionController *c in queuedConnections)
+			if (c.multitaskEnabled)
+				[backgroundConnections addObject:c];
+		
+		[queuedConnections removeObjectsInArray:backgroundConnections];
+		
+		[queuedConnections addObjectsFromArray:nonMultitaskingCurrentlyActive];
+		[queuedConnections sortUsingComparator:compareConnections];
+		[activeConnections removeObjectsInArray:nonMultitaskingCurrentlyActive];
+		
+		[nonMultitaskingCurrentlyActive release], nonMultitaskingCurrentlyActive = nil;
+		
+		[self dt_runNextConnection];
+		
+	} else {
+		[self dt_hush];
+	}
+}
+
+- (void)dt_hush {
+	
+	active = NO;
+	
+	for (DTConnectionController *c in activeConnections)
+		[c reset];
+	
+	[queuedConnections addObjectsFromArray:activeConnections];
+	[queuedConnections sortUsingComparator:compareConnections];
+	[activeConnections removeAllObjects];
+}
+
+- (void)dt_willEnterForeground:(NSNotification *)notification {	
+	active = YES;
+	[self dt_runNextConnection];
 }
 
 #pragma mark -

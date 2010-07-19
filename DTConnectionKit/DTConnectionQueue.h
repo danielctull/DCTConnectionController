@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 #import "DTConnectionController.h"
 
 extern NSString *const DTConnectionQueueConnectionCountChangedNotification;
@@ -16,6 +17,10 @@ extern NSString *const DTConnectionQueueConnectionCountChangedNotification;
 	NSMutableArray *queuedConnections;
 	NSInteger lastActiveConnectionCount;
 	BOOL active;
+	
+	NSMutableArray *backgroundConnections;
+	UIBackgroundTaskIdentifier backgroundTaskIdentifier;
+	BOOL inBackground;
 }
 
 - (void)addConnectionController:(DTConnectionController *)connectionController;
@@ -30,6 +35,8 @@ extern NSString *const DTConnectionQueueConnectionCountChangedNotification;
 - (void)start;
 
 @property (nonatomic, assign) NSInteger maxConnections;
+@property (nonatomic, assign) BOOL multitaskEnabled;
+
 @property (nonatomic, readonly) NSInteger activeConnectionsCount;
 @property (nonatomic, readonly) NSInteger queuedConnectionsCount;
 @property (nonatomic, readonly) NSInteger connectionCount;
