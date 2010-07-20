@@ -17,12 +17,12 @@
 @synthesize window;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
-	/*DTConnectionKitExampleViewController *viewController = [[DTConnectionKitExampleViewController alloc] init];
+	DTConnectionKitExampleViewController *viewController = [[DTConnectionKitExampleViewController alloc] init];
 	nav = [[UINavigationController alloc] initWithRootViewController:viewController];
 	[window addSubview:nav.view];
 	[viewController release];
-    */[window makeKeyAndVisible];
-	
+    [window makeKeyAndVisible];
+	/*
 	
 	DTOAuthRequestTokenConnection *connection = [DTOAuthRequestTokenConnection connectionController];
 	connection.URL = [NSURL URLWithString:@"http://term.ie/oauth/example/request_token.php"];
@@ -39,7 +39,7 @@
 	accessTokenConnection.token = @"requestkey";
 	accessTokenConnection.secretToken = @"requestsecret";
 	[accessTokenConnection connect];
-		
+*/		
 }
 
 

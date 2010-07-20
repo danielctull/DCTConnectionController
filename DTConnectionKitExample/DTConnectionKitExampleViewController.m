@@ -59,6 +59,7 @@
 	
 	for (NSString *s in urls) {
 		DTURLLoadingConnectionController *connection = [DTURLLoadingConnectionController connectionController];
+		connection.multitaskEnabled = YES;
 		connection.delegate = self;
 		connection.URL = [NSURL URLWithString:s];
 		[connection addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
@@ -115,41 +116,48 @@
 	[df release];
 		
 	NSString *newLine = @"";
-	if ([self.textView.text length] > 0) {
+	/*if ([self.textView.text length] > 0) {
 		newLine = @"\n";
-	}
+	}*/
 	
 	NSString *prefixString = [NSString stringWithFormat:@"%@%@ %@: ", newLine, dateString, [self stringFromURL:connectionController.URL]];
 	switch (connectionController.status) {
 		case DTConnectionControllerStatusStarted:
+			NSLog(@"%@Started", prefixString);
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Started", prefixString];
 			break;
 		case DTConnectionControllerStatusQueued:
+			NSLog(@"%@Queued", prefixString);
 			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Queued", prefixString];
 			break;
 		case DTConnectionControllerStatusFailed:
+			NSLog(@"%@Failed", prefixString);
+			[connectionController removeObserver:self forKeyPath:@"status"];
 			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Failed", prefixString];
-			[connectionController removeObserver:self forKeyPath:@"status"];
 			break;
 		case DTConnectionControllerStatusNotStarted:
+			NSLog(@"%@Not Started", prefixString);
 			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Not Started", prefixString];
 			break;
 		case DTConnectionControllerStatusResponded:
+			NSLog(@"%@Responded", prefixString);
 			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Responded", prefixString];
 			break;
 		case DTConnectionControllerStatusComplete:
+			NSLog(@"%@Complete", prefixString);
+			[connectionController removeObserver:self forKeyPath:@"status"];
 			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Complete", prefixString];
-			[connectionController removeObserver:self forKeyPath:@"status"];
 			break;
 		case DTConnectionControllerStatusCancelled:
+			NSLog(@"%Cancelled", prefixString);
+			[connectionController removeObserver:self forKeyPath:@"status"];
 			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%Cancelled", prefixString];
-			[connectionController removeObserver:self forKeyPath:@"status"];
 			break;
 		default:
 			break;
