@@ -27,7 +27,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 
 @interface DTConnectionQueue ()
 
-- (NSMutableArray *)dt_connectionQueue;
+- (NSMutableArray *)dt_currentConnectionQueue;
 - (void)dt_checkConnectionCount;
 - (void)dt_runNextConnection;
 - (BOOL)dt_tryToRunConnection:(DTConnectionController *)connection;
@@ -183,7 +183,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	
 	if (!active) return;
 	
-	if ([[self dt_connectionQueue] count] < 1) {
+	if ([[self dt_currentConnectionQueue] count] < 1) {
 		[self dt_checkConnectionCount];
 		return;
 	}
@@ -204,7 +204,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 
 - (DTConnectionController *)dt_nextConnection {
 	
-	for (DTConnectionController *connection in [self dt_connectionQueue]) {
+	for (DTConnectionController *connection in [self dt_currentConnectionQueue]) {
 		DTConnectionController *c = [self dt_nextConnectionInterator:connection];
 		if (c)
 			return c;
@@ -263,7 +263,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	//[self dt_checkConnectionCount];
 }
 
-- (NSMutableArray *)dt_connectionQueue {
+- (NSMutableArray *)dt_currentConnectionQueue {
 	if (inBackground) return backgroundConnections;
 	return queuedConnections;
 }
