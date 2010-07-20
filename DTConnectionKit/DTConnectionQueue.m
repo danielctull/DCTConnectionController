@@ -124,6 +124,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	if (connection.status == DTConnectionControllerStatusComplete 
 		|| connection.status == DTConnectionControllerStatusFailed
 		|| connection.status == DTConnectionControllerStatusCancelled) {
+		
 		[self dt_removeConnection:connection];
 		[self dt_runNextConnection];
 	}
@@ -289,6 +290,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 		for (DTConnectionController *c in activeConnections)  {
 			if (!c.multitaskEnabled) {
 				[c reset];
+				[c setQueued];
 				[nonMultitaskingCurrentlyActive addObject:c];
 			}
 		}
@@ -320,8 +322,10 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	
 	active = NO;
 	
-	for (DTConnectionController *c in activeConnections)
+	for (DTConnectionController *c in activeConnections) {
 		[c reset];
+		[c setQueued];
+	}
 	
 	[queuedConnections addObjectsFromArray:activeConnections];
 	[activeConnections removeAllObjects];
@@ -329,8 +333,11 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 
 - (void)dt_finishedBackgroundConnections {
 	
-	for (DTConnectionController *c in backgroundConnections)
+	for (DTConnectionController *c in backgroundConnections) {
 		[c reset];
+		[c setQueued];
+	}
+	
 	[queuedConnections addObjectsFromArray:backgroundConnections];
 	
 	[backgroundConnections release]; backgroundConnections = nil;
@@ -341,6 +348,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
 	[queuedConnections sortUsingComparator:compareConnections];
 	active = YES;
+	inBackground = NO;
 	[self dt_runNextConnection];
 }
 
