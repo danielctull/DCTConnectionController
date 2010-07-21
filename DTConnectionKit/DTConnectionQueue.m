@@ -110,6 +110,14 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	[self dt_runNextConnection];
 }
 
+- (void)requeueConnectionController:(DTConnectionController *)connectionController {
+	[connectionController retain];
+	[self dt_removeConnection:connectionController];
+	[connectionController reset];
+	[self dt_addConnectionControllerToQueue:connectionController];
+	[connectionController release];
+}
+
 - (void)observeValueForKeyPath:(NSString *)keyPath
 					  ofObject:(id)object
 						change:(NSDictionary *)change

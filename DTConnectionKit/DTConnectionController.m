@@ -79,6 +79,10 @@ NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionC
 	[[DTConnectionQueue sharedConnectionQueue] addConnectionController:self];
 }
 
+- (void)requeue {
+	[[DTConnectionQueue sharedConnectionQueue] requeueConnectionController:self];
+}
+
 - (void)cancel {
 	[urlConnection cancel];
 	[self dt_finishWithCancelation];

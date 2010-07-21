@@ -24,6 +24,7 @@ extern NSString *const DTConnectionQueueConnectionCountChangedNotification;
 }
 
 - (void)addConnectionController:(DTConnectionController *)connectionController;
+- (void)requeueConnectionController:(DTConnectionController *)connectionController;
 
 - (NSArray *)connectionControllers;
 
