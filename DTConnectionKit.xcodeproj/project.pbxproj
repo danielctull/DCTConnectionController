@@ -38,7 +38,6 @@
 		24E4660911F8358E0064FCA1 /* DTRequestConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E465F311F8358E0064FCA1 /* DTRequestConnectionController.m */; };
 		24E4660A11F8358E0064FCA1 /* DTURLLoadingConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E465F511F8358E0064FCA1 /* DTURLLoadingConnectionController.m */; };
 		24E4660B11F8358E0064FCA1 /* DTOAuthAccessTokenConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E465F811F8358E0064FCA1 /* DTOAuthAccessTokenConnectionController.m */; };
-		24E4660C11F8358E0064FCA1 /* DTOAuthConnection.m.orig in Resources */ = {isa = PBXBuildFile; fileRef = 24E465F911F8358E0064FCA1 /* DTOAuthConnection.m.orig */; };
 		24E4660D11F8358E0064FCA1 /* DTOAuthConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E465FB11F8358E0064FCA1 /* DTOAuthConnectionController.m */; };
 		24E4660E11F8358E0064FCA1 /* DTOAuthController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E465FD11F8358E0064FCA1 /* DTOAuthController.m */; };
 		24E4660F11F8358E0064FCA1 /* DTOAuthRequestTokenConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E465FF11F8358E0064FCA1 /* DTOAuthRequestTokenConnectionController.m */; };
@@ -96,7 +95,6 @@
 		24E465F511F8358E0064FCA1 /* DTURLLoadingConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTURLLoadingConnectionController.m; sourceTree = "<group>"; };
 		24E465F711F8358E0064FCA1 /* DTOAuthAccessTokenConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTOAuthAccessTokenConnectionController.h; sourceTree = "<group>"; };
 		24E465F811F8358E0064FCA1 /* DTOAuthAccessTokenConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTOAuthAccessTokenConnectionController.m; sourceTree = "<group>"; };
-		24E465F911F8358E0064FCA1 /* DTOAuthConnection.m.orig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = DTOAuthConnection.m.orig; sourceTree = "<group>"; };
 		24E465FA11F8358E0064FCA1 /* DTOAuthConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTOAuthConnectionController.h; sourceTree = "<group>"; };
 		24E465FB11F8358E0064FCA1 /* DTOAuthConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTOAuthConnectionController.m; sourceTree = "<group>"; };
 		24E465FC11F8358E0064FCA1 /* DTOAuthController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTOAuthController.h; sourceTree = "<group>"; };
@@ -250,7 +248,6 @@
 			children = (
 				24E465F711F8358E0064FCA1 /* DTOAuthAccessTokenConnectionController.h */,
 				24E465F811F8358E0064FCA1 /* DTOAuthAccessTokenConnectionController.m */,
-				24E465F911F8358E0064FCA1 /* DTOAuthConnection.m.orig */,
 				24E465FA11F8358E0064FCA1 /* DTOAuthConnectionController.h */,
 				24E465FB11F8358E0064FCA1 /* DTOAuthConnectionController.m */,
 				24E465FC11F8358E0064FCA1 /* DTOAuthController.h */,
@@ -379,7 +376,6 @@
 				28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */,
 				24E0F62510D6490C00F03AD8 /* DTConnectionKitExampleView.xib in Resources */,
 				24306A9B114E894B008BBE38 /* MainWindow-iPad.xib in Resources */,
-				24E4660C11F8358E0064FCA1 /* DTOAuthConnection.m.orig in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

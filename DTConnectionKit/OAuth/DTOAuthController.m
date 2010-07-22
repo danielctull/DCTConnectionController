@@ -100,7 +100,7 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 
 - (void)tryAccessTokenConnectionWithParameters:(NSDictionary *)parameters {
 	
-	accessTokenConnection = [[DTOAuthAccessTokenConnection alloc] init];
+	accessTokenConnection = [[DTOAuthAccessTokenConnectionController alloc] init];
 	
 	for (NSString *key in parameters)
 		[accessTokenConnection setValue:[parameters objectForKey:key] forParameter:key];	

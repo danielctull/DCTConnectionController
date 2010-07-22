@@ -15,7 +15,7 @@ extern NSString *const DTOAuthCallBackNotification;
 
 @interface DTOAuthController : NSObject <DTConnectionControllerDelegate> {
 	DTOAuthRequestTokenConnectionController *requestTokenConnection;
-	DTOAuthAccessTokenConnection *accessTokenConnection;	
+	DTOAuthAccessTokenConnectionController *accessTokenConnection;	
 }
 
 

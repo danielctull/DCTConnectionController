@@ -9,7 +9,7 @@
 #import "DTOAuthAccessTokenConnectionController.h"
 
 
-@implementation DTOAuthAccessTokenConnection
+@implementation DTOAuthAccessTokenConnectionController
 
 - (id)init {
 	if (!(self = [super init])) return nil;

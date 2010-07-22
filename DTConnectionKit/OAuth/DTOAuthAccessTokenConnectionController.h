@@ -8,7 +8,7 @@
 
 #import "DTOAuthConnectionController.h"
 
-@interface DTOAuthAccessTokenConnection : DTOAuthConnectionController {
+@interface DTOAuthAccessTokenConnectionController : DTOAuthConnectionController {
 }
 @property (nonatomic, retain) NSString *token;
 @end
