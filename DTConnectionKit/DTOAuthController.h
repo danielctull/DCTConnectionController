@@ -7,39 +7,50 @@
 //
 
 
-#import "DTConnectionController.h"
+#import "DTConnection.h"
 #import "DTOAuthRequestTokenConnection.h"
 #import "DTOAuthAccessTokenConnection.h"
 
 extern NSString *const DTOAuthCallBackNotification;
 
-@interface DTOAuthController : NSObject <DTConnectionControllerDelegate> {
+@interface DTOAuthController : NSObject <DTConnectionDelegate> {
 	DTOAuthRequestTokenConnection *requestTokenConnection;
-	DTOAuthAccessTokenConnection *accessTokenConnection;
-	
-	NSString *oauthTokenSecret;
-	
+	DTOAuthAccessTokenConnection *accessTokenConnection;	
 }
 
 
 
 
 
-// Provie the folling in a subclass.
+// Provide the folling in a subclass.
 
-@property (nonatomic, readonly) NSString *consumerKey;
-@property (nonatomic, readonly) NSString *secretConsumerKey;
-@property (nonatomic, readonly) NSString *serviceName;
+- (NSURL *)accessTokenConnectionURL;
+- (DTConnectionType)accessTokenConnectionType;
 
-@property (nonatomic, readonly) DTConnectionType requestTokenConnectionType;
-@property (nonatomic, readonly) NSURL *requestTokenConnectionURL;
+- (NSURL *)requestTokenConnectionURL;
+- (DTConnectionType)requestTokenConnectionType;
 
-@property (nonatomic, readonly) DTConnectionType accessTokenConnectionType;
-@property (nonatomic, readonly) NSURL *accessTokenConnectionURL;
+- (NSString *)consumerKey;
+- (NSString *)secretConsumerKey;
+
+- (NSString *)serviceName;
+- (NSURL *)userAuthPageURL;
 
 
 
+
+
+
+
+
++ (void)postHandledURLNotification:(NSURL *)url;
+
+
+
+@property (nonatomic, readonly) NSString *callback;
 @property (nonatomic, assign) BOOL canLogin;
+@property (nonatomic, readonly) NSString *oauthToken;
+@property (nonatomic, readonly) NSString *oauthTokenSecret;
 
 - (void)login;
 
