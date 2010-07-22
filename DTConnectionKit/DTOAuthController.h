@@ -7,14 +7,14 @@
 //
 
 
-#import "DTConnection.h"
-#import "DTOAuthRequestTokenConnection.h"
-#import "DTOAuthAccessTokenConnection.h"
+#import "DTConnectionController.h"
+#import "DTOAuthRequestTokenConnectionController.h"
+#import "DTOAuthAccessTokenConnectionController.h"
 
 extern NSString *const DTOAuthCallBackNotification;
 
-@interface DTOAuthController : NSObject <DTConnectionDelegate> {
-	DTOAuthRequestTokenConnection *requestTokenConnection;
+@interface DTOAuthController : NSObject <DTConnectionControllerDelegate> {
+	DTOAuthRequestTokenConnectionController *requestTokenConnection;
 	DTOAuthAccessTokenConnection *accessTokenConnection;	
 }
 

@@ -8,8 +8,8 @@
 
 #import "DTConnectionKitAppDelegate.h"
 #import "DTConnectionKitExampleViewController.h"
-#import "DTOAuthRequestTokenConnection.h"
-#import "DTOAuthAccessTokenConnection.h"
+#import "DTOAuthRequestTokenConnectionController.h"
+#import "DTOAuthAccessTokenConnectionController.h"
 #import "DTOAuthController.h"
 
 @implementation DTConnectionKitAppDelegate

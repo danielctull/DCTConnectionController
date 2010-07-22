@@ -1,5 +1,5 @@
 //
-//  DTOAuthRequestTokenConnection.h
+//  DTOAuthRequestTokenConnectionController.h
 //  DTConnectionKit
 //
 //  Created by Daniel Tull on 04.07.2010.
@@ -8,7 +8,7 @@
 
 #import "DTOAuthConnectionController.h"
 
-@interface DTOAuthRequestTokenConnection : DTOAuthConnectionController {
+@interface DTOAuthRequestTokenConnectionController : DTOAuthConnectionController {
 }
 
 @end

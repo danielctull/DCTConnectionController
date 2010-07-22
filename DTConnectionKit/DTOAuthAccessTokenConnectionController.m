@@ -6,7 +6,7 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTOAuthAccessTokenConnection.h"
+#import "DTOAuthAccessTokenConnectionController.h"
 
 
 @implementation DTOAuthAccessTokenConnection

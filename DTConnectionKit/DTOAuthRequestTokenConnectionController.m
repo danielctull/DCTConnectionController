@@ -1,14 +1,14 @@
 //
-//  DTOAuthRequestTokenConnection.m
+//  DTOAuthRequestTokenConnectionController.m
 //  DTConnectionKit
 //
 //  Created by Daniel Tull on 04.07.2010.
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTOAuthRequestTokenConnection.h"
+#import "DTOAuthRequestTokenConnectionController.h"
 
-@implementation DTOAuthRequestTokenConnection
+@implementation DTOAuthRequestTokenConnectionController
 
 - (id)init {
 	if (!(self = [super init])) return nil;

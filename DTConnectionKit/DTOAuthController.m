@@ -50,7 +50,7 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	
 	NSString *s = [url query];
 	
-	NSDictionary *d = [DTOAuthConnection oauthDictionaryFromString:s];
+	NSDictionary *d = [DTOAuthConnectionController oauthDictionaryFromString:s];
 	
 	NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), d);
 	
@@ -58,11 +58,11 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	
 }
 
-- (void)dtconnection:(DTConnection *)connection didSucceedWithObject:(NSObject *)object {
+- (void)connectionController:(DTConnectionController *)connectionController didSucceedWithObject:(NSObject *)object {
 	
 	NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), object);
 	
-	if ([connection isEqual:requestTokenConnection]) {
+	if ([connectionController isEqual:requestTokenConnection]) {
 		
 		NSDictionary *d = (NSDictionary *)object;
 		
@@ -74,7 +74,7 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	}
 	
 	
-	if ([connection isEqual:accessTokenConnection]) {
+	if ([connectionController isEqual:accessTokenConnection]) {
 		
 		//NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), object);
 	}
@@ -85,7 +85,7 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	
 	if (requestTokenConnection || !self.consumerKey || !self.secretConsumerKey) return;
 	
-	requestTokenConnection = [[DTOAuthRequestTokenConnection alloc] init];
+	requestTokenConnection = [[DTOAuthRequestTokenConnectionController alloc] init];
 	requestTokenConnection.URL = [self requestTokenConnectionURL];
 	requestTokenConnection.type = [self requestTokenConnectionType];
 	requestTokenConnection.consumerKey = [self consumerKey];
@@ -153,7 +153,7 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 }
 
 - (DTConnectionType)accessTokenConnectionType {
-	return DTConnectionTypeGet;
+	return DTConnectionControllerTypeGet;
 }
 
 - (NSURL *)requestTokenConnectionURL {
@@ -161,7 +161,7 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 }
 
 - (DTConnectionType)requestTokenConnectionType {
-	return DTConnectionTypeGet;
+	return DTConnectionControllerTypeGet;
 }
 
 - (NSString *)consumerKey {
