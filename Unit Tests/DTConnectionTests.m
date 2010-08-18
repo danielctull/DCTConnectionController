@@ -7,7 +7,7 @@
 //
 
 #import "DTConnectionTests.h"
-#import "DTConnection.h"
+#import "DTConnectionController.h"
 
 @implementation DTConnectionTests
 

@@ -18,28 +18,28 @@
 	
 	[queue stop];
 	
-	DTMockConnection *veryHigh = [DTMockConnection connection];
-	veryHigh.priority = DTConnectionPriorityVeryHigh;
+	DTMockConnection *veryHigh = [DTMockConnection connectionController];
+	veryHigh.priority = DTConnectionControllerPriorityVeryHigh;
 	
-	DTMockConnection *high = [DTMockConnection connection];
-	high.priority = DTConnectionPriorityHigh;
+	DTMockConnection *high = [DTMockConnection connectionController];
+	high.priority = DTConnectionControllerPriorityHigh;
 	
-	DTMockConnection *medium = [DTMockConnection connection];
-	medium.priority = DTConnectionPriorityMedium;
+	DTMockConnection *medium = [DTMockConnection connectionController];
+	medium.priority = DTConnectionControllerPriorityMedium;
 	
-	DTMockConnection *low = [DTMockConnection connection];
-	low.priority = DTConnectionPriorityLow;
+	DTMockConnection *low = [DTMockConnection connectionController];
+	low.priority = DTConnectionControllerPriorityLow;
 	
-	DTMockConnection *veryLow = [DTMockConnection connection];
-	veryLow.priority = DTConnectionPriorityVeryLow;
+	DTMockConnection *veryLow = [DTMockConnection connectionController];
+	veryLow.priority = DTConnectionControllerPriorityVeryLow;
 	
-	[queue addConnection:veryLow];
-	[queue addConnection:low];
-	[queue addConnection:medium];
-	[queue addConnection:high];
-	[queue addConnection:veryHigh];
+	[queue addConnectionController:veryLow];
+	[queue addConnectionController:low];
+	[queue addConnectionController:medium];
+	[queue addConnectionController:high];
+	[queue addConnectionController:veryHigh];
 	
-	NSArray *connections = [queue connections];
+	NSArray *connections = [queue connectionControllers];
 	
 	STAssertTrue([[connections objectAtIndex:0] isEqual:veryHigh], @"First object should be very high priority");
 	
@@ -58,20 +58,20 @@
 	
 	[queue stop];
 	
-	DTMockConnection *veryLow = [DTMockConnection connection];
-	veryLow.priority = DTConnectionPriorityVeryLow;
+	DTMockConnection *veryLow = [DTMockConnection connectionController];
+	veryLow.priority = DTConnectionControllerPriorityVeryLow;
 	
-	DTMockConnection *medium = [DTMockConnection connection];
-	medium.priority = DTConnectionPriorityMedium;
+	DTMockConnection *medium = [DTMockConnection connectionController];
+	medium.priority = DTConnectionControllerPriorityMedium;
 	
-	DTMockConnection *veryHigh = [DTMockConnection connection];
-	veryHigh.priority = DTConnectionPriorityVeryHigh;
+	DTMockConnection *veryHigh = [DTMockConnection connectionController];
+	veryHigh.priority = DTConnectionControllerPriorityVeryHigh;
 	[veryHigh addDependency:veryLow];
 	[veryHigh addDependency:medium];
 	
-	[queue addConnection:veryHigh];
-	[queue addConnection:veryLow];
-	[queue addConnection:medium];
+	[queue addConnectionController:veryHigh];
+	[queue addConnectionController:veryLow];
+	[queue addConnectionController:medium];
 	
 	STAssertTrue([[queue nextConnection] isEqual:medium], @"Object should be the medium connection.");
 	
@@ -98,30 +98,30 @@
 	
 	[queue stop];
 	
-	DTMockConnection *veryLow = [DTMockConnection connection];
-	veryLow.priority = DTConnectionPriorityVeryLow;
+	DTMockConnection *veryLow = [DTMockConnection connectionController];
+	veryLow.priority = DTConnectionControllerPriorityVeryLow;
 	
-	DTMockConnection *low = [DTMockConnection connection];
-	low.priority = DTConnectionPriorityLow;
+	DTMockConnection *low = [DTMockConnection connectionController];
+	low.priority = DTConnectionControllerPriorityLow;
 	[low addDependency:veryLow];
 	
-	DTMockConnection *medium = [DTMockConnection connection];
-	medium.priority = DTConnectionPriorityMedium;
+	DTMockConnection *medium = [DTMockConnection connectionController];
+	medium.priority = DTConnectionControllerPriorityMedium;
 	[medium addDependency:low];
 	
-	DTMockConnection *high = [DTMockConnection connection];
-	high.priority = DTConnectionPriorityHigh;
+	DTMockConnection *high = [DTMockConnection connectionController];
+	high.priority = DTConnectionControllerPriorityHigh;
 	[high addDependency:medium];
 	
-	DTMockConnection *veryHigh = [DTMockConnection connection];
-	veryHigh.priority = DTConnectionPriorityVeryHigh;
+	DTMockConnection *veryHigh = [DTMockConnection connectionController];
+	veryHigh.priority = DTConnectionControllerPriorityVeryHigh;
 	[veryHigh addDependency:high];
 	
-	[queue addConnection:veryLow];
-	[queue addConnection:low];
-	[queue addConnection:medium];
-	[queue addConnection:high];
-	[queue addConnection:veryHigh];
+	[queue addConnectionController:veryLow];
+	[queue addConnectionController:low];
+	[queue addConnectionController:medium];
+	[queue addConnectionController:high];
+	[queue addConnectionController:veryHigh];
 	
 	STAssertTrue([[queue nextConnection] isEqual:veryLow], @"Object should be the veryLow connection.");
 	[queue runNextConnection];
