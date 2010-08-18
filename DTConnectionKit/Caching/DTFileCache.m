@@ -29,10 +29,10 @@ NSString *const DTFileCacheDictionaryPath = @"DTDiskCacheDictionary";
 }
 
 + (BOOL)setData:(NSData *)data forKey:(NSString *)key {
-
+	
 	NSString *filename = [[self cacheDictionary] objectForKey:key];
 	BOOL newFile = NO;
-		
+	
 	if (!filename) {
 		CFUUIDRef uuidObj = CFUUIDCreate(nil);
 		CFStringRef uniqueString = CFUUIDCreateString(nil, uuidObj);
@@ -110,16 +110,16 @@ NSString *const DTFileCacheDictionaryPath = @"DTDiskCacheDictionary";
 + (NSString *)baseDirectoryPath {
 	
 	NSString *path = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) objectAtIndex:0] stringByAppendingPathComponent:DTFileCachePath];
-		
+	
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	
 	if (![fileManager fileExistsAtPath:path])
-		[fileManager createDirectoryAtPath:path attributes:nil];
+		[fileManager createDirectoryAtPath:path withIntermediateDirectories:YES attributes:nil error:nil];
 	
 	return path;
 }
 
-	
+
 + (NSString *)cacheDictionaryPath {
 	return [[self baseDirectoryPath] stringByAppendingPathComponent:DTFileCacheDictionaryPath];
 }
