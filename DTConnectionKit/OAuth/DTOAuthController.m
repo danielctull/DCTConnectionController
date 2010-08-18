@@ -25,7 +25,7 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 
 @synthesize canLogin;
 
-@synthesize oauthToken, oauthTokenSecret;
+@synthesize oauthToken, oauthTokenSecret, username, delegate;
 
 - (id)init {
 	
@@ -66,15 +66,21 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 		
 		NSDictionary *d = (NSDictionary *)object;
 		
-		oauthTokenSecret = [[d objectForKey:DTOAuthTokenSecretKey] retain];
-		oauthToken = [[d objectForKey:DTOAuthTokenKey] retain];
+		self.oauthTokenSecret = [d objectForKey:DTOAuthTokenSecretKey];
+		self.oauthToken = [d objectForKey:DTOAuthTokenKey];
 		
 		self.canLogin = YES;
 		
-	}
-	
-	
-	if ([connectionController isEqual:accessTokenConnection]) {
+	} else if ([connectionController isEqual:accessTokenConnection]) {
+		
+		NSDictionary *d = (NSDictionary *)object;
+		
+		self.oauthTokenSecret = [d objectForKey:DTOAuthTokenSecretKey];
+		self.oauthToken = [d objectForKey:DTOAuthTokenKey];
+		self.username = [d objectForKey:@"screen_name"];
+		
+		if ([self.delegate respondsToSelector:@selector(oauthControllerDidComplete:)])
+			[self.delegate oauthControllerDidComplete:self];
 		
 		//NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), object);
 	}

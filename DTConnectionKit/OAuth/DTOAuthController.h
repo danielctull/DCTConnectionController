@@ -13,6 +13,8 @@
 
 extern NSString *const DTOAuthCallBackNotification;
 
+@protocol DTOAuthControllerDelegate;
+
 @interface DTOAuthController : NSObject <DTConnectionControllerDelegate> {
 	DTOAuthRequestTokenConnectionController *requestTokenConnection;
 	DTOAuthAccessTokenConnectionController *accessTokenConnection;	
@@ -49,9 +51,19 @@ extern NSString *const DTOAuthCallBackNotification;
 
 @property (nonatomic, readonly) NSString *callback;
 @property (nonatomic, assign) BOOL canLogin;
-@property (nonatomic, readonly) NSString *oauthToken;
-@property (nonatomic, readonly) NSString *oauthTokenSecret;
-
+@property (nonatomic, retain) NSString *oauthToken;
+@property (nonatomic, retain) NSString *oauthTokenSecret;
+@property (nonatomic, retain) NSString *username;
+@property (nonatomic, assign) id<DTOAuthControllerDelegate> delegate;
 - (void)login;
+
+@end
+
+
+
+
+@protocol DTOAuthControllerDelegate <NSObject>
+
+- (void)oauthControllerDidComplete:(DTOAuthController *)oauthController;
 
 @end
