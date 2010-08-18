@@ -10,15 +10,9 @@
 
 
 @interface DTRESTController : DTConnectionController {
-    NSMutableDictionary *queryParameters, *bodyParameters;
 }
 
++ (NSArray *)queryProperties;
++ (NSArray *)bodyProperties;
 
-- (void)setQueryParameter:(NSString *)parameter forKey:(NSString *)key;
-- (void)removeQueryParameterForKey:(NSString *)key;
-- (NSString *)queryParameterForKey:(NSString *)key;
-
-- (void)setBodyParameter:(NSString *)parameter forKey:(NSString *)key;
-- (void)removeBodyParameterForKey:(NSString *)key;
-- (NSString *)bodyParameterForKey:(NSString *)key;
 @end
