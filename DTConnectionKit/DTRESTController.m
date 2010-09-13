@@ -37,11 +37,15 @@
 	return array;
 }
 
+- (NSString *)baseURLString {
+	return @"";	
+}
+
 - (NSMutableURLRequest *)newRequest {
 	
 	NSMutableURLRequest *request = [super newRequest];
 	
-	NSMutableString *url = [[[[self URL] absoluteString] mutableCopy] autorelease];
+	NSMutableString *url = [[[self baseURLString] mutableCopy] autorelease];
 	
 	Class class = [self class];
 	
