@@ -54,8 +54,13 @@
 	
 	while ([class isSubclassOfClass:[DTRESTController class]] && ![[DTRESTController class] isSubclassOfClass:class]) {
 		
-		[queries addObjectsFromArray:[class queryProperties]];
-		[bodies addObjectsFromArray:[class bodyProperties]];
+		NSArray *classQueries = [class queryProperties];
+		if (classQueries)
+			[queries addObjectsFromArray:classQueries];
+		
+		NSArray *classBodies = [class bodyProperties];		
+		if (classBodies) 
+			[bodies addObjectsFromArray:classBodies];
 		
 		class = class_getSuperclass(class);
 	}
