@@ -6,9 +6,9 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTCoreDataConnectionController.h"
+#import "DCTCoreDataConnectionController.h"
 
-@implementation DTCoreDataConnectionController
+@implementation DCTCoreDataConnectionController
 
 @synthesize managedObjectContext;
 

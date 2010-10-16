@@ -10,7 +10,7 @@
 #import <CoreData/CoreData.h>
 #import "DCTConnectionController.h"
 
-@interface DTCoreDataConnectionController : DCTConnectionController {
+@interface DCTCoreDataConnectionController : DCTConnectionController {
 	NSManagedObjectContext *managedObjectContext;
 }
 

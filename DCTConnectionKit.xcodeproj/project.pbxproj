@@ -35,7 +35,7 @@
 		24E4660511F8358E0064FCA1 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E465EA11F8358E0064FCA1 /* NSData+Base64.m */; };
 		24E4660611F8358E0064FCA1 /* NSDictionary+DTLocateObjectForKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E465EC11F8358E0064FCA1 /* NSDictionary+DTLocateObjectForKey.m */; };
 		24E4660711F8358E0064FCA1 /* NSString+DTURLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E465EE11F8358E0064FCA1 /* NSString+DTURLEncoding.m */; };
-		24E4660811F8358E0064FCA1 /* DTCoreDataConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E465F111F8358E0064FCA1 /* DTCoreDataConnectionController.m */; };
+		24E4660811F8358E0064FCA1 /* DCTCoreDataConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E465F111F8358E0064FCA1 /* DCTCoreDataConnectionController.m */; };
 		24E4660911F8358E0064FCA1 /* DTRequestConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E465F311F8358E0064FCA1 /* DTRequestConnectionController.m */; };
 		24E4660A11F8358E0064FCA1 /* DTURLLoadingConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E465F511F8358E0064FCA1 /* DTURLLoadingConnectionController.m */; };
 		24E4660B11F8358E0064FCA1 /* DTOAuthAccessTokenConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E465F811F8358E0064FCA1 /* DTOAuthAccessTokenConnectionController.m */; };
@@ -92,8 +92,8 @@
 		24E465EC11F8358E0064FCA1 /* NSDictionary+DTLocateObjectForKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+DTLocateObjectForKey.m"; sourceTree = "<group>"; };
 		24E465ED11F8358E0064FCA1 /* NSString+DTURLEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+DTURLEncoding.h"; sourceTree = "<group>"; };
 		24E465EE11F8358E0064FCA1 /* NSString+DTURLEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+DTURLEncoding.m"; sourceTree = "<group>"; };
-		24E465F011F8358E0064FCA1 /* DTCoreDataConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTCoreDataConnectionController.h; sourceTree = "<group>"; };
-		24E465F111F8358E0064FCA1 /* DTCoreDataConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTCoreDataConnectionController.m; sourceTree = "<group>"; };
+		24E465F011F8358E0064FCA1 /* DCTCoreDataConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; path = DCTCoreDataConnectionController.h; sourceTree = "<group>"; };
+		24E465F111F8358E0064FCA1 /* DCTCoreDataConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTCoreDataConnectionController.m; sourceTree = "<group>"; };
 		24E465F211F8358E0064FCA1 /* DTRequestConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTRequestConnectionController.h; sourceTree = "<group>"; };
 		24E465F311F8358E0064FCA1 /* DTRequestConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTRequestConnectionController.m; sourceTree = "<group>"; };
 		24E465F411F8358E0064FCA1 /* DTURLLoadingConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTURLLoadingConnectionController.h; sourceTree = "<group>"; };
@@ -238,8 +238,8 @@
 		24E465EF11F8358E0064FCA1 /* Connection Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				24E465F011F8358E0064FCA1 /* DTCoreDataConnectionController.h */,
-				24E465F111F8358E0064FCA1 /* DTCoreDataConnectionController.m */,
+				24E465F011F8358E0064FCA1 /* DCTCoreDataConnectionController.h */,
+				24E465F111F8358E0064FCA1 /* DCTCoreDataConnectionController.m */,
 				24E465F211F8358E0064FCA1 /* DTRequestConnectionController.h */,
 				24E465F311F8358E0064FCA1 /* DTRequestConnectionController.m */,
 				24E465F411F8358E0064FCA1 /* DTURLLoadingConnectionController.h */,
@@ -428,7 +428,7 @@
 				24E4660511F8358E0064FCA1 /* NSData+Base64.m in Sources */,
 				24E4660611F8358E0064FCA1 /* NSDictionary+DTLocateObjectForKey.m in Sources */,
 				24E4660711F8358E0064FCA1 /* NSString+DTURLEncoding.m in Sources */,
-				24E4660811F8358E0064FCA1 /* DTCoreDataConnectionController.m in Sources */,
+				24E4660811F8358E0064FCA1 /* DCTCoreDataConnectionController.m in Sources */,
 				24E4660911F8358E0064FCA1 /* DTRequestConnectionController.m in Sources */,
 				24E4660A11F8358E0064FCA1 /* DTURLLoadingConnectionController.m in Sources */,
 				24E4660B11F8358E0064FCA1 /* DTOAuthAccessTokenConnectionController.m in Sources */,
