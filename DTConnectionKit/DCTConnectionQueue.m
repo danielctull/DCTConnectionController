@@ -36,11 +36,11 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 - (DCTConnectionController *)dctInternal_nextConnection;
 - (DCTConnectionController *)dctInternal_nextConnectionInterator:(DCTConnectionController *)connection;
 
-- (void)dt_didEnterBackground:(NSNotification *)notification;
-- (void)dt_hush;
-- (void)dt_finishedBackgroundConnections;
+- (void)dctInternal_didEnterBackground:(NSNotification *)notification;
+- (void)dctInternal_hush;
+- (void)dctInternal_finishedBackgroundConnections;
 
-- (void)dt_addConnectionControllerToQueue:(DCTConnectionController *)connectionController;
+- (void)dctInternal_addConnectionControllerToQueue:(DCTConnectionController *)connectionController;
 - (void)dctInternal_removeConnectionFromQueue:(DCTConnectionController *)connectionController;
 @end
 
@@ -69,7 +69,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	self.maxConnections = 5;
 	self.multitaskEnabled = YES;
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dt_didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dctInternal_didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
 	return self;	
 }
@@ -102,7 +102,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	
 	[connectionController addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	
-	[self dt_addConnectionControllerToQueue:connectionController];
+	[self dctInternal_addConnectionControllerToQueue:connectionController];
 	[connectionController setQueued];
 		
 	if (!active) return;
@@ -114,7 +114,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	[connectionController retain];
 	[self dctInternal_removeConnection:connectionController];
 	[connectionController reset];
-	[self dt_addConnectionControllerToQueue:connectionController];
+	[self dctInternal_addConnectionControllerToQueue:connectionController];
 	[connectionController release];
 }
 
@@ -166,7 +166,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 }
 
 #pragma mark -
-#pragma mark Private methods
+#pragma mark Internal
 
 - (void)dctInternal_checkConnectionCount {
 	
@@ -177,7 +177,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	} else {
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 		
-		if (inBackground) [self dt_finishedBackgroundConnections];
+		if (inBackground) [self dctInternal_finishedBackgroundConnections];
 	}
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueConnectionCountChangedNotification object:self];
@@ -279,7 +279,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 #pragma mark -
 #pragma mark Multitasking
 
-- (void)dt_didEnterBackground:(NSNotification *)notification {
+- (void)dctInternal_didEnterBackground:(NSNotification *)notification {
 	
 	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dt_willEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
@@ -289,8 +289,8 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	if (multitaskEnabled) {
 		
 		backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-			[self dt_hush];
-			[self dt_finishedBackgroundConnections];
+			[self dctInternal_hush];
+			[self dctInternal_finishedBackgroundConnections];
 		}];
 		
 		NSMutableArray *nonMultitaskingCurrentlyActive = [[NSMutableArray alloc] init];
@@ -322,11 +322,11 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 		[self dctInternal_runNextConnection];
 		
 	} else {
-		[self dt_hush];
+		[self dctInternal_hush];
 	}
 }
 
-- (void)dt_hush {
+- (void)dctInternal_hush {
 	
 	active = NO;
 	
@@ -339,7 +339,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	[activeConnections removeAllObjects];
 }
 
-- (void)dt_finishedBackgroundConnections {
+- (void)dctInternal_finishedBackgroundConnections {
 	
 	for (DCTConnectionController *c in backgroundConnections) {
 		[c reset];
@@ -364,7 +364,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 #pragma mark -
 #pragma mark Queue methods
 
-- (void)dt_addConnectionControllerToQueue:(DCTConnectionController *)connectionController {
+- (void)dctInternal_addConnectionControllerToQueue:(DCTConnectionController *)connectionController {
 	if (inBackground && connectionController.multitaskEnabled) {
 		[backgroundConnections addObject:connectionController];
 		[backgroundConnections sortUsingComparator:compareConnections];
