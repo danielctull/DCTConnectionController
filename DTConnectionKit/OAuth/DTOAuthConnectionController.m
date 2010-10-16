@@ -46,8 +46,8 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 	[super dealloc];
 }
 
-- (DTOAuthSignature *)signature {
-	return [[[DTOAuthSignature alloc] init] autorelease];
+- (DCTOAuthSignature *)signature {
+	return [[[DCTOAuthSignature alloc] init] autorelease];
 }
 
 - (NSMutableURLRequest *)newRequest {
@@ -57,7 +57,7 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 	[request setURL:self.URL];
 	
 	// Setting up the signature.
-	DTOAuthSignature *signature = [self signature];
+	DCTOAuthSignature *signature = [self signature];
 	
 	if (!self.secretToken) self.secretToken = @"";
 	if (!self.secretConsumerKey) self.secretConsumerKey = @"";

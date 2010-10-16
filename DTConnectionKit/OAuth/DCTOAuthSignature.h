@@ -9,14 +9,14 @@
 #import <Foundation/Foundation.h>
 
 typedef enum {
-	DTOAuthSignatureTypeHMAC_SHA1 = 0,
-	DTOAuthSignatureTypePlaintext
-} DTOAuthSignatureType;
+	DCTOAuthSignatureTypeHMAC_SHA1 = 0,
+	DCTOAuthSignatureTypePlaintext
+} DCTOAuthSignatureType;
 
-@interface DTOAuthSignature : NSObject {
+@interface DCTOAuthSignature : NSObject {
 }
 
-@property (nonatomic, assign) DTOAuthSignatureType type;
+@property (nonatomic, assign) DCTOAuthSignatureType type;
 @property (nonatomic, copy) NSString *secret;
 @property (nonatomic, copy) NSString *text;
 @property (nonatomic, readonly) NSString *signature;

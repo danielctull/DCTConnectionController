@@ -7,7 +7,7 @@
 //
 
 #import "DCTConnectionController.h"
-#import "DTOAuthSignature.h"
+#import "DCTOAuthSignature.h"
 
 extern NSString *const DTOAuthCallBackKey;
 extern NSString *const DTOAuthConsumerKeyKey;
@@ -27,7 +27,7 @@ extern NSString *const DTOAuthVerifierKey;
 - (NSString *)valueForParameter:(NSString *)parameterName;
 - (void)setValue:(NSString *)value forParameter:(NSString *)parameterName;
 
-- (DTOAuthSignature *)signature;
+- (DCTOAuthSignature *)signature;
 
 - (void)receivedOAuthDictionary:(NSDictionary *)dictionary;
 

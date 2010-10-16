@@ -6,7 +6,7 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTOAuthSignature.h"
+#import "DCTOAuthSignature.h"
 #import "NSData+Base64.h"
 #import "NSString+DTURLEncoding.h"
 #import <CommonCrypto/CommonHMAC.h>
@@ -16,11 +16,11 @@ NSString * const DTOAuthSignatureTypeString[] = {
 	@"PLAINTEXT"
 };
 
-@implementation DTOAuthSignature
+@implementation DCTOAuthSignature
 @synthesize type, secret, text;
 
 - (NSString *)typeString {
-	return DTOAuthSignatureTypeString[DTOAuthSignatureTypeHMAC_SHA1];
+	return DTOAuthSignatureTypeString[DCTOAuthSignatureTypeHMAC_SHA1];
 	
 	// PLAIN TEXT NOT WORKING
 	return DTOAuthSignatureTypeString[self.type];
@@ -28,7 +28,7 @@ NSString * const DTOAuthSignatureTypeString[] = {
 
 - (NSString *)signature {
 	
-	if (self.type == DTOAuthSignatureTypePlaintext) {
+	if (self.type == DCTOAuthSignatureTypePlaintext) {
 		// NOT WORKING CURRENTLY
 		// return [self.secret dt_urlEncodedString];
 	}
