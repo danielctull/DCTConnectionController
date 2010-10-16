@@ -9,7 +9,7 @@
 #import "DCTConnectionController.h"
 
 
-@interface DTRequestConnectionController : DCTConnectionController {}
+@interface DCTRequestConnectionController : DCTConnectionController {}
 
 @property (nonatomic, retain) NSURLRequest *request;
 

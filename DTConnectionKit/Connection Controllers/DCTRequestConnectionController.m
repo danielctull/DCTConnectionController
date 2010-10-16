@@ -6,10 +6,10 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTRequestConnectionController.h"
+#import "DCTRequestConnectionController.h"
 
 
-@implementation DTRequestConnectionController
+@implementation DCTRequestConnectionController
 @synthesize request;
 
 - (NSMutableURLRequest *)newRequest {
