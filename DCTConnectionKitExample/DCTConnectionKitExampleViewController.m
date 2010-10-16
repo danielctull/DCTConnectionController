@@ -6,6 +6,7 @@
 //  Copyright 2009 Daniel Tull. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
 #import "DCTConnectionKitExampleViewController.h"
 #import "DCTURLLoadingConnectionController.h"
 #import "DCTConnectionQueue+Singleton.h"

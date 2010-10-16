@@ -8,7 +8,7 @@
 
 #import "DCTConnectionQueue.h"
 
-@interface DCTConnectionQueue (DTInternalAccess)
-- (DCTConnectionController *)nextConnection;
-- (void)runNextConnection;
+@interface DCTConnectionQueue (DCTInternalAccess)
+- (DCTConnectionController *)dct_nextConnection;
+- (void)dct_runNextConnection;
 @end

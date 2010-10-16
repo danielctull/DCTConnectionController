@@ -6,15 +6,15 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DCTConnectionQueue+DTInternalAccess.h"
+#import "DCTConnectionQueue+DCTInternalAccess.h"
 
-@implementation DCTConnectionQueue (DTInternalAccess)
+@implementation DCTConnectionQueue (DCTInternalAccess)
 
-- (DCTConnectionController *)nextConnection {
+- (DCTConnectionController *)dct_nextConnection {
 	return [self performSelector:@selector(dctInternal_nextConnection)];
 }
 
-- (void)runNextConnection {
+- (void)dct_runNextConnection {
 	[self performSelector:@selector(dctInternal_runNextConnection)];
 }
 
