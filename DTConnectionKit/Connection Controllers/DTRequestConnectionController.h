@@ -6,10 +6,10 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTConnectionController.h"
+#import "DCTConnectionController.h"
 
 
-@interface DTRequestConnectionController : DTConnectionController {}
+@interface DTRequestConnectionController : DCTConnectionController {}
 
 @property (nonatomic, retain) NSURLRequest *request;
 

@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
-#import "DTConnectionController.h"
+#import "DCTConnectionController.h"
 
 extern NSString *const DTConnectionQueueConnectionCountChangedNotification;
 
@@ -23,14 +23,14 @@ extern NSString *const DTConnectionQueueConnectionCountChangedNotification;
 	BOOL inBackground;
 }
 
-- (void)addConnectionController:(DTConnectionController *)connectionController;
-- (void)requeueConnectionController:(DTConnectionController *)connectionController;
+- (void)addConnectionController:(DCTConnectionController *)connectionController;
+- (void)requeueConnectionController:(DCTConnectionController *)connectionController;
 
 - (NSArray *)connectionControllers;
 
 - (BOOL)isConnectingToURL:(NSURL *)URL;
 - (BOOL)hasQueuedConnectionControllerToURL:(NSURL *)URL;
-- (DTConnectionController *)queuedConnectionControllerToURL:(NSURL *)URL;
+- (DCTConnectionController *)queuedConnectionControllerToURL:(NSURL *)URL;
 
 - (void)stop;
 - (void)start;

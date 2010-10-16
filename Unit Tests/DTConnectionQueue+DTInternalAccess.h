@@ -9,6 +9,6 @@
 #import "DTConnectionQueue.h"
 
 @interface DTConnectionQueue (DTInternalAccess)
-- (DTConnectionController *)nextConnection;
+- (DCTConnectionController *)nextConnection;
 - (void)runNextConnection;
 @end

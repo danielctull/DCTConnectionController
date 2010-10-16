@@ -6,7 +6,7 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTConnectionController.h"
+#import "DCTConnectionController.h"
 #import "DTConnectionQueue+DTSingleton.h"
 
 NSString * const DTConnectionControllerTypeString[] = {
@@ -26,7 +26,7 @@ NSString *const DTConnectionControllerFailedNotification = @"DTConnectionControl
 NSString *const DTConnectionControllerResponseNotification = @"DTConnectionControllerResponseNotification";
 NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionControllerCancellationNotification";
 
-@interface DTConnectionController ()
+@interface DCTConnectionController ()
 @property (nonatomic, retain, readwrite) NSURL *URL;
 @property (nonatomic, readwrite) DTConnectionControllerStatus status;
 @property (nonatomic, retain, readwrite) NSObject *returnedObject;
@@ -50,7 +50,7 @@ NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionC
 @end
 
 
-@implementation DTConnectionController
+@implementation DCTConnectionController
 
 @synthesize delegate, status, type, priority, multitaskEnabled, URL, returnedObject, returnedError, returnedResponse;
 
@@ -105,14 +105,14 @@ NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionC
 	return [[dependencies copy] autorelease];
 }
 
-- (void)addDependency:(DTConnectionController *)connectionController {
+- (void)addDependency:(DCTConnectionController *)connectionController {
 	
 	if (!connectionController) return;
 	
 	[dependencies addObject:connectionController];
 }
 
-- (void)removeDependency:(DTConnectionController *)connectionController {
+- (void)removeDependency:(DCTConnectionController *)connectionController {
 	
 	if (![dependencies containsObject:connectionController]) return;
 	

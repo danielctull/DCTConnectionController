@@ -8,9 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
-#import "DTConnectionController.h"
+#import "DCTConnectionController.h"
 
-@interface DTCoreDataConnectionController : DTConnectionController {
+@interface DTCoreDataConnectionController : DCTConnectionController {
 	NSManagedObjectContext *managedObjectContext;
 }
 

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "DTConnectionController.h"
+#import "DCTConnectionController.h"
 #import "DTURLConnection.h"
 
 /** @brief Specifies the type of connection to use.
@@ -61,7 +61,7 @@ extern NSString *const DTConnectionControllerTypeString[];
 
 @protocol DTConnectionControllerDelegate;
 
-@interface DTConnectionController : NSObject {
+@interface DCTConnectionController : NSObject {
 	DTConnectionControllerPriority priority;
 	NSMutableArray *dependencies;
 	DTConnectionType type;
@@ -82,8 +82,8 @@ extern NSString *const DTConnectionControllerTypeString[];
 
 + (id)connectionController;
 
-- (void)addDependency:(DTConnectionController *)connectionController;
-- (void)removeDependency:(DTConnectionController *)connectionController;
+- (void)addDependency:(DCTConnectionController *)connectionController;
+- (void)removeDependency:(DCTConnectionController *)connectionController;
 
 - (void)connect;
 - (void)cancel;
@@ -229,24 +229,24 @@ extern NSString *const DTConnectionControllerTypeString[];
  @param connectionController The connection controller informing the delegate of the event.
  @param object The object returned by the connection.
  */
-- (void)connectionController:(DTConnectionController *)connectionController didSucceedWithObject:(NSObject *)object;
+- (void)connectionController:(DCTConnectionController *)connectionController didSucceedWithObject:(NSObject *)object;
 /** @brief Tells the delegate the connection has failed.
  
  @param connectionController The connection controller informing the delegate of the event.
  @param error The error received from the server.
  */
-- (void)connectionController:(DTConnectionController *)connectionController didFailWithError:(NSError *)error;
+- (void)connectionController:(DCTConnectionController *)connectionController didFailWithError:(NSError *)error;
 
 /** @brief Tells the delegate the connection was cancelled.
  
  @param connectionController The connection controller informing the delegate of the event.
  */
-- (void)connectionControllerWasCancelled:(DTConnectionController *)connectionController;
+- (void)connectionControllerWasCancelled:(DCTConnectionController *)connectionController;
 
 /** @brief Tells the delegate a response has been received from the server.
  
  @param connectionController The connection controller informing the delegate of the event.
  @param response The received response.
  */
-- (void)connectionController:(DTConnectionController *)connectionController didReceiveResponse:(NSURLResponse *)response;
+- (void)connectionController:(DCTConnectionController *)connectionController didReceiveResponse:(NSURLResponse *)response;
 @end

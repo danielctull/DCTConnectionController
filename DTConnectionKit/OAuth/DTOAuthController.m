@@ -58,7 +58,7 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	
 }
 
-- (void)connectionController:(DTConnectionController *)connectionController didSucceedWithObject:(NSObject *)object {
+- (void)connectionController:(DCTConnectionController *)connectionController didSucceedWithObject:(NSObject *)object {
 	
 	NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), object);
 	

@@ -6,10 +6,10 @@
 //  Copyright (c) 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTConnectionController.h"
+#import "DCTConnectionController.h"
 
 
-@interface DTRESTController : DTConnectionController {
+@interface DTRESTController : DCTConnectionController {
 }
 
 + (NSArray *)queryProperties;

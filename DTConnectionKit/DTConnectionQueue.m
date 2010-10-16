@@ -11,10 +11,10 @@
 
 NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2) {
 	
-	if (![obj1 isKindOfClass:[DTConnectionController class]] || ![obj2 isKindOfClass:[DTConnectionController class]]) return (NSComparisonResult)NSOrderedSame;
+	if (![obj1 isKindOfClass:[DCTConnectionController class]] || ![obj2 isKindOfClass:[DCTConnectionController class]]) return (NSComparisonResult)NSOrderedSame;
 	
-	DTConnectionController *con1 = (DTConnectionController *)obj1;
-	DTConnectionController *con2 = (DTConnectionController *)obj2;
+	DCTConnectionController *con1 = (DCTConnectionController *)obj1;
+	DCTConnectionController *con2 = (DCTConnectionController *)obj2;
 	
 	if (con1.priority > con2.priority) return (NSComparisonResult)NSOrderedDescending;
 	
@@ -30,18 +30,18 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 - (NSMutableArray *)dt_currentConnectionQueue;
 - (void)dt_checkConnectionCount;
 - (void)dt_runNextConnection;
-- (BOOL)dt_tryToRunConnection:(DTConnectionController *)connection;
-- (void)dt_removeConnection:(DTConnectionController *)connection;
+- (BOOL)dt_tryToRunConnection:(DCTConnectionController *)connection;
+- (void)dt_removeConnection:(DCTConnectionController *)connection;
 
-- (DTConnectionController *)dt_nextConnection;
-- (DTConnectionController *)dt_nextConnectionInterator:(DTConnectionController *)connection;
+- (DCTConnectionController *)dt_nextConnection;
+- (DCTConnectionController *)dt_nextConnectionInterator:(DCTConnectionController *)connection;
 
 - (void)dt_didEnterBackground:(NSNotification *)notification;
 - (void)dt_hush;
 - (void)dt_finishedBackgroundConnections;
 
-- (void)dt_addConnectionControllerToQueue:(DTConnectionController *)connectionController;
-- (void)dt_removeConnectionFromQueue:(DTConnectionController *)connectionController;
+- (void)dt_addConnectionControllerToQueue:(DCTConnectionController *)connectionController;
+- (void)dt_removeConnectionFromQueue:(DCTConnectionController *)connectionController;
 @end
 
 @implementation DTConnectionQueue
@@ -98,7 +98,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
     return [activeConnections arrayByAddingObjectsFromArray:queuedConnections];
 }
 
-- (void)addConnectionController:(DTConnectionController *)connectionController {
+- (void)addConnectionController:(DCTConnectionController *)connectionController {
 	
 	[connectionController addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	
@@ -110,7 +110,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	[self dt_runNextConnection];
 }
 
-- (void)requeueConnectionController:(DTConnectionController *)connectionController {
+- (void)requeueConnectionController:(DCTConnectionController *)connectionController {
 	[connectionController retain];
 	[self dt_removeConnection:connectionController];
 	[connectionController reset];
@@ -123,9 +123,9 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 						change:(NSDictionary *)change
 					   context:(void *)context {
 	
-	if (![object isKindOfClass:[DTConnectionController class]]) return;
+	if (![object isKindOfClass:[DCTConnectionController class]]) return;
 	
-	DTConnectionController *connection = (DTConnectionController *)object;
+	DCTConnectionController *connection = (DCTConnectionController *)object;
 	
 	if (!active) return;
 	
@@ -139,7 +139,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 }
 
 - (BOOL)isConnectingToURL:(NSURL *)URL {
-	for (DTConnectionController *c in activeConnections)
+	for (DCTConnectionController *c in activeConnections)
 		if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
 			return YES;
 	
@@ -153,12 +153,12 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	return NO;
 }
 
-- (DTConnectionController *)queuedConnectionControllerToURL:(NSURL *)URL {
-	for (DTConnectionController *c in queuedConnections)
+- (DCTConnectionController *)queuedConnectionControllerToURL:(NSURL *)URL {
+	for (DCTConnectionController *c in queuedConnections)
 		if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
 			return c;
 	
-	for (DTConnectionController *c in backgroundConnections)
+	for (DCTConnectionController *c in backgroundConnections)
 		if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
 			return c;
 	
@@ -199,7 +199,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	// Loop through the queue and try to run the top-most connection.
 	// If it can't be run (eg waiting for dependencies), run the next one down.
 		
-	DTConnectionController *connection = [self dt_nextConnection];
+	DCTConnectionController *connection = [self dt_nextConnection];
 	
 	if (connection) {
 		[activeConnections addObject:connection];
@@ -210,29 +210,29 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	[self dt_checkConnectionCount];
 }
 
-- (DTConnectionController *)dt_nextConnection {
+- (DCTConnectionController *)dt_nextConnection {
 	
-	for (DTConnectionController *connection in [self dt_currentConnectionQueue]) {
-		DTConnectionController *c = [self dt_nextConnectionInterator:connection];
+	for (DCTConnectionController *connection in [self dt_currentConnectionQueue]) {
+		DCTConnectionController *c = [self dt_nextConnectionInterator:connection];
 		if (c)
 			return c;
 	}
 	return nil;
 }
 
-- (DTConnectionController *)dt_nextConnectionInterator:(DTConnectionController *)connection {
+- (DCTConnectionController *)dt_nextConnectionInterator:(DCTConnectionController *)connection {
 	if ([connection.dependencies count] > 0) {
 		
 		// Sort so the dependencies are in order from high to low.
 		NSArray *sortedDependencies = [connection.dependencies sortedArrayUsingComparator:compareConnections];		
 		
 		// Look for connections that are queued at present, if there is one, we can process that one.
-		for (DTConnectionController *c in sortedDependencies)
+		for (DCTConnectionController *c in sortedDependencies)
 			if (c.status == DTConnectionControllerStatusQueued)
 				return [self dt_nextConnectionInterator:c];
 		
 		// Look for connections that are "active" at present, if there is one, we can't proceed.		
-		for (DTConnectionController *c in sortedDependencies)
+		for (DCTConnectionController *c in sortedDependencies)
 			if (c.status == DTConnectionControllerStatusStarted || c.status == DTConnectionControllerStatusResponded)
 				return nil;
 	}	
@@ -240,7 +240,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	return connection;
 }
 
-- (BOOL)dt_tryToRunConnection:(DTConnectionController *)connection {
+- (BOOL)dt_tryToRunConnection:(DCTConnectionController *)connection {
 	
 	if ([connection.dependencies count] > 0) {
 		
@@ -248,12 +248,12 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 		NSArray *sortedDependencies = [connection.dependencies sortedArrayUsingComparator:compareConnections];		
 	
 		// Look for connections that are queued at present, if there is one, we can process that one.
-		for (DTConnectionController *c in sortedDependencies)
+		for (DCTConnectionController *c in sortedDependencies)
 			if (c.status == DTConnectionControllerStatusQueued)
 				return [self dt_tryToRunConnection:c];
 		
 		// Look for connections that are "active" at present, if there is one, we can't proceed.		
-		for (DTConnectionController *c in sortedDependencies)
+		for (DCTConnectionController *c in sortedDependencies)
 			if (c.status == DTConnectionControllerStatusStarted || c.status == DTConnectionControllerStatusResponded)
 				return NO;
 	}	
@@ -265,7 +265,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	return YES;
 }
 
-- (void)dt_removeConnection:(DTConnectionController *)connection {
+- (void)dt_removeConnection:(DCTConnectionController *)connection {
 	[connection removeObserver:self forKeyPath:@"status"];
 	[activeConnections removeObject:connection];
 	//[self dt_checkConnectionCount];
@@ -295,7 +295,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 		
 		NSMutableArray *nonMultitaskingCurrentlyActive = [[NSMutableArray alloc] init];
 		
-		for (DTConnectionController *c in activeConnections)  {
+		for (DCTConnectionController *c in activeConnections)  {
 			if (!c.multitaskEnabled) {
 				[c reset];
 				[c setQueued];
@@ -305,7 +305,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 		
 		backgroundConnections = [[NSMutableArray alloc] init];
 		
-		for (DTConnectionController *c in queuedConnections)
+		for (DCTConnectionController *c in queuedConnections)
 			if (c.multitaskEnabled)
 				[backgroundConnections addObject:c];
 		
@@ -330,7 +330,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	
 	active = NO;
 	
-	for (DTConnectionController *c in activeConnections) {
+	for (DCTConnectionController *c in activeConnections) {
 		[c reset];
 		[c setQueued];
 	}
@@ -341,7 +341,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 
 - (void)dt_finishedBackgroundConnections {
 	
-	for (DTConnectionController *c in backgroundConnections) {
+	for (DCTConnectionController *c in backgroundConnections) {
 		[c reset];
 		[c setQueued];
 	}
@@ -364,7 +364,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 #pragma mark -
 #pragma mark Queue methods
 
-- (void)dt_addConnectionControllerToQueue:(DTConnectionController *)connectionController {
+- (void)dt_addConnectionControllerToQueue:(DCTConnectionController *)connectionController {
 	if (inBackground && connectionController.multitaskEnabled) {
 		[backgroundConnections addObject:connectionController];
 		[backgroundConnections sortUsingComparator:compareConnections];
@@ -374,7 +374,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 	}
 }
 
-- (void)dt_removeConnectionFromQueue:(DTConnectionController *)connectionController {
+- (void)dt_removeConnectionFromQueue:(DCTConnectionController *)connectionController {
 	// backgroundConnections will be nil for normal running time, so this is ok.
 	[backgroundConnections removeObject:connectionController];
 	[queuedConnections removeObject:connectionController];

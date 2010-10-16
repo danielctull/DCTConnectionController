@@ -6,9 +6,9 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTConnectionController.h"
+#import "DCTConnectionController.h"
 
-@interface DTMockConnection : DTConnectionController {
+@interface DTMockConnection : DCTConnectionController {
 
 }
 - (void)complete;

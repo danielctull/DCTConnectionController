@@ -10,7 +10,7 @@
 
 @implementation DTConnectionQueue (DTInternalAccess)
 
-- (DTConnectionController *)nextConnection {
+- (DCTConnectionController *)nextConnection {
 	return [self performSelector:@selector(dt_nextConnection)];
 }
 
