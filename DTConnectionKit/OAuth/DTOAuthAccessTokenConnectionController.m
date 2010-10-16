@@ -14,7 +14,7 @@
 - (id)init {
 	if (!(self = [super init])) return nil;
 	
-	NSArray *keys = [NSArray arrayWithObjects:DTOAuthConsumerKeyKey, DTOAuthNonceKey, DTOAuthSignatureMethodKey, DTOAuthTimestampKey, DTOAuthVersionKey, DTOAuthTokenKey, nil];
+	NSArray *keys = [NSArray arrayWithObjects:DCTOAuthConsumerKeyKey, DCTOAuthNonceKey, DCTOAuthSignatureMethodKey, DCTOAuthTimestampKey, DCTOAuthVersionKey, DCTOAuthTokenKey, nil];
 	
 	for (NSString *key in keys) [self setValue:@"" forParameter:key];
 	
@@ -25,10 +25,10 @@
 #pragma mark Accessor methods
 
 - (void)setToken:(NSString *)s {
-	[parameters setObject:s forKey:DTOAuthTokenKey];
+	[parameters setObject:s forKey:DCTOAuthTokenKey];
 }
 - (NSString *)token {
-	return [parameters objectForKey:DTOAuthTokenKey];
+	return [parameters objectForKey:DCTOAuthTokenKey];
 }
 
 @end

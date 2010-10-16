@@ -13,7 +13,7 @@
 - (id)init {
 	if (!(self = [super init])) return nil;
 	
-	NSArray *keys = [NSArray arrayWithObjects:DTOAuthConsumerKeyKey, DTOAuthNonceKey, DTOAuthSignatureMethodKey, DTOAuthTimestampKey, DTOAuthVersionKey, nil];
+	NSArray *keys = [NSArray arrayWithObjects:DCTOAuthConsumerKeyKey, DCTOAuthNonceKey, DCTOAuthSignatureMethodKey, DCTOAuthTimestampKey, DCTOAuthVersionKey, nil];
 	
 	for (NSString *key in keys) [self setValue:@"" forParameter:key];
 	

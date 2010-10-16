@@ -50,7 +50,7 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	
 	NSString *s = [url query];
 	
-	NSDictionary *d = [DTOAuthConnectionController oauthDictionaryFromString:s];
+	NSDictionary *d = [DCTOAuthConnectionController oauthDictionaryFromString:s];
 	
 	NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), d);
 	
@@ -66,8 +66,8 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 		
 		NSDictionary *d = (NSDictionary *)object;
 		
-		self.oauthTokenSecret = [d objectForKey:DTOAuthTokenSecretKey];
-		self.oauthToken = [d objectForKey:DTOAuthTokenKey];
+		self.oauthTokenSecret = [d objectForKey:DCTOAuthVerifierKey];
+		self.oauthToken = [d objectForKey:DCTOAuthTokenKey];
 		
 		self.canLogin = YES;
 		
@@ -75,8 +75,8 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 		
 		NSDictionary *d = (NSDictionary *)object;
 		
-		self.oauthTokenSecret = [d objectForKey:DTOAuthTokenSecretKey];
-		self.oauthToken = [d objectForKey:DTOAuthTokenKey];
+		self.oauthTokenSecret = [d objectForKey:DCTOAuthVerifierKey];
+		self.oauthToken = [d objectForKey:DCTOAuthTokenKey];
 		self.username = [d objectForKey:@"screen_name"];
 		
 		if ([self.delegate respondsToSelector:@selector(oauthControllerDidComplete:)])
@@ -97,7 +97,7 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	requestTokenConnection.consumerKey = [self consumerKey];
 	requestTokenConnection.secretConsumerKey = [self secretConsumerKey];
 	
-	[requestTokenConnection setValue:self.callback forParameter:DTOAuthCallBackKey];
+	[requestTokenConnection setValue:self.callback forParameter:DCTOAuthCallBackKey];
 	
 	requestTokenConnection.delegate = self;
 	[requestTokenConnection connect];

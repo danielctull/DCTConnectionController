@@ -9,18 +9,18 @@
 #import "DCTConnectionController.h"
 #import "DCTOAuthSignature.h"
 
-extern NSString *const DTOAuthCallBackKey;
-extern NSString *const DTOAuthConsumerKeyKey;
-extern NSString *const DTOAuthNonceKey;
-extern NSString *const DTOAuthSignatureMethodKey;
-extern NSString *const DTOAuthTimestampKey;
-extern NSString *const DTOAuthVersionKey;
-extern NSString *const DTOAuthSignatureKey;
-extern NSString *const DTOAuthTokenKey;
-extern NSString *const DTOAuthTokenSecretKey;
+extern NSString *const DCTOAuthCallBackKey;
+extern NSString *const DCTOAuthConsumerKeyKey;
+extern NSString *const DCTOAuthNonceKey;
+extern NSString *const DCTOAuthSignatureMethodKey;
+extern NSString *const DCTOAuthTimestampKey;
+extern NSString *const DCTOAuthVersionKey;
+extern NSString *const DCTOAuthSignatureKey;
+extern NSString *const DCTOAuthTokenKey;
+extern NSString *const DCTOAuthVerifierKey;
 extern NSString *const DTOAuthVerifierKey;
 
-@interface DTOAuthConnectionController : DCTConnectionController {
+@interface DCTOAuthConnectionController : DCTConnectionController {
 	NSMutableDictionary *parameters;
 }
 

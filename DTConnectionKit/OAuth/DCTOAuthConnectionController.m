@@ -6,27 +6,27 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTOAuthConnectionController.h"
+#import "DCTOAuthConnectionController.h"
 #import "NSString+DTURLEncoding.h"
 
-NSString *const DTOAuthCallBackKey = @"oauth_callback";
-NSString *const DTOAuthConsumerKeyKey = @"oauth_consumer_key";
-NSString *const DTOAuthNonceKey = @"oauth_nonce";
-NSString *const DTOAuthSignatureMethodKey = @"oauth_signature_method";
-NSString *const DTOAuthTimestampKey = @"oauth_timestamp";
-NSString *const DTOAuthVersionKey = @"oauth_version";
-NSString *const DTOAuthSignatureKey = @"oauth_signature";
-NSString *const DTOAuthTokenKey = @"oauth_token";
-NSString *const DTOAuthTokenSecretKey = @"oauth_token_secret";
+NSString *const DCTOAuthCallBackKey = @"oauth_callback";
+NSString *const DCTOAuthConsumerKeyKey = @"oauth_consumer_key";
+NSString *const DCTOAuthNonceKey = @"oauth_nonce";
+NSString *const DCTOAuthSignatureMethodKey = @"oauth_signature_method";
+NSString *const DCTOAuthTimestampKey = @"oauth_timestamp";
+NSString *const DCTOAuthVersionKey = @"oauth_version";
+NSString *const DCTOAuthSignatureKey = @"oauth_signature";
+NSString *const DCTOAuthTokenKey = @"oauth_token";
+NSString *const DCTOAuthVerifierKey = @"oauth_token_secret";
 NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 
 
-@interface DTOAuthConnectionController ()
+@interface DCTOAuthConnectionController ()
 - (NSString *)dt_stringForKey:(NSString *)key value:(NSString *)value;
 - (NSString *)dt_baseStringForKey:(NSString *)key value:(NSString *)value;
 @end
 
-@implementation DTOAuthConnectionController
+@implementation DCTOAuthConnectionController
 
 @synthesize secretConsumerKey, secretToken, URL=mutableURL;
 
@@ -64,12 +64,12 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 	
 	signature.secret = [NSString stringWithFormat:@"%@&%@", self.secretConsumerKey, self.secretToken];
 	
-	[parameters setObject:[signature typeString] forKey:DTOAuthSignatureMethodKey];
+	[parameters setObject:[signature typeString] forKey:DCTOAuthSignatureMethodKey];
 	
 	NSTimeInterval timeInterval = [[NSDate date] timeIntervalSince1970];
 	NSInteger timeStamp = (NSInteger)timeInterval;
 	
-	[parameters setObject:[NSString stringWithFormat:@"%i", timeStamp] forKey:DTOAuthTimestampKey];
+	[parameters setObject:[NSString stringWithFormat:@"%i", timeStamp] forKey:DCTOAuthTimestampKey];
 	NSMutableString *baseString = [[NSMutableString alloc] init];
 	[baseString appendString:DCTConnectionControllerTypeString[self.type]];
 	[baseString appendString:@"&"];
@@ -94,7 +94,7 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 		[oauthString appendString:[self dt_stringForKey:key value:[parameters objectForKey:key]]];
 		[oauthString appendString:@", "];
 	}
-	[oauthString appendString:[self dt_stringForKey:DTOAuthSignatureKey value:signature.signature]];
+	[oauthString appendString:[self dt_stringForKey:DCTOAuthSignatureKey value:signature.signature]];
 	
 	[request addValue:oauthString forHTTPHeaderField:@"Authorization"];
 	
@@ -118,7 +118,7 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 	NSString *string = [[[NSString alloc] initWithData:(NSData *)object encoding:NSUTF8StringEncoding] autorelease];
 	//NSLog(@"%@ %@", [self class], string);
 	
-	NSDictionary *d = [DTOAuthConnectionController oauthDictionaryFromString:string];
+	NSDictionary *d = [DCTOAuthConnectionController oauthDictionaryFromString:string];
 	
 	if (!d) {
 		[self receivedError:nil];
@@ -165,23 +165,23 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 }
 
 - (void)setNonce:(NSString *)s {
-	[parameters setObject:s forKey:DTOAuthNonceKey];
+	[parameters setObject:s forKey:DCTOAuthNonceKey];
 }
 - (NSString *)nonce {
-	return [parameters objectForKey:DTOAuthNonceKey];
+	return [parameters objectForKey:DCTOAuthNonceKey];
 }
 
 - (void)setVersion:(NSString *)s {
-	[parameters setObject:s forKey:DTOAuthVersionKey];
+	[parameters setObject:s forKey:DCTOAuthVersionKey];
 }
 - (NSString *)version {
-	return [parameters objectForKey:DTOAuthVersionKey];
+	return [parameters objectForKey:DCTOAuthVersionKey];
 }
 - (void)setConsumerKey:(NSString *)s {
-	[parameters setObject:s forKey:DTOAuthConsumerKeyKey];
+	[parameters setObject:s forKey:DCTOAuthConsumerKeyKey];
 }
 - (NSString *)consumerKey {
-	return [parameters objectForKey:DTOAuthConsumerKeyKey];
+	return [parameters objectForKey:DCTOAuthConsumerKeyKey];
 }
 #pragma mark -
 #pragma mark Private methods
