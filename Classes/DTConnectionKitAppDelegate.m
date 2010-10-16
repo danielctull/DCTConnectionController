@@ -26,14 +26,14 @@
 	
 	DTOAuthRequestTokenConnection *connection = [DTOAuthRequestTokenConnection connectionController];
 	connection.URL = [NSURL URLWithString:@"http://term.ie/oauth/example/request_token.php"];
-	connection.type = DTConnectionControllerTypeGet;
+	connection.type = DCTConnectionControllerTypeGet;
 	connection.consumerKey = @"key";
 	connection.secretConsumerKey = @"secret";
 	[connection connect];
 	
 	DTOAuthAccessTokenConnection *accessTokenConnection = [DTOAuthAccessTokenConnection connectionController];
 	accessTokenConnection.URL = [NSURL URLWithString:@"http://term.ie/oauth/example/access_token.php"];
-	accessTokenConnection.type = DTConnectionControllerTypeGet;
+	accessTokenConnection.type = DCTConnectionControllerTypeGet;
 	accessTokenConnection.consumerKey = @"key";
 	accessTokenConnection.secretConsumerKey = @"secret";
 	accessTokenConnection.token = @"requestkey";

@@ -27,10 +27,10 @@ extern NSString *const DTOAuthCallBackNotification;
 // Provide the folling in a subclass.
 
 - (NSURL *)accessTokenConnectionURL;
-- (DTConnectionType)accessTokenConnectionType;
+- (DCTConnectionType)accessTokenConnectionType;
 
 - (NSURL *)requestTokenConnectionURL;
-- (DTConnectionType)requestTokenConnectionType;
+- (DCTConnectionType)requestTokenConnectionType;
 
 - (NSString *)consumerKey;
 - (NSString *)secretConsumerKey;

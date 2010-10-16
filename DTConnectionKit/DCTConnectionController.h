@@ -13,15 +13,15 @@
 /** @brief Specifies the type of connection to use.
  */
 typedef enum {
-	DTConnectionControllerTypeGet = 0,	/**< Uses a GET connection. */
-	DTConnectionControllerTypePost,		/**< Uses a POST connection. */
-	DTConnectionControllerTypePut,		/**< Uses a PUT connection. */
-	DTConnectionControllerTypeDelete,		/**< Uses a DELETE connection. */
-	DTConnectionControllerTypeOptions,	/**< Uses a OPTIONS connection. */
-	DTConnectionControllerTypeHead,		/**< Uses a HEAD connection. */
-	DTConnectionControllerTypeTrace,		/**< Uses a TRACE connection. */
-	DTConnectionControllerTypeConnect		/**< Uses a CONNECT connection. */
-} DTConnectionType;
+	DCTConnectionControllerTypeGet = 0,	/**< Uses a GET connection. */
+	DCTConnectionControllerTypePost,		/**< Uses a POST connection. */
+	DCTConnectionControllerTypePut,		/**< Uses a PUT connection. */
+	DCTConnectionControllerTypeDelete,		/**< Uses a DELETE connection. */
+	DCTConnectionControllerTypeOptions,	/**< Uses a OPTIONS connection. */
+	DCTConnectionControllerTypeHead,		/**< Uses a HEAD connection. */
+	DCTConnectionControllerTypeTrace,		/**< Uses a TRACE connection. */
+	DCTConnectionControllerTypeConnect		/**< Uses a CONNECT connection. */
+} DCTConnectionType;
 
 /** @brief Specifies the different stages of a connection.
  */
@@ -64,7 +64,7 @@ extern NSString *const DTConnectionControllerTypeString[];
 @interface DCTConnectionController : NSObject {
 	DCTConnectionControllerPriority priority;
 	NSMutableArray *dependencies;
-	DTConnectionType type;
+	DCTConnectionType type;
 	DTConnectionControllerStatus status;
 	DCTURLConnection *urlConnection;
 	NSURL *URL;
@@ -107,7 +107,7 @@ extern NSString *const DTConnectionControllerTypeString[];
  
  Specifies the type of connection to use. DTConnectionType is a typedef enum and possible values can be seen in the header file.
  */
-@property (nonatomic, assign) DTConnectionType type;
+@property (nonatomic, assign) DCTConnectionType type;
 
 /** @brief This method should be used in subclasses to give custom requests.
  

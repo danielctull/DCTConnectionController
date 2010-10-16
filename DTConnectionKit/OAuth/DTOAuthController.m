@@ -158,16 +158,16 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	return [NSURL URLWithString:@""];
 }
 
-- (DTConnectionType)accessTokenConnectionType {
-	return DTConnectionControllerTypeGet;
+- (DCTConnectionType)accessTokenConnectionType {
+	return DCTConnectionControllerTypeGet;
 }
 
 - (NSURL *)requestTokenConnectionURL {
 	return [NSURL URLWithString:@""];
 }
 
-- (DTConnectionType)requestTokenConnectionType {
-	return DTConnectionControllerTypeGet;
+- (DCTConnectionType)requestTokenConnectionType {
+	return DCTConnectionControllerTypeGet;
 }
 
 - (NSString *)consumerKey {
