@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "DCTConnectionController.h"
-#import "DTURLConnection.h"
+#import "DCTURLConnection.h"
 
 /** @brief Specifies the type of connection to use.
  */
@@ -66,7 +66,7 @@ extern NSString *const DTConnectionControllerTypeString[];
 	NSMutableArray *dependencies;
 	DTConnectionType type;
 	DTConnectionControllerStatus status;
-	DTURLConnection *urlConnection;
+	DCTURLConnection *urlConnection;
 	NSURL *URL;
 	NSObject *returnedObject;
 	NSError *returnedError;

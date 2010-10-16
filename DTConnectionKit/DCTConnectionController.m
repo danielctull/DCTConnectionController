@@ -131,7 +131,7 @@ NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionC
 	self.URL = [request URL];
 	[urlConnection release];
 	urlConnection = nil;
-	urlConnection = [[DTURLConnection alloc] initWithRequest:request delegate:self];
+	urlConnection = [[DCTURLConnection alloc] initWithRequest:request delegate:self];
 	[request release];
 	
 	self.status = DTConnectionControllerStatusStarted;
@@ -174,11 +174,11 @@ NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionC
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-	[(DTURLConnection *)connection appendData:data];
+	[(DCTURLConnection *)connection appendData:data];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-	NSData *data = ((DTURLConnection *)connection).data;
+	NSData *data = ((DCTURLConnection *)connection).data;
 	
     [self receivedObject:data];
 	if (!self.returnedObject) self.returnedObject = data;

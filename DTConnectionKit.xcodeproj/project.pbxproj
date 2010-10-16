@@ -14,13 +14,13 @@
 		24306A9B114E894B008BBE38 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24306A9A114E894B008BBE38 /* MainWindow-iPad.xib */; };
 		2442E598120F1E8F00E3B3BF /* DCTRESTController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2442E597120F1E8F00E3B3BF /* DCTRESTController.m */; };
 		2456D8E1110B6F54009A4F1E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2456D8E0110B6F54009A4F1E /* CoreData.framework */; };
-		2462681D112C8E860046D38E /* DTURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 24083D4210CF9A07009B758E /* DTURLConnection.m */; };
+		2462681D112C8E860046D38E /* DCTURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 24083D4210CF9A07009B758E /* DCTURLConnection.m */; };
 		24A4807211C03BF800F75C55 /* DCTConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 24A4807111C03BF800F75C55 /* DCTConnectionQueue.m */; };
 		24A4808711C03CD500F75C55 /* DCTConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24A4808611C03CD500F75C55 /* DCTConnectionController.m */; };
 		24BD77ED11DCD1090094DB11 /* DTConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD77EC11DCD1090094DB11 /* DTConnectionTests.m */; };
 		24BD781311DCD3460094DB11 /* DCTConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24A4808611C03CD500F75C55 /* DCTConnectionController.m */; };
 		24BD781411DCD3480094DB11 /* DCTConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 24A4807111C03BF800F75C55 /* DCTConnectionQueue.m */; };
-		24BD781511DCD34D0094DB11 /* DTURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 24083D4210CF9A07009B758E /* DTURLConnection.m */; };
+		24BD781511DCD34D0094DB11 /* DCTURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 24083D4210CF9A07009B758E /* DCTURLConnection.m */; };
 		24BD781E11DCD37B0094DB11 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		24BD782311DCD3870094DB11 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		24BD783511DCD3C30094DB11 /* DTConnectionQueueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD783411DCD3C30094DB11 /* DTConnectionQueueTests.m */; };
@@ -53,8 +53,8 @@
 		1D3623250D0F684500981E51 /* DTConnectionKitAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConnectionKitAppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* DTConnectionKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DTConnectionKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
-		24083D4110CF9A07009B758E /* DTURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTURLConnection.h; sourceTree = "<group>"; };
-		24083D4210CF9A07009B758E /* DTURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTURLConnection.m; sourceTree = "<group>"; };
+		24083D4110CF9A07009B758E /* DCTURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; path = DCTURLConnection.h; sourceTree = "<group>"; };
+		24083D4210CF9A07009B758E /* DCTURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTURLConnection.m; sourceTree = "<group>"; };
 		24306A9A114E894B008BBE38 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "Resources-iPad/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		2442E596120F1E8F00E3B3BF /* DCTRESTController.h */ = {isa = PBXFileReference; fileEncoding = 4; path = DCTRESTController.h; sourceTree = "<group>"; };
 		2442E597120F1E8F00E3B3BF /* DCTRESTController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTRESTController.m; sourceTree = "<group>"; };
@@ -166,8 +166,8 @@
 				24A4808611C03CD500F75C55 /* DCTConnectionController.m */,
 				2442E596120F1E8F00E3B3BF /* DCTRESTController.h */,
 				2442E597120F1E8F00E3B3BF /* DCTRESTController.m */,
-				24083D4110CF9A07009B758E /* DTURLConnection.h */,
-				24083D4210CF9A07009B758E /* DTURLConnection.m */,
+				24083D4110CF9A07009B758E /* DCTURLConnection.h */,
+				24083D4210CF9A07009B758E /* DCTURLConnection.m */,
 				24E465E111F8358E0064FCA1 /* Caching */,
 				24E465E611F8358E0064FCA1 /* Categories */,
 				24E465EF11F8358E0064FCA1 /* Connection Controllers */,
@@ -418,7 +418,7 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* DTConnectionKitAppDelegate.m in Sources */,
 				24E0F62410D6490C00F03AD8 /* DTConnectionKitExampleViewController.m in Sources */,
-				2462681D112C8E860046D38E /* DTURLConnection.m in Sources */,
+				2462681D112C8E860046D38E /* DCTURLConnection.m in Sources */,
 				24A4807211C03BF800F75C55 /* DCTConnectionQueue.m in Sources */,
 				24A4808711C03CD500F75C55 /* DCTConnectionController.m in Sources */,
 				24BD786211DCD9B30094DB11 /* DCTConnectionQueue+Singleton.m in Sources */,
@@ -447,7 +447,7 @@
 				24BD77ED11DCD1090094DB11 /* DTConnectionTests.m in Sources */,
 				24BD781311DCD3460094DB11 /* DCTConnectionController.m in Sources */,
 				24BD781411DCD3480094DB11 /* DCTConnectionQueue.m in Sources */,
-				24BD781511DCD34D0094DB11 /* DTURLConnection.m in Sources */,
+				24BD781511DCD34D0094DB11 /* DCTURLConnection.m in Sources */,
 				24BD783511DCD3C30094DB11 /* DTConnectionQueueTests.m in Sources */,
 				24BD78CC11DCE1630094DB11 /* DTMockConnection.m in Sources */,
 				24BD78D511DCE24C0094DB11 /* DTConnectionQueue+DTInternalAccess.m in Sources */,

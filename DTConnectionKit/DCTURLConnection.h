@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface DTURLConnection : NSURLConnection {
+@interface DCTURLConnection : NSURLConnection {
 	
 	NSData *data;
     NSString *identifier;

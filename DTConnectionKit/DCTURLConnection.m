@@ -6,14 +6,14 @@
 //  Copyright 2009 Daniel Tull. All rights reserved.
 //
 
-#import "DTURLConnection.h"
+#import "DCTURLConnection.h"
 
-@interface DTURLConnection ()
+@interface DCTURLConnection ()
 @property (readwrite, copy) NSData *data;
 @property (readwrite, copy) NSString *identifier;
 @end
 
-@implementation DTURLConnection
+@implementation DCTURLConnection
 
 @synthesize data, identifier, URL;
 
@@ -41,7 +41,7 @@
 }
 
 + (id)connectionWithRequest:(NSURLRequest *)request delegate:(id)delegate {
-	return [[[DTURLConnection alloc] initWithRequest:request delegate:delegate] autorelease];
+	return [[[DCTURLConnection alloc] initWithRequest:request delegate:delegate] autorelease];
 }
 
 - (void)dealloc {
