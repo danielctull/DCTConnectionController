@@ -8,6 +8,6 @@
 
 #import "DCTConnectionQueue.h"
 
-@interface DCTConnectionQueue (DTSingleton)
+@interface DCTConnectionQueue (Singleton)
 + (DCTConnectionQueue *)sharedConnectionQueue;
 @end

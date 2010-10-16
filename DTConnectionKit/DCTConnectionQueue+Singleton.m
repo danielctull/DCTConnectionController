@@ -10,7 +10,7 @@
 
 static DCTConnectionQueue *sharedInstance = nil;
 
-@implementation DCTConnectionQueue (DTSingleton)
+@implementation DCTConnectionQueue (Singleton)
 
 + (void)initialize {
     if (!sharedInstance) {
