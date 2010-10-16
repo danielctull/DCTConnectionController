@@ -6,10 +6,10 @@
 //  Copyright (c) 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTRESTController.h"
+#import "DCTRESTController.h"
 #import <objc/runtime.h>
 
-@implementation DTRESTController
+@implementation DCTRESTController
 
 + (NSArray *)bodyProperties {
 	return [NSArray array];
@@ -52,7 +52,7 @@
 	NSMutableArray *queries = [[[NSMutableArray alloc] init] autorelease];
 	NSMutableArray *bodies = [[[NSMutableArray alloc] init] autorelease];
 	
-	while ([class isSubclassOfClass:[DTRESTController class]] && ![[DTRESTController class] isSubclassOfClass:class]) {
+	while ([class isSubclassOfClass:[DCTRESTController class]] && ![[DCTRESTController class] isSubclassOfClass:class]) {
 		
 		NSArray *classQueries = [class queryProperties];
 		if (classQueries)

@@ -9,7 +9,7 @@
 #import "DCTConnectionController.h"
 
 
-@interface DTRESTController : DCTConnectionController {
+@interface DCTRESTController : DCTConnectionController {
 }
 
 + (NSArray *)queryProperties;
