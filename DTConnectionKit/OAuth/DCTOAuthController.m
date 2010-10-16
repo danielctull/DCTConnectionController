@@ -6,13 +6,13 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTOAuthController.h"
+#import "DCTOAuthController.h"
 #import "NSString+DTURLEncoding.h"
 #import "NSBundle+DTInfoPlist.h"
 
 NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 
-@interface DTOAuthController ()
+@interface DCTOAuthController ()
 - (void)tryRequestTokenConnection;
 - (void)tryAccessTokenConnectionWithParameters:(NSDictionary *)parameters;
 - (NSString *)schemeDefinedInInfoPlist;
@@ -21,7 +21,7 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 
 
 
-@implementation DTOAuthController
+@implementation DCTOAuthController
 
 @synthesize canLogin;
 
