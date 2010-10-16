@@ -9,7 +9,7 @@
 #import "DCTConnectionKitAppDelegate.h"
 #import "DCTConnectionKitExampleViewController.h"
 #import "DTOAuthRequestTokenConnectionController.h"
-#import "DTOAuthAccessTokenConnectionController.h"
+#import "DCTOAuthAccessTokenConnectionController.h"
 #import "DTOAuthController.h"
 
 @implementation DCTConnectionKitAppDelegate
