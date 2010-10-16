@@ -1,23 +1,23 @@
 //
-//  DTConnectionKitAppDelegate.m
-//  DTConnectionKit
+//  DCTConnectionKitAppDelegate.m
+//  DCTConnectionKit
 //
 //  Created by Daniel Tull on 09.12.2009.
 //  Copyright Daniel Tull 2009. All rights reserved.
 //
 
-#import "DTConnectionKitAppDelegate.h"
-#import "DTConnectionKitExampleViewController.h"
+#import "DCTConnectionKitAppDelegate.h"
+#import "DCTConnectionKitExampleViewController.h"
 #import "DTOAuthRequestTokenConnectionController.h"
 #import "DTOAuthAccessTokenConnectionController.h"
 #import "DTOAuthController.h"
 
-@implementation DTConnectionKitAppDelegate
+@implementation DCTConnectionKitAppDelegate
 
 @synthesize window;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
-	DTConnectionKitExampleViewController *viewController = [[DTConnectionKitExampleViewController alloc] init];
+	DCTConnectionKitExampleViewController *viewController = [[DCTConnectionKitExampleViewController alloc] init];
 	nav = [[UINavigationController alloc] initWithRootViewController:viewController];
 	[window addSubview:nav.view];
 	[viewController release];

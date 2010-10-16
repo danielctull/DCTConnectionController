@@ -1,6 +1,6 @@
 //
 //  DTConnectionController.m
-//  DTConnectionKit
+//  DCTConnectionKit
 //
 //  Created by Daniel Tull on 09.06.2010.
 //  Copyright 2010 Daniel Tull. All rights reserved.
@@ -9,7 +9,7 @@
 #import "DCTConnectionController.h"
 #import "DCTConnectionQueue+Singleton.h"
 
-NSString * const DTConnectionControllerTypeString[] = {
+NSString * const DCTConnectionControllerTypeString[] = {
 	@"GET",
 	@"POST",
 	@"PUT",
@@ -21,10 +21,10 @@ NSString * const DTConnectionControllerTypeString[] = {
 };
 
 
-NSString *const DTConnectionControllerCompletedNotification = @"DTConnectionControllerCompletedNotification";
-NSString *const DTConnectionControllerFailedNotification = @"DTConnectionControllerFailedNotification";
-NSString *const DTConnectionControllerResponseNotification = @"DTConnectionControllerResponseNotification";
-NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionControllerCancellationNotification";
+NSString *const DCTConnectionControllerCompletedNotification = @"DCTConnectionControllerCompletedNotification";
+NSString *const DCTConnectionControllerFailedNotification = @"DCTConnectionControllerFailedNotification";
+NSString *const DCTConnectionControllerResponseNotification = @"DCTConnectionControllerResponseNotification";
+NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectionControllerCancellationNotification";
 
 @interface DCTConnectionController ()
 @property (nonatomic, retain, readwrite) NSURL *URL;
@@ -33,19 +33,19 @@ NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionC
 @property (nonatomic, retain, readwrite) NSError *returnedError;
 @property (nonatomic, retain, readwrite) NSURLResponse *returnedResponse;
 
-- (void)dt_announceResponse;
-- (void)dt_finishWithFailure;
-- (void)dt_finishWithSuccess;
-- (void)dt_finishWithCancelation;
+- (void)dctInternal_announceResponse;
+- (void)dctInternal_finishWithFailure;
+- (void)dctInternal_finishWithSuccess;
+- (void)dctInternal_finishWithCancelation;
 
-- (void)dt_notifyDelegateOfObject:(NSObject *)object;
-- (void)dt_notifyObserversOfObject:(NSObject *)object;
-- (void)dt_notifyDelegateOfReturnedError:(NSError *)error;
-- (void)dt_notifyObserversOfReturnedError:(NSError *)error;
-- (void)dt_notifyDelegateOfCancellation;
-- (void)dt_notifyObserversOfCancellation;
-- (void)dt_notifyDelegateOfResponse:(NSURLResponse *)response;
-- (void)dt_notifyObserversOfResponse:(NSURLResponse *)response;
+- (void)dctInternal_notifyDelegateOfObject:(NSObject *)object;
+- (void)dctInternal_notifyObserversOfObject:(NSObject *)object;
+- (void)dctInternal_notifyDelegateOfReturnedError:(NSError *)error;
+- (void)dctInternal_notifyObserversOfReturnedError:(NSError *)error;
+- (void)dctInternal_notifyDelegateOfCancellation;
+- (void)dctInternal_notifyObserversOfCancellation;
+- (void)dctInternal_notifyDelegateOfResponse:(NSURLResponse *)response;
+- (void)dctInternal_notifyObserversOfResponse:(NSURLResponse *)response;
 
 @end
 
@@ -85,7 +85,7 @@ NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionC
 
 - (void)cancel {
 	[urlConnection cancel];
-	[self dt_finishWithCancelation];
+	[self dctInternal_finishWithCancelation];
 	[urlConnection release]; urlConnection = nil;
 }
 
@@ -124,7 +124,7 @@ NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionC
 	NSURLRequest *request = [self newRequest];
 	
 	if (!request) {
-		[self dt_finishWithFailure];
+		[self dctInternal_finishWithFailure];
 		return;
 	}
 	
@@ -136,7 +136,7 @@ NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionC
 	
 	self.status = DTConnectionControllerStatusStarted;
 	
-	if (!urlConnection) [self dt_finishWithFailure];
+	if (!urlConnection) [self dctInternal_finishWithFailure];
 }
 
 - (void)setQueued {
@@ -148,7 +148,7 @@ NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionC
 
 - (NSMutableURLRequest *)newRequest {
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-	[request setHTTPMethod:DTConnectionControllerTypeString[type]];	
+	[request setHTTPMethod:DCTConnectionControllerTypeString[type]];	
 	return request;
 }
 
@@ -170,7 +170,7 @@ NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionC
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
     [self receivedResponse:response];
 	if (!self.returnedResponse) self.returnedResponse = response;
-	[self dt_announceResponse];
+	[self dctInternal_announceResponse];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
@@ -182,41 +182,41 @@ NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionC
 	
     [self receivedObject:data];
 	if (!self.returnedObject) self.returnedObject = data;
-	[self dt_finishWithSuccess];
+	[self dctInternal_finishWithSuccess];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     [self receivedError:error];
 	if (!self.returnedError) self.returnedError = error;
-	[self dt_finishWithFailure];
+	[self dctInternal_finishWithFailure];
 }
 
 #pragma mark -
 #pragma mark Private methods
 
-- (void)dt_announceResponse {
-	[self dt_notifyDelegateOfResponse:self.returnedResponse];
-	[self dt_notifyObserversOfResponse:self.returnedResponse];
+- (void)dctInternal_announceResponse {
+	[self dctInternal_notifyDelegateOfResponse:self.returnedResponse];
+	[self dctInternal_notifyObserversOfResponse:self.returnedResponse];
 	self.status = DTConnectionControllerStatusResponded;
 }
 
-- (void)dt_finishWithSuccess {
-	[self dt_notifyDelegateOfObject:self.returnedObject];
-	[self dt_notifyObserversOfObject:self.returnedObject];
+- (void)dctInternal_finishWithSuccess {
+	[self dctInternal_notifyDelegateOfObject:self.returnedObject];
+	[self dctInternal_notifyObserversOfObject:self.returnedObject];
 	self.status = DTConnectionControllerStatusComplete;
 	[delegate release]; delegate = nil;
 }
 
-- (void)dt_finishWithFailure {
-	[self dt_notifyDelegateOfReturnedError:self.returnedError];
-	[self dt_notifyObserversOfReturnedError:self.returnedError];
+- (void)dctInternal_finishWithFailure {
+	[self dctInternal_notifyDelegateOfReturnedError:self.returnedError];
+	[self dctInternal_notifyObserversOfReturnedError:self.returnedError];
 	self.status = DTConnectionControllerStatusFailed;
 	[delegate release]; delegate = nil;
 }
 
-- (void)dt_finishWithCancelation {
-	[self dt_notifyDelegateOfCancellation];
-	[self dt_notifyObserversOfCancellation];
+- (void)dctInternal_finishWithCancelation {
+	[self dctInternal_notifyDelegateOfCancellation];
+	[self dctInternal_notifyObserversOfCancellation];
 	self.status = DTConnectionControllerStatusCancelled;
 	[delegate release]; delegate = nil;
 }
@@ -224,40 +224,40 @@ NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionC
 #pragma mark -
 #pragma mark Private notification methods
 
-- (void)dt_notifyDelegateOfObject:(NSObject *)object {	
+- (void)dctInternal_notifyDelegateOfObject:(NSObject *)object {	
 	if ([self.delegate respondsToSelector:@selector(connectionController:didSucceedWithObject:)])
 		[self.delegate connectionController:self didSucceedWithObject:object];
 }
 
-- (void)dt_notifyObserversOfObject:(NSObject *)object {
-	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionControllerCompletedNotification object:self];
+- (void)dctInternal_notifyObserversOfObject:(NSObject *)object {
+	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerCompletedNotification object:self];
 }
 
-- (void)dt_notifyDelegateOfReturnedError:(NSError *)error {
+- (void)dctInternal_notifyDelegateOfReturnedError:(NSError *)error {
 	if ([self.delegate respondsToSelector:@selector(connectionController:didFailWithError:)])
 		[self.delegate connectionController:self didFailWithError:error];
 }
 
-- (void)dt_notifyObserversOfReturnedError:(NSError *)error {
-	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionControllerFailedNotification object:self];
+- (void)dctInternal_notifyObserversOfReturnedError:(NSError *)error {
+	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerFailedNotification object:self];
 }
 
-- (void)dt_notifyDelegateOfCancellation {
+- (void)dctInternal_notifyDelegateOfCancellation {
 	if ([self.delegate respondsToSelector:@selector(connectionControllerWasCancelled:)])
 		[self.delegate connectionControllerWasCancelled:self];
 }
 
-- (void)dt_notifyObserversOfCancellation {
-	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionControllerCancellationNotification object:self];
+- (void)dctInternal_notifyObserversOfCancellation {
+	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerCancellationNotification object:self];
 }
 
-- (void)dt_notifyDelegateOfResponse:(NSURLResponse *)response {
+- (void)dctInternal_notifyDelegateOfResponse:(NSURLResponse *)response {
 	if ([self.delegate respondsToSelector:@selector(connectionController:didReceiveResponse:)])
 		[self.delegate connectionController:self didReceiveResponse:response];
 }
 
-- (void)dt_notifyObserversOfResponse:(NSURLResponse *)response {
-	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionControllerResponseNotification object:self];
+- (void)dctInternal_notifyObserversOfResponse:(NSURLResponse *)response {
+	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerResponseNotification object:self];
 }
 
 @end

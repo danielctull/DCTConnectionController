@@ -1,29 +1,29 @@
 //
-//  DTConnectionKitExampleViewController.m
-//  DTConnectionKit
+//  DCTConnectionKitExampleViewController.m
+//  DCTConnectionKit
 //
 //  Created by Daniel Tull on 14.12.2009.
 //  Copyright 2009 Daniel Tull. All rights reserved.
 //
 
-#import "DTConnectionKitExampleViewController.h"
+#import "DCTConnectionKitExampleViewController.h"
 #import "DTURLLoadingConnectionController.h"
 #import "DCTConnectionQueue+Singleton.h"
 
-@interface DTConnectionKitExampleViewController ()
+@interface DCTConnectionKitExampleViewController ()
 - (NSString *)stringFromURL:(NSURL *)url;
 - (void)statusUpdate:(DTURLLoadingConnectionController *)connectionController;
 @end
 
 
-@implementation DTConnectionKitExampleViewController
+@implementation DCTConnectionKitExampleViewController
 
 @synthesize textView, toolbar, connectionsLabel;
 
 - (id)init {
-	if (!(self = [self initWithNibName:@"DTConnectionKitExampleView" bundle:nil])) return nil;
+	if (!(self = [self initWithNibName:@"DCTConnectionKitExampleView" bundle:nil])) return nil;
 	
-	self.title = @"DTConnectionKit";
+	self.title = @"DCTConnectionKit";
 	
 	return self;
 }

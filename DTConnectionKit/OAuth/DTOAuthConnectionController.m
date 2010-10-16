@@ -1,6 +1,6 @@
 //
 //  DTOAuthConnectionController.m
-//  DTConnectionKit
+//  DCTConnectionKit
 //
 //  Created by Daniel Tull on 05.07.2010.
 //  Copyright 2010 Daniel Tull. All rights reserved.
@@ -71,7 +71,7 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 	
 	[parameters setObject:[NSString stringWithFormat:@"%i", timeStamp] forKey:DTOAuthTimestampKey];
 	NSMutableString *baseString = [[NSMutableString alloc] init];
-	[baseString appendString:DTConnectionControllerTypeString[self.type]];
+	[baseString appendString:DCTConnectionControllerTypeString[self.type]];
 	[baseString appendString:@"&"];
 	[baseString appendString:[[request.URL absoluteString] dt_urlEncodedString]];
 	[baseString appendString:@"&"];

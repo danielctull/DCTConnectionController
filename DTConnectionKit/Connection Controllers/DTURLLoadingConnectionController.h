@@ -1,6 +1,6 @@
 //
 //  DTURLLoadingConnectionController.h
-//  DTConnectionKit
+//  DCTConnectionKit
 //
 //  Created by Daniel Tull on 25.01.2010.
 //  Copyright 2010 Daniel Tull. All rights reserved.

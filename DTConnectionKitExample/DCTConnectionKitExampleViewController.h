@@ -1,6 +1,6 @@
 //
-//  DTConnectionKitExampleViewController.h
-//  DTConnectionKit
+//  DCTConnectionKitExampleViewController.h
+//  DCTConnectionKit
 //
 //  Created by Daniel Tull on 14.12.2009.
 //  Copyright 2009 Daniel Tull. All rights reserved.
@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "DCTConnectionController.h"
 
-@interface DTConnectionKitExampleViewController : UIViewController <DTConnectionControllerDelegate> {
+@interface DCTConnectionKitExampleViewController : UIViewController <DTConnectionControllerDelegate> {
 	UITextView *textView;
 	UIToolbar *toolbar;
 	UILabel *connectionsLabel;

@@ -1,6 +1,6 @@
 //
 //  DTConnectionController.h
-//  DTConnectionKit
+//  DCTConnectionKit
 //
 //  Created by Daniel Tull on 09.06.2010.
 //  Copyright 2010 Daniel Tull. All rights reserved.
@@ -47,17 +47,17 @@ typedef enum {
 
 /** @brief Name of the notification sent out when the connection has successfully completed.
  */
-extern NSString *const DTConnectionControllerCompletedNotification;
+extern NSString *const DCTConnectionControllerCompletedNotification;
 
 /** @brief Name of the notification sent out when the connection has failed.
  */
-extern NSString *const DTConnectionControllerFailedNotification;
+extern NSString *const DCTConnectionControllerFailedNotification;
 
 /** @brief Name of the notification sent out when the connection has recieved a response.
  */
-extern NSString *const DTConnectionControllerResponseNotification;
+extern NSString *const DCTConnectionControllerResponseNotification;
 
-extern NSString *const DTConnectionControllerTypeString[];
+extern NSString *const DCTConnectionControllerTypeString[];
 
 @protocol DTConnectionControllerDelegate;
 

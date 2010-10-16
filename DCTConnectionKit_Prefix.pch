@@ -1,5 +1,5 @@
 //
-// Prefix header for all source files of the 'DTConnectionKit' target in the 'DTConnectionKit' project
+// Prefix header for all source files of the 'DCTConnectionKit' target in the 'DCTConnectionKit' project
 //
 
 #ifdef __OBJC__
