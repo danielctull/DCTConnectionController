@@ -8,7 +8,7 @@
 
 #import "DCTConnectionQueueTests.h"
 #import "DCTMockConnection.h"
-#import "DCTConnectionQueue+DTInternalAccess.h"
+#import "DCTConnectionQueue+DCTInternalAccess.h"
 
 @implementation DCTConnectionQueueTests
 
