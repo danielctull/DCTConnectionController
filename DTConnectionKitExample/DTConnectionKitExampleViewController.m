@@ -68,33 +68,33 @@
 	
 	DTURLLoadingConnectionController *engadget = [DTURLLoadingConnectionController connectionController];
 	engadget.URL = [NSURL URLWithString:@"http://www.engadget.com/"];
-	engadget.priority = DTConnectionControllerPriorityHigh;
+	engadget.priority = DCTConnectionControllerPriorityHigh;
 	[engadget addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[engadget connect];
 	
 	DTURLLoadingConnectionController *ebay = [DTURLLoadingConnectionController connectionController];
 	ebay.URL = [NSURL URLWithString:@"http://www.ebay.com/"];
-	ebay.priority = DTConnectionControllerPriorityLow;
+	ebay.priority = DCTConnectionControllerPriorityLow;
 	[ebay addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[ebay connect];
 	
 	DTURLLoadingConnectionController *google = [DTURLLoadingConnectionController connectionController];
 	google.URL = [NSURL URLWithString:@"http://www.google.com/"];
-	google.priority = DTConnectionControllerPriorityLow;
+	google.priority = DCTConnectionControllerPriorityLow;
 	[google addDependency:ebay];
 	[google addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[google connect];
 	
 	DTURLLoadingConnectionController *apple = [DTURLLoadingConnectionController connectionController];
 	apple.URL = [NSURL URLWithString:@"http://www.apple.com/"];
-	apple.priority = DTConnectionControllerPriorityLow;
+	apple.priority = DCTConnectionControllerPriorityLow;
 	[apple addDependency:google];
 	[apple addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[apple connect];
 	
 	DTURLLoadingConnectionController *bbc = [DTURLLoadingConnectionController connectionController];
 	bbc.URL = [NSURL URLWithString:@"http://www.bbc.co.uk/"];
-	bbc.priority = DTConnectionControllerPriorityHigh;
+	bbc.priority = DCTConnectionControllerPriorityHigh;
 	[bbc addDependency:apple];
 	[bbc addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[bbc connect];

@@ -38,12 +38,12 @@ typedef enum {
 /** @brief Specifies the possible priorities for a connection.
  */
 typedef enum {
-	DTConnectionControllerPriorityVeryHigh = 0,
-	DTConnectionControllerPriorityHigh,
-	DTConnectionControllerPriorityMedium,
-	DTConnectionControllerPriorityLow,
-	DTConnectionControllerPriorityVeryLow
-} DTConnectionControllerPriority;
+	DCTConnectionControllerPriorityVeryHigh = 0,
+	DCTConnectionControllerPriorityHigh,
+	DCTConnectionControllerPriorityMedium,
+	DCTConnectionControllerPriorityLow,
+	DCTConnectionControllerPriorityVeryLow
+} DCTConnectionControllerPriority;
 
 /** @brief Name of the notification sent out when the connection has successfully completed.
  */
@@ -62,7 +62,7 @@ extern NSString *const DTConnectionControllerTypeString[];
 @protocol DTConnectionControllerDelegate;
 
 @interface DCTConnectionController : NSObject {
-	DTConnectionControllerPriority priority;
+	DCTConnectionControllerPriority priority;
 	NSMutableArray *dependencies;
 	DTConnectionType type;
 	DTConnectionControllerStatus status;
@@ -74,7 +74,7 @@ extern NSString *const DTConnectionControllerTypeString[];
 }
 
 @property (nonatomic, readonly) DTConnectionControllerStatus status;
-@property (nonatomic, assign) DTConnectionControllerPriority priority;
+@property (nonatomic, assign) DCTConnectionControllerPriority priority;
 
 @property (nonatomic, readonly) NSArray *dependencies;
 

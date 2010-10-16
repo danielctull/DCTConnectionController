@@ -19,19 +19,19 @@
 	[queue stop];
 	
 	DTMockConnection *veryHigh = [DTMockConnection connectionController];
-	veryHigh.priority = DTConnectionControllerPriorityVeryHigh;
+	veryHigh.priority = DCTConnectionControllerPriorityVeryHigh;
 	
 	DTMockConnection *high = [DTMockConnection connectionController];
-	high.priority = DTConnectionControllerPriorityHigh;
+	high.priority = DCTConnectionControllerPriorityHigh;
 	
 	DTMockConnection *medium = [DTMockConnection connectionController];
-	medium.priority = DTConnectionControllerPriorityMedium;
+	medium.priority = DCTConnectionControllerPriorityMedium;
 	
 	DTMockConnection *low = [DTMockConnection connectionController];
-	low.priority = DTConnectionControllerPriorityLow;
+	low.priority = DCTConnectionControllerPriorityLow;
 	
 	DTMockConnection *veryLow = [DTMockConnection connectionController];
-	veryLow.priority = DTConnectionControllerPriorityVeryLow;
+	veryLow.priority = DCTConnectionControllerPriorityVeryLow;
 	
 	[queue addConnectionController:veryLow];
 	[queue addConnectionController:low];
@@ -59,13 +59,13 @@
 	[queue stop];
 	
 	DTMockConnection *veryLow = [DTMockConnection connectionController];
-	veryLow.priority = DTConnectionControllerPriorityVeryLow;
+	veryLow.priority = DCTConnectionControllerPriorityVeryLow;
 	
 	DTMockConnection *medium = [DTMockConnection connectionController];
-	medium.priority = DTConnectionControllerPriorityMedium;
+	medium.priority = DCTConnectionControllerPriorityMedium;
 	
 	DTMockConnection *veryHigh = [DTMockConnection connectionController];
-	veryHigh.priority = DTConnectionControllerPriorityVeryHigh;
+	veryHigh.priority = DCTConnectionControllerPriorityVeryHigh;
 	[veryHigh addDependency:veryLow];
 	[veryHigh addDependency:medium];
 	
@@ -99,22 +99,22 @@
 	[queue stop];
 	
 	DTMockConnection *veryLow = [DTMockConnection connectionController];
-	veryLow.priority = DTConnectionControllerPriorityVeryLow;
+	veryLow.priority = DCTConnectionControllerPriorityVeryLow;
 	
 	DTMockConnection *low = [DTMockConnection connectionController];
-	low.priority = DTConnectionControllerPriorityLow;
+	low.priority = DCTConnectionControllerPriorityLow;
 	[low addDependency:veryLow];
 	
 	DTMockConnection *medium = [DTMockConnection connectionController];
-	medium.priority = DTConnectionControllerPriorityMedium;
+	medium.priority = DCTConnectionControllerPriorityMedium;
 	[medium addDependency:low];
 	
 	DTMockConnection *high = [DTMockConnection connectionController];
-	high.priority = DTConnectionControllerPriorityHigh;
+	high.priority = DCTConnectionControllerPriorityHigh;
 	[high addDependency:medium];
 	
 	DTMockConnection *veryHigh = [DTMockConnection connectionController];
-	veryHigh.priority = DTConnectionControllerPriorityVeryHigh;
+	veryHigh.priority = DCTConnectionControllerPriorityVeryHigh;
 	[veryHigh addDependency:high];
 	
 	[queue addConnectionController:veryLow];

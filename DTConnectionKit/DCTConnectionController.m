@@ -62,7 +62,7 @@ NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionC
 	if (!(self = [super init])) return nil;
 	
 	dependencies = [[NSMutableArray alloc] init];
-	priority = DTConnectionControllerPriorityMedium;
+	priority = DCTConnectionControllerPriorityMedium;
 	
 	return self;
 }

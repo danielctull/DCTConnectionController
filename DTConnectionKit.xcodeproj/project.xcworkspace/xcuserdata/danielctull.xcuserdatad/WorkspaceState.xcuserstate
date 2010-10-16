@@ -361,7 +361,7 @@
 				</dict>
 				<dict>
 					<key>CF$UID</key>
-					<integer>36</integer>
+					<integer>37</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
@@ -658,8 +658,8 @@
 			<string>NSIndexSet</string>
 		</dict>
 		<integer>1</integer>
-		<string>DCTConnectionQueue+Single</string>
-		<string>DCTConnectionQueue+DTSingle</string>
+		<string>DCTConnectionControllerPriorityVeryLow</string>
+		<string>DTConnectionControllerPriorityVeryLow</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -1533,9 +1533,9 @@
 		<string>PrimaryDocumentVisibleCharacterRange</string>
 		<string>MessageBubblesVisible</string>
 		<string>PrimaryDocumentSelectedCharacterRange</string>
-		<real>308954695.60662699</real>
-		<string>{0, 3661}</string>
-		<string>{463, 0}</string>
+		<real>308954854.99001998</real>
+		<string>{0, 3669}</string>
+		<string>{1844, 0}</string>
 		<string>Xcode.IDEKit.EditorDocument.SourceCode</string>
 		<dict>
 			<key>$class</key>
@@ -7758,9 +7758,9 @@
 				</dict>
 			</array>
 		</dict>
-		<real>308954695.60514301</real>
-		<string>{0, 3661}</string>
-		<string>{463, 0}</string>
+		<real>308954854.98861599</real>
+		<string>{0, 3669}</string>
+		<string>{1844, 0}</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -10717,10 +10717,6 @@
 				</dict>
 				<dict>
 					<key>CF$UID</key>
-					<integer>508</integer>
-				</dict>
-				<dict>
-					<key>CF$UID</key>
 					<integer>891</integer>
 				</dict>
 				<dict>
@@ -10738,6 +10734,10 @@
 				<dict>
 					<key>CF$UID</key>
 					<integer>897</integer>
+				</dict>
+				<dict>
+					<key>CF$UID</key>
+					<integer>508</integer>
 				</dict>
 				<dict>
 					<key>CF$UID</key>
@@ -10766,15 +10766,7 @@
 				<integer>888</integer>
 			</dict>
 		</dict>
-		<dict>
-			<key>$class</key>
-			<dict>
-				<key>CF$UID</key>
-				<integer>98</integer>
-			</dict>
-			<key>NS.string</key>
-			<string>file://localhost/Users/danielctull/Dropbox/Programs/Cocoa/Frameworks/DCTConnectionKit/DTConnectionKit/DCTConnectionController.h</string>
-		</dict>
+		<string>file://localhost/Users/danielctull/Dropbox/Programs/Cocoa/Frameworks/DCTConnectionKit/Unit%20Tests/DTConnectionQueueTests.m</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -10799,7 +10791,7 @@
 				<integer>98</integer>
 			</dict>
 			<key>NS.string</key>
-			<string>file://localhost/Users/danielctull/Dropbox/Programs/Cocoa/Frameworks/DCTConnectionKit/DTConnectionKit/DCTConnectionController.m</string>
+			<string>file://localhost/Users/danielctull/Dropbox/Programs/Cocoa/Frameworks/DCTConnectionKit/DTConnectionKit/DCTConnectionController.h</string>
 		</dict>
 		<dict>
 			<key>$class</key>
@@ -10818,15 +10810,7 @@
 				<integer>892</integer>
 			</dict>
 		</dict>
-		<dict>
-			<key>$class</key>
-			<dict>
-				<key>CF$UID</key>
-				<integer>98</integer>
-			</dict>
-			<key>NS.string</key>
-			<string>file://localhost/Users/danielctull/Dropbox/Programs/Cocoa/Frameworks/DCTConnectionKit/DTConnectionKit/DCTRESTController.h</string>
-		</dict>
+		<string>file://localhost/Users/danielctull/Dropbox/Programs/Cocoa/Frameworks/DCTConnectionKit/DTConnectionKitExample/DTConnectionKitExampleViewController.m</string>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -10844,7 +10828,15 @@
 				<integer>894</integer>
 			</dict>
 		</dict>
-		<string>file://localhost/Users/danielctull/Dropbox/Programs/Cocoa/Frameworks/DCTConnectionKit/DTConnectionKitExample/DTConnectionKitExampleViewController.m</string>
+		<dict>
+			<key>$class</key>
+			<dict>
+				<key>CF$UID</key>
+				<integer>98</integer>
+			</dict>
+			<key>NS.string</key>
+			<string>file://localhost/Users/danielctull/Dropbox/Programs/Cocoa/Frameworks/DCTConnectionKit/DTConnectionKit/DCTConnectionController.m</string>
+		</dict>
 		<dict>
 			<key>$class</key>
 			<dict>
@@ -10913,7 +10905,7 @@
 				<integer>98</integer>
 			</dict>
 			<key>NS.string</key>
-			<string>file://localhost/Users/danielctull/Dropbox/Programs/Cocoa/Frameworks/DCTConnectionKit/DTConnectionKit/DCTConnectionQueue.m</string>
+			<string>file://localhost/Users/danielctull/Dropbox/Programs/Cocoa/Frameworks/DCTConnectionKit/DTConnectionKit/DCTRESTController.h</string>
 		</dict>
 		<dict>
 			<key>$class</key>
@@ -10932,7 +10924,15 @@
 				<integer>902</integer>
 			</dict>
 		</dict>
-		<string>file://localhost/Users/danielctull/Dropbox/Programs/Cocoa/Frameworks/DCTConnectionKit/DTConnectionKit/Connection%20Controllers/DTCoreDataConnectionController.h</string>
+		<dict>
+			<key>$class</key>
+			<dict>
+				<key>CF$UID</key>
+				<integer>98</integer>
+			</dict>
+			<key>NS.string</key>
+			<string>file://localhost/Users/danielctull/Dropbox/Programs/Cocoa/Frameworks/DCTConnectionKit/DTConnectionKit/DCTConnectionQueue.m</string>
+		</dict>
 	</array>
 	<key>$top</key>
 	<dict>
