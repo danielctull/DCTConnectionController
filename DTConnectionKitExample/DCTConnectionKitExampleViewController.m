@@ -123,38 +123,38 @@
 	NSString *logPrefixString = [NSString stringWithFormat:@"%@ %@: ", dateString, [self stringFromURL:connectionController.URL]];
 	NSString *prefixString = [NSString stringWithFormat:@"%@%@ %@: ", newLine, dateString, [self stringFromURL:connectionController.URL]];
 	switch (connectionController.status) {
-		case DTConnectionControllerStatusStarted:
+		case DCTConnectionControllerStatusStarted:
 			NSLog(@"%@Started", logPrefixString);
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Started", prefixString];
 			break;
-		case DTConnectionControllerStatusQueued:
+		case DCTConnectionControllerStatusQueued:
 			NSLog(@"%@Queued", logPrefixString);
 			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Queued", prefixString];
 			break;
-		case DTConnectionControllerStatusFailed:
+		case DCTConnectionControllerStatusFailed:
 			NSLog(@"%@Failed", logPrefixString);
 			[connectionController removeObserver:self forKeyPath:@"status"];
 			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Failed", prefixString];
 			break;
-		case DTConnectionControllerStatusNotStarted:
+		case DCTConnectionControllerStatusNotStarted:
 			NSLog(@"%@Not Started", logPrefixString);
 			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Not Started", prefixString];
 			break;
-		case DTConnectionControllerStatusResponded:
+		case DCTConnectionControllerStatusResponded:
 			NSLog(@"%@Responded", logPrefixString);
 			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Responded", prefixString];
 			break;
-		case DTConnectionControllerStatusComplete:
+		case DCTConnectionControllerStatusComplete:
 			NSLog(@"%@Complete", logPrefixString);
 			[connectionController removeObserver:self forKeyPath:@"status"];
 			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Complete", prefixString];
 			break;
-		case DTConnectionControllerStatusCancelled:
+		case DCTConnectionControllerStatusCancelled:
 			NSLog(@"%@Cancelled", logPrefixString);
 			[connectionController removeObserver:self forKeyPath:@"status"];
 			return;

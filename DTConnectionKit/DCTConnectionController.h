@@ -26,14 +26,14 @@ typedef enum {
 /** @brief Specifies the different stages of a connection.
  */
 typedef enum {
-	DTConnectionControllerStatusNotStarted = 0,	/**< The connection has not begun yet, and has not been given to the DTConnectionManager object to perform. */
-	DTConnectionControllerStatusQueued,			/**< The connection has been placed in a queue and is awaiting a free slot to perform. */
-	DTConnectionControllerStatusStarted,			/**< The request has been sent and a response is being awaited. */
-	DTConnectionControllerStatusResponded,		/**< A response has been received by the server and the connection is awaiting completion. */
-	DTConnectionControllerStatusComplete,			/**< The connection completed without any errors. */
-	DTConnectionControllerStatusFailed,			/**< The connection failed. */
-	DTConnectionControllerStatusCancelled			/**< The connection failed. */
-} DTConnectionControllerStatus;
+	DCTConnectionControllerStatusNotStarted = 0,	/**< The connection has not begun yet, and has not been given to the DTConnectionManager object to perform. */
+	DCTConnectionControllerStatusQueued,			/**< The connection has been placed in a queue and is awaiting a free slot to perform. */
+	DCTConnectionControllerStatusStarted,			/**< The request has been sent and a response is being awaited. */
+	DCTConnectionControllerStatusResponded,		/**< A response has been received by the server and the connection is awaiting completion. */
+	DCTConnectionControllerStatusComplete,			/**< The connection completed without any errors. */
+	DCTConnectionControllerStatusFailed,			/**< The connection failed. */
+	DCTConnectionControllerStatusCancelled			/**< The connection failed. */
+} DCTConnectionControllerStatus;
 
 /** @brief Specifies the possible priorities for a connection.
  */
@@ -65,7 +65,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 	DCTConnectionControllerPriority priority;
 	NSMutableArray *dependencies;
 	DCTConnectionType type;
-	DTConnectionControllerStatus status;
+	DCTConnectionControllerStatus status;
 	DCTURLConnection *urlConnection;
 	NSURL *URL;
 	NSObject *returnedObject;
@@ -73,7 +73,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 	NSURLResponse *returnedResponse;
 }
 
-@property (nonatomic, readonly) DTConnectionControllerStatus status;
+@property (nonatomic, readonly) DCTConnectionControllerStatus status;
 @property (nonatomic, assign) DCTConnectionControllerPriority priority;
 
 @property (nonatomic, readonly) NSArray *dependencies;

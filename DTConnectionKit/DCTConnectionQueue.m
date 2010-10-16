@@ -129,9 +129,9 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	
 	if (!active) return;
 	
-	if (connection.status == DTConnectionControllerStatusComplete 
-		|| connection.status == DTConnectionControllerStatusFailed
-		|| connection.status == DTConnectionControllerStatusCancelled) {
+	if (connection.status == DCTConnectionControllerStatusComplete 
+		|| connection.status == DCTConnectionControllerStatusFailed
+		|| connection.status == DCTConnectionControllerStatusCancelled) {
 		
 		[self dctInternal_removeConnection:connection];
 		[self dctInternal_runNextConnection];
@@ -228,12 +228,12 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 		
 		// Look for connections that are queued at present, if there is one, we can process that one.
 		for (DCTConnectionController *c in sortedDependencies)
-			if (c.status == DTConnectionControllerStatusQueued)
+			if (c.status == DCTConnectionControllerStatusQueued)
 				return [self dctInternal_nextConnectionInterator:c];
 		
 		// Look for connections that are "active" at present, if there is one, we can't proceed.		
 		for (DCTConnectionController *c in sortedDependencies)
-			if (c.status == DTConnectionControllerStatusStarted || c.status == DTConnectionControllerStatusResponded)
+			if (c.status == DCTConnectionControllerStatusStarted || c.status == DCTConnectionControllerStatusResponded)
 				return nil;
 	}	
 	
@@ -249,12 +249,12 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	
 		// Look for connections that are queued at present, if there is one, we can process that one.
 		for (DCTConnectionController *c in sortedDependencies)
-			if (c.status == DTConnectionControllerStatusQueued)
+			if (c.status == DCTConnectionControllerStatusQueued)
 				return [self dctInternal_tryToRunConnection:c];
 		
 		// Look for connections that are "active" at present, if there is one, we can't proceed.		
 		for (DCTConnectionController *c in sortedDependencies)
-			if (c.status == DTConnectionControllerStatusStarted || c.status == DTConnectionControllerStatusResponded)
+			if (c.status == DCTConnectionControllerStatusStarted || c.status == DCTConnectionControllerStatusResponded)
 				return NO;
 	}	
 	

@@ -28,7 +28,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 @interface DCTConnectionController ()
 @property (nonatomic, retain, readwrite) NSURL *URL;
-@property (nonatomic, readwrite) DTConnectionControllerStatus status;
+@property (nonatomic, readwrite) DCTConnectionControllerStatus status;
 @property (nonatomic, retain, readwrite) NSObject *returnedObject;
 @property (nonatomic, retain, readwrite) NSError *returnedError;
 @property (nonatomic, retain, readwrite) NSURLResponse *returnedResponse;
@@ -95,7 +95,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	self.returnedResponse = nil;
 	self.returnedError = nil;
 	self.returnedObject = nil;
-	self.status = DTConnectionControllerStatusNotStarted;
+	self.status = DCTConnectionControllerStatusNotStarted;
 }
 
 #pragma mark -
@@ -134,13 +134,13 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	urlConnection = [[DCTURLConnection alloc] initWithRequest:request delegate:self];
 	[request release];
 	
-	self.status = DTConnectionControllerStatusStarted;
+	self.status = DCTConnectionControllerStatusStarted;
 	
 	if (!urlConnection) [self dctInternal_finishWithFailure];
 }
 
 - (void)setQueued {
-	self.status = DTConnectionControllerStatusQueued;
+	self.status = DCTConnectionControllerStatusQueued;
 }
 
 #pragma mark -
@@ -197,27 +197,27 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 - (void)dctInternal_announceResponse {
 	[self dctInternal_notifyDelegateOfResponse:self.returnedResponse];
 	[self dctInternal_notifyObserversOfResponse:self.returnedResponse];
-	self.status = DTConnectionControllerStatusResponded;
+	self.status = DCTConnectionControllerStatusResponded;
 }
 
 - (void)dctInternal_finishWithSuccess {
 	[self dctInternal_notifyDelegateOfObject:self.returnedObject];
 	[self dctInternal_notifyObserversOfObject:self.returnedObject];
-	self.status = DTConnectionControllerStatusComplete;
+	self.status = DCTConnectionControllerStatusComplete;
 	[delegate release]; delegate = nil;
 }
 
 - (void)dctInternal_finishWithFailure {
 	[self dctInternal_notifyDelegateOfReturnedError:self.returnedError];
 	[self dctInternal_notifyObserversOfReturnedError:self.returnedError];
-	self.status = DTConnectionControllerStatusFailed;
+	self.status = DCTConnectionControllerStatusFailed;
 	[delegate release]; delegate = nil;
 }
 
 - (void)dctInternal_finishWithCancelation {
 	[self dctInternal_notifyDelegateOfCancellation];
 	[self dctInternal_notifyObserversOfCancellation];
-	self.status = DTConnectionControllerStatusCancelled;
+	self.status = DCTConnectionControllerStatusCancelled;
 	[delegate release]; delegate = nil;
 }
 
