@@ -1,5 +1,5 @@
 //
-//  DTMockConnection.h
+//  DCTMockConnection.h
 //  DCTConnectionKit
 //
 //  Created by Daniel Tull on 01.07.2010.
@@ -8,7 +8,7 @@
 
 #import "DCTConnectionController.h"
 
-@interface DTMockConnection : DCTConnectionController {
+@interface DCTMockConnection : DCTConnectionController {
 
 }
 - (void)complete;

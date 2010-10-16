@@ -17,7 +17,7 @@
 		24BD781E11DCD37B0094DB11 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		24BD782311DCD3870094DB11 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		24BD783511DCD3C30094DB11 /* DTConnectionQueueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD783411DCD3C30094DB11 /* DTConnectionQueueTests.m */; };
-		24BD78CC11DCE1630094DB11 /* DTMockConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD78CB11DCE1630094DB11 /* DTMockConnection.m */; };
+		24BD78CC11DCE1630094DB11 /* DCTMockConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD78CB11DCE1630094DB11 /* DCTMockConnection.m */; };
 		24BD78D511DCE24C0094DB11 /* DTConnectionQueue+DTInternalAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD78D411DCE24C0094DB11 /* DTConnectionQueue+DTInternalAccess.m */; };
 		24E4DC49126A5FD500C19D4B /* DTCacheURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E4DC1D126A5FD500C19D4B /* DTCacheURLProtocol.m */; };
 		24E4DC4A126A5FD500C19D4B /* DTFileCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E4DC1F126A5FD500C19D4B /* DTFileCache.m */; };
@@ -60,8 +60,8 @@
 		24BD77EC11DCD1090094DB11 /* DTConnectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConnectionTests.m; sourceTree = "<group>"; };
 		24BD783311DCD3C30094DB11 /* DTConnectionQueueTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTConnectionQueueTests.h; sourceTree = "<group>"; };
 		24BD783411DCD3C30094DB11 /* DTConnectionQueueTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConnectionQueueTests.m; sourceTree = "<group>"; };
-		24BD78CA11DCE1630094DB11 /* DTMockConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTMockConnection.h; sourceTree = "<group>"; };
-		24BD78CB11DCE1630094DB11 /* DTMockConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTMockConnection.m; sourceTree = "<group>"; };
+		24BD78CA11DCE1630094DB11 /* DCTMockConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; path = DCTMockConnection.h; sourceTree = "<group>"; };
+		24BD78CB11DCE1630094DB11 /* DCTMockConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTMockConnection.m; sourceTree = "<group>"; };
 		24BD78D311DCE24C0094DB11 /* DTConnectionQueue+DTInternalAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DTConnectionQueue+DTInternalAccess.h"; sourceTree = "<group>"; };
 		24BD78D411DCE24C0094DB11 /* DTConnectionQueue+DTInternalAccess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DTConnectionQueue+DTInternalAccess.m"; sourceTree = "<group>"; };
 		24E4DC1C126A5FD500C19D4B /* DTCacheURLProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTCacheURLProtocol.h; sourceTree = "<group>"; };
@@ -167,8 +167,8 @@
 				24BD77EC11DCD1090094DB11 /* DTConnectionTests.m */,
 				24BD783311DCD3C30094DB11 /* DTConnectionQueueTests.h */,
 				24BD783411DCD3C30094DB11 /* DTConnectionQueueTests.m */,
-				24BD78CA11DCE1630094DB11 /* DTMockConnection.h */,
-				24BD78CB11DCE1630094DB11 /* DTMockConnection.m */,
+				24BD78CA11DCE1630094DB11 /* DCTMockConnection.h */,
+				24BD78CB11DCE1630094DB11 /* DCTMockConnection.m */,
 				24BD78D311DCE24C0094DB11 /* DTConnectionQueue+DTInternalAccess.h */,
 				24BD78D411DCE24C0094DB11 /* DTConnectionQueue+DTInternalAccess.m */,
 			);
@@ -443,7 +443,7 @@
 			files = (
 				24BD77ED11DCD1090094DB11 /* DTConnectionTests.m in Sources */,
 				24BD783511DCD3C30094DB11 /* DTConnectionQueueTests.m in Sources */,
-				24BD78CC11DCE1630094DB11 /* DTMockConnection.m in Sources */,
+				24BD78CC11DCE1630094DB11 /* DCTMockConnection.m in Sources */,
 				24BD78D511DCE24C0094DB11 /* DTConnectionQueue+DTInternalAccess.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
