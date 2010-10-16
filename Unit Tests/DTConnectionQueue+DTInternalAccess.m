@@ -11,11 +11,11 @@
 @implementation DCTConnectionQueue (DTInternalAccess)
 
 - (DCTConnectionController *)nextConnection {
-	return [self performSelector:@selector(dt_nextConnection)];
+	return [self performSelector:@selector(dctInternal_nextConnection)];
 }
 
 - (void)runNextConnection {
-	[self performSelector:@selector(dt_runNextConnection)];
+	[self performSelector:@selector(dctInternal_runNextConnection)];
 }
 
 @end

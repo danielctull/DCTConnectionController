@@ -27,21 +27,21 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 
 @interface DCTConnectionQueue ()
 
-- (NSMutableArray *)dt_currentConnectionQueue;
-- (void)dt_checkConnectionCount;
-- (void)dt_runNextConnection;
-- (BOOL)dt_tryToRunConnection:(DCTConnectionController *)connection;
-- (void)dt_removeConnection:(DCTConnectionController *)connection;
+- (NSMutableArray *)dctInternal_currentConnectionQueue;
+- (void)dctInternal_checkConnectionCount;
+- (void)dctInternal_runNextConnection;
+- (BOOL)dctInternal_tryToRunConnection:(DCTConnectionController *)connection;
+- (void)dctInternal_removeConnection:(DCTConnectionController *)connection;
 
-- (DCTConnectionController *)dt_nextConnection;
-- (DCTConnectionController *)dt_nextConnectionInterator:(DCTConnectionController *)connection;
+- (DCTConnectionController *)dctInternal_nextConnection;
+- (DCTConnectionController *)dctInternal_nextConnectionInterator:(DCTConnectionController *)connection;
 
 - (void)dt_didEnterBackground:(NSNotification *)notification;
 - (void)dt_hush;
 - (void)dt_finishedBackgroundConnections;
 
 - (void)dt_addConnectionControllerToQueue:(DCTConnectionController *)connectionController;
-- (void)dt_removeConnectionFromQueue:(DCTConnectionController *)connectionController;
+- (void)dctInternal_removeConnectionFromQueue:(DCTConnectionController *)connectionController;
 @end
 
 @implementation DCTConnectionQueue
@@ -107,12 +107,12 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 		
 	if (!active) return;
 	
-	[self dt_runNextConnection];
+	[self dctInternal_runNextConnection];
 }
 
 - (void)requeueConnectionController:(DCTConnectionController *)connectionController {
 	[connectionController retain];
-	[self dt_removeConnection:connectionController];
+	[self dctInternal_removeConnection:connectionController];
 	[connectionController reset];
 	[self dt_addConnectionControllerToQueue:connectionController];
 	[connectionController release];
@@ -133,8 +133,8 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 		|| connection.status == DTConnectionControllerStatusFailed
 		|| connection.status == DTConnectionControllerStatusCancelled) {
 		
-		[self dt_removeConnection:connection];
-		[self dt_runNextConnection];
+		[self dctInternal_removeConnection:connection];
+		[self dctInternal_runNextConnection];
 	}
 }
 
@@ -168,7 +168,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 #pragma mark -
 #pragma mark Private methods
 
-- (void)dt_checkConnectionCount {
+- (void)dctInternal_checkConnectionCount {
 	
 	if (lastActiveConnectionCount == self.activeConnectionsCount) return;
 		
@@ -185,42 +185,42 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	lastActiveConnectionCount = self.activeConnectionsCount;
 }
 
-- (void)dt_runNextConnection {
+- (void)dctInternal_runNextConnection {
 	
 	if (self.activeConnectionsCount >= self.maxConnections) return;
 	
 	if (!active) return;
 	
-	if ([[self dt_currentConnectionQueue] count] < 1) {
-		[self dt_checkConnectionCount];
+	if ([[self dctInternal_currentConnectionQueue] count] < 1) {
+		[self dctInternal_checkConnectionCount];
 		return;
 	}
 	
 	// Loop through the queue and try to run the top-most connection.
 	// If it can't be run (eg waiting for dependencies), run the next one down.
 		
-	DCTConnectionController *connection = [self dt_nextConnection];
+	DCTConnectionController *connection = [self dctInternal_nextConnection];
 	
 	if (connection) {
 		[activeConnections addObject:connection];
-		[self dt_removeConnectionFromQueue:connection]; 
+		[self dctInternal_removeConnectionFromQueue:connection]; 
 		[connection start];	
 	}
 	
-	[self dt_checkConnectionCount];
+	[self dctInternal_checkConnectionCount];
 }
 
-- (DCTConnectionController *)dt_nextConnection {
+- (DCTConnectionController *)dctInternal_nextConnection {
 	
-	for (DCTConnectionController *connection in [self dt_currentConnectionQueue]) {
-		DCTConnectionController *c = [self dt_nextConnectionInterator:connection];
+	for (DCTConnectionController *connection in [self dctInternal_currentConnectionQueue]) {
+		DCTConnectionController *c = [self dctInternal_nextConnectionInterator:connection];
 		if (c)
 			return c;
 	}
 	return nil;
 }
 
-- (DCTConnectionController *)dt_nextConnectionInterator:(DCTConnectionController *)connection {
+- (DCTConnectionController *)dctInternal_nextConnectionInterator:(DCTConnectionController *)connection {
 	if ([connection.dependencies count] > 0) {
 		
 		// Sort so the dependencies are in order from high to low.
@@ -229,7 +229,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 		// Look for connections that are queued at present, if there is one, we can process that one.
 		for (DCTConnectionController *c in sortedDependencies)
 			if (c.status == DTConnectionControllerStatusQueued)
-				return [self dt_nextConnectionInterator:c];
+				return [self dctInternal_nextConnectionInterator:c];
 		
 		// Look for connections that are "active" at present, if there is one, we can't proceed.		
 		for (DCTConnectionController *c in sortedDependencies)
@@ -240,7 +240,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	return connection;
 }
 
-- (BOOL)dt_tryToRunConnection:(DCTConnectionController *)connection {
+- (BOOL)dctInternal_tryToRunConnection:(DCTConnectionController *)connection {
 	
 	if ([connection.dependencies count] > 0) {
 		
@@ -250,7 +250,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 		// Look for connections that are queued at present, if there is one, we can process that one.
 		for (DCTConnectionController *c in sortedDependencies)
 			if (c.status == DTConnectionControllerStatusQueued)
-				return [self dt_tryToRunConnection:c];
+				return [self dctInternal_tryToRunConnection:c];
 		
 		// Look for connections that are "active" at present, if there is one, we can't proceed.		
 		for (DCTConnectionController *c in sortedDependencies)
@@ -260,18 +260,18 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	
 	// There are no dependencies left to be run on this connection, so we can safely run it.	
 	[activeConnections addObject:connection];
-	[self dt_removeConnectionFromQueue:connection]; 
+	[self dctInternal_removeConnectionFromQueue:connection]; 
 	[connection start];
 	return YES;
 }
 
-- (void)dt_removeConnection:(DCTConnectionController *)connection {
+- (void)dctInternal_removeConnection:(DCTConnectionController *)connection {
 	[connection removeObserver:self forKeyPath:@"status"];
 	[activeConnections removeObject:connection];
-	//[self dt_checkConnectionCount];
+	//[self dctInternal_checkConnectionCount];
 }
 
-- (NSMutableArray *)dt_currentConnectionQueue {
+- (NSMutableArray *)dctInternal_currentConnectionQueue {
 	if (inBackground) return backgroundConnections;
 	return queuedConnections;
 }
@@ -319,7 +319,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 		
 		[nonMultitaskingCurrentlyActive release], nonMultitaskingCurrentlyActive = nil;
 		
-		[self dt_runNextConnection];
+		[self dctInternal_runNextConnection];
 		
 	} else {
 		[self dt_hush];
@@ -357,7 +357,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	[queuedConnections sortUsingComparator:compareConnections];
 	active = YES;
 	inBackground = NO;
-	[self dt_runNextConnection];
+	[self dctInternal_runNextConnection];
 }
 
 
@@ -374,7 +374,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	}
 }
 
-- (void)dt_removeConnectionFromQueue:(DCTConnectionController *)connectionController {
+- (void)dctInternal_removeConnectionFromQueue:(DCTConnectionController *)connectionController {
 	// backgroundConnections will be nil for normal running time, so this is ok.
 	[backgroundConnections removeObject:connectionController];
 	[queuedConnections removeObject:connectionController];
