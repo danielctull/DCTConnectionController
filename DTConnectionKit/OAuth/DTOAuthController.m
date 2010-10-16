@@ -91,7 +91,7 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	
 	if (requestTokenConnection || !self.consumerKey || !self.secretConsumerKey) return;
 	
-	requestTokenConnection = [[DTOAuthRequestTokenConnectionController alloc] init];
+	requestTokenConnection = [[DCTOAuthRequestTokenConnectionController alloc] init];
 	requestTokenConnection.URL = [self requestTokenConnectionURL];
 	requestTokenConnection.type = [self requestTokenConnectionType];
 	requestTokenConnection.consumerKey = [self consumerKey];

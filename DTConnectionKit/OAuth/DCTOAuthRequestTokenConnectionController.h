@@ -8,7 +8,7 @@
 
 #import "DCTOAuthConnectionController.h"
 
-@interface DTOAuthRequestTokenConnectionController : DCTOAuthConnectionController {
+@interface DCTOAuthRequestTokenConnectionController : DCTOAuthConnectionController {
 }
 
 @end

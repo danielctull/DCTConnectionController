@@ -41,7 +41,7 @@
 		24E4660B11F8358E0064FCA1 /* DCTOAuthAccessTokenConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E465F811F8358E0064FCA1 /* DCTOAuthAccessTokenConnectionController.m */; };
 		24E4660D11F8358E0064FCA1 /* DCTOAuthConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E465FB11F8358E0064FCA1 /* DCTOAuthConnectionController.m */; };
 		24E4660E11F8358E0064FCA1 /* DTOAuthController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E465FD11F8358E0064FCA1 /* DTOAuthController.m */; };
-		24E4660F11F8358E0064FCA1 /* DTOAuthRequestTokenConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E465FF11F8358E0064FCA1 /* DTOAuthRequestTokenConnectionController.m */; };
+		24E4660F11F8358E0064FCA1 /* DCTOAuthRequestTokenConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E465FF11F8358E0064FCA1 /* DCTOAuthRequestTokenConnectionController.m */; };
 		24E4661011F8358E0064FCA1 /* DCTOAuthSignature.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E4660111F8358E0064FCA1 /* DCTOAuthSignature.m */; };
 		288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 288765FC0DF74451002DB57D /* CoreGraphics.framework */; };
 		28AD733F0D9D9553002E5188 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 28AD733E0D9D9553002E5188 /* MainWindow.xib */; };
@@ -104,8 +104,8 @@
 		24E465FB11F8358E0064FCA1 /* DCTOAuthConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTOAuthConnectionController.m; sourceTree = "<group>"; };
 		24E465FC11F8358E0064FCA1 /* DTOAuthController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTOAuthController.h; sourceTree = "<group>"; };
 		24E465FD11F8358E0064FCA1 /* DTOAuthController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTOAuthController.m; sourceTree = "<group>"; };
-		24E465FE11F8358E0064FCA1 /* DTOAuthRequestTokenConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTOAuthRequestTokenConnectionController.h; sourceTree = "<group>"; };
-		24E465FF11F8358E0064FCA1 /* DTOAuthRequestTokenConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTOAuthRequestTokenConnectionController.m; sourceTree = "<group>"; };
+		24E465FE11F8358E0064FCA1 /* DCTOAuthRequestTokenConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; path = DCTOAuthRequestTokenConnectionController.h; sourceTree = "<group>"; };
+		24E465FF11F8358E0064FCA1 /* DCTOAuthRequestTokenConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTOAuthRequestTokenConnectionController.m; sourceTree = "<group>"; };
 		24E4660011F8358E0064FCA1 /* DCTOAuthSignature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTOAuthSignature.h; sourceTree = "<group>"; };
 		24E4660111F8358E0064FCA1 /* DCTOAuthSignature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTOAuthSignature.m; sourceTree = "<group>"; };
 		288765FC0DF74451002DB57D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -257,8 +257,8 @@
 				24E465FD11F8358E0064FCA1 /* DTOAuthController.m */,
 				24E465F711F8358E0064FCA1 /* DCTOAuthAccessTokenConnectionController.h */,
 				24E465F811F8358E0064FCA1 /* DCTOAuthAccessTokenConnectionController.m */,
-				24E465FE11F8358E0064FCA1 /* DTOAuthRequestTokenConnectionController.h */,
-				24E465FF11F8358E0064FCA1 /* DTOAuthRequestTokenConnectionController.m */,
+				24E465FE11F8358E0064FCA1 /* DCTOAuthRequestTokenConnectionController.h */,
+				24E465FF11F8358E0064FCA1 /* DCTOAuthRequestTokenConnectionController.m */,
 				24E4660011F8358E0064FCA1 /* DCTOAuthSignature.h */,
 				24E4660111F8358E0064FCA1 /* DCTOAuthSignature.m */,
 			);
@@ -434,7 +434,7 @@
 				24E4660B11F8358E0064FCA1 /* DCTOAuthAccessTokenConnectionController.m in Sources */,
 				24E4660D11F8358E0064FCA1 /* DCTOAuthConnectionController.m in Sources */,
 				24E4660E11F8358E0064FCA1 /* DTOAuthController.m in Sources */,
-				24E4660F11F8358E0064FCA1 /* DTOAuthRequestTokenConnectionController.m in Sources */,
+				24E4660F11F8358E0064FCA1 /* DCTOAuthRequestTokenConnectionController.m in Sources */,
 				24E4661011F8358E0064FCA1 /* DCTOAuthSignature.m in Sources */,
 				2442E598120F1E8F00E3B3BF /* DCTRESTController.m in Sources */,
 			);

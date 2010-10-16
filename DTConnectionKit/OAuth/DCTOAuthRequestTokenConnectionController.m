@@ -6,9 +6,9 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTOAuthRequestTokenConnectionController.h"
+#import "DCTOAuthRequestTokenConnectionController.h"
 
-@implementation DTOAuthRequestTokenConnectionController
+@implementation DCTOAuthRequestTokenConnectionController
 
 - (id)init {
 	if (!(self = [super init])) return nil;
