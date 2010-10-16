@@ -98,13 +98,13 @@
 		24E465F311F8358E0064FCA1 /* DCTRequestConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTRequestConnectionController.m; sourceTree = "<group>"; };
 		24E465F411F8358E0064FCA1 /* DCTURLLoadingConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTURLLoadingConnectionController.h; sourceTree = "<group>"; };
 		24E465F511F8358E0064FCA1 /* DCTURLLoadingConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTURLLoadingConnectionController.m; sourceTree = "<group>"; };
-		24E465F711F8358E0064FCA1 /* DCTOAuthAccessTokenConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; path = DCTOAuthAccessTokenConnectionController.h; sourceTree = "<group>"; };
+		24E465F711F8358E0064FCA1 /* DCTOAuthAccessTokenConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTOAuthAccessTokenConnectionController.h; sourceTree = "<group>"; };
 		24E465F811F8358E0064FCA1 /* DCTOAuthAccessTokenConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTOAuthAccessTokenConnectionController.m; sourceTree = "<group>"; };
 		24E465FA11F8358E0064FCA1 /* DCTOAuthConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTOAuthConnectionController.h; sourceTree = "<group>"; };
 		24E465FB11F8358E0064FCA1 /* DCTOAuthConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTOAuthConnectionController.m; sourceTree = "<group>"; };
-		24E465FC11F8358E0064FCA1 /* DCTOAuthController.h */ = {isa = PBXFileReference; fileEncoding = 4; path = DCTOAuthController.h; sourceTree = "<group>"; };
+		24E465FC11F8358E0064FCA1 /* DCTOAuthController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTOAuthController.h; sourceTree = "<group>"; };
 		24E465FD11F8358E0064FCA1 /* DCTOAuthController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTOAuthController.m; sourceTree = "<group>"; };
-		24E465FE11F8358E0064FCA1 /* DCTOAuthRequestTokenConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; path = DCTOAuthRequestTokenConnectionController.h; sourceTree = "<group>"; };
+		24E465FE11F8358E0064FCA1 /* DCTOAuthRequestTokenConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTOAuthRequestTokenConnectionController.h; sourceTree = "<group>"; };
 		24E465FF11F8358E0064FCA1 /* DCTOAuthRequestTokenConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTOAuthRequestTokenConnectionController.m; sourceTree = "<group>"; };
 		24E4660011F8358E0064FCA1 /* DCTOAuthSignature.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTOAuthSignature.h; sourceTree = "<group>"; };
 		24E4660111F8358E0064FCA1 /* DCTOAuthSignature.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTOAuthSignature.m; sourceTree = "<group>"; };
@@ -470,7 +470,7 @@
 				INFOPLIST_FILE = "DCTConnectionKit-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = "";
 				PRODUCT_NAME = DCTConnectionKit;
-				SDKROOT = iphonesimulator4.0;
+				SDKROOT = iphonesimulator;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -487,7 +487,7 @@
 				INFOPLIST_FILE = "DTConnectionKit-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = "";
 				PRODUCT_NAME = DTConnectionKit;
-				SDKROOT = iphoneos4.0;
+				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
