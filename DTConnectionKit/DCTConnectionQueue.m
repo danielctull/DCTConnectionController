@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DTConnectionQueue.h"
+#import "DCTConnectionQueue.h"
 
 NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2) {
 	
@@ -25,7 +25,7 @@ NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2)
 
 NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnectionQueueConnectionCountChangedNotification";
 
-@interface DTConnectionQueue ()
+@interface DCTConnectionQueue ()
 
 - (NSMutableArray *)dt_currentConnectionQueue;
 - (void)dt_checkConnectionCount;
@@ -44,7 +44,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 - (void)dt_removeConnectionFromQueue:(DCTConnectionController *)connectionController;
 @end
 
-@implementation DTConnectionQueue
+@implementation DCTConnectionQueue
 
 @synthesize maxConnections, multitaskEnabled;
 

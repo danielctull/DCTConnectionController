@@ -8,7 +8,7 @@
 
 #import "DTConnectionQueue+DTInternalAccess.h"
 
-@implementation DTConnectionQueue (DTInternalAccess)
+@implementation DCTConnectionQueue (DTInternalAccess)
 
 - (DCTConnectionController *)nextConnection {
 	return [self performSelector:@selector(dt_nextConnection)];

@@ -44,7 +44,7 @@ static NSMutableArray *consultedAboutURLs = nil;
 	NSError *error = nil;
 	
 	if (!data) {
-		DTConnectionQueue *connectionQueue = [DTConnectionQueue sharedConnectionQueue];
+		DCTConnectionQueue *connectionQueue = [DCTConnectionQueue sharedConnectionQueue];
 		
 		[consultedAboutURLs addObject:urlStringToLoad];
 		[connectionQueue incrementExternalConnectionCount];

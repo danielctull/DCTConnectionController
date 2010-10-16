@@ -39,7 +39,7 @@
 	
 	self.navigationController.toolbarHidden = NO;
 	
-	[[DTConnectionQueue sharedConnectionQueue] setMaxConnections:3];
+	[[DCTConnectionQueue sharedConnectionQueue] setMaxConnections:3];
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(connectionCountChanged:) 
 												 name:DTConnectionQueueConnectionCountChangedNotification 
@@ -183,7 +183,7 @@
 }
 
 - (void)connectionCountChanged:(NSNotification *)notification {
-	self.connectionsLabel.text = [NSString stringWithFormat:@"Connections: %i", [DTConnectionQueue sharedConnectionQueue].activeConnectionsCount];
+	self.connectionsLabel.text = [NSString stringWithFormat:@"Connections: %i", [DCTConnectionQueue sharedConnectionQueue].activeConnectionsCount];
 }
 
 @end

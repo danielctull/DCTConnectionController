@@ -14,7 +14,7 @@
 
 - (void)testPriority {
 	
-	DTConnectionQueue *queue = [[[DTConnectionQueue alloc] init] autorelease];
+	DCTConnectionQueue *queue = [[[DCTConnectionQueue alloc] init] autorelease];
 	
 	[queue stop];
 	
@@ -54,7 +54,7 @@
 
 - (void)testOrderingDependencies {
 	
-	DTConnectionQueue *queue = [[[DTConnectionQueue alloc] init] autorelease];
+	DCTConnectionQueue *queue = [[[DCTConnectionQueue alloc] init] autorelease];
 	
 	[queue stop];
 	
@@ -94,7 +94,7 @@
 }
 
 - (void)testDeepDependency {
-	DTConnectionQueue *queue = [[[DTConnectionQueue alloc] init] autorelease];
+	DCTConnectionQueue *queue = [[[DCTConnectionQueue alloc] init] autorelease];
 	
 	[queue stop];
 	

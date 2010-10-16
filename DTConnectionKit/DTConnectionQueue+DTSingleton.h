@@ -6,8 +6,8 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTConnectionQueue.h"
+#import "DCTConnectionQueue.h"
 
-@interface DTConnectionQueue (DTSingleton)
-+ (DTConnectionQueue *)sharedConnectionQueue;
+@interface DCTConnectionQueue (DTSingleton)
++ (DCTConnectionQueue *)sharedConnectionQueue;
 @end

@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DTConnectionController.h"
+#import "DCTConnectionController.h"
 
 @interface DTConnectionKitExampleViewController : UIViewController <DTConnectionControllerDelegate> {
 	UITextView *textView;

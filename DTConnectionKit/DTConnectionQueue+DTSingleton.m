@@ -8,9 +8,9 @@
 
 #import "DTConnectionQueue+DTSingleton.h"
 
-static DTConnectionQueue *sharedInstance = nil;
+static DCTConnectionQueue *sharedInstance = nil;
 
-@implementation DTConnectionQueue (DTSingleton)
+@implementation DCTConnectionQueue (DTSingleton)
 
 + (void)initialize {
     if (!sharedInstance) {
@@ -18,7 +18,7 @@ static DTConnectionQueue *sharedInstance = nil;
     }
 }
 
-+ (DTConnectionQueue *)sharedConnectionQueue {
++ (DCTConnectionQueue *)sharedConnectionQueue {
     return sharedInstance;
 }
 

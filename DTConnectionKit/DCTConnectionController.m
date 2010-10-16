@@ -76,11 +76,11 @@ NSString *const DTConnectionControllerCancellationNotification = @"DTConnectionC
 #pragma mark Managing the connection
 
 - (void)connect {
-	[[DTConnectionQueue sharedConnectionQueue] addConnectionController:self];
+	[[DCTConnectionQueue sharedConnectionQueue] addConnectionController:self];
 }
 
 - (void)requeue {
-	[[DTConnectionQueue sharedConnectionQueue] requeueConnectionController:self];
+	[[DCTConnectionQueue sharedConnectionQueue] requeueConnectionController:self];
 }
 
 - (void)cancel {

@@ -12,7 +12,7 @@
 
 extern NSString *const DTConnectionQueueConnectionCountChangedNotification;
 
-@interface DTConnectionQueue : NSObject {
+@interface DCTConnectionQueue : NSObject {
     NSMutableArray *activeConnections;
 	NSMutableArray *queuedConnections;
 	NSInteger lastActiveConnectionCount;
