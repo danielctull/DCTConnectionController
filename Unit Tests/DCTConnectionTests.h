@@ -1,5 +1,5 @@
 //
-//  DTConnectionTests.h
+//  DCTConnectionTests.h
 //  DCTConnectionKit
 //
 //  Created by Daniel Tull on 01.07.2010.
@@ -9,7 +9,7 @@
 #import <SenTestingKit/SenTestingKit.h>
 #import <Foundation/Foundation.h>
 
-@interface DTConnectionTests : SenTestCase {
+@interface DCTConnectionTests : SenTestCase {
 
 }
 

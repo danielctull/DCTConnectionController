@@ -13,10 +13,10 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		24306A9B114E894B008BBE38 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24306A9A114E894B008BBE38 /* MainWindow-iPad.xib */; };
 		2456D8E1110B6F54009A4F1E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2456D8E0110B6F54009A4F1E /* CoreData.framework */; };
-		24BD77ED11DCD1090094DB11 /* DTConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD77EC11DCD1090094DB11 /* DTConnectionTests.m */; };
+		24BD77ED11DCD1090094DB11 /* DCTConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD77EC11DCD1090094DB11 /* DCTConnectionTests.m */; };
 		24BD781E11DCD37B0094DB11 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		24BD782311DCD3870094DB11 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
-		24BD783511DCD3C30094DB11 /* DTConnectionQueueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD783411DCD3C30094DB11 /* DTConnectionQueueTests.m */; };
+		24BD783511DCD3C30094DB11 /* DCTConnectionQueueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD783411DCD3C30094DB11 /* DCTConnectionQueueTests.m */; };
 		24BD78CC11DCE1630094DB11 /* DCTMockConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD78CB11DCE1630094DB11 /* DCTMockConnection.m */; };
 		24BD78D511DCE24C0094DB11 /* DTConnectionQueue+DTInternalAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD78D411DCE24C0094DB11 /* DTConnectionQueue+DTInternalAccess.m */; };
 		24E4DC49126A5FD500C19D4B /* DTCacheURLProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E4DC1D126A5FD500C19D4B /* DTCacheURLProtocol.m */; };
@@ -56,11 +56,11 @@
 		2456D8E0110B6F54009A4F1E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		24BD77D711DCCE340094DB11 /* Unit Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unit Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		24BD77D811DCCE340094DB11 /* Unit Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Unit Tests-Info.plist"; sourceTree = "<group>"; };
-		24BD77EB11DCD1090094DB11 /* DTConnectionTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTConnectionTests.h; sourceTree = "<group>"; };
-		24BD77EC11DCD1090094DB11 /* DTConnectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConnectionTests.m; sourceTree = "<group>"; };
-		24BD783311DCD3C30094DB11 /* DTConnectionQueueTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DTConnectionQueueTests.h; sourceTree = "<group>"; };
-		24BD783411DCD3C30094DB11 /* DTConnectionQueueTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DTConnectionQueueTests.m; sourceTree = "<group>"; };
-		24BD78CA11DCE1630094DB11 /* DCTMockConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; path = DCTMockConnection.h; sourceTree = "<group>"; };
+		24BD77EB11DCD1090094DB11 /* DCTConnectionTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionTests.h; sourceTree = "<group>"; };
+		24BD77EC11DCD1090094DB11 /* DCTConnectionTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionTests.m; sourceTree = "<group>"; };
+		24BD783311DCD3C30094DB11 /* DCTConnectionQueueTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionQueueTests.h; sourceTree = "<group>"; };
+		24BD783411DCD3C30094DB11 /* DCTConnectionQueueTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionQueueTests.m; sourceTree = "<group>"; };
+		24BD78CA11DCE1630094DB11 /* DCTMockConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTMockConnection.h; sourceTree = "<group>"; };
 		24BD78CB11DCE1630094DB11 /* DCTMockConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTMockConnection.m; sourceTree = "<group>"; };
 		24BD78D311DCE24C0094DB11 /* DTConnectionQueue+DTInternalAccess.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DTConnectionQueue+DTInternalAccess.h"; sourceTree = "<group>"; };
 		24BD78D411DCE24C0094DB11 /* DTConnectionQueue+DTInternalAccess.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DTConnectionQueue+DTInternalAccess.m"; sourceTree = "<group>"; };
@@ -163,10 +163,10 @@
 		24BD77E811DCD0BE0094DB11 /* Unit Tests */ = {
 			isa = PBXGroup;
 			children = (
-				24BD77EB11DCD1090094DB11 /* DTConnectionTests.h */,
-				24BD77EC11DCD1090094DB11 /* DTConnectionTests.m */,
-				24BD783311DCD3C30094DB11 /* DTConnectionQueueTests.h */,
-				24BD783411DCD3C30094DB11 /* DTConnectionQueueTests.m */,
+				24BD77EB11DCD1090094DB11 /* DCTConnectionTests.h */,
+				24BD77EC11DCD1090094DB11 /* DCTConnectionTests.m */,
+				24BD783311DCD3C30094DB11 /* DCTConnectionQueueTests.h */,
+				24BD783411DCD3C30094DB11 /* DCTConnectionQueueTests.m */,
 				24BD78CA11DCE1630094DB11 /* DCTMockConnection.h */,
 				24BD78CB11DCE1630094DB11 /* DCTMockConnection.m */,
 				24BD78D311DCE24C0094DB11 /* DTConnectionQueue+DTInternalAccess.h */,
@@ -441,8 +441,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				24BD77ED11DCD1090094DB11 /* DTConnectionTests.m in Sources */,
-				24BD783511DCD3C30094DB11 /* DTConnectionQueueTests.m in Sources */,
+				24BD77ED11DCD1090094DB11 /* DCTConnectionTests.m in Sources */,
+				24BD783511DCD3C30094DB11 /* DCTConnectionQueueTests.m in Sources */,
 				24BD78CC11DCE1630094DB11 /* DCTMockConnection.m in Sources */,
 				24BD78D511DCE24C0094DB11 /* DTConnectionQueue+DTInternalAccess.m in Sources */,
 			);
@@ -476,12 +476,12 @@
 				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = DTConnectionKit_Prefix.pch;
+				GCC_PREFIX_HEADER = DCTConnectionKit_Prefix.pch;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
-				INFOPLIST_FILE = "DTConnectionKit-Info.plist";
+				INFOPLIST_FILE = "DCTConnectionKit-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = "";
-				PRODUCT_NAME = DTConnectionKit;
-				SDKROOT = iphoneos;
+				PRODUCT_NAME = DCTConnectionKit;
+				SDKROOT = iphonesimulator4.1;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
