@@ -1,5 +1,5 @@
 //
-//  DTConnectionQueue+DTInternalAccess.h
+//  DCTConnectionQueue+DTInternalAccess.h
 //  DTConnectionKit
 //
 //  Created by Daniel Tull on 01.07.2010.

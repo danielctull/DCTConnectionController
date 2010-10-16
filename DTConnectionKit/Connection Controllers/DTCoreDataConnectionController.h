@@ -27,7 +27,7 @@
 
 /** @brief Use this method to create a Core Data-based Connection.
  
- Calling this adds the DTConnection operation to be added to the DTConnectionQueue. 
+ Calling this adds the DTConnection operation to be added to the DCTConnectionQueue. 
  
  */
 - (id)initWithManagedObjectContext:(NSManagedObjectContext *)managedObjectContext;

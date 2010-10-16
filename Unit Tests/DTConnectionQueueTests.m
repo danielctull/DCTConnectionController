@@ -1,16 +1,16 @@
 //
-//  DTConnectionQueueTests.m
+//  DCTConnectionQueueTests.m
 //  DTConnectionKit
 //
 //  Created by Daniel Tull on 01.07.2010.
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTConnectionQueueTests.h"
+#import "DCTConnectionQueueTests.h"
 #import "DTMockConnection.h"
-#import "DTConnectionQueue+DTInternalAccess.h"
+#import "DCTConnectionQueue+DTInternalAccess.h"
 
-@implementation DTConnectionQueueTests
+@implementation DCTConnectionQueueTests
 
 - (void)testPriority {
 	

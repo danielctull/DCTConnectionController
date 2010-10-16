@@ -1,5 +1,5 @@
 //
-//  DTConnectionQueue.m
+//  DCTConnectionQueue.m
 //  DTConnectionKit
 //
 //  Created by Daniel Tull on 09.06.2010.
@@ -23,7 +23,7 @@ NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2)
 	return (NSComparisonResult)NSOrderedSame;
 };
 
-NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnectionQueueConnectionCountChangedNotification";
+NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConnectionQueueConnectionCountChangedNotification";
 
 @interface DCTConnectionQueue ()
 
@@ -180,7 +180,7 @@ NSString *const DTConnectionQueueConnectionCountChangedNotification = @"DTConnec
 		if (inBackground) [self dt_finishedBackgroundConnections];
 	}
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:DTConnectionQueueConnectionCountChangedNotification object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueConnectionCountChangedNotification object:self];
 	
 	lastActiveConnectionCount = self.activeConnectionsCount;
 }

@@ -9,7 +9,7 @@
 #import "DTCacheURLProtocol.h"
 #import "DTFileCache.h"
 #import "DTURLLoadingConnectionController.h"
-#import "DTConnectionQueue+DTSingleton.h"
+#import "DCTConnectionQueue+Singleton.h"
 
 NSString *const DTCacheURLProtocolString = @"dtcache";
 

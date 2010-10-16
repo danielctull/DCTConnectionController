@@ -1,12 +1,12 @@
 //
-//  DTConnectionQueue+DTInternalAccess.m
+//  DCTConnectionQueue+DTInternalAccess.m
 //  DTConnectionKit
 //
 //  Created by Daniel Tull on 01.07.2010.
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DTConnectionQueue+DTInternalAccess.h"
+#import "DCTConnectionQueue+DTInternalAccess.h"
 
 @implementation DCTConnectionQueue (DTInternalAccess)
 

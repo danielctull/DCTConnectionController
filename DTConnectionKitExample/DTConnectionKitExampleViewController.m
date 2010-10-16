@@ -8,7 +8,7 @@
 
 #import "DTConnectionKitExampleViewController.h"
 #import "DTURLLoadingConnectionController.h"
-#import "DTConnectionQueue+DTSingleton.h"
+#import "DCTConnectionQueue+Singleton.h"
 
 @interface DTConnectionKitExampleViewController ()
 - (NSString *)stringFromURL:(NSURL *)url;
@@ -42,7 +42,7 @@
 	[[DCTConnectionQueue sharedConnectionQueue] setMaxConnections:3];
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(connectionCountChanged:) 
-												 name:DTConnectionQueueConnectionCountChangedNotification 
+												 name:DCTConnectionQueueConnectionCountChangedNotification 
 											   object:nil];
 	
 	NSArray *urls = [NSArray arrayWithObjects:
