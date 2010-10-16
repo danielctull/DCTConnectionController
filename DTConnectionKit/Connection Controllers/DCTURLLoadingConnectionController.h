@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "DCTConnectionController.h"
 
-@interface DTURLLoadingConnectionController : DCTConnectionController {
+@interface DCTURLLoadingConnectionController : DCTConnectionController {
 }
 
 @property (nonatomic, retain, readwrite) NSURL *URL;
