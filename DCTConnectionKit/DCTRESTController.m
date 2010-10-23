@@ -1,5 +1,5 @@
 //
-//  DTRESTController.m
+//  DCTRESTController.m
 //  DCTConnectionKit
 //
 //  Created by Daniel Tull on 08/08/2010.

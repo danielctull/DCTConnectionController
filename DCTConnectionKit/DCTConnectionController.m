@@ -1,5 +1,5 @@
 //
-//  DTConnectionController.m
+//  DCTConnectionController.m
 //  DCTConnectionKit
 //
 //  Created by Daniel Tull on 09.06.2010.

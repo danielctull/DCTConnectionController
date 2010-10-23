@@ -1,5 +1,5 @@
 //
-//  DTConnectionController.h
+//  DCTConnectionController.h
 //  DCTConnectionKit
 //
 //  Created by Daniel Tull on 09.06.2010.
@@ -59,7 +59,7 @@ extern NSString *const DCTConnectionControllerResponseNotification;
 
 extern NSString *const DCTConnectionControllerTypeString[];
 
-@protocol DTConnectionControllerDelegate;
+@protocol DCTConnectionControllerDelegate;
 
 @interface DCTConnectionController : NSObject {
 	DCTConnectionControllerPriority priority;
@@ -133,10 +133,10 @@ extern NSString *const DCTConnectionControllerTypeString[];
 /** @brief The object that acts as the delegate of the receiving connection controller.
  
  Unlike the usual behaviour of delegates in Cocoa, the delegate is retained by the connection controller. 
- This is because DTConnectionController uses DTConnectionManager to perform the connection and the connection manager
+ This is because DCTConnectionController uses DTConnectionManager to perform the connection and the connection manager
  must retain its delegates. Because of this the delegate should never retain the connection controller.
  */
-@property (nonatomic, retain) id<DTConnectionControllerDelegate> delegate;
+@property (nonatomic, retain) id<DCTConnectionControllerDelegate> delegate;
 
 /**
  @}
@@ -218,11 +218,11 @@ extern NSString *const DCTConnectionControllerTypeString[];
 @end
 
 #pragma mark -
-/** The delegate of DTConnectionController must adopt the DTConnectionControllerDelegate protocol, although all the methods 
+/** The delegate of DCTConnectionController must adopt the DCTConnectionControllerDelegate protocol, although all the methods 
  are optional. They allow the delegate to handle only certain types of events, although connectionController:didSucceedWithObject: 
  and connectionController:didFailWithError: should both be handled to take advantage of the data and handle any occuring errors.
  */
-@protocol DTConnectionControllerDelegate <NSObject>
+@protocol DCTConnectionControllerDelegate <NSObject>
 @optional
 /** @brief Tells the delegate the connection has succeeded.
  
