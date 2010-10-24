@@ -154,14 +154,17 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 - (void)receivedObject:(NSObject *)object {
 	self.returnedObject = object;
+	[self dctInternal_finishWithSuccess];
 }
 
 - (void)receivedResponse:(NSURLResponse *)response {
 	self.returnedResponse = response;
+	[self dctInternal_announceResponse];
 }
 
 - (void)receivedError:(NSError *)error {
 	self.returnedError = error;
+	[self dctInternal_finishWithFailure];
 }
 
 #pragma mark -
@@ -169,8 +172,6 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
     [self receivedResponse:response];
-	if (!self.returnedResponse) self.returnedResponse = response;
-	[self dctInternal_announceResponse];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
@@ -181,14 +182,10 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	NSData *data = ((DCTURLConnection *)connection).data;
 	
     [self receivedObject:data];
-	if (!self.returnedObject) self.returnedObject = data;
-	[self dctInternal_finishWithSuccess];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
     [self receivedError:error];
-	if (!self.returnedError) self.returnedError = error;
-	[self dctInternal_finishWithFailure];
 }
 
 #pragma mark -
