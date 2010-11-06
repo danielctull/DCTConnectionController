@@ -70,7 +70,7 @@
 	DCTURLLoadingConnectionController *engadget = [DCTURLLoadingConnectionController connectionController];
 	engadget.URL = [NSURL URLWithString:@"http://www.engadget.com/"];
 	engadget.priority = DCTConnectionControllerPriorityHigh;
-	[engadget addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+	[engadget addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];	
 	[engadget connect];
 	
 	DCTURLLoadingConnectionController *ebay = [DCTURLLoadingConnectionController connectionController];
@@ -123,6 +123,7 @@
 	 
 	NSString *logPrefixString = [NSString stringWithFormat:@"%@ %@: ", dateString, [self stringFromURL:connectionController.URL]];
 	NSString *prefixString = [NSString stringWithFormat:@"%@%@ %@: ", newLine, dateString, [self stringFromURL:connectionController.URL]];
+	
 	switch (connectionController.status) {
 		case DCTConnectionControllerStatusStarted:
 			NSLog(@"%@Started", logPrefixString);
