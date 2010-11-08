@@ -43,19 +43,6 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 
 @synthesize maxConnections;
 
-- (void)start {
-	active = YES;
-	[self dctInternal_runNextConnection];
-}
-
-- (void)pause {
-	active = NO;
-}
-
-- (void)stop {
-	active = NO;
-}
-
 #pragma mark -
 #pragma mark NSObject
 
@@ -79,6 +66,19 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 
 #pragma mark -
 #pragma mark DCTConnection Queue
+
+- (void)start {
+	active = YES;
+	[self dctInternal_runNextConnection];
+}
+
+- (void)pause {
+	active = NO;
+}
+
+- (void)stop {
+	active = NO;
+}
 
 - (void)addConnectionController:(DCTConnectionController *)connectionController {
 	
@@ -187,10 +187,6 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 
 - (NSInteger)connectionCount {
 	return connectionCount;
-}
-
-- (NSArray *)connectionControllers {	
-    return [activeConnections arrayByAddingObjectsFromArray:queuedConnections];
 }
 
 #pragma mark -

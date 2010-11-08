@@ -31,8 +31,6 @@ extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 - (void)removeConnectionController:(DCTConnectionController *)connectionController;
 - (void)requeueConnectionController:(DCTConnectionController *)connectionController;
 
-- (NSArray *)connectionControllers;
-
 - (BOOL)isConnectingToURL:(NSURL *)URL;
 - (BOOL)hasQueuedConnectionControllerToURL:(NSURL *)URL;
 - (DCTConnectionController *)queuedConnectionControllerToURL:(NSURL *)URL;
@@ -43,12 +41,9 @@ extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 
 @property (nonatomic, assign) NSInteger maxConnections;
 
-//@property (nonatomic, readonly) NSInteger activeConnectionsCount;
-//@property (nonatomic, readonly) NSInteger queuedConnectionsCount;
 @property (nonatomic, readonly) NSInteger connectionCount;
-
-@property (nonatomic, readonly) NSArray *activeConnectionControllers, *queuedConnectionControllers;
-
+@property (nonatomic, readonly) NSArray *activeConnectionControllers;
+@property (nonatomic, readonly) NSArray *queuedConnectionControllers;
 
 - (void)incrementExternalConnectionCount;
 - (void)decrementExternalConnectionCount;

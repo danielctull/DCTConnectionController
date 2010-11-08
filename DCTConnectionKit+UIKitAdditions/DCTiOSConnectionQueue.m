@@ -33,6 +33,8 @@
 												 name:UIApplicationWillEnterForegroundNotification 
 											   object:nil];
 	
+	
+	
 	return self;
 }
 
