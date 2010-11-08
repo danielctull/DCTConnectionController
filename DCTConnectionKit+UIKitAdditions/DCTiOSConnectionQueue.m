@@ -33,9 +33,20 @@
 												 name:UIApplicationWillEnterForegroundNotification 
 											   object:nil];
 	
-	
+	[[NSNotificationCenter defaultCenter] addObserver:self 
+											 selector:@selector(dctInternal_activeConnectionCountChanged:) 
+												 name:DCTConnectionQueueActiveConnectionCountChangedNotification 
+											   object:self];
 	
 	return self;
+}
+
+- (void)dctInternal_activeConnectionCountChanged:(NSNotification *)notificaiton {
+
+	if (self.activeConnectionCount > 0)
+		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+	else
+		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
 }
 
 - (NSInteger)connectionCount {

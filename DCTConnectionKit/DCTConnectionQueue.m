@@ -64,6 +64,8 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 
 - (void)dctInternal_addConnectionControllerToQueue:(DCTConnectionController *)connectionController;
 - (void)dctInternal_removeConnectionFromQueue:(DCTConnectionController *)connectionController;
+
+- (void)dctInternal_dequeueAndStartConnection:(DCTConnectionController *)connectionController;
 @end
 
 @implementation DCTConnectionQueue
@@ -242,13 +244,9 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 		
 	DCTConnectionController *connection = [self dctInternal_nextConnection];
 	
-	if (connection) {
-		[self dctInternal_addConnectionControllerToActives:connection];
-		[self dctInternal_removeConnectionFromQueue:connection];
-		[connection start];	
-	}
+	if (!connection) return;
 	
-	//[self dctInternal_checkConnectionCount];
+	[self dctInternal_dequeueAndStartConnection:connection];
 }
 
 - (DCTConnectionController *)dctInternal_nextConnection {
@@ -299,10 +297,9 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 				return NO;
 	}	
 	
-	// There are no dependencies left to be run on this connection, so we can safely run it.	
-	[self dctInternal_addConnectionControllerToActives:connection];
-	[self dctInternal_removeConnectionFromQueue:connection];
-	[connection start];
+	// There are no dependencies left to be run on this connection, so we can safely run it.
+	[self dctInternal_dequeueAndStartConnection:connection];
+	
 	return YES;
 }
 
@@ -345,5 +342,14 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 	}];
 }
 
+- (void)dctInternal_dequeueAndStartConnection:(DCTConnectionController *)connectionController {
+	
+	[self changeValueForKey:DCTConnectionQueueActiveConnectionCountKey withChange:^{
+		[activeConnections addObject:connectionController];
+		[queuedConnections removeObject:connectionController];
+	}];
+	
+	[connectionController start];
+}
 
 @end
