@@ -209,7 +209,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	
 	if (!active) return;
 	
-	if ([[self dctInternal_currentConnectionQueue] count] < 1) {
+	if ([[self dctInternal_currentConnectionQueue] count] == 0) {
 		[self dctInternal_checkConnectionCount];
 		return;
 	}
