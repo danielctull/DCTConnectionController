@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 #import "DCTConnectionController.h"
 
 extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;

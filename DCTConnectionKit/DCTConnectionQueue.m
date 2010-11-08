@@ -6,7 +6,6 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "DCTConnectionQueue.h"
 
 NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2) {

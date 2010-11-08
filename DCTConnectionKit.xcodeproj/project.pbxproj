@@ -11,6 +11,7 @@
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
+		242640ED12885FF5004572A6 /* DCTConnectionMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = 242640EC12885FF5004572A6 /* DCTConnectionMonitor.m */; };
 		24306A9B114E894B008BBE38 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24306A9A114E894B008BBE38 /* MainWindow-iPad.xib */; };
 		2456D8E1110B6F54009A4F1E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2456D8E0110B6F54009A4F1E /* CoreData.framework */; };
 		24BD77ED11DCD1090094DB11 /* DCTConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD77EC11DCD1090094DB11 /* DCTConnectionTests.m */; };
@@ -50,6 +51,8 @@
 		1D3623250D0F684500981E51 /* DCTConnectionKitAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionKitAppDelegate.m; sourceTree = "<group>"; };
 		1D6058910D05DD3D006BFB54 /* DCTConnectionKit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DCTConnectionKit.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
+		242640EB12885FF5004572A6 /* DCTConnectionMonitor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionMonitor.h; sourceTree = "<group>"; };
+		242640EC12885FF5004572A6 /* DCTConnectionMonitor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionMonitor.m; sourceTree = "<group>"; };
 		24306A9A114E894B008BBE38 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "Resources-iPad/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		243DB58D126A4B4F00A5AF1F /* DCTConnectionKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "DCTConnectionKit-Info.plist"; sourceTree = "<group>"; };
 		243DB58F126A4B8500A5AF1F /* DCTConnectionKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionKit_Prefix.pch; sourceTree = "<group>"; };
@@ -150,6 +153,15 @@
 				24BD77D711DCCE340094DB11 /* Unit Tests.octest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		242640EA12885FD9004572A6 /* DCTConnectionKit+UIKitAdditions */ = {
+			isa = PBXGroup;
+			children = (
+				242640EB12885FF5004572A6 /* DCTConnectionMonitor.h */,
+				242640EC12885FF5004572A6 /* DCTConnectionMonitor.m */,
+			);
+			path = "DCTConnectionKit+UIKitAdditions";
 			sourceTree = "<group>";
 		};
 		24306A99114E894A008BBE38 /* Resources-iPad */ = {
@@ -266,6 +278,7 @@
 			isa = PBXGroup;
 			children = (
 				24E4DC1A126A5FD500C19D4B /* DCTConnectionKit */,
+				242640EA12885FD9004572A6 /* DCTConnectionKit+UIKitAdditions */,
 				24E4DC45126A5FD500C19D4B /* DCTConnectionKitExample */,
 				24BD77E811DCD0BE0094DB11 /* Unit Tests */,
 				080E96DDFE201D6D7F000001 /* Classes */,
@@ -434,6 +447,7 @@
 				24E4DC5A126A5FD500C19D4B /* DCTOAuthRequestTokenConnectionController.m in Sources */,
 				24E4DC5B126A5FD500C19D4B /* DCTOAuthSignature.m in Sources */,
 				24E4DC5D126A5FD500C19D4B /* DCTConnectionKitExampleViewController.m in Sources */,
+				242640ED12885FF5004572A6 /* DCTConnectionMonitor.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
