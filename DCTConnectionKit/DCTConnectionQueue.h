@@ -10,6 +10,7 @@
 #import "DCTConnectionController.h"
 
 extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
+extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotification;
 
 @interface DCTConnectionQueue : NSObject {
     NSMutableArray *activeConnections;
