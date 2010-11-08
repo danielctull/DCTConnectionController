@@ -111,8 +111,9 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 
 - (void)stop {
 	active = NO;
-	for (DCTConnectionController *c in activeConnections)
-		[self requeueConnectionController:c];
+	
+	while ([activeConnections count] > 0)
+		[self requeueConnectionController:[activeConnections lastObject]];
 }
 
 - (void)addConnectionController:(DCTConnectionController *)connectionController {
