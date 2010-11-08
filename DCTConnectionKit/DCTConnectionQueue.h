@@ -17,6 +17,8 @@ extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 	BOOL active;
 	NSInteger externalConnectionCount;
 	NSInteger connectionCount;
+	
+	NSArray *externalConnectionCountKeys;
 }
 
 /**
@@ -41,7 +43,7 @@ extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 
 @property (nonatomic, assign) NSInteger maxConnections;
 
-@property (nonatomic, readonly) NSInteger connectionCount;
+@property (nonatomic, readonly) NSInteger connectionCount, activeConnectionCount;
 @property (nonatomic, readonly) NSArray *activeConnectionControllers;
 @property (nonatomic, readonly) NSArray *queuedConnectionControllers;
 

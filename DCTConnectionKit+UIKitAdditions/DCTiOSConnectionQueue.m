@@ -75,20 +75,20 @@
 		[self stop];
 	}];
 	
+	// Remove non-multitasking connections from the queue
+	for (DCTConnectionController *c in self.queuedConnectionControllers) {
+		if (!c.multitaskEnabled) {
+			[nonMultitaskingConnections addObject:c]; 
+			[self removeConnectionController:c];
+		}
+	}
+	
 	// Remove connections that are active, but not multitasking and put them in our own queue.
 	for (DCTConnectionController *c in self.activeConnectionControllers) {
 		if (!c.multitaskEnabled) {
 			[c reset];
 			[c setQueued];
 			[nonMultitaskingConnections addObject:c];
-			[self removeConnectionController:c];
-		}
-	}
-	
-	// Remove non-multitasking connections from the queue
-	for (DCTConnectionController *c in self.queuedConnectionControllers) {
-		if (!c.multitaskEnabled) {
-			[nonMultitaskingConnections addObject:c]; 
 			[self removeConnectionController:c];
 		}
 	}
