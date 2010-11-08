@@ -11,12 +11,20 @@
 #import "DCTOAuthRequestTokenConnectionController.h"
 #import "DCTOAuthAccessTokenConnectionController.h"
 #import "DCTOAuthController.h"
+#import "DCTConnectionMonitor.h"
+#import "DCTiOSConnectionQueue.h"
+#import "DCTConnectionQueue+Singleton.h"
 
 @implementation DCTConnectionKitAppDelegate
 
 @synthesize window;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
+	
+	DCTConnectionMonitor *m = [[DCTConnectionMonitor alloc] init];
+	
+	DCTiOSConnectionQueue *q = [DCTiOSConnectionQueue sharedConnectionQueue];
+	
 	DCTConnectionKitExampleViewController *viewController = [[DCTConnectionKitExampleViewController alloc] init];
 	nav = [[UINavigationController alloc] initWithRootViewController:viewController];
 	[window addSubview:nav.view];
