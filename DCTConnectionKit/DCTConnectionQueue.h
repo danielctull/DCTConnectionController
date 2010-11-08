@@ -29,6 +29,7 @@ extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 - (DCTConnectionController *)queuedConnectionControllerToURL:(NSURL *)URL;
 
 - (void)stop;
+- (void)pause;
 - (void)start;
 
 @property (nonatomic, assign) NSInteger maxConnections;
