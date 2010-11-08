@@ -21,9 +21,11 @@
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
 	
-	DCTConnectionMonitor *m = [[DCTConnectionMonitor alloc] init];
+	//DCTConnectionMonitor *m = [[DCTConnectionMonitor alloc] init];
 	
-	DCTiOSConnectionQueue *q = [DCTiOSConnectionQueue sharedConnectionQueue];
+	DCTiOSConnectionQueue *queue = (DCTiOSConnectionQueue *)[DCTiOSConnectionQueue sharedConnectionQueue];
+	queue.multitaskEnabled = YES;
+	queue.maxConnections = 4;
 	
 	DCTConnectionKitExampleViewController *viewController = [[DCTConnectionKitExampleViewController alloc] init];
 	nav = [[UINavigationController alloc] initWithRootViewController:viewController];

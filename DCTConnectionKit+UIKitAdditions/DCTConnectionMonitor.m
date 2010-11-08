@@ -7,7 +7,7 @@
 //
 
 #import "DCTConnectionMonitor.h"
-#import "DCTConnectionQueue+Singleton.h"
+#import "DCTConnectionQueue.h"
 
 @interface DCTConnectionMonitor ()
 - (void)dctInternal_countChangedNotification:(NSNotification *)notification;
