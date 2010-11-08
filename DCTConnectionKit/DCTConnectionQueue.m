@@ -35,17 +35,13 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 - (DCTConnectionController *)dctInternal_nextConnection;
 - (DCTConnectionController *)dctInternal_nextConnectionInterator:(DCTConnectionController *)connection;
 
-- (void)dctInternal_didEnterBackground:(NSNotification *)notification;
-- (void)dctInternal_hush;
-- (void)dctInternal_finishedBackgroundConnections;
-
 - (void)dctInternal_addConnectionControllerToQueue:(DCTConnectionController *)connectionController;
 - (void)dctInternal_removeConnectionFromQueue:(DCTConnectionController *)connectionController;
 @end
 
 @implementation DCTConnectionQueue
 
-@synthesize maxConnections, multitaskEnabled;
+@synthesize maxConnections;
 
 - (void)start {
 	active = YES;
@@ -66,9 +62,6 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	queuedConnections = [[NSMutableArray alloc] init];
 	active = YES;
 	self.maxConnections = 5;
-	self.multitaskEnabled = YES;
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dctInternal_didEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
 	
 	return self;	
 }
@@ -81,6 +74,13 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 
 #pragma mark -
 
+- (NSArray *)activeConnectionControllers {
+	return [NSArray arrayWithArray:activeConnections];
+}
+- (NSArray *)queuedConnectionControllers {
+	return [NSArray arrayWithArray:queuedConnections];
+}
+
 - (NSInteger)activeConnectionsCount {
 	return [activeConnections count];
 }
@@ -90,7 +90,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 }
 
 - (NSInteger)connectionCount {
-	return self.activeConnectionsCount + self.queuedConnectionsCount + [backgroundConnections count];
+	return self.activeConnectionsCount + self.queuedConnectionsCount;
 }
 
 - (NSArray *)connectionControllers {	
@@ -157,10 +157,6 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 		if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
 			return c;
 	
-	for (DCTConnectionController *c in backgroundConnections)
-		if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
-			return c;
-	
 	return nil;
 }
 
@@ -170,14 +166,6 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 - (void)dctInternal_checkConnectionCount {
 	
 	if (lastActiveConnectionCount == self.activeConnectionsCount) return;
-		
-	if (self.activeConnectionsCount > 0) {
-		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-	} else {
-		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-		
-		if (inBackground) [self dctInternal_finishedBackgroundConnections];
-	}
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueConnectionCountChangedNotification object:self];
 	
@@ -271,111 +259,18 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 }
 
 - (NSMutableArray *)dctInternal_currentConnectionQueue {
-	if (inBackground) return backgroundConnections;
 	return queuedConnections;
 }
-
-#pragma mark -
-#pragma mark Multitasking
-
-- (void)dctInternal_didEnterBackground:(NSNotification *)notification {
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
-	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dt_willEnterForeground:) name:UIApplicationWillEnterForegroundNotification object:nil];
-	
-	inBackground = YES;
-	
-	if (multitaskEnabled) {
-		
-		backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-			[self dctInternal_hush];
-			[self dctInternal_finishedBackgroundConnections];
-		}];
-		
-		NSMutableArray *nonMultitaskingCurrentlyActive = [[NSMutableArray alloc] init];
-		
-		for (DCTConnectionController *c in activeConnections)  {
-			if (!c.multitaskEnabled) {
-				[c reset];
-				[c setQueued];
-				[nonMultitaskingCurrentlyActive addObject:c];
-			}
-		}
-		
-		backgroundConnections = [[NSMutableArray alloc] init];
-		
-		for (DCTConnectionController *c in queuedConnections)
-			if (c.multitaskEnabled)
-				[backgroundConnections addObject:c];
-		
-		[queuedConnections removeObjectsInArray:backgroundConnections];
-		
-		[queuedConnections addObjectsFromArray:nonMultitaskingCurrentlyActive];
-		[activeConnections removeObjectsInArray:nonMultitaskingCurrentlyActive];
-		
-		[backgroundConnections sortUsingComparator:compareConnections];
-		[queuedConnections sortUsingComparator:compareConnections];
-		
-		[nonMultitaskingCurrentlyActive release], nonMultitaskingCurrentlyActive = nil;
-		
-		[self dctInternal_runNextConnection];
-		
-	} else {
-		[self dctInternal_hush];
-	}
-}
-
-- (void)dctInternal_hush {
-	
-	active = NO;
-	
-	for (DCTConnectionController *c in activeConnections) {
-		[c reset];
-		[c setQueued];
-	}
-	
-	[queuedConnections addObjectsFromArray:activeConnections];
-	[activeConnections removeAllObjects];
-}
-
-- (void)dctInternal_finishedBackgroundConnections {
-	
-	for (DCTConnectionController *c in backgroundConnections) {
-		[c reset];
-		[c setQueued];
-	}
-	
-	[queuedConnections addObjectsFromArray:backgroundConnections];
-	
-	[backgroundConnections release]; backgroundConnections = nil;
-	[[UIApplication sharedApplication] endBackgroundTask:backgroundTaskIdentifier];
-}
-
-- (void)dt_willEnterForeground:(NSNotification *)notification {
-	[[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
-	[queuedConnections sortUsingComparator:compareConnections];
-	active = YES;
-	inBackground = NO;
-	[self dctInternal_runNextConnection];
-}
-
 
 #pragma mark -
 #pragma mark Queue methods
 
 - (void)dctInternal_addConnectionControllerToQueue:(DCTConnectionController *)connectionController {
-	if (inBackground && connectionController.multitaskEnabled) {
-		[backgroundConnections addObject:connectionController];
-		[backgroundConnections sortUsingComparator:compareConnections];
-	} else {
-		[queuedConnections addObject:connectionController];
-		[queuedConnections sortUsingComparator:compareConnections];
-	}
+	[queuedConnections addObject:connectionController];
+	[queuedConnections sortUsingComparator:compareConnections];
 }
 
 - (void)dctInternal_removeConnectionFromQueue:(DCTConnectionController *)connectionController {
-	// backgroundConnections will be nil for normal running time, so this is ok.
-	[backgroundConnections removeObject:connectionController];
 	[queuedConnections removeObject:connectionController];
 }
 

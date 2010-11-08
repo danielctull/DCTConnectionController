@@ -16,10 +16,6 @@ extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 	NSMutableArray *queuedConnections;
 	NSInteger lastActiveConnectionCount;
 	BOOL active;
-	
-	NSMutableArray *backgroundConnections;
-	UIBackgroundTaskIdentifier backgroundTaskIdentifier;
-	BOOL inBackground;
 }
 
 - (void)addConnectionController:(DCTConnectionController *)connectionController;
@@ -35,11 +31,13 @@ extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 - (void)start;
 
 @property (nonatomic, assign) NSInteger maxConnections;
-@property (nonatomic, assign) BOOL multitaskEnabled;
 
 @property (nonatomic, readonly) NSInteger activeConnectionsCount;
 @property (nonatomic, readonly) NSInteger queuedConnectionsCount;
 @property (nonatomic, readonly) NSInteger connectionCount;
+
+
+@property (nonatomic, readonly) NSArray *activeConnectionControllers, *queuedConnectionControllers;
 
 #pragma mark -
 #pragma mark Depricated
