@@ -9,8 +9,11 @@
 #import <UIKit/UIKit.h>
 #import "DCTConnectionQueue.h"
 
-@interface DCTConnectionMonitor : NSObject {
+@interface DCTConnectionMonitor : NSObject {}
 
-}
+@property (nonatomic, assign) NSInteger connectionCount;
+
+- (void)addConnection;
+- (void)removeConnection;
 
 @end
