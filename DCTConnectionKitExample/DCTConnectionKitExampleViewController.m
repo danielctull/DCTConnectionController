@@ -185,7 +185,7 @@
 }
 
 - (void)connectionCountChanged:(NSNotification *)notification {
-	self.connectionsLabel.text = [NSString stringWithFormat:@"Connections: %i", [DCTConnectionQueue sharedConnectionQueue].activeConnectionsCount];
+	self.connectionsLabel.text = [NSString stringWithFormat:@"Connections: %i", [DCTConnectionQueue sharedConnectionQueue].connectionCount];
 }
 
 @end

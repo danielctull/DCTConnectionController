@@ -14,8 +14,9 @@ extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 @interface DCTConnectionQueue : NSObject {
     NSMutableArray *activeConnections;
 	NSMutableArray *queuedConnections;
-	NSInteger lastActiveConnectionCount;
 	BOOL active;
+	NSInteger externalConnectionCount;
+	NSInteger connectionCount;
 }
 
 /**
@@ -42,10 +43,14 @@ extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 
 @property (nonatomic, assign) NSInteger maxConnections;
 
-@property (nonatomic, readonly) NSInteger activeConnectionsCount;
-@property (nonatomic, readonly) NSInteger queuedConnectionsCount;
+//@property (nonatomic, readonly) NSInteger activeConnectionsCount;
+//@property (nonatomic, readonly) NSInteger queuedConnectionsCount;
 @property (nonatomic, readonly) NSInteger connectionCount;
 
 @property (nonatomic, readonly) NSArray *activeConnectionControllers, *queuedConnectionControllers;
+
+
+- (void)incrementExternalConnectionCount;
+- (void)decrementExternalConnectionCount;
 
 @end

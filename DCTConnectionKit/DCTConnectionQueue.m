@@ -94,13 +94,14 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 
 - (void)removeConnectionController:(DCTConnectionController *)connectionController {
 	
+	[connectionController reset];
+	
 	if ([activeConnections containsObject:connectionController])
 		[self dctInternal_removeActiveConnection:connectionController];
 		
 	else if ([queuedConnections containsObject:connectionController]) 
 		[self dctInternal_removeConnectionFromQueue:connectionController];
 	
-	[connectionController reset];
 	[connectionController removeObserver:self forKeyPath:@"status"];
 }
 
@@ -118,6 +119,8 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 					   context:(void *)context {
 	
 	if (![object isKindOfClass:[DCTConnectionController class]]) return;
+	
+	if (![keyPath isEqualToString:@"status"]) return;
 	
 	if (!active) return;
 	
@@ -156,6 +159,14 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 }
 
 
+- (void)incrementExternalConnectionCount {
+	externalConnectionCount++;
+}
+
+- (void)decrementExternalConnectionCount {
+	externalConnectionCount--;
+}
+
 #pragma mark -
 #pragma mark DCTConnectionQueue Accessors
 
@@ -175,7 +186,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 }
 
 - (NSInteger)connectionCount {
-	return self.activeConnectionsCount + self.queuedConnectionsCount;
+	return connectionCount;
 }
 
 - (NSArray *)connectionControllers {	
@@ -187,11 +198,13 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 
 - (void)dctInternal_checkConnectionCount {
 	
-	if (lastActiveConnectionCount == self.activeConnectionsCount) return;
+	if (connectionCount == self.activeConnectionsCount) return;
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueConnectionCountChangedNotification object:self];
 	
-	lastActiveConnectionCount = self.activeConnectionsCount;
+	[self willChangeValueForKey:@"connectionCount"];
+	connectionCount = self.activeConnectionsCount;
+	[self didChangeValueForKey:@"connectionCount"];
 }
 
 - (void)dctInternal_runNextConnection {
