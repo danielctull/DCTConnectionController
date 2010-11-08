@@ -50,11 +50,15 @@
 }
 
 - (void)dctInternal_activeConnectionCountChanged:(NSNotification *)notificaiton {
-
-	if (self.activeConnectionCount > 0)
+	
+	if (self.activeConnectionCount > 0) {
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-	else
+	
+	} else {
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+		
+		if (inBackground) [[UIApplication sharedApplication] endBackgroundTask:backgroundTaskIdentifier];
+	}
 }
 
 - (NSInteger)connectionCount {
@@ -115,13 +119,13 @@
 
 - (void)dctInternal_willEnterForeground:(NSNotification *)notification {
 	if (!inBackground) return;
+	inBackground = NO;
 	
 	for (DCTConnectionController *c in nonMultitaskingConnections)
 		[self addConnectionController:c];
 	
 	[nonMultitaskingConnections release];
 	nonMultitaskingConnections = nil;
-	inBackground = NO;
 	[self start];
 }
 

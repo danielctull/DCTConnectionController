@@ -111,6 +111,8 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 
 - (void)stop {
 	active = NO;
+	for (DCTConnectionController *c in activeConnections)
+		[self requeueConnectionController:c];
 }
 
 - (void)addConnectionController:(DCTConnectionController *)connectionController {
@@ -241,6 +243,12 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 	if (!connection) return;
 	
 	[self dctInternal_dequeueAndStartConnection:connection];
+	
+	// In the case that connections are added but the queue is not active, such as
+	// returning from background in multitasking, we should repeatedly call this method.
+	// It will return out when the max connections has been hit or when there are 
+	// no more connections to run.
+	[self dctInternal_runNextConnection];
 }
 
 - (DCTConnectionController *)dctInternal_nextConnection {
