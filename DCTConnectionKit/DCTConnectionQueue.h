@@ -18,8 +18,16 @@ extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 	BOOL active;
 }
 
-- (void)removeConnectionController:(DCTConnectionController *)connectionController;
+/**
+ Add a connection controller to the queue. This method causes the connection queue to
+ find the next connection and run it.
+ */
 - (void)addConnectionController:(DCTConnectionController *)connectionController;
+
+/**
+ 
+ */
+- (void)removeConnectionController:(DCTConnectionController *)connectionController;
 - (void)requeueConnectionController:(DCTConnectionController *)connectionController;
 
 - (NSArray *)connectionControllers;
