@@ -53,7 +53,6 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 
 @interface DCTConnectionQueue ()
 
-- (NSMutableArray *)dctInternal_currentConnectionQueue;
 - (void)dctInternal_runNextConnection;
 - (BOOL)dctInternal_tryToRunConnection:(DCTConnectionController *)connection;
 - (void)dctInternal_removeActiveConnection:(DCTConnectionController *)connection;
@@ -122,7 +121,8 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 }
 
 - (void)removeConnectionController:(DCTConnectionController *)connectionController {
-	
+
+	[connectionController removeObserver:self forKeyPath:@"status"];
 	[connectionController reset];
 	
 	if ([activeConnections containsObject:connectionController])
@@ -130,8 +130,6 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 		
 	else if ([queuedConnections containsObject:connectionController]) 
 		[self dctInternal_removeConnectionFromQueue:connectionController];
-	
-	[connectionController removeObserver:self forKeyPath:@"status"];
 }
 
 - (void)requeueConnectionController:(DCTConnectionController *)connectionController {
@@ -166,12 +164,8 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 	
 	DCTConnectionController *connection = (DCTConnectionController *)object;
 	
-	if (connection.status == DCTConnectionControllerStatusComplete 
-		|| connection.status == DCTConnectionControllerStatusFailed
-		|| connection.status == DCTConnectionControllerStatusCancelled) {
-		
+	if (connection.status >= DCTConnectionControllerStatusComplete)
 		[self dctInternal_removeActiveConnection:connection];
-	}
 }
 
 - (BOOL)isConnectingToURL:(NSURL *)URL {
@@ -251,7 +245,7 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 
 - (DCTConnectionController *)dctInternal_nextConnection {
 	
-	for (DCTConnectionController *connection in [self dctInternal_currentConnectionQueue]) {
+	for (DCTConnectionController *connection in queuedConnections) {
 		DCTConnectionController *c = [self dctInternal_nextConnectionIterator:connection];
 		if (c)
 			return c;
@@ -301,10 +295,6 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 	[self dctInternal_dequeueAndStartConnection:connection];
 	
 	return YES;
-}
-
-- (NSMutableArray *)dctInternal_currentConnectionQueue {
-	return queuedConnections;
 }
 
 - (void)dctInternal_addConnectionControllerToQueue:(DCTConnectionController *)connectionController {
