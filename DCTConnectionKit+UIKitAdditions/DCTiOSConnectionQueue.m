@@ -71,7 +71,6 @@
 	
 	backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
 		[self stop];
-		//[self dctInternal_finishedBackgroundConnections];
 	}];
 	
 	// Remove connections that are active, but not multitasking and put them in our own queue.
@@ -104,6 +103,7 @@
 	inBackground = NO;
 	[self start];
 }
+
 /*
 - (void)dctInternal_finishedBackgroundConnections {
 	
