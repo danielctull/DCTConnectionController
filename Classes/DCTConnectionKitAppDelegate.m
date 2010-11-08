@@ -11,7 +11,6 @@
 #import "DCTOAuthRequestTokenConnectionController.h"
 #import "DCTOAuthAccessTokenConnectionController.h"
 #import "DCTOAuthController.h"
-#import "DCTConnectionMonitor.h"
 #import "DCTiOSConnectionQueue.h"
 #import "DCTConnectionQueue+Singleton.h"
 
@@ -20,8 +19,6 @@
 @synthesize window;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
-	
-	//DCTConnectionMonitor *m = [[DCTConnectionMonitor alloc] init];
 	
 	DCTiOSConnectionQueue *queue = (DCTiOSConnectionQueue *)[DCTiOSConnectionQueue sharedConnectionQueue];
 	queue.multitaskEnabled = YES;
