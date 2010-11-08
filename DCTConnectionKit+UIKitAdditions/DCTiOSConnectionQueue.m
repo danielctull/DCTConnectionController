@@ -19,6 +19,14 @@
 
 @synthesize multitaskEnabled;
 
+- (void)dealloc {
+	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+	[notificationCenter removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+	[notificationCenter removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
+	[notificationCenter removeObserver:self name:DCTConnectionQueueActiveConnectionCountChangedNotification object:self];
+    [super dealloc];
+}
+
 - (id)init {
 	if (!(self = [super init])) return nil;
 	
