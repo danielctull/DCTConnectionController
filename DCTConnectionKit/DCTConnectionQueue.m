@@ -45,6 +45,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 
 - (void)start {
 	active = YES;
+	[self dctInternal_runNextConnection];
 }
 
 - (void)pause {
@@ -77,29 +78,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 }
 
 #pragma mark -
-
-- (NSArray *)activeConnectionControllers {
-	return [NSArray arrayWithArray:activeConnections];
-}
-- (NSArray *)queuedConnectionControllers {
-	return [NSArray arrayWithArray:queuedConnections];
-}
-
-- (NSInteger)activeConnectionsCount {
-	return [activeConnections count];
-}
-
-- (NSInteger)queuedConnectionsCount {
-	return [queuedConnections count];
-}
-
-- (NSInteger)connectionCount {
-	return self.activeConnectionsCount + self.queuedConnectionsCount;
-}
-
-- (NSArray *)connectionControllers {	
-    return [activeConnections arrayByAddingObjectsFromArray:queuedConnections];
-}
+#pragma mark DCTConnection Queue
 
 - (void)addConnectionController:(DCTConnectionController *)connectionController {
 	
@@ -176,8 +155,35 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	return nil;
 }
 
+
 #pragma mark -
-#pragma mark Internal
+#pragma mark DCTConnectionQueue Accessors
+
+- (NSArray *)activeConnectionControllers {
+	return [NSArray arrayWithArray:activeConnections];
+}
+- (NSArray *)queuedConnectionControllers {
+	return [NSArray arrayWithArray:queuedConnections];
+}
+
+- (NSInteger)activeConnectionsCount {
+	return [activeConnections count];
+}
+
+- (NSInteger)queuedConnectionsCount {
+	return [queuedConnections count];
+}
+
+- (NSInteger)connectionCount {
+	return self.activeConnectionsCount + self.queuedConnectionsCount;
+}
+
+- (NSArray *)connectionControllers {	
+    return [activeConnections arrayByAddingObjectsFromArray:queuedConnections];
+}
+
+#pragma mark -
+#pragma mark Internals
 
 - (void)dctInternal_checkConnectionCount {
 	
@@ -271,9 +277,6 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 - (NSMutableArray *)dctInternal_currentConnectionQueue {
 	return queuedConnections;
 }
-
-#pragma mark -
-#pragma mark Queue methods
 
 - (void)dctInternal_addConnectionControllerToQueue:(DCTConnectionController *)connectionController {
 	[queuedConnections addObject:connectionController];
