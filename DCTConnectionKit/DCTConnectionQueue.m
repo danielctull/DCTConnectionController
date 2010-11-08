@@ -119,9 +119,9 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	
 	if (![object isKindOfClass:[DCTConnectionController class]]) return;
 	
-	DCTConnectionController *connection = (DCTConnectionController *)object;
-	
 	if (!active) return;
+	
+	DCTConnectionController *connection = (DCTConnectionController *)object;
 	
 	if (connection.status == DCTConnectionControllerStatusComplete 
 		|| connection.status == DCTConnectionControllerStatusFailed
