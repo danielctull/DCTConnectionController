@@ -5,7 +5,7 @@
 //  Created by Daniel Tull on 09.07.2010.
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
-
+#import <UIKit/UIKit.h>
 #import "DCTOAuthController.h"
 #import "NSString+DTURLEncoding.h"
 #import "NSBundle+DTInfoPlist.h"

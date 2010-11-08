@@ -7,43 +7,46 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <UIKit/UIKit.h>
 #import "DCTConnectionController.h"
 
 extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
+extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotification;
 
 @interface DCTConnectionQueue : NSObject {
     NSMutableArray *activeConnections;
 	NSMutableArray *queuedConnections;
-	NSInteger lastActiveConnectionCount;
 	BOOL active;
+	NSInteger externalConnectionCount;
+	NSInteger connectionCount;
 	
-	NSMutableArray *backgroundConnections;
-	UIBackgroundTaskIdentifier backgroundTaskIdentifier;
-	BOOL inBackground;
+	NSArray *externalConnectionCountKeys;
 }
 
+/**
+ Add a connection controller to the queue. This method causes the connection queue to
+ find the next connection and run it.
+ */
 - (void)addConnectionController:(DCTConnectionController *)connectionController;
-- (void)requeueConnectionController:(DCTConnectionController *)connectionController;
 
-- (NSArray *)connectionControllers;
+/**
+ 
+ */
+- (void)removeConnectionController:(DCTConnectionController *)connectionController;
+- (void)requeueConnectionController:(DCTConnectionController *)connectionController;
 
 - (BOOL)isConnectingToURL:(NSURL *)URL;
 - (BOOL)hasQueuedConnectionControllerToURL:(NSURL *)URL;
 - (DCTConnectionController *)queuedConnectionControllerToURL:(NSURL *)URL;
 
 - (void)stop;
+- (void)pause;
 - (void)start;
 
 @property (nonatomic, assign) NSInteger maxConnections;
-@property (nonatomic, assign) BOOL multitaskEnabled;
 
-@property (nonatomic, readonly) NSInteger activeConnectionsCount;
-@property (nonatomic, readonly) NSInteger queuedConnectionsCount;
-@property (nonatomic, readonly) NSInteger connectionCount;
-
-#pragma mark -
-#pragma mark Depricated
+@property (nonatomic, readonly) NSInteger connectionCount, activeConnectionCount;
+@property (nonatomic, readonly) NSArray *activeConnectionControllers;
+@property (nonatomic, readonly) NSArray *queuedConnectionControllers;
 
 - (void)incrementExternalConnectionCount;
 - (void)decrementExternalConnectionCount;

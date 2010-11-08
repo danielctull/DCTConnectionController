@@ -12,13 +12,16 @@ static DCTConnectionQueue *sharedInstance = nil;
 
 @implementation DCTConnectionQueue (Singleton)
 
-+ (void)initialize {
+/*+ (void)initialize {
     if (!sharedInstance) {
         sharedInstance = [[self alloc] init];
     }
-}
+}*/
 
 + (DCTConnectionQueue *)sharedConnectionQueue {
+	
+	if (!sharedInstance) sharedInstance = [[self alloc] init];
+	
     return sharedInstance;
 }
 
