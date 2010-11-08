@@ -82,8 +82,6 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 
 - (void)addConnectionController:(DCTConnectionController *)connectionController {
 	
-	NSLog(@"%@:%@", self, NSStringFromSelector(_cmd));
-	
 	[connectionController addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	
 	[self dctInternal_addConnectionControllerToQueue:connectionController];
