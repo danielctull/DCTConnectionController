@@ -12,8 +12,9 @@
 @implementation DCTConnectionMonitor
 
 - (void)dealloc {
-	DCTConnectionQueue *queue = [DCTConnectionQueue sharedConnectionQueue];
-	[queue removeObserver:self forKeyPath:@"connectionCount"];
+	[[NSNotificationCenter defaultCenter] removeObserver:self
+													name:DCTConnectionQueueConnectionCountChangedNotification 
+												  object:nil];
     [super dealloc];
 }
 
@@ -21,19 +22,20 @@
 	
 	if (!(self = [super init])) return nil;
 	
-	DCTConnectionQueue *queue = [DCTConnectionQueue sharedConnectionQueue];
-	[queue addObserver:self forKeyPath:@"connectionCount" options:NSKeyValueObservingOptionNew context:NULL];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(countChanged:) 
+												 name:DCTConnectionQueueConnectionCountChangedNotification 
+											   object:nil];
 	
 	return self;
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath
-					  ofObject:(id)object
-                        change:(NSDictionary *)change
-                       context:(void *)context {
+- (void)countChanged:(NSNotification *)notification {
 	
-	DCTConnectionQueue *queue = [DCTConnectionQueue sharedConnectionQueue];
-
+	if (![[notification object] isKindOfClass:[DCTConnectionQueue class]]) return;
+	
+	DCTConnectionQueue *queue = [notification object];
+	
 	if (queue.connectionCount > 0)
 		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 	else
