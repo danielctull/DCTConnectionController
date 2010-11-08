@@ -54,7 +54,6 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 @interface DCTConnectionQueue ()
 
 - (NSMutableArray *)dctInternal_currentConnectionQueue;
-- (void)dctInternal_checkConnectionCount;
 - (void)dctInternal_runNextConnection;
 - (BOOL)dctInternal_tryToRunConnection:(DCTConnectionController *)connection;
 - (void)dctInternal_removeActiveConnection:(DCTConnectionController *)connection;
@@ -230,13 +229,6 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 #pragma mark -
 #pragma mark Internals
 
-- (void)dctInternal_checkConnectionCount {
-	
-	if (connectionCount == [activeConnections count]) return;
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueConnectionCountChangedNotification object:self];
-}
-
 - (void)dctInternal_runNextConnection {
 	
 	if ([activeConnections count] >= self.maxConnections) return;
@@ -251,9 +243,8 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 	DCTConnectionController *connection = [self dctInternal_nextConnection];
 	
 	if (connection) {
-	//	[activeConnections addObject:connection];
 		[self dctInternal_addConnectionControllerToActives:connection];
-		[self dctInternal_removeConnectionFromQueue:connection]; 
+		[self dctInternal_removeConnectionFromQueue:connection];
 		[connection start];	
 	}
 	
@@ -310,7 +301,7 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 	
 	// There are no dependencies left to be run on this connection, so we can safely run it.	
 	[self dctInternal_addConnectionControllerToActives:connection];
-	[self dctInternal_removeConnectionFromQueue:connection]; 
+	[self dctInternal_removeConnectionFromQueue:connection];
 	[connection start];
 	return YES;
 }
