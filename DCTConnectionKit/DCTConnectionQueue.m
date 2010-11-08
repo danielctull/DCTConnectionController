@@ -33,7 +33,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 - (void)dctInternal_removeActiveConnection:(DCTConnectionController *)connection;
 
 - (DCTConnectionController *)dctInternal_nextConnection;
-- (DCTConnectionController *)dctInternal_nextConnectionInterator:(DCTConnectionController *)connection;
+- (DCTConnectionController *)dctInternal_nextConnectionIterator:(DCTConnectionController *)connection;
 
 - (void)dctInternal_addConnectionControllerToQueue:(DCTConnectionController *)connectionController;
 - (void)dctInternal_removeConnectionFromQueue:(DCTConnectionController *)connectionController;
@@ -222,14 +222,14 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 - (DCTConnectionController *)dctInternal_nextConnection {
 	
 	for (DCTConnectionController *connection in [self dctInternal_currentConnectionQueue]) {
-		DCTConnectionController *c = [self dctInternal_nextConnectionInterator:connection];
+		DCTConnectionController *c = [self dctInternal_nextConnectionIterator:connection];
 		if (c)
 			return c;
 	}
 	return nil;
 }
 
-- (DCTConnectionController *)dctInternal_nextConnectionInterator:(DCTConnectionController *)connection {
+- (DCTConnectionController *)dctInternal_nextConnectionIterator:(DCTConnectionController *)connection {
 	if ([connection.dependencies count] > 0) {
 		
 		// Sort so the dependencies are in order from high to low.
@@ -238,7 +238,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 		// Look for connections that are queued at present, if there is one, we can process that one.
 		for (DCTConnectionController *c in sortedDependencies)
 			if (c.status == DCTConnectionControllerStatusQueued)
-				return [self dctInternal_nextConnectionInterator:c];
+				return [self dctInternal_nextConnectionIterator:c];
 		
 		// Look for connections that are "active" at present, if there is one, we can't proceed.		
 		for (DCTConnectionController *c in sortedDependencies)
