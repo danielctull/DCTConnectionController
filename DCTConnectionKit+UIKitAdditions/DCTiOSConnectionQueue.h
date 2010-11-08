@@ -16,5 +16,5 @@
 }
 
 @property (nonatomic, assign) BOOL multitaskEnabled;
-
+@property (nonatomic, readonly) NSArray *nonMultitaskingQueuedConnections;
 @end

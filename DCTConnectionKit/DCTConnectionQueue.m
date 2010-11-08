@@ -30,7 +30,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 - (void)dctInternal_checkConnectionCount;
 - (void)dctInternal_runNextConnection;
 - (BOOL)dctInternal_tryToRunConnection:(DCTConnectionController *)connection;
-- (void)dctInternal_removeConnection:(DCTConnectionController *)connection;
+- (void)dctInternal_removeActiveConnection:(DCTConnectionController *)connection;
 
 - (DCTConnectionController *)dctInternal_nextConnection;
 - (DCTConnectionController *)dctInternal_nextConnectionInterator:(DCTConnectionController *)connection;
@@ -47,12 +47,16 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	active = YES;
 }
 
+- (void)pause {
+	active = NO;
+}
+
 - (void)stop {
 	active = NO;
 }
 
 #pragma mark -
-#pragma mark init/dealloc
+#pragma mark NSObject
 
 - (id)init {
 	
@@ -109,9 +113,21 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	[self dctInternal_runNextConnection];
 }
 
+- (void)removeConnectionController:(DCTConnectionController *)connectionController {
+	
+	if ([activeConnections containsObject:connectionController])
+		[self dctInternal_removeActiveConnection:connectionController];
+		
+	else if ([queuedConnections containsObject:connectionController]) 
+		[self dctInternal_removeConnectionFromQueue:connectionController];
+	
+	[connectionController reset];
+	[connectionController removeObserver:self forKeyPath:@"status"];
+}
+
 - (void)requeueConnectionController:(DCTConnectionController *)connectionController {
 	[connectionController retain];
-	[self dctInternal_removeConnection:connectionController];
+	[self dctInternal_removeActiveConnection:connectionController];
 	[connectionController reset];
 	[self dctInternal_addConnectionControllerToQueue:connectionController];
 	[connectionController release];
@@ -132,7 +148,7 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 		|| connection.status == DCTConnectionControllerStatusFailed
 		|| connection.status == DCTConnectionControllerStatusCancelled) {
 		
-		[self dctInternal_removeConnection:connection];
+		[self dctInternal_removeActiveConnection:connection];
 		[self dctInternal_runNextConnection];
 	}
 }
@@ -252,12 +268,6 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	return YES;
 }
 
-- (void)dctInternal_removeConnection:(DCTConnectionController *)connection {
-	[connection removeObserver:self forKeyPath:@"status"];
-	[activeConnections removeObject:connection];
-	//[self dctInternal_checkConnectionCount];
-}
-
 - (NSMutableArray *)dctInternal_currentConnectionQueue {
 	return queuedConnections;
 }
@@ -274,10 +284,9 @@ NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConn
 	[queuedConnections removeObject:connectionController];
 }
 
-#pragma mark -
-#pragma mark Depricated
-
-- (void)incrementExternalConnectionCount {}
-- (void)decrementExternalConnectionCount {}
+- (void)dctInternal_removeActiveConnection:(DCTConnectionController *)connection {
+	[connection removeObserver:self forKeyPath:@"status"];
+	[activeConnections removeObject:connection];
+}
 
 @end

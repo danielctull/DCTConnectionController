@@ -18,6 +18,7 @@ extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 	BOOL active;
 }
 
+- (void)removeConnectionController:(DCTConnectionController *)connectionController;
 - (void)addConnectionController:(DCTConnectionController *)connectionController;
 - (void)requeueConnectionController:(DCTConnectionController *)connectionController;
 
@@ -38,11 +39,5 @@ extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 
 
 @property (nonatomic, readonly) NSArray *activeConnectionControllers, *queuedConnectionControllers;
-
-#pragma mark -
-#pragma mark Depricated
-
-- (void)incrementExternalConnectionCount;
-- (void)decrementExternalConnectionCount;
 
 @end
