@@ -243,10 +243,7 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 	
 	if (!active) return;
 	
-	if ([[self dctInternal_currentConnectionQueue] count] == 0) {
-		//[self dctInternal_checkConnectionCount];
-		return;
-	}
+	if ([queuedConnections count] == 0) return;
 	
 	// Loop through the queue and try to run the top-most connection.
 	// If it can't be run (eg waiting for dependencies), run the next one down.
