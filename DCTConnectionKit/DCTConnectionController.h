@@ -156,6 +156,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 
 - (void)addDelegate:(id<DCTConnectionControllerDelegate>)delegate;
+- (void)addDelegates:(NSArray *)delegateArray;
 - (NSArray *)delegates;
 
 
