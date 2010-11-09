@@ -116,8 +116,8 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 #pragma mark -
 #pragma mark Managing the connection
 
-- (void)connect {
-	[[DCTConnectionQueue sharedConnectionQueue] addConnectionController:self];
+- (DCTConnectionController *)connect {
+	return [[DCTConnectionQueue sharedConnectionQueue] addConnectionController:self];
 }
 
 - (void)requeue {

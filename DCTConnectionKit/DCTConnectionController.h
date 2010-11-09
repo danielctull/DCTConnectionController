@@ -97,7 +97,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 - (void)addDependency:(DCTConnectionController *)connectionController;
 - (void)removeDependency:(DCTConnectionController *)connectionController;
 
-- (void)connect;
+- (DCTConnectionController *)connect;
 - (void)cancel;
 - (void)reset;
 - (void)requeue;
