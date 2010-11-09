@@ -100,6 +100,14 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[delegates addObjectsFromArray:delegateArray];
 }
 
+- (void)removeDelegate:(id<DCTConnectionControllerDelegate>)delegate {
+	[delegates removeObject:delegate];
+}
+
+- (void)removeDelegates:(NSArray *)delegatesToRemove {
+	[delegates removeObjectsInArray:delegatesToRemove];
+}
+
 - (NSArray *)delegates {
 	return [NSArray arrayWithArray:delegates];
 }
