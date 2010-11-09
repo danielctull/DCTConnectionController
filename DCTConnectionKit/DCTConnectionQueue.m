@@ -8,6 +8,7 @@
 
 #import "DCTConnectionQueue.h"
 #import "NSObject+DCTKVOExtras.h"
+#import "DCTObservationInfo.h"
 
 NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2) {
 	
@@ -99,7 +100,16 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 	
 	if (i != NSNotFound) {
 		DCTConnectionController *currentCC = [self.connectionControllers objectAtIndex:i];
+		
+		// Add the delegates from the duplicated connection to the existing one
 		[currentCC addDelegates:connectionController.delegates];
+		
+		// Add the observers from the duplicated connection to the existing one, and remove from the dupe
+		for (DCTObservationInfo *info in [connectionController observationInformation]) {
+			[currentCC addObserver:info.object forKeyPath:info.keyPath options:info.options context:info.context];
+			[connectionController removeObserver:info.object forKeyPath:info.keyPath];
+		}
+		
 		return currentCC;
 	}
 	

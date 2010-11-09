@@ -9,6 +9,7 @@
 #import "DCTConnectionController.h"
 #import "DCTConnectionQueue+Singleton.h"
 #import "DCTConnectionController+DCTEquality.h"
+#import "DCTObservationInfo.h"
 
 NSString * const DCTConnectionControllerTypeString[] = {
 	@"GET",
@@ -72,11 +73,13 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	dependencies = [[NSMutableArray alloc] init];
 	priority = DCTConnectionControllerPriorityMedium;
 	delegates = [[NSMutableArray alloc] init];
+	observationInfos = [[NSMutableSet alloc] init];
 	
 	return self;
 }
 
 - (void)dealloc {
+	[observationInfos release], observationInfos = nil;
 	[delegates release]; delegates = nil;
 	[dependencies release], dependencies = nil;
 	[super dealloc];
@@ -342,12 +345,50 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	if (self.responseBlock) self.responseBlock(response);
 }
 
+
+
+#pragma mark -
+#pragma mark Duplication handling
+
 - (BOOL)isEqual:(id)object {
 	
 	if (![object isKindOfClass:[DCTConnectionController class]]) return NO;
 	
 	return [self isEqualToConnectionController:object];
+}
+
+- (void)addObserver:(NSObject *)anObserver forKeyPath:(NSString *)keyPath options:(NSKeyValueObservingOptions)options context:(void *)context {
+	[super addObserver:anObserver forKeyPath:keyPath options:options context:context];
 	
+	DCTObservationInfo *info = [[DCTObservationInfo alloc] init];
+	info.object = anObserver;
+	info.keyPath = keyPath;
+	info.options = options;
+	info.context = context;
+	[observationInfos addObject:info];
+	[info release];
+}
+
+- (void)removeObserver:(NSObject *)anObserver forKeyPath:(NSString *)keyPath {
+	[super removeObserver:anObserver forKeyPath:keyPath];
+	
+	NSSet *infos = [observationInfos objectsWithOptions:NSEnumerationReverse passingTest:^(id obj, BOOL *stop){
+		
+		if (![obj isKindOfClass:[DCTObservationInfo class]]) return NO;
+		
+		DCTObservationInfo *info = (DCTObservationInfo *)obj;
+		
+		if (![info.keyPath isEqualToString:keyPath]) return NO;
+		if (![info.object isEqual:anObserver]) return NO;
+		
+		return YES;
+	}];
+	
+	[observationInfos minusSet:infos];
+}
+
+- (NSSet *)observationInformation {
+	return [NSSet setWithSet:observationInfos];
 }
 
 @end
