@@ -14,11 +14,23 @@
 #import "DCTiOSConnectionQueue.h"
 #import "DCTConnectionQueue+Singleton.h"
 
+#import "DCTURLLoadingConnectionController.h"
+#import "DCTConnectionController+DCTEquality.h"
+
 @implementation DCTConnectionKitAppDelegate
 
 @synthesize window;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
+	
+	DCTURLLoadingConnectionController *c = [[DCTURLLoadingConnectionController alloc] init];
+	c.URL = [NSURL URLWithString:@"www.google.com"];
+	
+	DCTURLLoadingConnectionController *c2 = [[DCTURLLoadingConnectionController alloc] init];
+	c2.URL = [NSURL URLWithString:@"www.google.com"];
+	
+	NSLog(@"[c isEqualToConnectionController:c2]: %i", [c isEqualToConnectionController:c2]);
+	
 	
 	DCTiOSConnectionQueue *queue = (DCTiOSConnectionQueue *)[DCTiOSConnectionQueue sharedConnectionQueue];
 	queue.multitaskEnabled = YES;
