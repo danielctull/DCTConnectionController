@@ -106,7 +106,10 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 		
 		// Add the observers from the duplicated connection to the existing one, and remove from the dupe
 		for (DCTObservationInfo *info in [connectionController observationInformation]) {
-			[currentCC addObserver:info.object forKeyPath:info.keyPath options:info.options context:info.context];
+			
+			if ([[[currentCC observationInformation] dct_observationInfosWithObject:info.object	keyPath:info.keyPath] count] == 0)
+				[currentCC addObserver:info.object forKeyPath:info.keyPath options:info.options context:info.context];
+			
 			[connectionController removeObserver:info.object forKeyPath:info.keyPath];
 		}
 		

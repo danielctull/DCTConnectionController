@@ -372,18 +372,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 - (void)removeObserver:(NSObject *)anObserver forKeyPath:(NSString *)keyPath {
 	[super removeObserver:anObserver forKeyPath:keyPath];
 	
-	NSSet *infos = [observationInfos objectsWithOptions:NSEnumerationReverse passingTest:^(id obj, BOOL *stop){
-		
-		if (![obj isKindOfClass:[DCTObservationInfo class]]) return NO;
-		
-		DCTObservationInfo *info = (DCTObservationInfo *)obj;
-		
-		if (![info.keyPath isEqualToString:keyPath]) return NO;
-		if (![info.object isEqual:anObserver]) return NO;
-		
-		return YES;
-	}];
-	
+	NSSet *infos = [observationInfos dct_observationInfosWithObject:anObserver keyPath:keyPath];	
 	[observationInfos minusSet:infos];
 }
 
