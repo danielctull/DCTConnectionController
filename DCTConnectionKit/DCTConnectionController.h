@@ -76,7 +76,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 	NSObject *returnedObject;
 	NSError *returnedError;
 	NSURLResponse *returnedResponse;
-	NSMutableArray *delegates;
+	NSMutableSet *delegates;
 	NSMutableSet *observationInfos;
 }
 
@@ -158,10 +158,10 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 
 - (void)addDelegate:(id<DCTConnectionControllerDelegate>)delegate;
-- (void)addDelegates:(NSArray *)delegateArray;
+- (void)addDelegates:(NSSet *)delegateArray;
 - (void)removeDelegate:(id<DCTConnectionControllerDelegate>)delegate;
-- (void)removeDelegates:(NSArray *)delegates;
-- (NSArray *)delegates;
+- (void)removeDelegates:(NSSet *)delegates;
+- (NSSet *)delegates;
 - (NSSet *)observationInformation;
 
 /**

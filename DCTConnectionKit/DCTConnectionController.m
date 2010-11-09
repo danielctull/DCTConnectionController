@@ -72,7 +72,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
 	dependencies = [[NSMutableArray alloc] init];
 	priority = DCTConnectionControllerPriorityMedium;
-	delegates = [[NSMutableArray alloc] init];
+	delegates = [[NSMutableSet alloc] init];
 	observationInfos = [[NSMutableSet alloc] init];
 	
 	return self;
@@ -100,20 +100,20 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[delegates addObject:delegate];
 }
 
-- (void)addDelegates:(NSArray *)delegateArray {
-	[delegates addObjectsFromArray:delegateArray];
+- (void)addDelegates:(NSSet *)delegateArray {
+	[delegates unionSet:delegateArray];
 }
 
 - (void)removeDelegate:(id<DCTConnectionControllerDelegate>)delegate {
 	[delegates removeObject:delegate];
 }
 
-- (void)removeDelegates:(NSArray *)delegatesToRemove {
-	[delegates removeObjectsInArray:delegatesToRemove];
+- (void)removeDelegates:(NSSet *)delegatesToRemove {
+	[delegates minusSet:delegatesToRemove];
 }
 
-- (NSArray *)delegates {
-	return [NSArray arrayWithArray:delegates];
+- (NSSet *)delegates {
+	return [NSSet setWithSet:delegates];
 }
 
 #pragma mark -
