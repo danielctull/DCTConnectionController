@@ -26,7 +26,7 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
  Add a connection controller to the queue. This method causes the connection queue to
  find the next connection and run it.
  */
-- (void)addConnectionController:(DCTConnectionController *)connectionController;
+- (DCTConnectionController *)addConnectionController:(DCTConnectionController *)connectionController;
 
 /**
  
@@ -47,6 +47,7 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
 @property (nonatomic, readonly) NSInteger connectionCount, activeConnectionCount;
 @property (nonatomic, readonly) NSArray *activeConnectionControllers;
 @property (nonatomic, readonly) NSArray *queuedConnectionControllers;
+@property (nonatomic, readonly) NSArray *connectionControllers;
 
 - (void)incrementExternalConnectionCount;
 - (void)decrementExternalConnectionCount;
