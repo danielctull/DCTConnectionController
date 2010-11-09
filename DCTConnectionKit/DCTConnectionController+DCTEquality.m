@@ -18,9 +18,11 @@
 
 - (BOOL)isEqualToConnectionController:(DCTConnectionController *)connectionController {
 	
-	//if ([self isEqual:connectionController]) return YES;
-	
 	if (![connectionController isKindOfClass:[self class]]) return NO;
+	
+	if (connectionController.type != self.type) return NO;
+	
+	if (![connectionController.URL isEqual:self.URL]) return NO;
 	
 	NSArray *properties = [self dctInternal_properties];
 	
