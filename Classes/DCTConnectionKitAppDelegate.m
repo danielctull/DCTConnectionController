@@ -14,11 +14,33 @@
 #import "DCTiOSConnectionQueue.h"
 #import "DCTConnectionQueue+Singleton.h"
 
+#import "DCTURLLoadingConnectionController.h"
+#import "DCTConnectionController+DCTEquality.h"
+
 @implementation DCTConnectionKitAppDelegate
 
 @synthesize window;
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
+	/*
+	DCTURLLoadingConnectionController *c = [[DCTURLLoadingConnectionController alloc] init];
+	c.URL = [NSURL URLWithString:@"www.google.com"];
+	c.delegate = self;
+	DCTConnectionController *cRunning = [c connect];
+	
+	NSLog(@"%@", cRunning);
+	
+	DCTURLLoadingConnectionController *c2 = [[DCTURLLoadingConnectionController alloc] init];
+	c2.URL = [NSURL URLWithString:@"www.google.com"];
+	c2.delegate = self;
+	DCTConnectionController *c2Running = [c2 connect];
+	
+	NSLog(@"%@", c2Running);
+	
+	NSLog(@"%@", [c delegates]);
+	
+	NSLog(@"[c isEqualToConnectionController:c2]: %i", [c isEqualToConnectionController:c2]);
+	*/
 	
 	DCTiOSConnectionQueue *queue = (DCTiOSConnectionQueue *)[DCTiOSConnectionQueue sharedConnectionQueue];
 	queue.multitaskEnabled = YES;
@@ -29,8 +51,8 @@
 	[window addSubview:nav.view];
 	[viewController release];
     [window makeKeyAndVisible];
-	/*
 	
+	/*
 	DTOAuthRequestTokenConnection *connection = [DTOAuthRequestTokenConnection connectionController];
 	connection.URL = [NSURL URLWithString:@"http://term.ie/oauth/example/request_token.php"];
 	connection.type = DCTConnectionControllerTypeGet;

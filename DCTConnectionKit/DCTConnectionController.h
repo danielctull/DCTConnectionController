@@ -76,7 +76,10 @@ extern NSString *const DCTConnectionControllerTypeString[];
 	NSObject *returnedObject;
 	NSError *returnedError;
 	NSURLResponse *returnedResponse;
+	NSMutableSet *delegates;
+	NSMutableSet *observationInfos;
 }
+
 
 @property (nonatomic, copy) DCTConnectionControllerResponseBlock responseBlock;
 @property (nonatomic, copy) DCTConnectionControllerCompletionBlock completionBlock;
@@ -95,7 +98,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 - (void)addDependency:(DCTConnectionController *)connectionController;
 - (void)removeDependency:(DCTConnectionController *)connectionController;
 
-- (void)connect;
+- (DCTConnectionController *)connect;
 - (void)cancel;
 - (void)reset;
 - (void)requeue;
@@ -145,8 +148,21 @@ extern NSString *const DCTConnectionControllerTypeString[];
  Unlike the usual behaviour of delegates in Cocoa, the delegate is retained by the connection controller. 
  This is because DCTConnectionController uses DTConnectionManager to perform the connection and the connection manager
  must retain its delegates. Because of this the delegate should never retain the connection controller.
+ 
+ @deprecated This property is now deprecated because connection controllers can now have multiple delegates as
+ the connection system can merge a connection controller at a whim, merging the delegates. It does this to 
+ save bandwidth for identical connections happening. See the DCTEquality category for details on the new equality
+ checking. Use -addDelegate: and -delegates instead.
  */
 @property (nonatomic, retain) id<DCTConnectionControllerDelegate> delegate;
+
+
+- (void)addDelegate:(id<DCTConnectionControllerDelegate>)delegate;
+- (void)addDelegates:(NSSet *)delegateArray;
+- (void)removeDelegate:(id<DCTConnectionControllerDelegate>)delegate;
+- (void)removeDelegates:(NSSet *)delegates;
+- (NSSet *)delegates;
+- (NSSet *)observationInformation;
 
 /**
  @}
