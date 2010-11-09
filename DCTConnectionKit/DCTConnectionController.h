@@ -79,6 +79,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 	NSMutableArray *delegates;
 }
 
+
 @property (nonatomic, copy) DCTConnectionControllerResponseBlock responseBlock;
 @property (nonatomic, copy) DCTConnectionControllerCompletionBlock completionBlock;
 @property (nonatomic, copy) DCTConnectionControllerFailureBlock failureBlock;

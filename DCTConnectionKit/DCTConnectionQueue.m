@@ -93,11 +93,22 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 		[self requeueConnectionController:c];
 }
 
-- (void)addConnectionController:(DCTConnectionController *)connectionController {
+- (DCTConnectionController *)addConnectionController:(DCTConnectionController *)connectionController {
+	
+	NSUInteger i = [self.connectionControllers indexOfObject:connectionController];
+	
+	if (i != NSNotFound) {
+		DCTConnectionController *currentCC = [self.connectionControllers objectAtIndex:i];
+		[currentCC addDelegates:connectionController.delegates];
+		return currentCC;
+	}
+	
+	
 	
 	[connectionController addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	
 	[self dctInternal_addConnectionControllerToQueue:connectionController];
+	return connectionController;
 }
 
 - (void)removeConnectionController:(DCTConnectionController *)connectionController {
@@ -192,6 +203,10 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 }
 - (NSArray *)queuedConnectionControllers {
 	return [NSArray arrayWithArray:queuedConnections];
+}
+
+- (NSArray *)connectionControllers {
+	return [activeConnections arrayByAddingObjectsFromArray:queuedConnections];
 }
 
 - (NSInteger)activeConnectionCount {

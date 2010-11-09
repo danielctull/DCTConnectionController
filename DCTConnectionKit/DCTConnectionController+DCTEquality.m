@@ -18,7 +18,7 @@
 
 - (BOOL)isEqualToConnectionController:(DCTConnectionController *)connectionController {
 	
-	if ([self isEqual:connectionController]) return YES;
+	//if ([self isEqual:connectionController]) return YES;
 	
 	if (![connectionController isKindOfClass:[self class]]) return NO;
 	

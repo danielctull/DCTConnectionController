@@ -8,6 +8,7 @@
 
 #import "DCTConnectionController.h"
 #import "DCTConnectionQueue+Singleton.h"
+#import "DCTConnectionController+DCTEquality.h"
 
 NSString * const DCTConnectionControllerTypeString[] = {
 	@"GET",
@@ -339,6 +340,14 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 - (void)dctInternal_notifyBlockOfResponse:(NSURLResponse *)response {
 	if (self.responseBlock) self.responseBlock(response);
+}
+
+- (BOOL)isEqual:(id)object {
+	
+	if (![object isKindOfClass:[DCTConnectionController class]]) return NO;
+	
+	return [self isEqualToConnectionController:object];
+	
 }
 
 @end
