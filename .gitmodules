@@ -1,0 +1,3 @@
+[submodule "Vendors/DCTFoundation"]
+	path = Vendors/DCTFoundation
+	url = git@github.com:danielctull/DCTFoundation.git

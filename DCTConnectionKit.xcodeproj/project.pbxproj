@@ -14,6 +14,13 @@
 		242640F312887F45004572A6 /* DCTiOSConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 242640F212887F45004572A6 /* DCTiOSConnectionQueue.m */; };
 		24306A9B114E894B008BBE38 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24306A9A114E894B008BBE38 /* MainWindow-iPad.xib */; };
 		2433FEF712893AFB008C10D2 /* DCTConnectionController+DCTEquality.m in Sources */ = {isa = PBXBuildFile; fileRef = 2433FEF612893AFB008C10D2 /* DCTConnectionController+DCTEquality.m */; };
+		2433FF1312895323008C10D2 /* DCTQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 2433FF0612895323008C10D2 /* DCTQueue.m */; };
+		2433FF1412895323008C10D2 /* DCTStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 2433FF0812895323008C10D2 /* DCTStack.m */; };
+		2433FF1512895323008C10D2 /* NSArray+DCTExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 2433FF0A12895323008C10D2 /* NSArray+DCTExtras.m */; };
+		2433FF1612895323008C10D2 /* NSDate+DCTDateComponents.m in Sources */ = {isa = PBXBuildFile; fileRef = 2433FF0C12895323008C10D2 /* NSDate+DCTDateComponents.m */; };
+		2433FF1712895323008C10D2 /* NSError+DCTExtensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2433FF0E12895323008C10D2 /* NSError+DCTExtensions.m */; };
+		2433FF1812895323008C10D2 /* NSObject+DCTKVOExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 2433FF1012895323008C10D2 /* NSObject+DCTKVOExtras.m */; };
+		2433FF1912895323008C10D2 /* NSObject+DCTPerformSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 2433FF1212895323008C10D2 /* NSObject+DCTPerformSelector.m */; };
 		2456D8E1110B6F54009A4F1E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2456D8E0110B6F54009A4F1E /* CoreData.framework */; };
 		24BD77ED11DCD1090094DB11 /* DCTConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD77EC11DCD1090094DB11 /* DCTConnectionTests.m */; };
 		24BD781E11DCD37B0094DB11 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
@@ -57,6 +64,20 @@
 		24306A9A114E894B008BBE38 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "Resources-iPad/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		2433FEF512893AFB008C10D2 /* DCTConnectionController+DCTEquality.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionController+DCTEquality.h"; sourceTree = "<group>"; };
 		2433FEF612893AFB008C10D2 /* DCTConnectionController+DCTEquality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionController+DCTEquality.m"; sourceTree = "<group>"; };
+		2433FF0512895323008C10D2 /* DCTQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTQueue.h; sourceTree = "<group>"; };
+		2433FF0612895323008C10D2 /* DCTQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTQueue.m; sourceTree = "<group>"; };
+		2433FF0712895323008C10D2 /* DCTStack.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTStack.h; sourceTree = "<group>"; };
+		2433FF0812895323008C10D2 /* DCTStack.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTStack.m; sourceTree = "<group>"; };
+		2433FF0912895323008C10D2 /* NSArray+DCTExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+DCTExtras.h"; sourceTree = "<group>"; };
+		2433FF0A12895323008C10D2 /* NSArray+DCTExtras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+DCTExtras.m"; sourceTree = "<group>"; };
+		2433FF0B12895323008C10D2 /* NSDate+DCTDateComponents.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+DCTDateComponents.h"; sourceTree = "<group>"; };
+		2433FF0C12895323008C10D2 /* NSDate+DCTDateComponents.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+DCTDateComponents.m"; sourceTree = "<group>"; };
+		2433FF0D12895323008C10D2 /* NSError+DCTExtensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSError+DCTExtensions.h"; sourceTree = "<group>"; };
+		2433FF0E12895323008C10D2 /* NSError+DCTExtensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSError+DCTExtensions.m"; sourceTree = "<group>"; };
+		2433FF0F12895323008C10D2 /* NSObject+DCTKVOExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+DCTKVOExtras.h"; sourceTree = "<group>"; };
+		2433FF1012895323008C10D2 /* NSObject+DCTKVOExtras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+DCTKVOExtras.m"; sourceTree = "<group>"; };
+		2433FF1112895323008C10D2 /* NSObject+DCTPerformSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+DCTPerformSelector.h"; sourceTree = "<group>"; };
+		2433FF1212895323008C10D2 /* NSObject+DCTPerformSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+DCTPerformSelector.m"; sourceTree = "<group>"; };
 		243DB58D126A4B4F00A5AF1F /* DCTConnectionKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "DCTConnectionKit-Info.plist"; sourceTree = "<group>"; };
 		243DB58F126A4B8500A5AF1F /* DCTConnectionKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionKit_Prefix.pch; sourceTree = "<group>"; };
 		2456D8E0110B6F54009A4F1E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -175,6 +196,28 @@
 			name = "Resources-iPad";
 			sourceTree = "<group>";
 		};
+		2433FF0412895323008C10D2 /* DCTFoundation */ = {
+			isa = PBXGroup;
+			children = (
+				2433FF0512895323008C10D2 /* DCTQueue.h */,
+				2433FF0612895323008C10D2 /* DCTQueue.m */,
+				2433FF0712895323008C10D2 /* DCTStack.h */,
+				2433FF0812895323008C10D2 /* DCTStack.m */,
+				2433FF0912895323008C10D2 /* NSArray+DCTExtras.h */,
+				2433FF0A12895323008C10D2 /* NSArray+DCTExtras.m */,
+				2433FF0B12895323008C10D2 /* NSDate+DCTDateComponents.h */,
+				2433FF0C12895323008C10D2 /* NSDate+DCTDateComponents.m */,
+				2433FF0D12895323008C10D2 /* NSError+DCTExtensions.h */,
+				2433FF0E12895323008C10D2 /* NSError+DCTExtensions.m */,
+				2433FF0F12895323008C10D2 /* NSObject+DCTKVOExtras.h */,
+				2433FF1012895323008C10D2 /* NSObject+DCTKVOExtras.m */,
+				2433FF1112895323008C10D2 /* NSObject+DCTPerformSelector.h */,
+				2433FF1212895323008C10D2 /* NSObject+DCTPerformSelector.m */,
+			);
+			name = DCTFoundation;
+			path = Vendors/DCTFoundation/DCTFoundation;
+			sourceTree = "<group>";
+		};
 		24BD77E811DCD0BE0094DB11 /* Unit Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -282,6 +325,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				2433FF0412895323008C10D2 /* DCTFoundation */,
 				24E4DC1A126A5FD500C19D4B /* DCTConnectionKit */,
 				242640EA12885FD9004572A6 /* DCTConnectionKit+UIKitAdditions */,
 				24E4DC45126A5FD500C19D4B /* DCTConnectionKitExample */,
@@ -454,6 +498,13 @@
 				24E4DC5D126A5FD500C19D4B /* DCTConnectionKitExampleViewController.m in Sources */,
 				242640F312887F45004572A6 /* DCTiOSConnectionQueue.m in Sources */,
 				2433FEF712893AFB008C10D2 /* DCTConnectionController+DCTEquality.m in Sources */,
+				2433FF1312895323008C10D2 /* DCTQueue.m in Sources */,
+				2433FF1412895323008C10D2 /* DCTStack.m in Sources */,
+				2433FF1512895323008C10D2 /* NSArray+DCTExtras.m in Sources */,
+				2433FF1612895323008C10D2 /* NSDate+DCTDateComponents.m in Sources */,
+				2433FF1712895323008C10D2 /* NSError+DCTExtensions.m in Sources */,
+				2433FF1812895323008C10D2 /* NSObject+DCTKVOExtras.m in Sources */,
+				2433FF1912895323008C10D2 /* NSObject+DCTPerformSelector.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
