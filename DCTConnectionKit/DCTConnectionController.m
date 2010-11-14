@@ -10,6 +10,7 @@
 #import "DCTConnectionQueue+Singleton.h"
 #import "DCTConnectionController+DCTEquality.h"
 #import "DCTObservationInfo.h"
+#import "NSMutableSet+DCTExtras.h"
 
 NSString * const DCTConnectionControllerTypeString[] = {
 	@"GET",
@@ -74,18 +75,74 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	priority = DCTConnectionControllerPriorityMedium;
 	delegates = [[NSMutableSet alloc] init];
 	observationInfos = [[NSMutableSet alloc] init];
+	responseBlocks = [[NSMutableSet alloc] init];
 	
 	return self;
 }
 
 - (void)dealloc {
+	[responseBlocks release], responseBlocks = nil;
 	[observationInfos release], observationInfos = nil;
 	[delegates release]; delegates = nil;
 	[dependencies release], dependencies = nil;
 	[super dealloc];
 }
 
-#pragma mark - 
+#pragma mark -
+#pragma mark Depricated Blocks
+
+- (void)setResponseBlock:(DCTConnectionControllerResponseBlock)block {
+	[self addResponseBlock:block];
+}
+
+- (DCTConnectionControllerResponseBlock)responseBlock {
+	return nil;
+}
+
+- (void)setCompletionBlock:(DCTConnectionControllerCompletionBlock)block {
+	[self addCompletionBlock:block];
+}
+
+- (DCTConnectionControllerCompletionBlock)completionBlock {
+	return nil;
+}
+
+- (void)setFailureBlock:(DCTConnectionControllerFailureBlock)block {
+	[self addFailureBlock:block];
+}
+
+- (DCTConnectionControllerFailureBlock)failureBlock {
+	return nil;
+}
+
+- (void)setCancelationBlock:(DCTConnectionControllerCancelationBlock)block {
+	[self addCancelationBlock:block];
+}
+
+- (DCTConnectionControllerCancelationBlock)cancelationBlock {
+	return nil;
+}
+
+#pragma mark -
+#pragma mark Block methods
+
+- (void)addResponseBlock:(DCTConnectionControllerResponseBlock)block {
+	[responseBlocks dct_addBlock:block];
+}
+
+- (void)addCompletionBlock:(DCTConnectionControllerCompletionBlock)block {
+	[completionBlocks dct_addBlock:block];
+}
+
+- (void)addFailureBlock:(DCTConnectionControllerFailureBlock)block {
+	[failureBlocks dct_addBlock:block];
+}
+
+- (void)addCancelationBlock:(DCTConnectionControllerCancelationBlock)block {
+	[cancelationBlocks dct_addBlock:block];
+}
+
+#pragma mark -
 #pragma mark Delegatation
 
 - (void)setDelegate:(id<DCTConnectionControllerDelegate>)delegate {
