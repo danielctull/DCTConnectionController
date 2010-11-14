@@ -82,17 +82,9 @@ extern NSString *const DCTConnectionControllerTypeString[];
 	NSMutableSet *responseBlocks, *completionBlocks, *failureBlocks, *cancelationBlocks;
 }
 
-
-@property (nonatomic, copy) DCTConnectionControllerResponseBlock responseBlock;
 - (void)addResponseBlock:(DCTConnectionControllerResponseBlock)responseBlock;
-
-@property (nonatomic, copy) DCTConnectionControllerCompletionBlock completionBlock;
 - (void)addCompletionBlock:(DCTConnectionControllerCompletionBlock)completionBlock;
-
-@property (nonatomic, copy) DCTConnectionControllerFailureBlock failureBlock;
 - (void)addFailureBlock:(DCTConnectionControllerFailureBlock)failureBlock;
-
-@property (nonatomic, copy) DCTConnectionControllerCancelationBlock cancelationBlock;
 - (void)addCancelationBlock:(DCTConnectionControllerCancelationBlock)cancelationBlock;
 
 @property (nonatomic, readonly) DCTConnectionControllerStatus status;

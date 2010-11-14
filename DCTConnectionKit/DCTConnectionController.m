@@ -89,41 +89,6 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 }
 
 #pragma mark -
-#pragma mark Depricated Blocks
-
-- (void)setResponseBlock:(DCTConnectionControllerResponseBlock)block {
-	[self addResponseBlock:block];
-}
-
-- (DCTConnectionControllerResponseBlock)responseBlock {
-	return nil;
-}
-
-- (void)setCompletionBlock:(DCTConnectionControllerCompletionBlock)block {
-	[self addCompletionBlock:block];
-}
-
-- (DCTConnectionControllerCompletionBlock)completionBlock {
-	return nil;
-}
-
-- (void)setFailureBlock:(DCTConnectionControllerFailureBlock)block {
-	[self addFailureBlock:block];
-}
-
-- (DCTConnectionControllerFailureBlock)failureBlock {
-	return nil;
-}
-
-- (void)setCancelationBlock:(DCTConnectionControllerCancelationBlock)block {
-	[self addCancelationBlock:block];
-}
-
-- (DCTConnectionControllerCancelationBlock)cancelationBlock {
-	return nil;
-}
-
-#pragma mark -
 #pragma mark Block methods
 
 - (void)addResponseBlock:(DCTConnectionControllerResponseBlock)block {
