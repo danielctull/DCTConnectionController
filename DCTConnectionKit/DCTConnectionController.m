@@ -340,7 +340,9 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 }
 
 - (void)dctInternal_notifyBlockOfObject:(NSObject *)object {
-	if (self.completionBlock) self.completionBlock(object);
+	
+	for (DCTConnectionControllerCompletionBlock block in completionBlocks)
+		block(object);
 }
 
 #pragma mark -
@@ -360,7 +362,9 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 }
 
 - (void)dctInternal_notifyBlockOfReturnedError:(NSError *)error {
-	if (self.failureBlock) self.failureBlock(error);
+	
+	for (DCTConnectionControllerFailureBlock block in failureBlocks)
+		block(error);
 }
 
 #pragma mark -
@@ -379,7 +383,9 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 }
 
 - (void)dctInternal_notifyBlockOfCancellation {
-	if (self.cancelationBlock) self.cancelationBlock();
+	
+	for (DCTConnectionControllerCancelationBlock block in cancelationBlocks)
+		block();
 }
 
 #pragma mark -
@@ -399,7 +405,9 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 
 - (void)dctInternal_notifyBlockOfResponse:(NSURLResponse *)response {
-	if (self.responseBlock) self.responseBlock(response);
+	
+	for (DCTConnectionControllerResponseBlock block in responseBlocks)
+		block(response);
 }
 
 
