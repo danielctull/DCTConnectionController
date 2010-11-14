@@ -62,7 +62,6 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 @implementation DCTConnectionController
 
 @synthesize status, type, priority, multitaskEnabled, URL, returnedObject, returnedError, returnedResponse;
-@synthesize completionBlock, failureBlock, responseBlock, cancelationBlock;
 
 + (id)connectionController {
 	return [[[self alloc] init] autorelease];
@@ -105,6 +104,22 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 - (void)addCancelationBlock:(DCTConnectionControllerCancelationBlock)block {
 	[cancelationBlocks dct_addBlock:block];
+}
+
+- (NSSet *)responseBlocks {
+	return [NSSet setWithSet:responseBlocks];
+}
+
+- (NSSet *)completionBlocks {
+	return [NSSet setWithSet:completionBlocks];
+}
+
+- (NSSet *)failureBlocks {
+	return [NSSet setWithSet:failureBlocks];
+}
+
+- (NSSet *)cancelationBlocks {
+	return [NSSet setWithSet:cancelationBlocks];
 }
 
 #pragma mark -

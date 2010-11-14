@@ -82,11 +82,6 @@ extern NSString *const DCTConnectionControllerTypeString[];
 	NSMutableSet *responseBlocks, *completionBlocks, *failureBlocks, *cancelationBlocks;
 }
 
-- (void)addResponseBlock:(DCTConnectionControllerResponseBlock)responseBlock;
-- (void)addCompletionBlock:(DCTConnectionControllerCompletionBlock)completionBlock;
-- (void)addFailureBlock:(DCTConnectionControllerFailureBlock)failureBlock;
-- (void)addCancelationBlock:(DCTConnectionControllerCancelationBlock)cancelationBlock;
-
 @property (nonatomic, readonly) DCTConnectionControllerStatus status;
 @property (nonatomic, assign) DCTConnectionControllerPriority priority;
 
@@ -164,6 +159,29 @@ extern NSString *const DCTConnectionControllerTypeString[];
 - (void)removeDelegates:(NSSet *)delegates;
 - (NSSet *)delegates;
 - (NSSet *)observationInformation;
+
+/**
+ @}
+ */
+
+#pragma mark -
+#pragma mark Managing event blocks
+
+/** @name Managing event blocks
+ @{
+ */
+
+- (NSSet *)responseBlocks;
+- (void)addResponseBlock:(DCTConnectionControllerResponseBlock)responseBlock;
+
+- (NSSet *)completionBlocks;
+- (void)addCompletionBlock:(DCTConnectionControllerCompletionBlock)completionBlock;
+
+- (NSSet *)failureBlocks;
+- (void)addFailureBlock:(DCTConnectionControllerFailureBlock)failureBlock;
+
+- (NSSet *)cancelationBlocks;
+- (void)addCancelationBlock:(DCTConnectionControllerCancelationBlock)cancelationBlock;
 
 /**
  @}
