@@ -10,14 +10,25 @@
 
 @implementation DCTOAuthRequestTokenConnectionController
 
+@synthesize callback;
+
 - (id)init {
 	if (!(self = [super init])) return nil;
 	
-	NSArray *keys = [NSArray arrayWithObjects:DCTOAuthConsumerKeyKey, DCTOAuthNonceKey, DCTOAuthSignatureMethodKey, DCTOAuthTimestampKey, DCTOAuthVersionKey, nil];
-	
-	for (NSString *key in keys) [self setValue:@"" forParameter:key];
+	self.callback = @"";
 	
 	return self;
+}
+
++ (NSArray *)oauthProperties {
+	return [NSArray arrayWithObject:DCTOAuthCallBackKey];
+}
+
+- (id)valueForKey:(NSString *)key {
+	if ([key isEqualToString:DCTOAuthCallBackKey])
+		return self.callback;
+	
+	return [super valueForKey:key];
 }
 
 @end

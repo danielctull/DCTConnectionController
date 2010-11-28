@@ -11,4 +11,6 @@
 @interface DCTOAuthRequestTokenConnectionController : DCTOAuthConnectionController {
 }
 
+@property (nonatomic, copy) NSString *callback;
+
 @end

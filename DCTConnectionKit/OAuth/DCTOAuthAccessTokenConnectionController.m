@@ -10,16 +10,18 @@
 
 
 @implementation DCTOAuthAccessTokenConnectionController
-
+/*
 - (id)init {
 	if (!(self = [super init])) return nil;
 	
 	NSArray *keys = [NSArray arrayWithObjects:DCTOAuthConsumerKeyKey, DCTOAuthNonceKey, DCTOAuthSignatureMethodKey, DCTOAuthTimestampKey, DCTOAuthVersionKey, DCTOAuthTokenKey, nil];
 	
-	for (NSString *key in keys) [self setValue:@"" forParameter:key];
+	//for (NSString *key in keys) [self setValue:@"" forParameter:key];
 	
 	return self;
-}
+}*/
+
+
 
 #pragma mark -
 #pragma mark Accessor methods
