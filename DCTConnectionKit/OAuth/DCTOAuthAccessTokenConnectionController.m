@@ -23,12 +23,12 @@
 
 #pragma mark -
 #pragma mark Accessor methods
-
+/*
 - (void)setToken:(NSString *)s {
 	[parameters setObject:s forKey:DCTOAuthTokenKey];
 }
 - (NSString *)token {
 	return [parameters objectForKey:DCTOAuthTokenKey];
-}
+}*/
 
 @end

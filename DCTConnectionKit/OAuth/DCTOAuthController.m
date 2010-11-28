@@ -92,7 +92,7 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	if (requestTokenConnection || !self.consumerKey || !self.secretConsumerKey) return;
 	
 	requestTokenConnection = [[DCTOAuthRequestTokenConnectionController alloc] init];
-	requestTokenConnection.URL = [self requestTokenConnectionURL];
+	// TODO: requestTokenConnection.URL = [self requestTokenConnectionURL];
 	requestTokenConnection.type = [self requestTokenConnectionType];
 	requestTokenConnection.consumerKey = [self consumerKey];
 	requestTokenConnection.secretConsumerKey = [self secretConsumerKey];
@@ -111,7 +111,7 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	for (NSString *key in parameters)
 		[accessTokenConnection setValue:[parameters objectForKey:key] forParameter:key];	
 	
-	accessTokenConnection.URL = [self accessTokenConnectionURL];
+	// TODO: accessTokenConnection.URL = [self accessTokenConnectionURL];
 	accessTokenConnection.type = [self accessTokenConnectionType];
 	accessTokenConnection.consumerKey = [self consumerKey];
 	accessTokenConnection.secretConsumerKey = [self secretConsumerKey];

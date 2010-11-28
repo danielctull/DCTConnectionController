@@ -6,7 +6,7 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DCTConnectionController.h"
+#import "DCTRESTController.h"
 #import "DCTOAuthSignature.h"
 
 extern NSString *const DCTOAuthCallBackKey;
@@ -20,24 +20,27 @@ extern NSString *const DCTOAuthTokenKey;
 extern NSString *const DCTOAuthVerifierKey;
 extern NSString *const DTOAuthVerifierKey;
 
-@interface DCTOAuthConnectionController : DCTConnectionController {
-	NSMutableDictionary *parameters;
+@interface DCTOAuthConnectionController : DCTRESTController {
+	NSDictionary *oauthParameters;
+	DCTOAuthSignature *signature;	
+	NSString *timestamp;
 }
 
-- (NSString *)valueForParameter:(NSString *)parameterName;
-- (void)setValue:(NSString *)value forParameter:(NSString *)parameterName;
++ (NSArray *)oauthProperties;
 
-- (DCTOAuthSignature *)signature;
 
-- (void)receivedOAuthDictionary:(NSDictionary *)dictionary;
 
 + (NSDictionary *)oauthDictionaryFromString:(NSString *)string;
+- (void)receivedOAuthDictionary:(NSDictionary *)dictionary;
 
 @property (nonatomic, retain) NSString *nonce;
 @property (nonatomic, retain) NSString *consumerKey;
 @property (nonatomic, retain) NSString *secretConsumerKey;
 @property (nonatomic, retain) NSString *secretToken;
 @property (nonatomic, retain) NSString *version;
-@property (nonatomic, retain) NSURL *URL;
+
+
+@property (nonatomic, readonly) NSString *timestamp;
+@property (nonatomic, readonly) DCTOAuthSignature *signature;
 
 @end
