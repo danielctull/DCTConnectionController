@@ -203,7 +203,6 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 - (void)receivedResponse:(NSURLResponse *)response {
 	self.returnedResponse = response;
-	[self dctInternal_announceResponse];
 }
 
 - (void)receivedError:(NSError *)error {
@@ -215,7 +214,9 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 #pragma mark NSURLConnection delegate methods
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+	self.returnedResponse = response;
     [self receivedResponse:response];
+	[self dctInternal_announceResponse];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
@@ -225,11 +226,19 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	NSData *data = ((DCTURLConnection *)connection).data;
 	
+	self.returnedObject = data;
     [self receivedObject:data];
+	[urlConnection cancel];
+	[urlConnection release]; urlConnection = nil;
+	[self dctInternal_finishWithSuccess];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+	self.returnedError = error;
     [self receivedError:error];
+	[urlConnection cancel];
+	[urlConnection release]; urlConnection = nil;
+	[self dctInternal_finishWithFailure];
 }
 
 #pragma mark -
@@ -243,6 +252,9 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 }
 
 - (void)dctInternal_finishWithSuccess {
+	if (calledToFinish) return;
+	calledToFinish = YES;
+		
 	[self dctInternal_notifyDelegateOfObject:self.returnedObject];
 	[self dctInternal_notifyObserversOfObject:self.returnedObject];
 	[self dctInternal_notifyBlockOfObject:self.returnedObject];
@@ -251,6 +263,9 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 }
 
 - (void)dctInternal_finishWithFailure {
+	if (calledToFinish) return;
+	calledToFinish = YES;
+	
 	[self dctInternal_notifyDelegateOfReturnedError:self.returnedError];
 	[self dctInternal_notifyObserversOfReturnedError:self.returnedError];
 	[self dctInternal_notifyBlockOfReturnedError:self.returnedError];
@@ -259,6 +274,9 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 }
 
 - (void)dctInternal_finishWithCancelation {
+	if (calledToFinish) return;
+	calledToFinish = YES;
+	
 	[self dctInternal_notifyDelegateOfCancellation];
 	[self dctInternal_notifyObserversOfCancellation];
 	[self dctInternal_notifyBlockOfCancellation];

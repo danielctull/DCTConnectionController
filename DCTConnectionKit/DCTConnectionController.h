@@ -73,11 +73,9 @@ extern NSString *const DCTConnectionControllerTypeString[];
 	DCTConnectionControllerStatus status;
 	DCTURLConnection *urlConnection;
 	NSURL *URL;
-	NSObject *returnedObject;
-	NSError *returnedError;
-	NSURLResponse *returnedResponse;
 	NSMutableSet *delegates;
 	NSMutableSet *observationInfos;
+	BOOL calledToFinish;
 }
 
 

@@ -19,11 +19,16 @@ NSString * const DTOAuthSignatureTypeString[] = {
 @implementation DCTOAuthSignature
 @synthesize type, secret, text;
 
-- (NSString *)typeString {
+
+- (NSString *)method {
 	return DTOAuthSignatureTypeString[DCTOAuthSignatureTypeHMAC_SHA1];
 	
 	// PLAIN TEXT NOT WORKING
 	return DTOAuthSignatureTypeString[self.type];
+}
+
+- (NSString *)typeString {
+	return self.method;
 }
 
 - (NSString *)signature {

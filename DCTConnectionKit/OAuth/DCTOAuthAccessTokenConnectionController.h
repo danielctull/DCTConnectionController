@@ -10,5 +10,5 @@
 
 @interface DCTOAuthAccessTokenConnectionController : DCTOAuthConnectionController {
 }
-@property (nonatomic, retain) NSString *token;
+//@property (nonatomic, retain) NSString *token;
 @end

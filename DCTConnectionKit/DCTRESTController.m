@@ -8,33 +8,26 @@
 
 #import "DCTRESTController.h"
 #import <objc/runtime.h>
+#import "NSString+DTURLEncoding.h"
+
+typedef id (^DCTInternalRESTControllerKeyValueStringConvertor) (id, id);
+
+@interface DCTRESTController ()
+- (NSArray *)dctInternal_keyValueStringsForKeys:(NSSet *)keys stringConvertor:(DCTInternalRESTControllerKeyValueStringConvertor)convertor;
+@end
 
 @implementation DCTRESTController
 
++ (NSArray *)headerProperties {
+	return nil;
+}
+
 + (NSArray *)bodyProperties {
-	return [NSArray array];
+	return nil;
 }
 
 + (NSArray *)queryProperties {
-	
-	NSUInteger outCount;
-	
-	objc_property_t *properties = class_copyPropertyList([self class], &outCount);
-	
-	NSMutableArray *array = [[[NSMutableArray alloc] init] autorelease];
-	
-	for (NSUInteger i = 0; i < outCount; i++) {
-		objc_property_t property = properties[i];
-		const char *propertyName = property_getName(property);
-		NSString *nameString = [[[NSString alloc] initWithCString:propertyName] autorelease];
-		[array addObject:nameString];
-	}
-	
-	//NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), array);
-	
-	free(properties);
-	
-	return array;
+	return nil;
 }
 
 - (NSString *)baseURLString {
@@ -44,65 +37,63 @@
 - (NSMutableURLRequest *)newRequest {
 	
 	NSMutableURLRequest *request = [super newRequest];
-	
-	NSMutableString *url = [[[self baseURLString] mutableCopy] autorelease];
+	NSMutableSet *queries = [NSMutableSet set];
+	NSMutableSet *bodies = [NSMutableSet set];
+	NSMutableSet *headers = [NSMutableSet set];
 	
 	Class class = [self class];
-	
-	NSMutableArray *queries = [[[NSMutableArray alloc] init] autorelease];
-	NSMutableArray *bodies = [[[NSMutableArray alloc] init] autorelease];
-	
 	while ([class isSubclassOfClass:[DCTRESTController class]] && ![[DCTRESTController class] isSubclassOfClass:class]) {
 		
 		NSArray *classQueries = [class queryProperties];
-		if (classQueries)
-			[queries addObjectsFromArray:classQueries];
+		if (classQueries) [queries addObjectsFromArray:classQueries];
 		
 		NSArray *classBodies = [class bodyProperties];		
-		if (classBodies) 
-			[bodies addObjectsFromArray:classBodies];
+		if (classBodies) [bodies addObjectsFromArray:classBodies];
+		
+		NSArray *classHeaders = [class headerProperties];
+		if (classHeaders) [headers addObjectsFromArray:classHeaders];
 		
 		class = class_getSuperclass(class);
 	}
 	
-	BOOL firstPass = YES;
+	DCTInternalRESTControllerKeyValueStringConvertor convertor = ^(id key, id value) {
+		return [NSString stringWithFormat:@"%@=%@", key, [value dt_urlEncodedString]];
+	};
 	
-	for (NSString *key in queries) {
-		
-		id value = [self valueForKey:key];
-		
-		if (value) {
-			
-			firstPass ? [url appendString:@"?"] : [url appendString:@"&"];
-			
-			[url appendFormat:@"%@=%@", key, value];
-			
-			firstPass = NO;
-		}
-		
+	if ([queries count] == 0) {
+		[request setURL:[NSURL URLWithString:[self baseURLString]]];
+	} else {
+		NSArray *queryKeyValues = [self dctInternal_keyValueStringsForKeys:queries stringConvertor:convertor];	
+		NSString *queryString = [queryKeyValues componentsJoinedByString:@"&"];
+		[request setURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@?%@", [self baseURLString], queryString]]];
 	}
 	
-	[request setURL:[NSURL URLWithString:url]];
-	
-	NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), url);
-	
-	NSMutableString *bodyString = [[[NSMutableString alloc] initWithData:[request HTTPBody] encoding:NSUTF8StringEncoding] autorelease];
-	
-	for (NSString *key in bodies) {
-		
-		id value = [self valueForKey:key];
-		
-		if (value) {
-			[bodyString length] == 0 ? : [bodyString appendString:@"&"];
-			
-			[bodyString appendFormat:@"%@=%@", key, value];
-		}
-	}
-	
+	NSArray *bodyKeyValues = [self dctInternal_keyValueStringsForKeys:bodies stringConvertor:convertor];
+	NSString *bodyString = [bodyKeyValues componentsJoinedByString:@"&"];
 	[request setHTTPBody:[bodyString dataUsingEncoding:NSUTF8StringEncoding]];
+		
+	[self dctInternal_keyValueStringsForKeys:headers stringConvertor:^(id key, id value){
+		[request addValue:value forHTTPHeaderField:key];
+		return [NSString stringWithFormat:@"%@: %@", key, value];
+	}];
 	
 	return request;	
 }
+
+- (NSArray *)dctInternal_keyValueStringsForKeys:(NSSet *)keys stringConvertor:(DCTInternalRESTControllerKeyValueStringConvertor)convertor {
+	
+	NSMutableArray *strings = [NSMutableArray arrayWithCapacity:[keys count]];
+	
+	for (NSString *key in keys) {
+		
+		id value = [self valueForKey:key];
+				
+		if (value && [value isKindOfClass:[NSString class]])
+			[strings addObject:convertor(key, value)];
+	}
+	return [NSArray arrayWithArray:strings];
+}
+		 
 
 
 @end
