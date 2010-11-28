@@ -8,7 +8,6 @@
 
 #import "DCTOAuthConnectionController.h"
 #import "NSString+DTURLEncoding.h"
-#import "NSMutableURLRequest+DCTOAuth.h"
 
 NSString *const DCTOAuthCallBackKey = @"oauth_callback";
 NSString *const DCTOAuthConsumerKeyKey = @"oauth_consumer_key";
@@ -33,7 +32,7 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 
 @implementation DCTOAuthConnectionController
 
-@synthesize nonce, consumerKey, secretConsumerKey, secretToken, version, timestamp;
+@synthesize nonce, consumerKey, secretConsumerKey, secretToken, version, timestamp, token;
 
 #pragma mark -
 #pragma mark NSObject
@@ -42,6 +41,7 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 	if (!(self = [super init])) return nil;
 		
 	self.consumerKey = @"";
+	self.token = @"";
 	self.secretToken = @"";
 	self.secretConsumerKey = @"";
 	self.nonce = [[NSProcessInfo processInfo] globallyUniqueString];
@@ -165,6 +165,8 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 		[authorizationArray addObject:s];
 	}
 	
+	[authorizationArray addObject:[self dt_stringForKey:DCTOAuthSignatureKey value:self.signature.signature]];
+	
 	return [authorizationArray componentsJoinedByString:@", "];	
 }
 
@@ -174,7 +176,7 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 		NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:7];
 		
 		[d setObject:self.consumerKey forKey:DCTOAuthConsumerKeyKey];
-		[d setObject:self.secretToken forKey:DCTOAuthTokenKey];
+		[d setObject:self.token forKey:DCTOAuthTokenKey];
 		[d setObject:self.nonce forKey:DCTOAuthNonceKey];
 		[d setObject:self.timestamp forKey:DCTOAuthTimestampKey];
 		[d setObject:self.signature.method forKey:DCTOAuthSignatureMethodKey];
@@ -188,7 +190,6 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 			class = [class superclass];
 		}
 		
-		[d setObject:self.signature.signature forKey:DCTOAuthSignatureKey];
 		oauthParameters = [[NSDictionary alloc] initWithDictionary:d];
 	}
 	
@@ -207,8 +208,7 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 	NSArray *keys = [[params allKeys] sortedArrayUsingSelector:@selector(compare:)];
 	
 	for (NSString *key in keys)
-		[coreArray addObject:[[self dt_baseStringForKey:key value:[params valueForKey:key]] dt_urlEncodedString]];
-	
+		[coreArray addObject:[self dt_baseStringForKey:key value:[params valueForKey:key]]];
 	
 	return [coreArray componentsJoinedByString:@"&"];
 }
@@ -217,9 +217,11 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 	
 	NSMutableArray *baseArray = [NSMutableArray arrayWithCapacity:3];
 	
-	[baseArray addObject:DCTConnectionControllerTypeString[self.type]];
+	[baseArray addObject:[DCTConnectionControllerTypeString[self.type] dt_urlEncodedString]];
 	[baseArray addObject:[[self baseURLString] dt_urlEncodedString]];
-	[baseArray addObject:[self dctInternal_coreOAuthString]];
+	[baseArray addObject:[[self dctInternal_coreOAuthString] dt_urlEncodedString]];
+	
+	NSLog(@"%@:%@ BASE STRING: \n\n%@\n\n", self, NSStringFromSelector(_cmd), [baseArray componentsJoinedByString:@"&"]);
 	
 	return [baseArray componentsJoinedByString:@"&"];
 }

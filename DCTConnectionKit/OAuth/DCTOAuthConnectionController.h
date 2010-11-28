@@ -36,6 +36,7 @@ extern NSString *const DTOAuthVerifierKey;
 @property (nonatomic, retain) NSString *nonce;
 @property (nonatomic, retain) NSString *consumerKey;
 @property (nonatomic, retain) NSString *secretConsumerKey;
+@property (nonatomic, retain) NSString *token;
 @property (nonatomic, retain) NSString *secretToken;
 @property (nonatomic, retain) NSString *version;
 

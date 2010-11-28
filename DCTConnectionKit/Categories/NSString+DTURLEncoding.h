@@ -11,5 +11,6 @@
 
 @interface NSString (DTURLEncoding)
 - (NSString *)dt_urlEncodedString;
+- (NSString *)dt_urlEncodedStringNoSlash;
 
 @end
