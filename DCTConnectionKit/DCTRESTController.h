@@ -14,6 +14,7 @@
 
 + (NSArray *)queryProperties;
 + (NSArray *)bodyProperties;
++ (NSArray *)headerProperties;
 - (NSString *)baseURLString;
 
 @end

@@ -92,12 +92,11 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	if (requestTokenConnection || !self.consumerKey || !self.secretConsumerKey) return;
 	
 	requestTokenConnection = [[DCTOAuthRequestTokenConnectionController alloc] init];
-	requestTokenConnection.URL = [self requestTokenConnectionURL];
+	// TODO: requestTokenConnection.URL = [self requestTokenConnectionURL];
 	requestTokenConnection.type = [self requestTokenConnectionType];
 	requestTokenConnection.consumerKey = [self consumerKey];
 	requestTokenConnection.secretConsumerKey = [self secretConsumerKey];
-	
-	[requestTokenConnection setValue:self.callback forParameter:DCTOAuthCallBackKey];
+	requestTokenConnection.callback = self.callback;
 	
 	requestTokenConnection.delegate = self;
 	[requestTokenConnection connect];
@@ -108,10 +107,10 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	
 	accessTokenConnection = [[DCTOAuthAccessTokenConnectionController alloc] init];
 	
-	for (NSString *key in parameters)
-		[accessTokenConnection setValue:[parameters objectForKey:key] forParameter:key];	
+	//for (NSString *key in parameters)
+	//	[accessTokenConnection setValue:[parameters objectForKey:key] forParameter:key];	
 	
-	accessTokenConnection.URL = [self accessTokenConnectionURL];
+	// TODO: accessTokenConnection.URL = [self accessTokenConnectionURL];
 	accessTokenConnection.type = [self accessTokenConnectionType];
 	accessTokenConnection.consumerKey = [self consumerKey];
 	accessTokenConnection.secretConsumerKey = [self secretConsumerKey];
@@ -150,9 +149,6 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DTOAuthCallBackNotification object:url];
 }
-
-
-
 
 - (NSURL *)accessTokenConnectionURL {
 	return [NSURL URLWithString:@""];
