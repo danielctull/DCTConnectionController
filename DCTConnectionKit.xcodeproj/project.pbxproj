@@ -23,6 +23,8 @@
 		2433FF1912895323008C10D2 /* NSObject+DCTPerformSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 2433FF1212895323008C10D2 /* NSObject+DCTPerformSelector.m */; };
 		2433FF1F12897080008C10D2 /* DCTObservationInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2433FF1E12897080008C10D2 /* DCTObservationInfo.m */; };
 		2456D8E1110B6F54009A4F1E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2456D8E0110B6F54009A4F1E /* CoreData.framework */; };
+		2467FCFB129082FE00382FAF /* NSMutableSet+DCTExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 2467FCFA129082FE00382FAF /* NSMutableSet+DCTExtras.m */; };
+		2467FD00129084B400382FAF /* DCTBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 2467FCFF129084B400382FAF /* DCTBlock.m */; };
 		24BD77ED11DCD1090094DB11 /* DCTConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD77EC11DCD1090094DB11 /* DCTConnectionTests.m */; };
 		24BD781E11DCD37B0094DB11 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		24BD782311DCD3870094DB11 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -84,6 +86,10 @@
 		243DB58D126A4B4F00A5AF1F /* DCTConnectionKit-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "DCTConnectionKit-Info.plist"; sourceTree = "<group>"; };
 		243DB58F126A4B8500A5AF1F /* DCTConnectionKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionKit_Prefix.pch; sourceTree = "<group>"; };
 		2456D8E0110B6F54009A4F1E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		2467FCF9129082FE00382FAF /* NSMutableSet+DCTExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableSet+DCTExtras.h"; sourceTree = "<group>"; };
+		2467FCFA129082FE00382FAF /* NSMutableSet+DCTExtras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableSet+DCTExtras.m"; sourceTree = "<group>"; };
+		2467FCFC129084A200382FAF /* DCTBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTBlock.h; sourceTree = "<group>"; };
+		2467FCFF129084B400382FAF /* DCTBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTBlock.m; sourceTree = "<group>"; };
 		24BD77D711DCCE340094DB11 /* Unit Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unit Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		24BD77D811DCCE340094DB11 /* Unit Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Unit Tests-Info.plist"; sourceTree = "<group>"; };
 		24BD77EB11DCD1090094DB11 /* DCTConnectionTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionTests.h; sourceTree = "<group>"; };
@@ -218,6 +224,10 @@
 				2433FF1012895323008C10D2 /* NSObject+DCTKVOExtras.m */,
 				2433FF1112895323008C10D2 /* NSObject+DCTPerformSelector.h */,
 				2433FF1212895323008C10D2 /* NSObject+DCTPerformSelector.m */,
+				2467FCF9129082FE00382FAF /* NSMutableSet+DCTExtras.h */,
+				2467FCFA129082FE00382FAF /* NSMutableSet+DCTExtras.m */,
+				2467FCFC129084A200382FAF /* DCTBlock.h */,
+				2467FCFF129084B400382FAF /* DCTBlock.m */,
 			);
 			name = DCTFoundation;
 			path = Vendors/DCTFoundation/DCTFoundation;
@@ -511,6 +521,8 @@
 				2433FF1812895323008C10D2 /* NSObject+DCTKVOExtras.m in Sources */,
 				2433FF1912895323008C10D2 /* NSObject+DCTPerformSelector.m in Sources */,
 				2433FF1F12897080008C10D2 /* DCTObservationInfo.m in Sources */,
+				2467FCFB129082FE00382FAF /* NSMutableSet+DCTExtras.m in Sources */,
+				2467FD00129084B400382FAF /* DCTBlock.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -635,7 +647,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				PREBINDING = NO;
-				SDKROOT = iphonesimulator4.1;
+				SDKROOT = iphonesimulator;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -651,7 +663,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				PREBINDING = NO;
-				SDKROOT = iphoneos4.1;
+				SDKROOT = iphonesimulator;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
