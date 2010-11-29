@@ -24,110 +24,87 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 @interface DCTOAuthConnectionController ()
 - (NSString *)dt_stringForKey:(NSString *)key value:(NSString *)value;
 - (NSString *)dt_baseStringForKey:(NSString *)key value:(NSString *)value;
+- (NSString *)dctInternal_authorizationHeader;
+- (NSArray *)dctInternal_sortedParameterKeys;
+- (NSString *)dctInternal_baseSignatureString;
+@property (nonatomic, readonly) NSDictionary *dctInternal_parameters;
 @end
 
 @implementation DCTOAuthConnectionController
 
-@synthesize secretConsumerKey, secretToken, URL=mutableURL;
+@synthesize nonce, consumerKey, secretConsumerKey, secretToken, version, timestamp, token;
+
+#pragma mark -
+#pragma mark NSObject
 
 - (id)init {
 	if (!(self = [super init])) return nil;
-	
-	parameters = [[NSMutableDictionary alloc] init];
-	
+		
+	self.consumerKey = @"";
+	self.token = @"";
+	self.secretToken = @"";
+	self.secretConsumerKey = @"";
 	self.nonce = [[NSProcessInfo processInfo] globallyUniqueString];
 	self.version = @"1.0";
+	
+	NSTimeInterval timeInterval = [[NSDate date] timeIntervalSince1970];
+	NSInteger timeInteger = (NSInteger)timeInterval;
+	timestamp = [[NSString stringWithFormat:@"%i", timeInteger] copy];
 	
 	return self;
 }
 
 - (void)dealloc {
-	[parameters release];
+	[timestamp release];
+	[oauthParameters release];
 	[super dealloc];
 }
 
-- (DCTOAuthSignature *)signature {
-	return [[[DCTOAuthSignature alloc] init] autorelease];
-}
-
-- (NSMutableURLRequest *)newRequest {
-	
-	NSMutableURLRequest *request = [super newRequest];
-	
-	[request setURL:self.URL];
-	
-	// Setting up the signature.
-	DCTOAuthSignature *signature = [self signature];
-	
-	if (!self.secretToken) self.secretToken = @"";
-	if (!self.secretConsumerKey) self.secretConsumerKey = @"";
-	
-	signature.secret = [NSString stringWithFormat:@"%@&%@", self.secretConsumerKey, self.secretToken];
-	
-	[parameters setObject:[signature typeString] forKey:DCTOAuthSignatureMethodKey];
-	
-	NSTimeInterval timeInterval = [[NSDate date] timeIntervalSince1970];
-	NSInteger timeStamp = (NSInteger)timeInterval;
-	
-	[parameters setObject:[NSString stringWithFormat:@"%i", timeStamp] forKey:DCTOAuthTimestampKey];
-	NSMutableString *baseString = [[NSMutableString alloc] init];
-	[baseString appendString:DCTConnectionControllerTypeString[self.type]];
-	[baseString appendString:@"&"];
-	[baseString appendString:[[request.URL absoluteString] dt_urlEncodedString]];
-	[baseString appendString:@"&"];
-	
-	NSArray *keys = [[parameters allKeys] sortedArrayUsingSelector:@selector(compare:)];
-	
-	for (NSString *key in keys) {
-		
-		if ([keys indexOfObject:key]!=0) [baseString appendString:[[NSString stringWithString:@"&"] dt_urlEncodedString]];
-		
-		[baseString appendString:[[self dt_baseStringForKey:key value:[parameters valueForKey:key]] dt_urlEncodedString]];
-	}
-	signature.text = baseString;
-	
-	// Setting up the header string.
-	
-	NSMutableString *oauthString = [NSMutableString stringWithFormat:@"OAuth realm=\"\", "];
-	
-	for (NSString *key in keys) {
-		[oauthString appendString:[self dt_stringForKey:key value:[parameters objectForKey:key]]];
-		[oauthString appendString:@", "];
-	}
-	[oauthString appendString:[self dt_stringForKey:DCTOAuthSignatureKey value:signature.signature]];
-	
-	[request addValue:oauthString forHTTPHeaderField:@"Authorization"];
-	
-	/*NSLog(@"%@ %@", [self class], parameters);
-	NSLog(@"%@ %@\n", [self class], signature.signature);
-	NSLog(@"%@ \n\n%@\n\n", [self class], baseString);
-	*/
-	return request;
-}
-
-- (void)receivedResponse:(NSURLResponse *)response {
-	//NSHTTPURLResponse *r = (NSHTTPURLResponse *)response;
-	//NSLog(@"%@ %@", [self class], [r allHeaderFields]);
-	[super receivedResponse:response];
-}
+#pragma mark -
+#pragma mark DCTConnectionController
 
 - (void)receivedObject:(NSObject *)object {
 	
-	if (![object isKindOfClass:[NSData class]]) return;
+	if (![object isKindOfClass:[NSData class]]) return [super receivedObject:object];
 	
 	NSString *string = [[[NSString alloc] initWithData:(NSData *)object encoding:NSUTF8StringEncoding] autorelease];
-	//NSLog(@"%@ %@", [self class], string);
 	
 	NSDictionary *d = [DCTOAuthConnectionController oauthDictionaryFromString:string];
 	
-	if (!d) {
-		[self receivedError:nil];
-		return;
-	}
+	if (!d) return [super receivedObject:object];
 	
 	[self receivedOAuthDictionary:d];
-	[super receivedObject:d];
+	[super receivedObject:object];
 }
+
++ (NSArray *)queryProperties {
+	return nil;
+}
+
++ (NSArray *)bodyProperties {
+	return nil;
+}
+
++ (NSArray *)headerProperties {
+	return [NSArray arrayWithObject:@"Authorization"];
+}
+
+
+#pragma mark -
+#pragma mark DCTOAuthConnectionController
+
+- (DCTOAuthSignature *)signature {
+	
+	if (!signature) {
+		signature = [[DCTOAuthSignature alloc] init];
+		signature.secret = [NSString stringWithFormat:@"%@&%@", self.secretConsumerKey, self.secretToken];
+		signature.text = [self dctInternal_baseSignatureString];
+	}
+	
+	return [[signature retain] autorelease];
+}
+
+
 
 + (NSDictionary *)oauthDictionaryFromString:(NSString *)string {
 	
@@ -149,42 +126,22 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 	
 }
 
++ (NSArray *)oauthProperties {
+	return nil;
+}
+
+- (id)valueForKey:(NSString *)key {
+	
+	if ([key isEqualToString:@"Authorization"])
+		return [self dctInternal_authorizationHeader];
+	
+	return [super valueForKey:key];	
+}
+
+- (void)receivedOAuthDictionary:(NSDictionary *)dictionary {}
+
 #pragma mark -
-#pragma mark Accessor methods
-
-- (void)setValue:(NSString *)value forParameter:(NSString *)parameterName {
-	
-	if ([value isEqualToString:@""] && [[parameters allKeys] containsObject:parameterName]) return;
-	
-	//NSLog(@"%@:%@", parameterName, value);
-	
-	[parameters setObject:value forKey:parameterName];
-}
-- (NSString *)valueForParameter:(NSString *)parameterName {
-	return [parameters objectForKey:parameterName];
-}
-
-- (void)setNonce:(NSString *)s {
-	[parameters setObject:s forKey:DCTOAuthNonceKey];
-}
-- (NSString *)nonce {
-	return [parameters objectForKey:DCTOAuthNonceKey];
-}
-
-- (void)setVersion:(NSString *)s {
-	[parameters setObject:s forKey:DCTOAuthVersionKey];
-}
-- (NSString *)version {
-	return [parameters objectForKey:DCTOAuthVersionKey];
-}
-- (void)setConsumerKey:(NSString *)s {
-	[parameters setObject:s forKey:DCTOAuthConsumerKeyKey];
-}
-- (NSString *)consumerKey {
-	return [parameters objectForKey:DCTOAuthConsumerKeyKey];
-}
-#pragma mark -
-#pragma mark Private methods
+#pragma mark Internal methods
 
 - (NSString *)dt_stringForKey:(NSString *)key value:(NSString *)value {
 	return [NSString stringWithFormat:@"%@=\"%@\"", key, value];
@@ -194,6 +151,79 @@ NSString *const DTOAuthVerifierKey = @"oauth_verifier";
 	return [NSString stringWithFormat:@"%@=%@", key, value];
 }
 
-- (void)receivedOAuthDictionary:(NSDictionary *)dictionary {}
+- (NSString *)dctInternal_authorizationHeader {
+	
+	NSMutableArray *authorizationArray = [NSMutableArray arrayWithCapacity:7];
+	
+	[authorizationArray addObject:[self dt_baseStringForKey:@"OAuth realm" value:[self baseURLString]]];
+	
+	NSDictionary *parameters = [self dctInternal_parameters];
+	
+	for (NSString *key in [self dctInternal_sortedParameterKeys]) {
+		
+		NSString *s = [self dt_stringForKey:key value:[parameters objectForKey:key]];
+		[authorizationArray addObject:s];
+	}
+	
+	[authorizationArray addObject:[self dt_stringForKey:DCTOAuthSignatureKey value:self.signature.signature]];
+	
+	return [authorizationArray componentsJoinedByString:@", "];	
+}
+
+- (NSDictionary *)dctInternal_parameters {
+	
+	if (!oauthParameters) {
+		NSMutableDictionary *d = [NSMutableDictionary dictionaryWithCapacity:7];
+		
+		[d setObject:self.consumerKey forKey:DCTOAuthConsumerKeyKey];
+		[d setObject:self.token forKey:DCTOAuthTokenKey];
+		[d setObject:self.nonce forKey:DCTOAuthNonceKey];
+		[d setObject:self.timestamp forKey:DCTOAuthTimestampKey];
+		[d setObject:self.signature.method forKey:DCTOAuthSignatureMethodKey];
+		[d setObject:self.version forKey:DCTOAuthVersionKey];
+		
+		Class class = [self class];
+		while ([class isSubclassOfClass:[DCTOAuthConnectionController class]] && ![[DCTOAuthConnectionController class] isSubclassOfClass:class]) {
+			for (NSString *key in [class oauthProperties])
+				[d setObject:[self valueForKey:key] forKey:key];
+			
+			class = [class superclass];
+		}
+		
+		oauthParameters = [[NSDictionary alloc] initWithDictionary:d];
+	}
+	
+	return oauthParameters;
+}
+
+- (NSArray *)dctInternal_sortedParameterKeys {
+	return [[[self dctInternal_parameters] allKeys] sortedArrayUsingSelector:@selector(compare:)];
+}
+
+- (NSString *)dctInternal_coreOAuthString {
+	
+	NSMutableArray *coreArray = [NSMutableArray arrayWithCapacity:7];
+	
+	NSDictionary *params = [self dctInternal_parameters];
+	NSArray *keys = [[params allKeys] sortedArrayUsingSelector:@selector(compare:)];
+	
+	for (NSString *key in keys)
+		[coreArray addObject:[self dt_baseStringForKey:key value:[params valueForKey:key]]];
+	
+	return [coreArray componentsJoinedByString:@"&"];
+}
+
+- (NSString *)dctInternal_baseSignatureString {
+	
+	NSMutableArray *baseArray = [NSMutableArray arrayWithCapacity:3];
+	
+	[baseArray addObject:[DCTConnectionControllerTypeString[self.type] dt_urlEncodedString]];
+	[baseArray addObject:[[self baseURLString] dt_urlEncodedString]];
+	[baseArray addObject:[[self dctInternal_coreOAuthString] dt_urlEncodedString]];
+	
+	NSLog(@"%@:%@ BASE STRING: \n\n%@\n\n", self, NSStringFromSelector(_cmd), [baseArray componentsJoinedByString:@"&"]);
+	
+	return [baseArray componentsJoinedByString:@"&"];
+}
 
 @end
