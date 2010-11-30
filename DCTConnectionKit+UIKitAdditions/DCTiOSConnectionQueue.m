@@ -21,43 +21,58 @@
 
 - (void)dealloc {
 	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-	[notificationCenter removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
-	[notificationCenter removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
-	[notificationCenter removeObserver:self name:DCTConnectionQueueActiveConnectionCountChangedNotification object:self];
-    [super dealloc];
+	
+	[notificationCenter removeObserver:self
+								  name:UIApplicationDidEnterBackgroundNotification
+								object:nil];
+	
+	[notificationCenter removeObserver:self
+								  name:UIApplicationWillEnterForegroundNotification
+								object:nil];
+	
+	[notificationCenter removeObserver:self
+								  name:DCTConnectionQueueActiveConnectionCountChangedNotification
+								object:self];
+    
+	[super dealloc];
 }
 
 - (id)init {
 	if (!(self = [super init])) return nil;
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self 
-											 selector:@selector(dctInternal_didEnterBackground:) 
-												 name:UIApplicationDidEnterBackgroundNotification 
-											   object:nil];
+	
+	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+	
+	[notificationCenter addObserver:self 
+						   selector:@selector(dctInternal_didEnterBackground:) 
+							   name:UIApplicationDidEnterBackgroundNotification 
+							 object:nil];
 	
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self 
-											 selector:@selector(dctInternal_willEnterForeground:) 
-												 name:UIApplicationWillEnterForegroundNotification 
-											   object:nil];
+	[notificationCenter addObserver:self 
+						   selector:@selector(dctInternal_willEnterForeground:) 
+							   name:UIApplicationWillEnterForegroundNotification 
+							 object:nil];
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self 
-											 selector:@selector(dctInternal_activeConnectionCountChanged:) 
-												 name:DCTConnectionQueueActiveConnectionCountChangedNotification 
-											   object:self];
+	[notificationCenter addObserver:self 
+						   selector:@selector(dctInternal_activeConnectionCountChanged:) 
+							   name:DCTConnectionQueueActiveConnectionCountChangedNotification 
+							 object:self];
 	
 	return self;
 }
 
 - (void)dctInternal_activeConnectionCountChanged:(NSNotification *)notificaiton {
 	
+	UIApplication *application = [UIApplication sharedApplication];
+	
 	if (self.activeConnectionCount > 0) {
-		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+		[application setNetworkActivityIndicatorVisible:YES];
 	
 	} else {
-		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+		[application setNetworkActivityIndicatorVisible:NO];
 		
-		if (inBackground) [[UIApplication sharedApplication] endBackgroundTask:backgroundTaskIdentifier];
+		if (inBackground) [application endBackgroundTask:backgroundTaskIdentifier];
 	}
 }
 
