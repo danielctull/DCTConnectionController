@@ -1,5 +1,5 @@
 //
-//  DCTConnectionController+DCTEquality.h
+//  DCTConnectionController+Equality.h
 //  DCTConnectionKit
 //
 //  Created by Daniel Tull on 09/11/2010.
@@ -9,6 +9,6 @@
 #import <Foundation/Foundation.h>
 #import "DCTConnectionController.h"
 
-@interface DCTConnectionController (DCTEquality)
+@interface DCTConnectionController (Equality)
 - (BOOL)isEqualToConnectionController:(DCTConnectionController *)connectionController;
 @end

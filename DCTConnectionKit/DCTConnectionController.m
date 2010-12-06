@@ -8,7 +8,7 @@
 
 #import "DCTConnectionController.h"
 #import "DCTConnectionQueue+Singleton.h"
-#import "DCTConnectionController+DCTEquality.h"
+#import "DCTConnectionController+Equality.h"
 #import "DCTObservationInfo.h"
 #import "NSMutableSet+DCTExtras.h"
 

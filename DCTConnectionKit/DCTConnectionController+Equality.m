@@ -1,12 +1,12 @@
 //
-//  DCTConnectionController+DCTEquality.m
+//  DCTConnectionController+Equality.m
 //  DCTConnectionKit
 //
 //  Created by Daniel Tull on 09/11/2010.
 //  Copyright (c) 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DCTConnectionController+DCTEquality.h"
+#import "DCTConnectionController+Equality.h"
 #import <objc/runtime.h>
 
 @interface DCTConnectionController ()
@@ -14,7 +14,7 @@
 - (NSArray *)dctInternal_properties;
 @end
 
-@implementation DCTConnectionController (DCTEquality)
+@implementation DCTConnectionController (Equality)
 
 - (BOOL)isEqualToConnectionController:(DCTConnectionController *)connectionController {
 	

@@ -15,7 +15,7 @@
 #import "DCTConnectionQueue+Singleton.h"
 
 #import "DCTURLLoadingConnectionController.h"
-#import "DCTConnectionController+DCTEquality.h"
+#import "DCTConnectionController+Equality.h"
 
 @implementation DCTConnectionKitAppDelegate
 
