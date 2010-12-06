@@ -1,0 +1,3 @@
+[submodule "DCTConnectionKit Project/Submodules/DCTFoundation"]
+	path = DCTConnectionKit Project/Submodules/DCTFoundation
+	url = git://github.com/danielctull/DCTFoundation.git
