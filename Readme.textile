@@ -2,6 +2,8 @@ h1. DCTConnectionKit
 
 DCTConnectionKit is yet another framework to handle URL connections, specifically those made to RESTful services.
 
+*Warning version 0.6 I did a force push because I altered some of the history. Sorry about that guys, but needed to remove some stuff to make this public.*
+
 h2. Branch Structure
 
 There are two branches to this repository, *master* and *production*, these are described below. (Thanks to "Abizer":https://github.com/Abizern for showing me this method and for his initial writeup below.)
