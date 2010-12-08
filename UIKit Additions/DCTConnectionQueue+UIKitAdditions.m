@@ -6,7 +6,7 @@
 //  Copyright (c) 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DCTiOSConnectionQueue.h"
+#import "DCTConnectionQueue+UIKitAdditions.h"
 
 @interface DCTConnectionQueue ()
 - (void)dctInternal_didEnterBackground:(NSNotification *)notification;
@@ -102,7 +102,7 @@
 		return;
 	}
 	
-	backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+	self.backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
 		[self stop];
 	}];
 	
@@ -148,7 +148,7 @@
 	[queuedConnections addObjectsFromArray:backgroundConnections];
 	
 	[backgroundConnections release]; backgroundConnections = nil;
-	[[UIApplication sharedApplication] endBackgroundTask:backgroundTaskIdentifier];
+	[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
 }
 
 - (void)dctInternal_hush {
