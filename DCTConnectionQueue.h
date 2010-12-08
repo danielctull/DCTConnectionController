@@ -20,7 +20,15 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
 	NSInteger connectionCount;
 	
 	NSArray *externalConnectionCountKeys;
+	
+	// Needed for multitasking on the iPhone, which is added as a category.	
+	NSMutableArray *nonMultitaskingConnections;
+	NSUInteger backgroundTaskIdentifier;
+	BOOL inBackground;
 }
+
+// Property to set for multitasking on iOS platforms. Default is YES.
+@property (nonatomic, assign) BOOL multitaskEnabled;
 
 /**
  Add a connection controller to the queue. This method causes the connection queue to
