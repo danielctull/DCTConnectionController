@@ -8,18 +8,24 @@
 
 #import "DCTiOSConnectionQueue.h"
 
-@interface DCTiOSConnectionQueue ()
+@interface DCTConnectionQueue ()
 - (void)dctInternal_didEnterBackground:(NSNotification *)notification;
 - (void)dctInternal_willEnterForeground:(NSNotification *)notification;
 //- (void)dctInternal_hush;
 //- (void)dctInternal_finishedBackgroundConnections;
 @end
 
-@implementation DCTiOSConnectionQueue
+@implementation DCTConnectionQueue (UIKitAdditions)
 
-@synthesize multitaskEnabled;
+- (void)setBackgroundTaskIdentifier:(UIBackgroundTaskIdentifier)aBackgroundTaskIdentifier {
+	backgroundTaskIdentifier = aBackgroundTaskIdentifier;
+}
 
-- (void)dealloc {
+- (UIBackgroundTaskIdentifier)backgroundTaskIdentifier {
+	return backgroundTaskIdentifier;
+}
+
+- (void)uikit_dealloc {
 	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 	
 	[notificationCenter removeObserver:self
@@ -33,13 +39,9 @@
 	[notificationCenter removeObserver:self
 								  name:DCTConnectionQueueActiveConnectionCountChangedNotification
 								object:self];
-    
-	[super dealloc];
 }
 
-- (id)init {
-	if (!(self = [super init])) return nil;
-	
+- (void)uikit_init {
 	
 	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 	
@@ -58,8 +60,6 @@
 						   selector:@selector(dctInternal_activeConnectionCountChanged:) 
 							   name:DCTConnectionQueueActiveConnectionCountChangedNotification 
 							 object:self];
-	
-	return self;
 }
 
 - (void)dctInternal_activeConnectionCountChanged:(NSNotification *)notificaiton {
@@ -72,12 +72,8 @@
 	} else {
 		[application setNetworkActivityIndicatorVisible:NO];
 		
-		if (inBackground) [application endBackgroundTask:backgroundTaskIdentifier];
+		if (inBackground) [application endBackgroundTask:self.backgroundTaskIdentifier];
 	}
-}
-
-- (NSInteger)connectionCount {
-	return [super connectionCount] + [nonMultitaskingConnections count];
 }
 
 - (NSArray *)nonMultitaskingQueuedConnections {
@@ -86,12 +82,9 @@
 	return [NSArray arrayWithArray:nonMultitaskingConnections];
 }
 
-- (DCTConnectionController *)queuedConnectionControllerToURL:(NSURL *)URL {
-	
-	DCTConnectionController *c = [super queuedConnectionControllerToURL:URL];
-	if (c) return c;
-	
-	for (c in nonMultitaskingConnections)
+- (DCTConnectionController *)uikit_queuedConnectionControllerToURL:(NSURL *)URL {
+		
+	for (DCTConnectionController *c in nonMultitaskingConnections)
 		if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
 			return c;
 	
