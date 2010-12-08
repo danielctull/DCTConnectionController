@@ -9,6 +9,7 @@
 #import "DCTConnectionQueue.h"
 #import "NSObject+DCTKVOExtras.h"
 #import "DCTObservationInfo.h"
+#import "NSObject+DCTPerformSelector.h"
 
 NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2) {
 	
@@ -48,7 +49,7 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 
 @implementation DCTConnectionQueue
 
-@synthesize maxConnections;
+@synthesize maxConnections, multitaskEnabled;
 
 #pragma mark -
 #pragma mark NSObject
@@ -57,6 +58,8 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 	
 	if (!(self = [super init])) return nil;
 	
+	[self dct_safePerformSelector:@selector(uikit_init)];
+		
 	activeConnections = [[NSMutableArray alloc] init];
 	queuedConnections = [[NSMutableArray alloc] init];
 	active = YES;
@@ -70,6 +73,8 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 }
 
 - (void)dealloc {
+	[self dct_safePerformSelector:@selector(uikit_dealloc)];
+	
 	[externalConnectionCountKeys release], externalConnectionCountKeys = nil;
 	[activeConnections release]; activeConnections = nil;
 	[queuedConnections release]; queuedConnections = nil;
@@ -193,7 +198,7 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 		if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
 			return c;
 	
-	return nil;
+	return [self dct_safePerformSelector:@selector(uikit_queuedConnectionControllerToURL) withObject:URL];
 }
 
 
@@ -228,7 +233,7 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 }
 
 - (NSInteger)connectionCount {
-	return self.activeConnectionCount + [queuedConnections count];
+	return self.activeConnectionCount + [queuedConnections count] + [nonMultitaskingConnections count];
 }
 
 #pragma mark -

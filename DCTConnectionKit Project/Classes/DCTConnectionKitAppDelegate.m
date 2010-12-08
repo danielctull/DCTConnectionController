@@ -11,7 +11,6 @@
 #import "DCTOAuthRequestTokenConnectionController.h"
 #import "DCTOAuthAccessTokenConnectionController.h"
 #import "DCTOAuthController.h"
-#import "DCTiOSConnectionQueue.h"
 #import "DCTConnectionQueue+Singleton.h"
 
 #import "DCTURLLoadingConnectionController.h"
@@ -42,7 +41,7 @@
 	NSLog(@"[c isEqualToConnectionController:c2]: %i", [c isEqualToConnectionController:c2]);
 	*/
 	
-	DCTiOSConnectionQueue *queue = (DCTiOSConnectionQueue *)[DCTiOSConnectionQueue sharedConnectionQueue];
+	DCTConnectionQueue *queue = [DCTConnectionQueue sharedConnectionQueue];
 	queue.multitaskEnabled = YES;
 	queue.maxConnections = 4;
 	
