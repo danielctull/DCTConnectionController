@@ -13,11 +13,11 @@
 /** @brief Specifies the type of connection to use.
  */
 typedef enum {
-	DCTConnectionControllerTypeGet = 0,	/**< Uses a GET connection. */
+	DCTConnectionControllerTypeGet = 0,		/**< Uses a GET connection. */
 	DCTConnectionControllerTypePost,		/**< Uses a POST connection. */
-	DCTConnectionControllerTypePut,		/**< Uses a PUT connection. */
+	DCTConnectionControllerTypePut,			/**< Uses a PUT connection. */
 	DCTConnectionControllerTypeDelete,		/**< Uses a DELETE connection. */
-	DCTConnectionControllerTypeOptions,	/**< Uses a OPTIONS connection. */
+	DCTConnectionControllerTypeOptions,		/**< Uses a OPTIONS connection. */
 	DCTConnectionControllerTypeHead,		/**< Uses a HEAD connection. */
 	DCTConnectionControllerTypeTrace,		/**< Uses a TRACE connection. */
 	DCTConnectionControllerTypeConnect		/**< Uses a CONNECT connection. */
@@ -29,10 +29,10 @@ typedef enum {
 	DCTConnectionControllerStatusNotStarted = 0,	/**< The connection has not begun yet, and has not been given to the DTConnectionManager object to perform. */
 	DCTConnectionControllerStatusQueued,			/**< The connection has been placed in a queue and is awaiting a free slot to perform. */
 	DCTConnectionControllerStatusStarted,			/**< The request has been sent and a response is being awaited. */
-	DCTConnectionControllerStatusResponded,		/**< A response has been received by the server and the connection is awaiting completion. */
+	DCTConnectionControllerStatusResponded,			/**< A response has been received by the server and the connection is awaiting completion. */
 	DCTConnectionControllerStatusComplete,			/**< The connection completed without any errors. */
 	DCTConnectionControllerStatusFailed,			/**< The connection failed. */
-	DCTConnectionControllerStatusCancelled			/**< The connection failed. */
+	DCTConnectionControllerStatusCancelled			/**< The connection was cancelled. */
 } DCTConnectionControllerStatus;
 
 /** @brief Specifies the possible priorities for a connection.
@@ -81,7 +81,6 @@ extern NSString *const DCTConnectionControllerTypeString[];
 }
 
 @property (nonatomic, readonly) DCTConnectionControllerStatus status;
-@property (nonatomic, assign) DCTConnectionControllerPriority priority;
 
 @property (nonatomic, readonly) NSArray *dependencies;
 
@@ -89,13 +88,42 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 + (id)connectionController;
 
-- (void)addDependency:(DCTConnectionController *)connectionController;
-- (void)removeDependency:(DCTConnectionController *)connectionController;
 
+/** @brief Adds the connection controller to the queue, checking to make sure it is unique and if not, 
+ returning the duplicate that is already queued.
+ 
+ If there is a connection controller in the queue or already running that exists with the same details as
+ the receiver, this will merge accross the delegate, completeion blocks, KVO and notification observers, then
+ return with the connection controller that already exists. This uses isEqualToConnectionController: to determine
+ equality, which checks the URL of the desitnation and each property added by subclasses.
+ 
+ In the case that a connection controller is already running, delegates and completion blocks will be 
+ called as soon as they are added to the existing connection controller. Due to this, it may be wise to
+ 
+ Connection controllers with dependencies do not currently get merged into an existing 
+ 
+ @return The actual connection controller that is added to the queue or already running.
+ */
 - (DCTConnectionController *)connect;
+
+
+/** @brief Cancels the connection.
+ 
+ Canceling the connection causes any cancelation blocks to be called and sends connectionControllerWasCancelled:
+ to its delegates.
+ */
 - (void)cancel;
+
+
+
 - (void)reset;
+
+
+
+
 - (void)requeue;
+
+
 
 - (void)start;
 
@@ -105,16 +133,45 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 #pragma mark -
 #pragma mark Setting up the connection details
-
-/** @name Setting up the connection details
- @{
- */
+/// @name    Setting up the connection details
 
 /** @brief The type of connection to use.
  
  Specifies the type of connection to use. DTConnectionType is a typedef enum and possible values can be seen in the header file.
  */
 @property (nonatomic, assign) DCTConnectionType type;
+
+
+/** @brief The priority of the connection controller.
+ 
+ Connection controllers will be sorted in order of their priority and as such high priority connections will be 
+ handled first. If two connections are in the queue with equal priorities, then they will be started in the order 
+ they were added to the conneciton queue. Generally it's a good idea to use the highest priority free for login
+ connections and lowest priority for connections the user didn't directly initiate.
+ */
+@property (nonatomic, assign) DCTConnectionControllerPriority priority;
+
+
+/** @brief Adds a connection controller that needs to finish before the receiver can start.
+ 
+ Currently, the depended connection controller just needs to be removed from the queue before the receiver starts, 
+ whether the depended connection controller finishes with success or failure. This will be looked into for future 
+ versions.
+ 
+ @param connectionController The connection controller that should be complete before the receiver starts.
+ */
+- (void)addDependency:(DCTConnectionController *)connectionController;
+
+
+/** @brief Removes the given connection controller from the list of depended connection controllers.
+ 
+ If the given connection controller is not in the list of dependencies, this is a no-op.
+ 
+ @param connectionController The connection controller to be removed from the dependency list.
+ */
+- (void)removeDependency:(DCTConnectionController *)connectionController;
+
+
 
 /** @brief This method should be used in subclasses to give custom requests.
  
@@ -125,17 +182,11 @@ extern NSString *const DCTConnectionControllerTypeString[];
  */
 - (NSMutableURLRequest *)newRequest;
 
-/**
- @}
- */
 
 
 #pragma mark -
 #pragma mark Setting up the delegate
-
-/** @name Setting up the delegate
- @{
- */
+//     @name Setting up the delegate
 
 /** @brief The object that acts as the delegate of the receiving connection controller.
  
@@ -158,16 +209,11 @@ extern NSString *const DCTConnectionControllerTypeString[];
 - (NSSet *)delegates;
 - (NSSet *)observationInformation;
 
-/**
- @}
- */
+
 
 #pragma mark -
 #pragma mark Managing event blocks
-
-/** @name Managing event blocks
- @{
- */
+///    @name Managing event blocks
 
 - (NSSet *)responseBlocks;
 - (void)addResponseBlock:(DCTConnectionControllerResponseBlock)responseBlock;
@@ -181,16 +227,12 @@ extern NSString *const DCTConnectionControllerTypeString[];
 - (NSSet *)cancelationBlocks;
 - (void)addCancelationBlock:(DCTConnectionControllerCancelationBlock)cancelationBlock;
 
-/**
- @}
- */
+
 
 #pragma mark -
 #pragma mark Handling connection events
+///    @name Handling connection events
 
-/** @name Handling connection events
- @{
- */
 
 /** @brief This method should be used in subclasses to handle the returned response.
  
@@ -231,10 +273,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 #pragma mark -
 #pragma mark Returned connection objects
-
-/** @name Returned connection objects 
- @{
- */
+///    @name Returned connection objects
 
 /** @brief The response returned from the connection.
  
