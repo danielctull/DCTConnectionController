@@ -92,7 +92,6 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 }
 
 - (void)dealloc {
-	NSLog(@"%@:%@", self, NSStringFromSelector(_cmd));
 	[responseBlocks release], responseBlocks = nil;
 	[observationInfos release], observationInfos = nil;
 	[delegates release]; delegates = nil;
