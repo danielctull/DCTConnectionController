@@ -212,14 +212,13 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
 	NSURLRequest *request = [self newRequest];
 	
-	if (!request) {
-		[self dctInternal_finishWithFailure];
-		return;
-	}
-	
 	self.URL = [request URL];
+	
+	// Make sure it isn't there
+	[urlConnection cancel];
 	[urlConnection release];
 	urlConnection = nil;
+	
 	urlConnection = [[DCTURLConnection alloc] initWithRequest:request delegate:self];
 	[request release];
 	
