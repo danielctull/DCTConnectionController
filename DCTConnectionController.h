@@ -102,7 +102,12 @@ extern NSString *const DCTConnectionControllerTypeString[];
  */
 @interface DCTConnectionController : NSObject {
 	DCTConnectionControllerPriority priority;
-	NSMutableArray *dependencies;
+	
+	//NSMutableArray *dependencies;
+	
+	NSMutableSet *dependencies, *dependents;
+	
+	
 	DCTConnectionType type;
 	DCTConnectionControllerStatus status;
 	DCTURLConnection *urlConnection;

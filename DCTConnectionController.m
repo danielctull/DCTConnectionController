@@ -50,6 +50,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 - (void)dctInternal_finishWithFailure;
 - (void)dctInternal_finishWithSuccess;
 - (void)dctInternal_finishWithCancelation;
+- (void)dctInternal_finish;
 
 - (void)dctInternal_sendResponse:(NSURLResponse *)response toDelegate:(id<DCTConnectionControllerDelegate>)delegate;
 - (void)dctInternal_sendCancelationToDelegate:(id<DCTConnectionControllerDelegate>)delegate;
@@ -61,6 +62,10 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 - (BOOL)dctInternal_hasFailed;
 - (BOOL)dctInternal_hasCompleted;
 - (BOOL)dctInternal_hasCancelled;
+
+@property (nonatomic, readonly) NSSet *dctInternal_dependents;
+- (void)dctInternal_addDependent:(DCTConnectionController *)connectionController;
+- (void)dctInternal_removeDependent:(DCTConnectionController *)connectionController;
 
 @end
 
@@ -76,7 +81,8 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 - (id)init {
 	if (!(self = [super init])) return nil;
 	
-	dependencies = [[NSMutableArray alloc] init];
+	dependencies = [[NSMutableSet alloc] init];
+	dependents = [[NSMutableSet alloc] init];
 	priority = DCTConnectionControllerPriorityMedium;
 	delegates = [[NSMutableSet alloc] init];
 	observationInfos = [[NSMutableSet alloc] init];
@@ -86,6 +92,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 }
 
 - (void)dealloc {
+	NSLog(@"%@:%@", self, NSStringFromSelector(_cmd));
 	[responseBlocks release], responseBlocks = nil;
 	[observationInfos release], observationInfos = nil;
 	[delegates release]; delegates = nil;
@@ -191,7 +198,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 #pragma mark Dependency methods
 
 - (NSArray *)dependencies {
-	return [[dependencies copy] autorelease];
+	return [dependencies allObjects];
 }
 
 - (void)addDependency:(DCTConnectionController *)connectionController {
@@ -199,6 +206,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	if (!connectionController) return;
 	
 	[dependencies addObject:connectionController];
+	[connectionController dctInternal_addDependent:self];
 }
 
 - (void)removeDependency:(DCTConnectionController *)connectionController {
@@ -206,6 +214,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	if (![dependencies containsObject:connectionController]) return;
 	
 	[dependencies removeObject:connectionController];
+	[connectionController dctInternal_removeDependent:self];
 }
 
 - (void)start {
@@ -329,7 +338,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerCompletedNotification object:self];
 	
-	[delegates release]; delegates = nil;
+	[self dctInternal_finish];
 }
 
 - (void)dctInternal_finishWithFailure {
@@ -347,8 +356,8 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	}];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerFailedNotification object:self];
-		
-	[delegates release]; delegates = nil;
+
+	[self dctInternal_finish];
 }
 
 - (void)dctInternal_finishWithCancelation {
@@ -364,8 +373,15 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	}];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerCancellationNotification object:self];
-		
+
+	[self dctInternal_finish];
+}
+
+- (void)dctInternal_finish {
 	[delegates release]; delegates = nil;
+	
+	for (DCTConnectionController *dependent in self.dctInternal_dependents)
+		[dependent removeDependency:self];
 }
 
 #pragma mark -
@@ -449,6 +465,12 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 		
 		[connectionController removeObserver:info.object forKeyPath:info.keyPath];
 	}
+	
+	
+	for (DCTConnectionController *dependent in connectionController.dctInternal_dependents) {
+		[dependent removeDependency:connectionController];
+		[dependent addDependency:self];
+	}
 }
 
 #pragma mark -
@@ -499,6 +521,18 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 - (NSSet *)dctInternal_observationInformation {
 	return [NSSet setWithSet:observationInfos];
+}
+
+- (NSSet *)dctInternal_dependents {
+	return [NSSet setWithSet:dependents];
+}
+
+- (void)dctInternal_addDependent:(DCTConnectionController *)connectionController {
+	[dependents addObject:connectionController];
+}
+
+- (void)dctInternal_removeDependent:(DCTConnectionController *)connectionController {
+	[dependents removeObject:connectionController];
 }
 
 @end
