@@ -75,18 +75,16 @@ extern NSString *const DCTConnectionControllerTypeString[];
 	NSURL *URL;
 	NSMutableSet *delegates;
 	NSMutableSet *observationInfos;
-	BOOL calledToFinish;
 	
 	NSMutableSet *responseBlocks, *completionBlocks, *failureBlocks, *cancelationBlocks;
 }
 
 @property (nonatomic, readonly) DCTConnectionControllerStatus status;
 
-@property (nonatomic, readonly) NSArray *dependencies;
-
-@property (nonatomic, retain, readonly) NSURL *URL;
-
+/** @brief Creates and returns an autoreleased connection controller. 
+ */
 + (id)connectionController;
+
 
 
 /** @brief Adds the connection controller to the queue, checking to make sure it is unique and if not, 
@@ -152,6 +150,26 @@ extern NSString *const DCTConnectionControllerTypeString[];
 @property (nonatomic, assign) DCTConnectionControllerPriority priority;
 
 
+
+
+
+
+/** @brief This method should be used in subclasses to give custom requests.
+ 
+ Calling super from the subclass will give a mutable request of type 'type', this is the prefered way 
+ to get the request object in subclasses.
+ 
+ @return A URL request which will form the connection.
+ */
+- (NSMutableURLRequest *)newRequest;
+
+
+
+/** @brief The dependencies for this connection controller.
+ */
+@property (nonatomic, readonly) NSArray *dependencies;
+
+
 /** @brief Adds a connection controller that needs to finish before the receiver can start.
  
  Currently, the depended connection controller just needs to be removed from the queue before the receiver starts, 
@@ -170,17 +188,6 @@ extern NSString *const DCTConnectionControllerTypeString[];
  @param connectionController The connection controller to be removed from the dependency list.
  */
 - (void)removeDependency:(DCTConnectionController *)connectionController;
-
-
-
-/** @brief This method should be used in subclasses to give custom requests.
- 
- Calling super from the subclass will give a mutable request of type 'type', this is the prefered way 
- to get the request object in subclasses.
- 
- @return A URL request which will form the connection.
- */
-- (NSMutableURLRequest *)newRequest;
 
 
 
@@ -220,9 +227,13 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 
 #pragma mark -
-#pragma mark Handling connection events
-///    @name Handling connection events
+#pragma mark Information about the connection
+///    @name Information about the connection
 
+
+
+
+@property (nonatomic, retain, readonly) NSURL *URL;
 
 /** @brief This method should be used in subclasses to handle the returned response.
  
