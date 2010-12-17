@@ -203,11 +203,8 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 
 - (void)addDelegate:(id<DCTConnectionControllerDelegate>)delegate;
-- (void)addDelegates:(NSSet *)delegateArray;
 - (void)removeDelegate:(id<DCTConnectionControllerDelegate>)delegate;
-- (void)removeDelegates:(NSSet *)delegates;
 - (NSSet *)delegates;
-- (NSSet *)observationInformation;
 
 
 
@@ -215,16 +212,12 @@ extern NSString *const DCTConnectionControllerTypeString[];
 #pragma mark Managing event blocks
 ///    @name Managing event blocks
 
-- (NSSet *)responseBlocks;
 - (void)addResponseBlock:(DCTConnectionControllerResponseBlock)responseBlock;
 
-- (NSSet *)completionBlocks;
 - (void)addCompletionBlock:(DCTConnectionControllerCompletionBlock)completionBlock;
 
-- (NSSet *)failureBlocks;
 - (void)addFailureBlock:(DCTConnectionControllerFailureBlock)failureBlock;
 
-- (NSSet *)cancelationBlocks;
 - (void)addCancelationBlock:(DCTConnectionControllerCancelationBlock)cancelationBlock;
 
 
