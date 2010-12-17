@@ -98,7 +98,7 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	requestTokenConnection.secretConsumerKey = [self secretConsumerKey];
 	requestTokenConnection.callback = self.callback;
 	
-	requestTokenConnection.delegate = self;
+	[requestTokenConnection addDelegate:self];
 	[requestTokenConnection connect];
 	
 }
@@ -116,7 +116,7 @@ NSString *const DTOAuthCallBackNotification = @"DTOAuthCallBackNotification";
 	accessTokenConnection.secretConsumerKey = [self secretConsumerKey];
 	accessTokenConnection.secretToken = self.oauthTokenSecret;
 	
-	accessTokenConnection.delegate = self;
+	[accessTokenConnection addDelegate:self];
 	[accessTokenConnection connect];
 	
 }
