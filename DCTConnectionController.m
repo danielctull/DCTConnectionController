@@ -96,6 +96,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[observationInfos release], observationInfos = nil;
 	[delegates release]; delegates = nil;
 	[dependencies release], dependencies = nil;
+	[dependents release], dependents = nil;
 	[super dealloc];
 }
 
@@ -381,6 +382,8 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
 	for (DCTConnectionController *dependent in self.dctInternal_dependents)
 		[dependent removeDependency:self];
+	
+	[dependents release], dependents = nil;
 }
 
 #pragma mark -
