@@ -199,9 +199,6 @@ extern NSString *const DCTConnectionControllerTypeString[];
  save bandwidth for identical connections happening. See the DCTEquality category for details on the new equality
  checking. Use -addDelegate: and -delegates instead.
  */
-@property (nonatomic, retain) id<DCTConnectionControllerDelegate> delegate;
-
-
 - (void)addDelegate:(id<DCTConnectionControllerDelegate>)delegate;
 - (void)removeDelegate:(id<DCTConnectionControllerDelegate>)delegate;
 - (NSSet *)delegates;

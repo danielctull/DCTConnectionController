@@ -147,42 +147,6 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[cancelationBlocks dct_addBlock:block];
 }
 
-- (NSSet *)responseBlocks {
-	return [NSSet setWithSet:responseBlocks];
-}
-
-- (NSSet *)completionBlocks {
-	return [NSSet setWithSet:completionBlocks];
-}
-
-- (NSSet *)failureBlocks {
-	return [NSSet setWithSet:failureBlocks];
-}
-
-- (NSSet *)cancelationBlocks {
-	return [NSSet setWithSet:cancelationBlocks];
-}
-
-#pragma mark -
-#pragma mark To be removed
-
-
-- (void)setDelegate:(id<DCTConnectionControllerDelegate>)delegate {
-	[self addDelegate:delegate];
-}
-
-- (id<DCTConnectionControllerDelegate>)delegate {
-	return nil;
-}
-
-- (void)addDelegates:(NSSet *)delegateArray {
-	[delegates unionSet:delegateArray];
-}
-
-- (void)removeDelegates:(NSSet *)delegatesToRemove {
-	[delegates minusSet:delegatesToRemove];
-}
-
 #pragma mark -
 #pragma mark Delegatation
 
