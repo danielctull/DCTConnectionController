@@ -66,6 +66,40 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 @protocol DCTConnectionControllerDelegate;
 
+
+
+/** @brief A class to handle one connection.
+ 
+ This class is an abstract class, which should always be subclassed in order to work.
+ Included is a simple subclass, DCTURLLoadingConnectionController, which loads the given URL.
+ 
+ Benefits to using a connection controller over using an NSURLConnection directly include:
+ - Easy ability to split up funtionality
+ - Setting up connections in a queue
+ - Adding dependencies, so that connections only start once all dependencies are complete
+ (useful for when a connection is dependent on a login connection for example)
+ - Ability to merge identical connections, again useful for login connections.
+ 
+ Most of the time when working with connection controllers, you will want to have a separate 
+ controller for different calls. You may have one for fetching all tweets and another for fetching
+ tweets from a particular user. The benefits here are that in the different implmenetations 
+ you know that one class does just the one task, meaning a lot less conditional statements.
+ 
+ It also allows you to build clever class hierarchies, for instance you may want to have another
+ abstract class used for all Twitter calls (for example TwitterConnectionController), where if it
+ fails due to an authentication issue, it starts a login connection controller, requeues itself and 
+ adds the login controller to its dependencies. All connection controllers inheriting from
+ TwitterConnectionController would then gain the ability to authenticate when they receive an
+ authentication challenge.
+ 
+ Many web services respond succesfully with error codes for the API in the returned data. Because 
+ a connection controller represents the higher level web service more than the actual connection, 
+ these failures should be reported as such. To achieve this, the subclass implementation of 
+ receivedObject: should look for error codes and if one is found, call receivedError: with an NSError
+ created from the data from the web service. This allows delegates to be informed correctly, the 
+ correct blocks to be called and the correct status to be set. Again, with the right class
+ hierarchy, this will likely only have to be done once.
+ */
 @interface DCTConnectionController : NSObject {
 	DCTConnectionControllerPriority priority;
 	NSMutableArray *dependencies;
@@ -78,6 +112,8 @@ extern NSString *const DCTConnectionControllerTypeString[];
 	
 	NSMutableSet *responseBlocks, *completionBlocks, *failureBlocks, *cancelationBlocks;
 }
+
+@property (nonatomic, retain, readonly) NSURL *URL;
 
 @property (nonatomic, readonly) DCTConnectionControllerStatus status;
 
@@ -227,13 +263,8 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 
 #pragma mark -
-#pragma mark Information about the connection
-///    @name Information about the connection
-
-
-
-
-@property (nonatomic, retain, readonly) NSURL *URL;
+#pragma mark Handling connection responses
+///    @name Handling connection responses
 
 /** @brief This method should be used in subclasses to handle the returned response.
  
@@ -252,6 +283,12 @@ extern NSString *const DCTConnectionControllerTypeString[];
  of the new data. Therefore, at the end of this method subclasses should call the super implementation
  with the handled data object as the parameter.
  
+ If connecting to a web service always responds successful, but returns it's error in JSON, a 
+ subclass can call receivedError: from its implementation of this method and this would propigate up
+ and the status of the connection controller would be reported as DCTConnectionControllerStatusFailed.
+ As well as this, instead of notifying delgates and observers that it had succeeded, it would report as
+ failed and again would call the failureBlocks rather than the completionBlocks.
+ 
  @param object The data object returned from the connection.
  */
 - (void)receivedObject:(NSObject *)object;
@@ -265,12 +302,10 @@ extern NSString *const DCTConnectionControllerTypeString[];
  returned from the connection.
  
  @param response The response returned from the connection.
+ 
+ @see receivedObject:
  */
 - (void)receivedError:(NSError *)error;
-
-/**
- @}
- */
 
 #pragma mark -
 #pragma mark Returned connection objects
@@ -301,7 +336,9 @@ extern NSString *const DCTConnectionControllerTypeString[];
 @end
 
 #pragma mark -
-/** The delegate of DCTConnectionController must adopt the DCTConnectionControllerDelegate protocol, although all the methods 
+/** @brief Protocol for delegates of DCTConnectionController to conform to.
+ 
+ The delegate of DCTConnectionController must adopt the DCTConnectionControllerDelegate protocol, although all the methods 
  are optional. They allow the delegate to handle only certain types of events, although connectionController:didSucceedWithObject: 
  and connectionController:didFailWithError: should both be handled to take advantage of the data and handle any occuring errors.
  */
