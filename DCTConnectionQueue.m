@@ -102,28 +102,6 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 
 - (DCTConnectionController *)addConnectionController:(DCTConnectionController *)connectionController {
 	
-	NSUInteger i = [self.connectionControllers indexOfObject:connectionController];
-	
-	if (i != NSNotFound) {
-		DCTConnectionController *currentCC = [self.connectionControllers objectAtIndex:i];
-		
-		// Add the delegates from the duplicated connection to the existing one
-		[currentCC addDelegates:connectionController.delegates];
-		
-		// Add the observers from the duplicated connection to the existing one, and remove from the dupe
-		for (DCTObservationInfo *info in [connectionController observationInformation]) {
-			
-			if ([[[currentCC observationInformation] dct_observationInfosWithObject:info.object	keyPath:info.keyPath] count] == 0)
-				[currentCC addObserver:info.object forKeyPath:info.keyPath options:info.options context:info.context];
-			
-			[connectionController removeObserver:info.object forKeyPath:info.keyPath];
-		}
-		
-		return currentCC;
-	}
-	
-	
-	
 	[connectionController addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	
 	[self dctInternal_addConnectionControllerToQueue:connectionController];

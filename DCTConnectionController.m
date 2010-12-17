@@ -30,6 +30,16 @@ NSString *const DCTConnectionControllerResponseNotification = @"DCTConnectionCon
 NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectionControllerCancellationNotification";
 
 @interface DCTConnectionController ()
+
+@property (nonatomic, readonly) NSSet *dctInternal_delegates;
+@property (nonatomic, readonly) NSSet *dctInternal_responseBlocks;
+@property (nonatomic, readonly) NSSet *dctInternal_completionBlocks;
+@property (nonatomic, readonly) NSSet *dctInternal_failureBlocks;
+@property (nonatomic, readonly) NSSet *dctInternal_cancelationBlocks;
+@property (nonatomic, readonly) NSSet *dctInternal_observationInformation;
+
+- (void)dctInternal_mergeInformationFromConnectionController:(DCTConnectionController *)connectionController;
+
 @property (nonatomic, retain, readwrite) NSURL *URL;
 @property (nonatomic, readwrite) DCTConnectionControllerStatus status;
 @property (nonatomic, retain, readwrite) NSObject *returnedObject;
@@ -40,22 +50,23 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 - (void)dctInternal_finishWithFailure;
 - (void)dctInternal_finishWithSuccess;
 - (void)dctInternal_finishWithCancelation;
+- (void)dctInternal_finish;
 
-- (void)dctInternal_notifyDelegateOfObject:(NSObject *)object;
-- (void)dctInternal_notifyObserversOfObject:(NSObject *)object;
-- (void)dctInternal_notifyBlockOfObject:(NSObject *)object;
+- (void)dctInternal_sendResponse:(NSURLResponse *)response toDelegate:(id<DCTConnectionControllerDelegate>)delegate;
+- (void)dctInternal_sendCancelationToDelegate:(id<DCTConnectionControllerDelegate>)delegate;
+- (void)dctInternal_sendObject:(id)object toDelegate:(id<DCTConnectionControllerDelegate>)delegate;
+- (void)dctInternal_sendError:(NSError *)error toDelegate:(id<DCTConnectionControllerDelegate>)delegate;
 
-- (void)dctInternal_notifyDelegateOfReturnedError:(NSError *)error;
-- (void)dctInternal_notifyObserversOfReturnedError:(NSError *)error;
-- (void)dctInternal_notifyBlockOfReturnedError:(NSError *)error;
+- (BOOL)dctInternal_hasResponded;
+- (BOOL)dctInternal_hasFinished;
+- (BOOL)dctInternal_hasFailed;
+- (BOOL)dctInternal_hasCompleted;
+- (BOOL)dctInternal_hasCancelled;
 
-- (void)dctInternal_notifyDelegateOfCancellation;
-- (void)dctInternal_notifyObserversOfCancellation;
-- (void)dctInternal_notifyBlockOfCancellation;
+@property (nonatomic, readonly) NSSet *dctInternal_dependents;
+- (void)dctInternal_addDependent:(DCTConnectionController *)connectionController;
+- (void)dctInternal_removeDependent:(DCTConnectionController *)connectionController;
 
-- (void)dctInternal_notifyDelegateOfResponse:(NSURLResponse *)response;
-- (void)dctInternal_notifyObserversOfResponse:(NSURLResponse *)response;
-- (void)dctInternal_notifyBlockOfResponse:(NSURLResponse *)response;
 @end
 
 
@@ -70,7 +81,8 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 - (id)init {
 	if (!(self = [super init])) return nil;
 	
-	dependencies = [[NSMutableArray alloc] init];
+	dependencies = [[NSMutableSet alloc] init];
+	dependents = [[NSMutableSet alloc] init];
 	priority = DCTConnectionControllerPriorityMedium;
 	delegates = [[NSMutableSet alloc] init];
 	observationInfos = [[NSMutableSet alloc] init];
@@ -84,6 +96,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[observationInfos release], observationInfos = nil;
 	[delegates release]; delegates = nil;
 	[dependencies release], dependencies = nil;
+	[dependents release], dependents = nil;
 	[super dealloc];
 }
 
@@ -91,62 +104,49 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 #pragma mark Block methods
 
 - (void)addResponseBlock:(DCTConnectionControllerResponseBlock)block {
+	
+	if ([self dctInternal_hasResponded]) block(self.returnedResponse);
+	
 	[responseBlocks dct_addBlock:block];
 }
 
 - (void)addCompletionBlock:(DCTConnectionControllerCompletionBlock)block {
+	
+	if ([self dctInternal_hasCompleted]) block(self.returnedObject);
+	
 	[completionBlocks dct_addBlock:block];
 }
 
 - (void)addFailureBlock:(DCTConnectionControllerFailureBlock)block {
+	
+	if ([self dctInternal_hasFailed]) block(self.returnedError);
+	
 	[failureBlocks dct_addBlock:block];
 }
 
 - (void)addCancelationBlock:(DCTConnectionControllerCancelationBlock)block {
+	
+	if ([self dctInternal_hasCancelled]) block();
+		
 	[cancelationBlocks dct_addBlock:block];
-}
-
-- (NSSet *)responseBlocks {
-	return [NSSet setWithSet:responseBlocks];
-}
-
-- (NSSet *)completionBlocks {
-	return [NSSet setWithSet:completionBlocks];
-}
-
-- (NSSet *)failureBlocks {
-	return [NSSet setWithSet:failureBlocks];
-}
-
-- (NSSet *)cancelationBlocks {
-	return [NSSet setWithSet:cancelationBlocks];
 }
 
 #pragma mark -
 #pragma mark Delegatation
 
-- (void)setDelegate:(id<DCTConnectionControllerDelegate>)delegate {
-	[self addDelegate:delegate];
-}
-
-- (id<DCTConnectionControllerDelegate>)delegate {
-	return nil;
-}
-
 - (void)addDelegate:(id<DCTConnectionControllerDelegate>)delegate {
+	
+	if ([self dctInternal_hasResponded]) [self dctInternal_sendResponse:self.returnedResponse toDelegate:delegate];
+	
+	if ([self dctInternal_hasFailed]) [self dctInternal_sendError:self.returnedError toDelegate:delegate];
+	
+	if ([self dctInternal_hasCompleted]) [self dctInternal_sendObject:self.returnedObject toDelegate:delegate];
+	
 	[delegates addObject:delegate];
-}
-
-- (void)addDelegates:(NSSet *)delegateArray {
-	[delegates unionSet:delegateArray];
 }
 
 - (void)removeDelegate:(id<DCTConnectionControllerDelegate>)delegate {
 	[delegates removeObject:delegate];
-}
-
-- (void)removeDelegates:(NSSet *)delegatesToRemove {
-	[delegates minusSet:delegatesToRemove];
 }
 
 - (NSSet *)delegates {
@@ -157,7 +157,22 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 #pragma mark Managing the connection
 
 - (DCTConnectionController *)connect {
-	return [[DCTConnectionQueue sharedConnectionQueue] addConnectionController:self];
+	
+	DCTConnectionQueue *queue = [DCTConnectionQueue sharedConnectionQueue];
+	
+	NSUInteger existingConnectionControllerIndex = [queue.connectionControllers indexOfObject:self];
+	
+	if (existingConnectionControllerIndex != NSNotFound) {
+		
+		DCTConnectionController *existingConnectionController = [queue.connectionControllers objectAtIndex:existingConnectionControllerIndex];
+		
+		[existingConnectionController dctInternal_mergeInformationFromConnectionController:self];
+		
+		return existingConnectionController;
+	}
+	
+	[queue addConnectionController:self];
+	return self;
 }
 
 - (void)requeue {
@@ -183,7 +198,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 #pragma mark Dependency methods
 
 - (NSArray *)dependencies {
-	return [[dependencies copy] autorelease];
+	return [dependencies allObjects];
 }
 
 - (void)addDependency:(DCTConnectionController *)connectionController {
@@ -191,6 +206,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	if (!connectionController) return;
 	
 	[dependencies addObject:connectionController];
+	[connectionController dctInternal_addDependent:self];
 }
 
 - (void)removeDependency:(DCTConnectionController *)connectionController {
@@ -198,20 +214,20 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	if (![dependencies containsObject:connectionController]) return;
 	
 	[dependencies removeObject:connectionController];
+	[connectionController dctInternal_removeDependent:self];
 }
 
 - (void)start {
 	
 	NSURLRequest *request = [self newRequest];
 	
-	if (!request) {
-		[self dctInternal_finishWithFailure];
-		return;
-	}
-	
 	self.URL = [request URL];
+	
+	// Make sure it isn't there
+	[urlConnection cancel];
 	[urlConnection release];
 	urlConnection = nil;
+	
 	urlConnection = [[DCTURLConnection alloc] initWithRequest:request delegate:self];
 	[request release];
 	
@@ -235,6 +251,9 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 - (void)receivedObject:(NSObject *)object {
 	self.returnedObject = object;
+	// Call to finish here allows subclasses to change whether a connection was successfully or not. 
+	// For example if the web service always responds successful, but returns an error in JSON, a 
+	// subclass could call receivedError: and this would mean the core connection controller fails.
 	[self dctInternal_finishWithSuccess];
 }
 
@@ -244,6 +263,9 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 - (void)receivedError:(NSError *)error {
 	self.returnedError = error;
+	// Call to finish here allows subclasses to change whether a connection was successfully or not. 
+	// For example if the web service always responds successful, but returns an error in JSON, a 
+	// subclass could call receivedError: and this would mean the core connection controller fails.
 	[self dctInternal_finishWithFailure];
 }
 
@@ -263,18 +285,21 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	NSData *data = ((DCTURLConnection *)connection).data;
 	
-	self.returnedObject = data;
-    [self receivedObject:data];
 	[urlConnection cancel];
 	[urlConnection release]; urlConnection = nil;
+	
+	self.returnedObject = data;
+    [self receivedObject:data];
 	[self dctInternal_finishWithSuccess];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
 	self.returnedError = error;
-    [self receivedError:error];
+	
 	[urlConnection cancel];
 	[urlConnection release]; urlConnection = nil;
+	
+    [self receivedError:error];
 	[self dctInternal_finishWithFailure];
 }
 
@@ -282,133 +307,107 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 #pragma mark Private methods
 
 - (void)dctInternal_announceResponse {
-	[self dctInternal_notifyDelegateOfResponse:self.returnedResponse];
-	[self dctInternal_notifyObserversOfResponse:self.returnedResponse];
-	[self dctInternal_notifyBlockOfResponse:self.returnedResponse];
+	
 	self.status = DCTConnectionControllerStatusResponded;
-}
-
-- (void)dctInternal_finishWithSuccess {
-	if (calledToFinish) return;
-	calledToFinish = YES;
-		
-	[self dctInternal_notifyDelegateOfObject:self.returnedObject];
-	[self dctInternal_notifyObserversOfObject:self.returnedObject];
-	[self dctInternal_notifyBlockOfObject:self.returnedObject];
-	self.status = DCTConnectionControllerStatusComplete;
-	[delegates release]; delegates = nil;
-}
-
-- (void)dctInternal_finishWithFailure {
-	if (calledToFinish) return;
-	calledToFinish = YES;
 	
-	[self dctInternal_notifyDelegateOfReturnedError:self.returnedError];
-	[self dctInternal_notifyObserversOfReturnedError:self.returnedError];
-	[self dctInternal_notifyBlockOfReturnedError:self.returnedError];
-	self.status = DCTConnectionControllerStatusFailed;
-	[delegates release]; delegates = nil;
-}
-
-- (void)dctInternal_finishWithCancelation {
-	if (calledToFinish) return;
-	calledToFinish = YES;
-	
-	[self dctInternal_notifyDelegateOfCancellation];
-	[self dctInternal_notifyObserversOfCancellation];
-	[self dctInternal_notifyBlockOfCancellation];
-	self.status = DCTConnectionControllerStatusCancelled;
-	[delegates release]; delegates = nil;
-}
-
-#pragma mark -
-#pragma mark Private object notification methods
-
-- (void)dctInternal_notifyDelegateOfObject:(NSObject *)object {	
-	
-	for (id<DCTConnectionControllerDelegate> delegate in delegates) {
-		
-		if ([delegate respondsToSelector:@selector(connectionController:didSucceedWithObject:)])
-			[delegate connectionController:self didSucceedWithObject:object];
-	}
-}
-
-- (void)dctInternal_notifyObserversOfObject:(NSObject *)object {
-	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerCompletedNotification object:self];
-}
-
-- (void)dctInternal_notifyBlockOfObject:(NSObject *)object {
-	
-	for (DCTConnectionControllerCompletionBlock block in completionBlocks)
-		block(object);
-}
-
-#pragma mark -
-#pragma mark Private error notification methods
-
-- (void)dctInternal_notifyDelegateOfReturnedError:(NSError *)error {
-	
-	for (id<DCTConnectionControllerDelegate> delegate in delegates) {
-		
-		if ([delegate respondsToSelector:@selector(connectionController:didFailWithError:)])
-			[delegate connectionController:self didFailWithError:error];
-	}
-}
-
-- (void)dctInternal_notifyObserversOfReturnedError:(NSError *)error {
-	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerFailedNotification object:self];
-}
-
-- (void)dctInternal_notifyBlockOfReturnedError:(NSError *)error {
-	
-	for (DCTConnectionControllerFailureBlock block in failureBlocks)
-		block(error);
-}
-
-#pragma mark -
-#pragma mark Private cancelation notification methods
-
-- (void)dctInternal_notifyDelegateOfCancellation {
-	for (id<DCTConnectionControllerDelegate> delegate in delegates) {
-		
-		if ([delegate respondsToSelector:@selector(connectionControllerWasCancelled:)])
-			[delegate connectionControllerWasCancelled:self];
-	}
-}
-
-- (void)dctInternal_notifyObserversOfCancellation {
-	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerCancellationNotification object:self];
-}
-
-- (void)dctInternal_notifyBlockOfCancellation {
-	
-	for (DCTConnectionControllerCancelationBlock block in cancelationBlocks)
-		block();
-}
-
-#pragma mark -
-#pragma mark Private response notification methods
-
-- (void)dctInternal_notifyDelegateOfResponse:(NSURLResponse *)response {
-	for (id<DCTConnectionControllerDelegate> delegate in delegates) {
-		
-		if ([delegate respondsToSelector:@selector(connectionController:didReceiveResponse:)])
-			[delegate connectionController:self didReceiveResponse:response];
-	}
-}
-
-- (void)dctInternal_notifyObserversOfResponse:(NSURLResponse *)response {
-	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerResponseNotification object:self];
-}
-
-
-- (void)dctInternal_notifyBlockOfResponse:(NSURLResponse *)response {
+	NSURLResponse *response = self.returnedResponse;
 	
 	for (DCTConnectionControllerResponseBlock block in responseBlocks)
 		block(response);
+	
+	[self.dctInternal_delegates enumerateObjectsUsingBlock:^(id delegate, BOOL *stop) {
+		[self dctInternal_sendResponse:response toDelegate:delegate];
+	}];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerResponseNotification object:self];	
 }
 
+- (void)dctInternal_finishWithSuccess {
+	if ([self dctInternal_hasFinished]) return;
+	
+	self.status = DCTConnectionControllerStatusComplete;
+	
+	id object = self.returnedObject;
+	
+	for (DCTConnectionControllerCompletionBlock block in completionBlocks)
+		block(object);
+	
+	[self.dctInternal_delegates enumerateObjectsUsingBlock:^(id delegate, BOOL *stop) {
+		[self dctInternal_sendObject:object toDelegate:delegate];
+	}];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerCompletedNotification object:self];
+	
+	[self dctInternal_finish];
+}
 
+- (void)dctInternal_finishWithFailure {
+	if ([self dctInternal_hasFinished]) return;
+	
+	self.status = DCTConnectionControllerStatusFailed;
+	
+	NSError *error = self.returnedError;
+	
+	for (DCTConnectionControllerFailureBlock block in failureBlocks)
+		block(error);
+	
+	[self.dctInternal_delegates enumerateObjectsUsingBlock:^(id delegate, BOOL *stop) {
+		[self dctInternal_sendError:error toDelegate:delegate];
+	}];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerFailedNotification object:self];
+
+	[self dctInternal_finish];
+}
+
+- (void)dctInternal_finishWithCancelation {
+	if ([self dctInternal_hasFinished]) return;
+
+	self.status = DCTConnectionControllerStatusCancelled;	
+	
+	for (DCTConnectionControllerCancelationBlock block in cancelationBlocks)
+		block();
+	
+	[self.dctInternal_delegates enumerateObjectsUsingBlock:^(id delegate, BOOL *stop) {
+		[self dctInternal_sendCancelationToDelegate:delegate];
+	}];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerCancellationNotification object:self];
+
+	[self dctInternal_finish];
+}
+
+- (void)dctInternal_finish {
+	[delegates release]; delegates = nil;
+	
+	for (DCTConnectionController *dependent in self.dctInternal_dependents)
+		[dependent removeDependency:self];
+	
+	[dependents release], dependents = nil;
+}
+
+#pragma mark -
+#pragma mark Delegate handling
+
+- (void)dctInternal_sendResponse:(NSURLResponse *)response toDelegate:(id<DCTConnectionControllerDelegate>)delegate {
+	if ([delegate respondsToSelector:@selector(connectionController:didReceiveResponse:)])
+		[delegate connectionController:self didReceiveResponse:response];
+}
+
+- (void)dctInternal_sendCancelationToDelegate:(id<DCTConnectionControllerDelegate>)delegate {
+	if ([delegate respondsToSelector:@selector(connectionControllerWasCancelled:)])
+		[delegate connectionControllerWasCancelled:self];
+}
+
+- (void)dctInternal_sendObject:(id)object toDelegate:(id<DCTConnectionControllerDelegate>)delegate {
+	if ([delegate respondsToSelector:@selector(connectionController:didSucceedWithObject:)])
+		[delegate connectionController:self didSucceedWithObject:object];
+}
+
+- (void)dctInternal_sendError:(NSError *)error toDelegate:(id<DCTConnectionControllerDelegate>)delegate {
+	if ([delegate respondsToSelector:@selector(connectionController:didFailWithError:)])
+		[delegate connectionController:self didFailWithError:error];
+}
 
 #pragma mark -
 #pragma mark Duplication handling
@@ -439,8 +438,103 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[observationInfos minusSet:infos];
 }
 
-- (NSSet *)observationInformation {
+
+- (void)dctInternal_mergeInformationFromConnectionController:(DCTConnectionController *)connectionController {
+	
+	// Add the delegates from the given connection controller
+	for (id<DCTConnectionControllerDelegate> delegate in connectionController.dctInternal_delegates)
+		[self addDelegate:delegate];	
+	
+	// Add blocks from the given connection controller:
+	
+	for (DCTConnectionControllerResponseBlock block in connectionController.dctInternal_responseBlocks)
+		[self addResponseBlock:block];
+	
+	for (DCTConnectionControllerCancelationBlock block in connectionController.dctInternal_cancelationBlocks)
+		[self addCancelationBlock:block];
+	
+	for (DCTConnectionControllerCompletionBlock block in connectionController.dctInternal_completionBlocks)
+		[self addCompletionBlock:block];
+	
+	for (DCTConnectionControllerFailureBlock block in connectionController.dctInternal_failureBlocks)
+		[self addFailureBlock:block];
+	
+	// Add the observers from the duplicated connection to the existing one, and remove from the merged one
+	for (DCTObservationInfo *info in [connectionController dctInternal_observationInformation]) {
+		
+		if ([[[self dctInternal_observationInformation] dct_observationInfosWithObject:info.object	keyPath:info.keyPath] count] == 0)
+			[self addObserver:info.object forKeyPath:info.keyPath options:info.options context:info.context];
+		
+		[connectionController removeObserver:info.object forKeyPath:info.keyPath];
+	}
+	
+	
+	for (DCTConnectionController *dependent in connectionController.dctInternal_dependents) {
+		[dependent removeDependency:connectionController];
+		[dependent addDependency:self];
+	}
+}
+
+#pragma mark -
+#pragma mark Useful checks
+
+- (BOOL)dctInternal_hasResponded {
+	return (self.status >= DCTConnectionControllerStatusResponded);
+}
+
+- (BOOL)dctInternal_hasFinished {
+	return (self.status > DCTConnectionControllerStatusResponded);
+}
+
+- (BOOL)dctInternal_hasFailed {
+	return (self.status == DCTConnectionControllerStatusFailed);
+}
+
+- (BOOL)dctInternal_hasCompleted {
+	return (self.status == DCTConnectionControllerStatusComplete);
+}
+
+- (BOOL)dctInternal_hasCancelled {
+	return (self.status == DCTConnectionControllerStatusCancelled);
+}
+
+#pragma mark -
+#pragma mark Internal getters
+
+- (NSSet *)dctInternal_delegates {
+	return [NSSet setWithSet:delegates];
+}
+
+- (NSSet *)dctInternal_responseBlocks {
+	return [NSSet setWithSet:responseBlocks];
+}
+
+- (NSSet *)dctInternal_completionBlocks {
+	return [NSSet setWithSet:completionBlocks];
+}
+
+- (NSSet *)dctInternal_failureBlocks {
+	return [NSSet setWithSet:failureBlocks];
+}
+
+- (NSSet *)dctInternal_cancelationBlocks {
+	return [NSSet setWithSet:cancelationBlocks];
+}
+
+- (NSSet *)dctInternal_observationInformation {
 	return [NSSet setWithSet:observationInfos];
+}
+
+- (NSSet *)dctInternal_dependents {
+	return [NSSet setWithSet:dependents];
+}
+
+- (void)dctInternal_addDependent:(DCTConnectionController *)connectionController {
+	[dependents addObject:connectionController];
+}
+
+- (void)dctInternal_removeDependent:(DCTConnectionController *)connectionController {
+	[dependents removeObject:connectionController];
 }
 
 @end
