@@ -15,6 +15,29 @@
 //- (void)dctInternal_finishedBackgroundConnections;
 @end
 
+
+
+
+
+@interface DCTConnectionController (DCTConnectionQueueUIKitAdditions)
+- (void)dctConnectionQueueUIKitAdditions_start;
+- (void)dctConnectionQueueUIKitAdditions_reset;
+- (void)dctConnectionQueueUIKitAdditions_setQueued;
+@end
+@implementation DCTConnectionController (DCTConnectionQueue)
+- (void)dctConnectionQueueUIKitAdditions_start {
+	[self performSelector:@selector(dctInternal_start)];
+}
+- (void)dctConnectionQueueUIKitAdditions_reset {
+	[self performSelector:@selector(dctInternal_reset)];
+}
+- (void)dctConnectionQueueUIKitAdditions_setQueued {
+	[self performSelector:@selector(dctInternal_setQueued)];
+}
+@end
+
+
+
 @implementation DCTConnectionQueue (UIKitAdditions)
 
 - (void)setBackgroundTaskIdentifier:(UIBackgroundTaskIdentifier)aBackgroundTaskIdentifier {
@@ -117,8 +140,8 @@
 	// Remove connections that are active, but not multitasking and put them in our own queue.
 	for (DCTConnectionController *c in self.activeConnectionControllers) {
 		if (!c.multitaskEnabled) {
-			[c reset];
-			[c setQueued];
+			[c dctConnectionQueueUIKitAdditions_reset];
+			[c dctConnectionQueueUIKitAdditions_setQueued];
 			[nonMultitaskingConnections addObject:c];
 			[self removeConnectionController:c];
 		}
@@ -136,32 +159,5 @@
 	nonMultitaskingConnections = nil;
 	[self start];
 }
-
-/*
-- (void)dctInternal_finishedBackgroundConnections {
-	
-	for (DCTConnectionController *c in backgroundConnections) {
-		[c reset];
-		[c setQueued];
-	}
-	
-	[queuedConnections addObjectsFromArray:backgroundConnections];
-	
-	[backgroundConnections release]; backgroundConnections = nil;
-	[[UIApplication sharedApplication] endBackgroundTask:self.backgroundTaskIdentifier];
-}
-
-- (void)dctInternal_hush {
-	
-	active = NO;
-	
-	for (DCTConnectionController *c in activeConnections) {
-		[c reset];
-		[c setQueued];
-	}
-	
-	[queuedConnections addObjectsFromArray:activeConnections];
-	[activeConnections removeAllObjects];
-}*/
 
 @end

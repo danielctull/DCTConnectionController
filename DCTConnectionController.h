@@ -381,21 +381,6 @@ extern NSString *const DCTConnectionControllerTypeString[];
 @property (nonatomic, retain, readonly) NSError *returnedError;
 
 
-/// @name Methods called by DCTConnectionQueue and should probably not be called elsewhere
-
-/** Resets the connection.
- */
-- (void)reset;
-
-/** Starts the connection.
- */
-- (void)start;
-
-/** Sets the connection as queued.
- */
-- (void)setQueued;
-
-
 @end
 
 

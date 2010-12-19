@@ -31,6 +31,10 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 @interface DCTConnectionController ()
 
+- (void)dctInternal_reset;
+- (void)dctInternal_start;
+- (void)dctInternal_setQueued;
+
 @property (nonatomic, readonly) NSSet *dctInternal_responseBlocks;
 @property (nonatomic, readonly) NSSet *dctInternal_completionBlocks;
 @property (nonatomic, readonly) NSSet *dctInternal_failureBlocks;
@@ -179,7 +183,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[urlConnection release]; urlConnection = nil;
 }
 
-- (void)reset {
+- (void)dctInternal_reset {
 	[urlConnection cancel];
 	[urlConnection release]; urlConnection = nil;
 	self.returnedResponse = nil;
@@ -213,7 +217,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[connectionController dctInternal_removeDependent:self];
 }
 
-- (void)start {
+- (void)dctInternal_start {
 	
 	// Make sure it isn't there
 	[urlConnection cancel];
@@ -232,7 +236,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	if (!urlConnection) [self dctInternal_finishWithFailure];
 }
 
-- (void)setQueued {
+- (void)dctInternal_setQueued {
 	self.status = DCTConnectionControllerStatusQueued;
 }
 
