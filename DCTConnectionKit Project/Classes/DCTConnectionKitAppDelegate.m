@@ -12,6 +12,7 @@
 #import "DCTOAuthAccessTokenConnectionController.h"
 #import "DCTOAuthController.h"
 #import "DCTConnectionQueue+Singleton.h"
+#import "DCTConnectionQueue+UIKitAdditions.h"
 
 #import "DCTURLLoadingConnectionController.h"
 #import "DCTConnectionController+Equality.h"

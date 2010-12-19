@@ -74,7 +74,7 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 
 @implementation DCTConnectionQueue
 
-@synthesize maxConnections, multitaskEnabled;
+@synthesize maxConnections;
 
 #pragma mark -
 #pragma mark NSObject

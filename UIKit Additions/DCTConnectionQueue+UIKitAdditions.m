@@ -48,6 +48,14 @@
 	return backgroundTaskIdentifier;
 }
 
+- (void)setMultitaskEnabled:(BOOL)aBool {
+	multitaskEnabled = aBool;
+}
+
+- (BOOL)multitaskEnabled {
+	return multitaskEnabled;
+}
+
 - (void)uikit_dealloc {
 	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 	
@@ -67,7 +75,7 @@
 - (void)uikit_init {
 	
 	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-	
+	multitaskEnabled = YES;
 	[notificationCenter addObserver:self 
 						   selector:@selector(dctInternal_didEnterBackground:) 
 							   name:UIApplicationDidEnterBackgroundNotification 

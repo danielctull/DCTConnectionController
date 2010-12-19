@@ -19,4 +19,8 @@
  */
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 
+/** Sets the connection as multitask enabled for the iOS platform.
+ */
+@property (nonatomic, assign) BOOL multitaskEnabled;
+
 @end

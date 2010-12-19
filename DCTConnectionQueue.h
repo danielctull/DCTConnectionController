@@ -25,16 +25,13 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
 	NSMutableArray *nonMultitaskingConnections;
 	NSUInteger backgroundTaskIdentifier;
 	BOOL inBackground;
+	BOOL multitaskEnabled;
 }
 
 /// @name Queue Settings
 
 /** The maximum number of simultaneous connections allowed at once. */
 @property (nonatomic, assign) NSInteger maxConnections;
-
-/** Property to set for multitasking on iOS platforms. Default is YES.
- */
-@property (nonatomic, assign) BOOL multitaskEnabled;
 
 /// @name Managing the queue
 
