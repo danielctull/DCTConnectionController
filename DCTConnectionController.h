@@ -107,6 +107,25 @@ extern NSString *const DCTConnectionControllerTypeString[];
  created from the data from the web service. This allows delegates to be informed correctly, the 
  correct blocks to be called and the correct status to be set. Again, with the right class
  hierarchy, this will likely only have to be done once.
+ 
+ *General Usage*
+ 
+ An example of how you may use a connection controller:
+ 
+ `DCTConnectionController *cc = [DCTConnectionController connectionController];`
+ 
+ `cc.delegate = self;`
+ 
+ `cc.priority = DCTConnectionControllerPriorityHigh;`
+ 
+ `[cc addCompletionBlock:^(NSObject *o) {`
+ 
+ `    NSLog(@"Connection Controller: %@ returned object: %@", cc, o);`
+ 
+ `}];`
+ 
+ `[cc connect];`
+ 
  */
 @interface DCTConnectionController : NSObject {
 	DCTConnectionControllerPriority priority;
