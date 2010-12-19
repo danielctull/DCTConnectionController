@@ -84,6 +84,7 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
  */
 - (DCTConnectionController *)queuedConnectionControllerToURL:(NSURL *)URL;
 
+/// @name Accessing Connection Controller Information
 
 /** The total amount of connection controllers queued and active. */
 @property (nonatomic, readonly) NSInteger connectionCount;
