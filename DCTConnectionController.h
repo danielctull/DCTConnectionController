@@ -111,21 +111,18 @@ extern NSString *const DCTConnectionControllerTypeString[];
  *General Usage*
  
  An example of how you may use a connection controller:
- 
- `DCTConnectionController *cc = [DCTConnectionController connectionController];`
- 
- `cc.delegate = self;`
- 
- `cc.priority = DCTConnectionControllerPriorityHigh;`
- 
- `[cc addCompletionBlock:^(NSObject *o) {`
- 
- `    NSLog(@"Connection Controller: %@ returned object: %@", cc, o);`
- 
- `}];`
- 
- `[cc connect];`
- 
+
+
+	DCTConnectionController *cc = [DCTConnectionController connectionController];
+	
+	cc.delegate = self;
+	cc.priority = DCTConnectionControllerPriorityHigh;
+	
+	[cc addCompletionBlock:^(NSObject *o) {
+		NSLog(@"Connection Controller: %@ returned object: %@", cc, o);
+	}];
+	
+	[cc connect]; 
  */
 @interface DCTConnectionController : NSObject {
 	DCTURLConnection *urlConnection;

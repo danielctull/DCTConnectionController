@@ -9,9 +9,11 @@
 #import <Foundation/Foundation.h>
 #import "DCTConnectionController.h"
 
+/** Another simple connection controller subclass.*/
 @interface DCTURLLoadingConnectionController : DCTConnectionController {
 }
 
+/** The URL to load. */
 @property (nonatomic, retain, readwrite) NSURL *URL;
 
 @end
