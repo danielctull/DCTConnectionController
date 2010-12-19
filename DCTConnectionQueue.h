@@ -27,8 +27,28 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
 	BOOL inBackground;
 }
 
-// Property to set for multitasking on iOS platforms. Default is YES.
+/// @name Queue Settings
+
+/** The maximum number of simultaneous connections allowed at once. */
+@property (nonatomic, assign) NSInteger maxConnections;
+
+/** Property to set for multitasking on iOS platforms. Default is YES.
+ */
 @property (nonatomic, assign) BOOL multitaskEnabled;
+
+/// @name Managing the queue
+
+/** Stops the conneciton queue. */
+- (void)stop;
+
+/** Pauses the conneciton queue. */
+- (void)pause;
+
+/** Starts the conneciton queue. */
+- (void)start;
+
+
+/// @name Managing Connection Controllers
 
 /**
  Add a connection controller to the queue. This method causes the connection queue to
@@ -40,24 +60,55 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
  
  */
 - (void)removeConnectionController:(DCTConnectionController *)connectionController;
+
+/** Requeues a connection controller.
+ 
+ This will stop the url connection in progress for the given connection controller and 
+ reset its internals back to before it started connecting.
+ */
 - (void)requeueConnectionController:(DCTConnectionController *)connectionController;
 
+
+/// @name Checking Connection Controllers
+
+/** Checks connection controllers to see if there is a connection to the given URL in progress.
+ 
+ Needed?
+ */
 - (BOOL)isConnectingToURL:(NSURL *)URL;
+
+/** Checks the queued connection controllers to see if there is a connection to the given URL in waiting.
+ 
+ Needed?
+ */
 - (BOOL)hasQueuedConnectionControllerToURL:(NSURL *)URL;
+
+/** Needed?
+ */
 - (DCTConnectionController *)queuedConnectionControllerToURL:(NSURL *)URL;
 
-- (void)stop;
-- (void)pause;
-- (void)start;
 
-@property (nonatomic, assign) NSInteger maxConnections;
+/** The total amount of connection controllers queued and active. */
+@property (nonatomic, readonly) NSInteger connectionCount;
 
-@property (nonatomic, readonly) NSInteger connectionCount, activeConnectionCount;
-@property (nonatomic, readonly) NSArray *activeConnectionControllers;
-@property (nonatomic, readonly) NSArray *queuedConnectionControllers;
+/** The amount of connection controllers currently in progress. */
+@property (nonatomic, readonly) NSInteger activeConnectionCount;
+
+/** Returns all the connection controllers currently in progress and queued. */
 @property (nonatomic, readonly) NSArray *connectionControllers;
 
+/** Returns all the connection controllers currently in progress. */
+@property (nonatomic, readonly) NSArray *activeConnectionControllers;
+
+/** Returns all the connection controllers currently queued. */
+@property (nonatomic, readonly) NSArray *queuedConnectionControllers;
+
+/// @name External Connection Counting
+
+/** Increments the external conneciton count */
 - (void)incrementExternalConnectionCount;
+
+/** Decrements the external conneciton count */
 - (void)decrementExternalConnectionCount;
 
 @end

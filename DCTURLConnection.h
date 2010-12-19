@@ -23,13 +23,13 @@
  @{
  */
 
-/** @brief A universally unique identifier to indentify this connection.
+/** A universally unique identifier to indentify this connection.
  
  Uses NSProcessInfo's -globallyUniqueString method to gain a unique string.
  */
 @property (readonly, copy) NSString *identifier;
 
-/** @brief The URL of the given request.
+/** The URL of the given request.
  */
 @property (readonly, retain) NSURL *URL;
 
@@ -43,7 +43,7 @@
  @{
  */
 
-/** @brief Initialises and returns a new URL connection with the given objects.
+/** Initialises and returns a new URL connection with the given objects.
  
  @param request The URL request for the URL connection to perform.
  @param delegate The delegate for the request.
@@ -64,18 +64,18 @@
  @{
  */
 
-/** @brief The data being returned through this connection.
+/** The data being returned through this connection.
  
  A nice place to store this without the hassle of setting up a dictionary for the returned data.
  Use -resetDataLength and -appendData: to modify the stored data.
  */
 @property (readonly, copy) NSData *data;
 
-/** @brief Resets the data length to 0.
+/** Resets the data length to 0.
  */
 - (void)resetDataLength;
 
-/** @brief Appends the given data to the receiver's data.
+/** Appends the given data to the receiver's data.
  
  Typically this will be called by the delegate of the URL connection every time it receives some data to build up the full data result.
  
