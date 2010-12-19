@@ -128,21 +128,14 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  */
 @interface DCTConnectionController : NSObject {
-	DCTConnectionControllerPriority priority;
-	
-	//NSMutableArray *dependencies;
-	
-	NSMutableSet *dependencies, *dependents;
-	
-	
-	DCTConnectionType type;
-	DCTConnectionControllerStatus status;
 	DCTURLConnection *urlConnection;
 	NSURL *URL;
-	NSMutableSet *delegates;
-	NSMutableSet *observationInfos;
-	
-	NSMutableSet *responseBlocks, *completionBlocks, *failureBlocks, *cancelationBlocks;
+	NSMutableSet *dependencies;
+	NSMutableSet *dependents;
+	NSMutableSet *responseBlocks;
+	NSMutableSet *completionBlocks;
+	NSMutableSet *failureBlocks;
+	NSMutableSet *cancelationBlocks;
 }
 
 /// @name Getting a Connection Controller
@@ -194,7 +187,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  @return The actual connection controller that is added to the queue or already running.
  */
-- (DCTConnectionController *)connect;
+- (void)connect;
 
 
 /** Cancels the connection.
@@ -241,33 +234,13 @@ extern NSString *const DCTConnectionControllerTypeString[];
 - (void)removeDependency:(DCTConnectionController *)connectionController;
 
 
-/// @name Managing delegates
+/// @name Managing the delegate
 
 /** The set of objects that are called when events happen.
  
  @return The set of delegates.
  */
-@property (nonatomic, readonly) NSSet *delegates;
-
-/** The object that acts as the delegate of the receiving connection controller.
- 
- Unlike the usual behaviour of delegates in Cocoa, the delegate is retained by the connection controller. 
- This is because DCTConnectionController uses DTConnectionManager to perform the connection and the connection manager
- must retain its delegates. Because of this the delegate should never retain the connection controller.
- 
- @deprecated This property is now deprecated because connection controllers can now have multiple delegates as
- the connection system can merge a connection controller at a whim, merging the delegates. It does this to 
- save bandwidth for identical connections happening. See the DCTEquality category for details on the new equality
- checking. Use -addDelegate: and -delegates instead.
- */
-- (void)addDelegate:(id<DCTConnectionControllerDelegate>)delegate;
-
-/** Removes the given delegate.
- 
- @param delegate The object to be removed as a delegate.
- */
-- (void)removeDelegate:(id<DCTConnectionControllerDelegate>)delegate;
-
+@property (nonatomic, retain) id<DCTConnectionControllerDelegate> delegate;
 
 /// @name Managing event blocks
 

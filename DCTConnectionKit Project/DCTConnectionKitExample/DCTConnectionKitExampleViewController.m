@@ -61,7 +61,7 @@
 	for (NSString *s in urls) {
 		DCTURLLoadingConnectionController *connection = [DCTURLLoadingConnectionController connectionController];
 		connection.multitaskEnabled = YES;
-		[connection addDelegate:self];
+		connection.delegate = self;
 		connection.URL = [NSURL URLWithString:s];
 		[connection addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 		[connection connect];
