@@ -44,21 +44,16 @@
 
 <p> <strong> General Usage </strong></p>
 
-<p> An example of how you may use a connection controller: </p>
+<p> An example of how you may use a connection controller:  <pre> DCTConnectionController *cc = [DCTConnectionController connectionController];
 
-<p> <code> <a href="DCTConnectionController.html">DCTConnectionController</a> *cc =  <a href="#//api/name/connectionController">[DCTConnectionController connectionController]</a> DCTConnectionController *cc = [DCTConnectionController connectionController]; </code></p>
+cc.delegate = self;
+cc.priority = DCTConnectionControllerPriorityHigh;
 
-<p> <code> cc.delegate = self; </code></p>
+[cc addCompletionBlock:^(NSObject *o) {
+	NSLog(@&quot;Connection Controller: %@ returned object: %@&quot;, cc, o);
+}];
 
-<p> <code> cc.priority = DCTConnectionControllerPriorityHigh; </code></p>
-
-<p> <code> [cc addCompletionBlock:^(NSObject *o) { </code></p>
-
-<p> <code> NSLog(@&quot;Connection Controller: %@ returned object: %@&quot;, cc, o); </code></p>
-
-<p> <code> }]; </code></p>
-
-<p> <code> [cc connect]; </code></p>
+[cc connect]; </pre></p>
 
 				</div>
 				
