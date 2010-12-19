@@ -219,15 +219,44 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 - (void)start {
 	
-	NSURLRequest *request = [self newRequest];
-	
-	self.URL = [request URL];
-	
 	// Make sure it isn't there
 	[urlConnection cancel];
 	[urlConnection release];
 	urlConnection = nil;
 	
+	
+	DCTConnectionQueue *queue = [DCTConnectionQueue sharedConnectionQueue];
+	
+	NSUInteger existingConnectionControllerIndex = [queue.connectionControllers indexOfObject:self];
+	
+	if (existingConnectionControllerIndex != NSNotFound) {
+		
+		DCTConnectionController *existingConnectionController = [queue.connectionControllers objectAtIndex:existingConnectionControllerIndex];
+		
+		self.status = existingConnectionController.status;
+		
+		[existingConnectionController addResponseBlock:^(NSURLResponse *response) {
+			self.returnedResponse = response;
+			[self dctInternal_announceResponse];
+		}];
+		
+		[existingConnectionController addCompletionBlock:^(NSObject *object) {
+			self.returnedObject = object;
+			[self dctInternal_finishWithSuccess];
+		}];
+		
+		[existingConnectionController addFailureBlock:^(NSError *error) {
+			self.returnedError = error;
+			[self dctInternal_finishWithFailure];
+		}];
+		
+		return;
+	}
+		
+	NSURLRequest *request = [self newRequest];
+	
+	self.URL = [request URL];
+		
 	urlConnection = [[DCTURLConnection alloc] initWithRequest:request delegate:self];
 	[request release];
 	
