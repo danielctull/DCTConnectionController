@@ -1,0 +1,284 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>DCTConnectionControllerDelegate Protocol Reference</title>
+		<meta http-equiv="Content-Type" content="application/xhtml+xml;charset=utf-8" />
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" />
+		<meta name="generator" content="appledoc" />
+	</head>
+	<body>
+		<article>
+			<div id="header">
+				<div class="section-header">
+					<h1 class="title title-header">DCTConnectionControllerDelegate Protocol Reference</h1>
+				</div>		
+			</div>
+			<div id="container">	
+				
+				<div class="section section-specification"><table cellspacing="0"><tbody>
+					<tr>
+	<td class="specification-title">Conforms to</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">DCTConnectionController.h</td>
+</tr>
+					</tbody></table></div>
+				
+				
+				
+				<div class="section section-overview">
+					<h2 class="subtitle subtitle-overview">Overview</h2>
+					
+<p> Protocol for delegates of  <a href="../Classes/DCTConnectionController.html">DCTConnectionController</a> to conform to. </p>
+
+<p> The delegate of  <a href="../Classes/DCTConnectionController.html">DCTConnectionController</a> must adopt the  <a href="DCTConnectionControllerDelegate.html">DCTConnectionControllerDelegate</a> protocol, although all the methods are optional. They allow the delegate to handle only certain types of events, although  <a href="#//api/name/connectionController:didSucceedWithObject:">connectionController:didSucceedWithObject:</a> and  <a href="#//api/name/connectionController:didFailWithError:">connectionController:didFailWithError:</a> should both be handled to take advantage of the data and handle any occuring errors. </p>
+
+				</div>
+				
+				
+				
+				
+				<div class="section section-tasks">
+					<h2 class="subtitle subtitle-tasks">Tasks</h2>
+					
+					
+
+					<ul class="task-list">
+						<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/connectionController:didSucceedWithObject:">- connectionController:didSucceedWithObject:</a></code>
+		<span class="tooltip"> Tells the delegate the connection has succeeded. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/connectionController:didFailWithError:">- connectionController:didFailWithError:</a></code>
+		<span class="tooltip"> Tells the delegate the connection has failed. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/connectionControllerWasCancelled:">- connectionControllerWasCancelled:</a></code>
+		<span class="tooltip"> Tells the delegate the connection was cancelled. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/connectionController:didReceiveResponse:">- connectionController:didReceiveResponse:</a></code>
+		<span class="tooltip"> Tells the delegate a response has been received from the server. </span>
+	</span>
+	
+</li>
+					</ul>
+					
+				</div>
+				
+				
+				
+				
+				
+				
+				
+				<div class="section section-methods">
+					<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+					
+					<div class="section-method">
+	<a name="//api/name/connectionController:didFailWithError:" title="connectionController:didFailWithError:"></a>
+	<h3 class="subsubtitle method-title">connectionController:didFailWithError:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Tells the delegate the connection has failed. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)connectionController:(DCTConnectionController *)<em>connectionController</em> didFailWithError:(NSError *)<em>error</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>connectionController</em></dt>
+			<dd> The connection controller informing the delegate of the event. </dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>error</em></dt>
+			<dd> The error received from the server. </dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/connectionController:didReceiveResponse:" title="connectionController:didReceiveResponse:"></a>
+	<h3 class="subsubtitle method-title">connectionController:didReceiveResponse:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Tells the delegate a response has been received from the server. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)connectionController:(DCTConnectionController *)<em>connectionController</em> didReceiveResponse:(NSURLResponse *)<em>response</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>connectionController</em></dt>
+			<dd> The connection controller informing the delegate of the event. </dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>response</em></dt>
+			<dd> The received response. </dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/connectionController:didSucceedWithObject:" title="connectionController:didSucceedWithObject:"></a>
+	<h3 class="subsubtitle method-title">connectionController:didSucceedWithObject:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Tells the delegate the connection has succeeded. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)connectionController:(DCTConnectionController *)<em>connectionController</em> didSucceedWithObject:(NSObject *)<em>object</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>connectionController</em></dt>
+			<dd> The connection controller informing the delegate of the event. </dd>
+		</dl>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>object</em></dt>
+			<dd> The object returned by the connection. </dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/connectionControllerWasCancelled:" title="connectionControllerWasCancelled:"></a>
+	<h3 class="subsubtitle method-title">connectionControllerWasCancelled:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Tells the delegate the connection was cancelled. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)connectionControllerWasCancelled:(DCTConnectionController *)<em>connectionController</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>connectionController</em></dt>
+			<dd> The connection controller informing the delegate of the event. </dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+				</div>
+				
+				
+				
+				
+			</div>
+			<div id="footer">
+				<hr />
+				<div class="footer-copyright">
+					<p><span class="copyright">&copy; 2010 Daniel Tull. All rights reserved. (Last updated: 2010-12-19)</span><br />
+					<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc</a>.</span></p>
+				</div>
+			</div>
+		</article>
+	</body>
+</html>

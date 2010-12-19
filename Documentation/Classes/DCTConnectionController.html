@@ -1,0 +1,1440 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>DCTConnectionController Class Reference</title>
+		<meta http-equiv="Content-Type" content="application/xhtml+xml;charset=utf-8" />
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" />
+		<meta name="generator" content="appledoc" />
+	</head>
+	<body>
+		<article>
+			<div id="header">
+				<div class="section-header">
+					<h1 class="title title-header">DCTConnectionController Class Reference</h1>
+				</div>		
+			</div>
+			<div id="container">	
+				
+				<div class="section section-specification"><table cellspacing="0"><tbody>
+					<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">DCTConnectionController.h</td>
+</tr>
+					</tbody></table></div>
+				
+				
+				
+				<div class="section section-overview">
+					<h2 class="subtitle subtitle-overview">Overview</h2>
+					
+<p> A class to handle one connection. </p>
+
+<p> This class is an abstract class, which should always be subclassed in order to work. Included is a simple subclass, DCTURLLoadingConnectionController, which loads the given URL. </p>
+
+<p> Benefits to using a connection controller over using an NSURLConnection directly include:  <ul><li> Easy ability to split up funtionality. </li></ul> <ul><li> Setting up connections in a queue. </li></ul> <ul><li> Adding dependencies, so that connections only start once all  <a href="#//api/name/dependencies">dependencies</a> are complete, useful for when a connection is dependent on a login connection for example. </li></ul> <ul><li> Queueing duplicate connection controllers to one already queued or active, will cause the duplicates to &quot;piggy back&quot; the existing connection controller. This way the application could need fewer connections without having to check each time you make the connection. </li></ul> <ul><li> Automatic benefits when  <a href="DCTConnectionController.html">DCTConnectionController</a> is improved! </li></ul></p>
+
+<p> Most of the time when working with connection controllers, you will want to have a separate controller for different calls. You may have one for fetching all tweets and another for fetching tweets from a particular user. The benefits here are that in the different implmenetations you know that one class does just the one task, meaning a lot less conditional statements. </p>
+
+<p> It also allows you to build clever class hierarchies, for instance you may want to have another abstract class used for all Twitter calls (for example TwitterConnectionController), where if it fails due to an authentication issue, it starts a login connection controller, requeues itself and adds the login controller to its dependencies. All connection controllers inheriting from TwitterConnectionController would then gain the ability to authenticate when they receive an authentication challenge. </p>
+
+<p> Many web services respond succesfully with error codes for the API in the returned data. Because a connection controller represents the higher level web service more than the actual connection, these failures should be reported as such. To achieve this, the subclass implementation of  <a href="#//api/name/receivedObject:">receivedObject:</a> should look for error codes and if one is found, call  <a href="#//api/name/receivedError:">receivedError:</a> with an NSError created from the data from the web service. This allows delegates to be informed correctly, the correct blocks to be called and the correct  <a href="#//api/name/status">status</a> to be set. Again, with the right class hierarchy, this will likely only have to be done once. </p>
+
+<p> <strong> General Usage </strong></p>
+
+<p> An example of how you may use a connection controller: </p>
+
+<p> <code> <a href="DCTConnectionController.html">DCTConnectionController</a> *cc =  <a href="#//api/name/connectionController">[DCTConnectionController connectionController]</a> DCTConnectionController *cc = [DCTConnectionController connectionController]; </code></p>
+
+<p> <code> cc.delegate = self; </code></p>
+
+<p> <code> cc.priority = DCTConnectionControllerPriorityHigh; </code></p>
+
+<p> <code> [cc addCompletionBlock:^(NSObject *o) { </code></p>
+
+<p> <code> NSLog(@&quot;Connection Controller: %@ returned object: %@&quot;, cc, o); </code></p>
+
+<p> <code> }]; </code></p>
+
+<p> <code> [cc connect]; </code></p>
+
+				</div>
+				
+				
+				
+				
+				<div class="section section-tasks">
+					<h2 class="subtitle subtitle-tasks">Tasks</h2>
+					
+					<h3 class="subsubtitle task-title">Creating a Connection Controller</h3>
+
+					<ul class="task-list">
+						<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/connectionController">+ connectionController</a></code>
+		<span class="tooltip"> Creates and returns an autoreleased connection controller. </span>
+	</span>
+	
+</li>
+					</ul>
+					
+					<h3 class="subsubtitle task-title">Setting up the connection details</h3>
+
+					<ul class="task-list">
+						<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/multitaskEnabled"> multitaskEnabled</a></code>
+		<span class="tooltip"> Sets the connection as multitask enabled for the iOS platform. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/type"> type</a></code>
+		<span class="tooltip"> The  <a href="#//api/name/type">type</a> of connection to use. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/priority"> priority</a></code>
+		<span class="tooltip"> The  <a href="#//api/name/priority">priority</a> of the connection controller. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/delegate"> delegate</a></code>
+		<span class="tooltip"> The  <a href="#//api/name/delegate">delegate</a> for the connection controller. </span>
+	</span>
+	
+</li>
+					</ul>
+					
+					<h3 class="subsubtitle task-title">Setting Dependencies</h3>
+
+					<ul class="task-list">
+						<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/dependencies"> dependencies</a></code>
+		<span class="tooltip"> The  <a href="#//api/name/dependencies">dependencies</a> for this connection controller. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/addDependency:">- addDependency:</a></code>
+		<span class="tooltip"> Adds a connection controller that needs to finish before the receiver can start. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/removeDependency:">- removeDependency:</a></code>
+		<span class="tooltip"> Removes the given connection controller from the list of depended connection controllers. </span>
+	</span>
+	
+</li>
+					</ul>
+					
+					<h3 class="subsubtitle task-title">Event Blocks</h3>
+
+					<ul class="task-list">
+						<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/addResponseBlock:">- addResponseBlock:</a></code>
+		<span class="tooltip"> Adds a response block. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/addCompletionBlock:">- addCompletionBlock:</a></code>
+		<span class="tooltip"> Adds a completion block. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/addFailureBlock:">- addFailureBlock:</a></code>
+		<span class="tooltip"> Adds a failure block. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/addCancelationBlock:">- addCancelationBlock:</a></code>
+		<span class="tooltip"> Adds a completion block. </span>
+	</span>
+	
+</li>
+					</ul>
+					
+					<h3 class="subsubtitle task-title">Managing the Connection</h3>
+
+					<ul class="task-list">
+						<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/connect">- connect</a></code>
+		<span class="tooltip"> Adds the connection controller to the queue, checking to make sure it is unique and if not, returning the duplicate that is already queued. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/cancel">- cancel</a></code>
+		<span class="tooltip"> Cancels the connection. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/requeue">- requeue</a></code>
+		<span class="tooltip"> Requeue the connection. </span>
+	</span>
+	
+</li>
+					</ul>
+					
+					<h3 class="subsubtitle task-title">Methods to use in Subclasses</h3>
+
+					<ul class="task-list">
+						<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/newRequest">- newRequest</a></code>
+		<span class="tooltip"> This method should be used in subclasses to give custom requests. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/receivedResponse:">- receivedResponse:</a></code>
+		<span class="tooltip"> This method should be used in subclasses to handle the returned response. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/receivedObject:">- receivedObject:</a></code>
+		<span class="tooltip"> This method should be used in subclasses to handle the returned data. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/receivedError:">- receivedError:</a></code>
+		<span class="tooltip"> This method should be used in subclasses to handle the returned error. </span>
+	</span>
+	
+</li>
+					</ul>
+					
+					<h3 class="subsubtitle task-title">Connection Status</h3>
+
+					<ul class="task-list">
+						<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/status"> status</a></code>
+		<span class="tooltip"> The  <a href="#//api/name/status">status</a> of the connection controller. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/URL"> URL</a></code>
+		<span class="tooltip"> The  <a href="#//api/name/URL">URL</a> the connection controller is managing. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/returnedResponse"> returnedResponse</a></code>
+		<span class="tooltip"> The response returned from the connection. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/returnedObject"> returnedObject</a></code>
+		<span class="tooltip"> The object, if there is one, returned from the connection. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/returnedError"> returnedError</a></code>
+		<span class="tooltip"> The error, if there is one, returned from the connection. </span>
+	</span>
+	
+</li>
+					</ul>
+					
+					<h3 class="subsubtitle task-title">Equality Methods</h3>
+
+					<ul class="task-list">
+						<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/isEqualToConnectionController:">- isEqualToConnectionController:</a></code>
+		<span class="tooltip"> Determines whether the given connection controller is equal to the receiver. </span>
+	</span>
+	
+</li>
+					</ul>
+					
+				</div>
+				
+				
+				
+				
+				
+				<div class="section section-methods">
+					<h2 class="subtitle subtitle-methods">Class Methods</h2>
+					
+					<div class="section-method">
+	<a name="//api/name/connectionController" title="connectionController"></a>
+	<h3 class="subsubtitle method-title">connectionController</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Creates and returns an autoreleased connection controller. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>+ (id)connectionController</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+				</div>
+				
+				
+				
+				<div class="section section-methods">
+					<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+					
+					<div class="section-method">
+	<a name="//api/name/addCancelationBlock:" title="addCancelationBlock:"></a>
+	<h3 class="subsubtitle method-title">addCancelationBlock:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Adds a completion block. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)addCancelationBlock:(DCTConnectionControllerCancelationBlock)<em>cancelationBlock</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>cancelationBlock</em></dt>
+			<dd> The cancelation block to add. </dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> Adds a completion block. </p>
+		
+		<p> DCTConnectionControllerCancelationBlock is defined as such: </p>
+		
+		<p> <code> typedef void (^DCTConnectionControllerCancelationBlock) (); </code></p>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/addCompletionBlock:" title="addCompletionBlock:"></a>
+	<h3 class="subsubtitle method-title">addCompletionBlock:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Adds a completion block. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)addCompletionBlock:(DCTConnectionControllerCompletionBlock)<em>completionBlock</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>completionBlock</em></dt>
+			<dd> The completion block to add. </dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> Adds a completion block. </p>
+		
+		<p> DCTConnectionControllerCompletionBlock is defined as such: </p>
+		
+		<p> <code> typedef void (^DCTConnectionControllerCompletionBlock) (NSObject *object); </code></p>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/addDependency:" title="addDependency:"></a>
+	<h3 class="subsubtitle method-title">addDependency:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Adds a connection controller that needs to finish before the receiver can start. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)addDependency:(DCTConnectionController *)<em>connectionController</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>connectionController</em></dt>
+			<dd> The connection controller that should be complete before the receiver starts. </dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> Adds a connection controller that needs to finish before the receiver can start. </p>
+		
+		<p> Currently, the depended connection controller just needs to be removed from the queue before the receiver starts, whether the depended connection controller finishes with success or failure. This will be looked into for future versions. </p>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/addFailureBlock:" title="addFailureBlock:"></a>
+	<h3 class="subsubtitle method-title">addFailureBlock:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Adds a failure block. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)addFailureBlock:(DCTConnectionControllerFailureBlock)<em>failureBlock</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>failureBlock</em></dt>
+			<dd> The failure block to add. </dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> Adds a failure block. </p>
+		
+		<p> DCTConnectionControllerFailureBlock is defined as such: </p>
+		
+		<p> <code> typedef void (^DCTConnectionControllerFailureBlock) (NSError *error); </code></p>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/addResponseBlock:" title="addResponseBlock:"></a>
+	<h3 class="subsubtitle method-title">addResponseBlock:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Adds a response block. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)addResponseBlock:(DCTConnectionControllerResponseBlock)<em>responseBlock</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>responseBlock</em></dt>
+			<dd> The response block to add. </dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> Adds a response block. </p>
+		
+		<p> DCTConnectionControllerResponseBlock is defined as such: </p>
+		
+		<p> <code> typedef void (^DCTConnectionControllerResponseBlock) (NSURLResponse *response); </code></p>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/cancel" title="cancel"></a>
+	<h3 class="subsubtitle method-title">cancel</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Cancels the connection. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)cancel</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> Cancels the connection. </p>
+		
+		<p> Canceling the connection causes any cancelation blocks to be called and sends connectionControllerWasCancelled: to its delegates. </p>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/connect" title="connect"></a>
+	<h3 class="subsubtitle method-title">connect</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Adds the connection controller to the queue, checking to make sure it is unique and if not, returning the duplicate that is already queued. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)connect</code></div>
+	
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p> The actual connection controller that is added to the queue or already running. </p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> Adds the connection controller to the queue, checking to make sure it is unique and if not, returning the duplicate that is already queued. </p>
+		
+		<p> If there is a connection controller in the queue or already running that exists with the same details as the receiver, this will merge accross the delegate, completeion blocks, KVO and notification observers, then return with the connection controller that already exists. This uses  <a href="#//api/name/isEqualToConnectionController:">isEqualToConnectionController:</a> to determine equality, which checks the  <a href="#//api/name/URL">URL</a> of the desitnation and each property added by subclasses. </p>
+		
+		<p> In the case that a connection controller is already running, delegates and completion blocks will be called as soon as they are added to the existing connection controller. Due to this, it may be wise to </p>
+		
+		<p> Connection controllers with  <a href="#//api/name/dependencies">dependencies</a> do not currently get merged into an existing </p>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/isEqualToConnectionController:" title="isEqualToConnectionController:"></a>
+	<h3 class="subsubtitle method-title">isEqualToConnectionController:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Determines whether the given connection controller is equal to the receiver. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (BOOL)isEqualToConnectionController:(DCTConnectionController *)<em>connectionController</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>connectionController</em></dt>
+			<dd> The connection controller to check equality with. </dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p> YES if the connection controllers are equal. </p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> Determines whether the given connection controller is equal to the receiver. </p>
+		
+		<p> Connection controllers are determined equal by checking the  <a href="#//api/name/URL">URL</a> , the  <a href="#//api/name/type">type</a> and their properties for equality. </p>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController+Equality.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/newRequest" title="newRequest"></a>
+	<h3 class="subsubtitle method-title">newRequest</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> This method should be used in subclasses to give custom requests. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (NSMutableURLRequest *)newRequest</code></div>
+	
+	
+	
+	
+	<div class="method-subsection return">
+		<h4 class="method-subtitle parameter-title">Return Value</h4>
+		<p> A  <a href="#//api/name/URL">URL</a> request which will form the connection. </p>
+	</div>
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> This method should be used in subclasses to give custom requests. </p>
+		
+		<p> Calling super from the subclass will give a mutable request of  <a href="#//api/name/type">type</a> &apos;type&apos;, this is the prefered way to get the request object in subclasses. </p>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/receivedError:" title="receivedError:"></a>
+	<h3 class="subsubtitle method-title">receivedError:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> This method should be used in subclasses to handle the returned error. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)receivedError:(NSError *)<em>error</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>response</em></dt>
+			<dd> The response returned from the connection. </dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> This method should be used in subclasses to handle the returned error. </p>
+		
+		<p> Subclasses should handle the error, taking any course of action given in the API documentation. The default implementation of this method notifies the  <a href="#//api/name/delegate">delegate</a> and observers of the error, so at the end of this method subclasses should call the super implementation. This could be provided with a new error message created specifically for delegates and observers or just passing the error returned from the connection. </p>
+		
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><a href="#//api/name/receivedObject:">receivedObject:</a></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/receivedObject:" title="receivedObject:"></a>
+	<h3 class="subsubtitle method-title">receivedObject:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> This method should be used in subclasses to handle the returned data. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)receivedObject:(NSObject *)<em>object</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>object</em></dt>
+			<dd> The data object returned from the connection. </dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> This method should be used in subclasses to handle the returned data. </p>
+		
+		<p> Subclasses should handle the incoming data, creating a wrapper or data object for the  <a href="#//api/name/delegate">delegate</a> and observers to use. The default implementation of this method notifies the  <a href="#//api/name/delegate">delegate</a> and observers of the new data. Therefore, at the end of this method subclasses should call the super implementation with the handled data object as the parameter. </p>
+		
+		<p> If connecting to a web service always responds successful, but returns it&apos;s error in JSON, a subclass can call  <a href="#//api/name/receivedError:">receivedError:</a> from its implementation of this method and this would propigate up and the  <a href="#//api/name/status">status</a> of the connection controller would be reported as DCTConnectionControllerStatusFailed. As well as this, instead of notifying delgates and observers that it had succeeded, it would report as failed and again would call the failureBlocks rather than the completionBlocks. </p>
+		
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><a href="#//api/name/receivedError:">receivedError:</a></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/receivedResponse:" title="receivedResponse:"></a>
+	<h3 class="subsubtitle method-title">receivedResponse:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> This method should be used in subclasses to handle the returned response. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)receivedResponse:(NSURLResponse *)<em>response</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>response</em></dt>
+			<dd> The response returned from the connection. </dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> This method should be used in subclasses to handle the returned response. </p>
+		
+		<p> Subclasses should handle the response, taking any course of action given in the API documentation. The default implementation of this method notifies the  <a href="#//api/name/delegate">delegate</a> and observers of the response, so at the end of this method subclasses should call the super implementation. </p>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/removeDependency:" title="removeDependency:"></a>
+	<h3 class="subsubtitle method-title">removeDependency:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Removes the given connection controller from the list of depended connection controllers. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)removeDependency:(DCTConnectionController *)<em>connectionController</em></code></div>
+	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>connectionController</em></dt>
+			<dd> The connection controller to be removed from the dependency list. </dd>
+		</dl>
+		
+	</div>
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> Removes the given connection controller from the list of depended connection controllers. </p>
+		
+		<p> If the given connection controller is not in the list of dependencies, this is a no-op. </p>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/requeue" title="requeue"></a>
+	<h3 class="subsubtitle method-title">requeue</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Requeue the connection. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)requeue</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+				</div>
+				
+				
+				
+				<div class="section section-methods">
+					<h2 class="subtitle subtitle-methods">Properties</h2>
+					
+					<div class="section-method">
+	<a name="//api/name/URL" title="URL"></a>
+	<h3 class="subsubtitle method-title">URL</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> The  <a href="#//api/name/URL">URL</a> the connection controller is managing. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain, readonly) NSURL *URL</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/delegate" title="delegate"></a>
+	<h3 class="subsubtitle method-title">delegate</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> The  <a href="#//api/name/delegate">delegate</a> for the connection controller. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain) id&lt;DCTConnectionControllerDelegate&gt; delegate</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> The  <a href="#//api/name/delegate">delegate</a> for the connection controller. </p>
+		
+		<p> Setting this will cause the connection controller to call the methods defined in DCTConnectionControllerDelegate, when the appropriate events occur. </p>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/dependencies" title="dependencies"></a>
+	<h3 class="subsubtitle method-title">dependencies</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> The  <a href="#//api/name/dependencies">dependencies</a> for this connection controller. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSArray *dependencies</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/multitaskEnabled" title="multitaskEnabled"></a>
+	<h3 class="subsubtitle method-title">multitaskEnabled</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Sets the connection as multitask enabled for the iOS platform. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) BOOL multitaskEnabled</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/priority" title="priority"></a>
+	<h3 class="subsubtitle method-title">priority</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> The  <a href="#//api/name/priority">priority</a> of the connection controller. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) DCTConnectionControllerPriority priority</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> The  <a href="#//api/name/priority">priority</a> of the connection controller. </p>
+		
+		<p> Connection controllers will be sorted in order of their  <a href="#//api/name/priority">priority</a> and as such high  <a href="#//api/name/priority">priority</a> connections will be handled first. If two connections are in the queue with equal priorities, then they will be started in the order they were added to the conneciton queue. Generally it&apos;s a good idea to use the highest  <a href="#//api/name/priority">priority</a> free for login connections and lowest  <a href="#//api/name/priority">priority</a> for connections the user didn&apos;t directly initiate. </p>
+		
+		<p> Priorities include:  <ul><li> <code> DCTConnectionControllerPriorityVeryHigh </code></li><li> <code> DCTConnectionControllerPriorityHigh </code></li><li> <code> DCTConnectionControllerPriorityMedium </code></li><li> <code> DCTConnectionControllerPriorityLow </code></li><li> <code> DCTConnectionControllerPriorityVeryLow </code></li></ul></p>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/returnedError" title="returnedError"></a>
+	<h3 class="subsubtitle method-title">returnedError</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> The error, if there is one, returned from the connection. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain, readonly) NSError *returnedError</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> The error, if there is one, returned from the connection. </p>
+		
+		<p> This holds the error given to the notifyDelegateAndObserversOfReturnedError: method, for observers to access. </p>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/returnedObject" title="returnedObject"></a>
+	<h3 class="subsubtitle method-title">returnedObject</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> The object, if there is one, returned from the connection. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain, readonly) NSObject *returnedObject</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> The object, if there is one, returned from the connection. </p>
+		
+		<p> This holds the object given to the notifyDelegateAndObserversOfReturnedObject: method, for observers to access. </p>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/returnedResponse" title="returnedResponse"></a>
+	<h3 class="subsubtitle method-title">returnedResponse</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> The response returned from the connection. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain, readonly) NSURLResponse *returnedResponse</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> The response returned from the connection. </p>
+		
+		<p> This holds the response given to the notifyDelegateAndObserversOfResponse: method, for observers to access. </p>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/status" title="status"></a>
+	<h3 class="subsubtitle method-title">status</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> The  <a href="#//api/name/status">status</a> of the connection controller. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) DCTConnectionControllerStatus status</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> The  <a href="#//api/name/status">status</a> of the connection controller. </p>
+		
+		<p> Possible statuses include:  <ul><li> <code> DCTConnectionControllerStatusNotStarted </code> When the connection has not started. It is also currently in this state if it has not been queued up due to an existing connection controller being equal existing. </li></ul> <ul><li> <code> DCTConnectionControllerStatusQueued </code> The connection controller has been queued up by the  <a href="DCTConnectionQueue.html">DCTConnectionQueue</a> and it is waiting to be started. </li></ul> <ul><li> <code> DCTConnectionControllerStatusStarted </code> The connection controller has started and is awaiting a response. </li></ul> <ul><li> <code> DCTConnectionControllerStatusResponded </code> A repsonse has been received. </li></ul> <ul><li> <code> DCTConnectionControllerStatusComplete </code> The connection controller has completed successfully. </li></ul> <ul><li> <code> DCTConnectionControllerStatusFailed </code> The connection controller has failed at some point, either due to a connection issue or an issue with the API usage. </li></ul> <ul><li> <code> DCTConnectionControllerStatusCancelled </code> The connection was cancelled by an external entity. </li></ul></p>
+		
+		<p> A connection controller is never gauranteed to be  <code> Queued </code> ; If an equal connection controller exists, the  <a href="DCTConnectionQueue.html">DCTConnectionQueue</a> won&apos;t queue up the duplicate. I&apos;d imagine a new  <a href="#//api/name/status">status</a> will be born for this later on. </p>
+		
+		<p> Generally a finished connection controller will only ever be  <code> Complete </code> ,  <code> Failed </code> or  <code> Cancelled </code> . That is to say that a completed connection controller won&apos;t become failed or cancelled later on. </p>
+		
+		<p> Currently, connection controllers generally go through  <code> NotStarted </code> ,  <code> Responded </code> and (  <code> Complete </code> |  <code> Failed </code> |  <code> Cancelled </code> ) statuses, though it is probably not wise to use this as a way of listening for events. </p>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/type" title="type"></a>
+	<h3 class="subsubtitle method-title">type</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> The  <a href="#//api/name/type">type</a> of connection to use. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) DCTConnectionType type</code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> The  <a href="#//api/name/type">type</a> of connection to use. </p>
+		
+		<p> Specifies the  <a href="#//api/name/type">type</a> of connection to use. Types include:  <ul><li> <code> DCTConnectionControllerTypeGet </code> for GET requests </li><li> <code> DCTConnectionControllerTypePost </code> for POST requests </li><li> <code> DCTConnectionControllerTypePut </code> for PUT requests </li><li> <code> DCTConnectionControllerTypeDelete </code> for DELETE requests </li><li> <code> DCTConnectionControllerTypeOptions </code> for OPTIONS requests </li><li> <code> DCTConnectionControllerTypeHead </code> for HEAD requests </li><li> <code> DCTConnectionControllerTypeTrace </code> for TRACE requests </li><li> <code> DCTConnectionControllerTypeConnect </code> for CONNECT requests </li></ul></p>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+				</div>
+				
+				
+			</div>
+			<div id="footer">
+				<hr />
+				<div class="footer-copyright">
+					<p><span class="copyright">&copy; 2010 Daniel Tull. All rights reserved. (Last updated: 2010-12-19)</span><br />
+					<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc</a>.</span></p>
+				</div>
+			</div>
+		</article>
+	</body>
+</html>

@@ -1,0 +1,771 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>DCTConnectionQueue Class Reference</title>
+		<meta http-equiv="Content-Type" content="application/xhtml+xml;charset=utf-8" />
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" />
+		<meta name="generator" content="appledoc" />
+	</head>
+	<body>
+		<article>
+			<div id="header">
+				<div class="section-header">
+					<h1 class="title title-header">DCTConnectionQueue Class Reference</h1>
+				</div>		
+			</div>
+			<div id="container">	
+				
+				<div class="section section-specification"><table cellspacing="0"><tbody>
+					<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value">NSObject</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">DCTConnectionQueue.h</td>
+</tr>
+					</tbody></table></div>
+				
+				
+				
+				
+				
+				
+				<div class="section section-tasks">
+					<h2 class="subtitle subtitle-tasks">Tasks</h2>
+					
+					<h3 class="subsubtitle task-title">Queue Settings</h3>
+
+					<ul class="task-list">
+						<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/maxConnections"> maxConnections</a></code>
+		<span class="tooltip"> The maximum number of simultaneous connections allowed at once. </span>
+	</span>
+	
+</li>
+					</ul>
+					
+					<h3 class="subsubtitle task-title">Managing the queue</h3>
+
+					<ul class="task-list">
+						<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/stop">- stop</a></code>
+		<span class="tooltip"> Stops the conneciton queue. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/start">- start</a></code>
+		<span class="tooltip"> Starts the conneciton queue. </span>
+	</span>
+	
+</li>
+					</ul>
+					
+					<h3 class="subsubtitle task-title">Connection Counts</h3>
+
+					<ul class="task-list">
+						<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/connectionCount"> connectionCount</a></code>
+		<span class="tooltip"> The total amount of connection controllers queued and active. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/activeConnectionCount"> activeConnectionCount</a></code>
+		<span class="tooltip"> The amount of connection controllers currently in progress. </span>
+	</span>
+	
+</li>
+					</ul>
+					
+					<h3 class="subsubtitle task-title">Accessing Connection Controllers</h3>
+
+					<ul class="task-list">
+						<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/connectionControllers"> connectionControllers</a></code>
+		<span class="tooltip"> Returns all the connection controllers currently in progress and queued. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/activeConnectionControllers"> activeConnectionControllers</a></code>
+		<span class="tooltip"> Returns all the connection controllers currently in progress. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/queuedConnectionControllers"> queuedConnectionControllers</a></code>
+		<span class="tooltip"> Returns all the connection controllers currently queued. </span>
+	</span>
+	
+</li>
+					</ul>
+					
+					<h3 class="subsubtitle task-title">Managing Connection Controllers</h3>
+
+					<ul class="task-list">
+						<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/addConnectionController:">- addConnectionController:</a></code>
+		<span class="tooltip"> Add a connection controller to the queue. This method causes the connection queue to find the next connection and run it. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/removeConnectionController:">- removeConnectionController:</a></code>
+		
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/requeueConnectionController:">- requeueConnectionController:</a></code>
+		<span class="tooltip"> Requeues a connection controller. </span>
+	</span>
+	
+</li>
+					</ul>
+					
+					<h3 class="subsubtitle task-title">External Connection Counting</h3>
+
+					<ul class="task-list">
+						<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/incrementExternalConnectionCount">- incrementExternalConnectionCount</a></code>
+		<span class="tooltip"> Increments the external conneciton count </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/decrementExternalConnectionCount">- decrementExternalConnectionCount</a></code>
+		<span class="tooltip"> Decrements the external conneciton count </span>
+	</span>
+	
+</li>
+					</ul>
+					
+					<h3 class="subsubtitle task-title">UIKitAdditions Methods</h3>
+
+					<ul class="task-list">
+						<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/nonMultitaskingQueuedConnectionControllers"> nonMultitaskingQueuedConnectionControllers</a></code>
+		<span class="tooltip"> Background task identifier given when we ask for background completion. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/backgroundTaskIdentifier"> backgroundTaskIdentifier</a></code>
+		<span class="tooltip"> Background task identifier given when we ask for background completion. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/multitaskEnabled"> multitaskEnabled</a></code>
+		<span class="tooltip"> Sets the connection as multitask enabled for the iOS platform. </span>
+	</span>
+	
+</li>
+					</ul>
+					
+					<h3 class="subsubtitle task-title">Singleton Methods</h3>
+
+					<ul class="task-list">
+						<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/sharedConnectionQueue">+ sharedConnectionQueue</a></code>
+		<span class="tooltip"> The shared connection queue. </span>
+	</span>
+	
+</li>
+					</ul>
+					
+				</div>
+				
+				
+				
+				
+				
+				<div class="section section-methods">
+					<h2 class="subtitle subtitle-methods">Class Methods</h2>
+					
+					<div class="section-method">
+	<a name="//api/name/sharedConnectionQueue" title="sharedConnectionQueue"></a>
+	<h3 class="subsubtitle method-title">sharedConnectionQueue</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> The shared connection queue. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>+ (DCTConnectionQueue *)sharedConnectionQueue</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionQueue+Singleton.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+				</div>
+				
+				
+				
+				<div class="section section-methods">
+					<h2 class="subtitle subtitle-methods">Instance Methods</h2>
+					
+					<div class="section-method">
+	<a name="//api/name/addConnectionController:" title="addConnectionController:"></a>
+	<h3 class="subsubtitle method-title">addConnectionController:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Add a connection controller to the queue. This method causes the connection queue to find the next connection and run it. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (DCTConnectionController *)addConnectionController:(DCTConnectionController *)<em>connectionController</em></code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionQueue.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/decrementExternalConnectionCount" title="decrementExternalConnectionCount"></a>
+	<h3 class="subsubtitle method-title">decrementExternalConnectionCount</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Decrements the external conneciton count </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)decrementExternalConnectionCount</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionQueue.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/incrementExternalConnectionCount" title="incrementExternalConnectionCount"></a>
+	<h3 class="subsubtitle method-title">incrementExternalConnectionCount</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Increments the external conneciton count </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)incrementExternalConnectionCount</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionQueue.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/removeConnectionController:" title="removeConnectionController:"></a>
+	<h3 class="subsubtitle method-title">removeConnectionController:</h3>
+	
+	
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)removeConnectionController:(DCTConnectionController *)<em>connectionController</em></code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionQueue.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/requeueConnectionController:" title="requeueConnectionController:"></a>
+	<h3 class="subsubtitle method-title">requeueConnectionController:</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Requeues a connection controller. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)requeueConnectionController:(DCTConnectionController *)<em>connectionController</em></code></div>
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection discussion-section">
+		<h4 class="method-subtitle">Discussion</h4>
+		
+		<p> Requeues a connection controller. </p>
+		
+		<p> This will  <a href="#//api/name/stop">stop</a> the url connection in progress for the given connection controller and reset its internals back to before it started connecting. </p>
+		
+	</div>
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionQueue.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/start" title="start"></a>
+	<h3 class="subsubtitle method-title">start</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Starts the conneciton queue. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)start</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionQueue.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/stop" title="stop"></a>
+	<h3 class="subsubtitle method-title">stop</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Stops the conneciton queue. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>- (void)stop</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionQueue.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+				</div>
+				
+				
+				
+				<div class="section section-methods">
+					<h2 class="subtitle subtitle-methods">Properties</h2>
+					
+					<div class="section-method">
+	<a name="//api/name/activeConnectionControllers" title="activeConnectionControllers"></a>
+	<h3 class="subsubtitle method-title">activeConnectionControllers</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Returns all the connection controllers currently in progress. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSArray *activeConnectionControllers</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionQueue.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/activeConnectionCount" title="activeConnectionCount"></a>
+	<h3 class="subsubtitle method-title">activeConnectionCount</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> The amount of connection controllers currently in progress. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSInteger activeConnectionCount</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionQueue.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/backgroundTaskIdentifier" title="backgroundTaskIdentifier"></a>
+	<h3 class="subsubtitle method-title">backgroundTaskIdentifier</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Background task identifier given when we ask for background completion. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdentifier</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionQueue+UIKitAdditions.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/connectionControllers" title="connectionControllers"></a>
+	<h3 class="subsubtitle method-title">connectionControllers</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Returns all the connection controllers currently in progress and queued. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSArray *connectionControllers</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionQueue.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/connectionCount" title="connectionCount"></a>
+	<h3 class="subsubtitle method-title">connectionCount</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> The total amount of connection controllers queued and active. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSInteger connectionCount</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionQueue.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/maxConnections" title="maxConnections"></a>
+	<h3 class="subsubtitle method-title">maxConnections</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> The maximum number of simultaneous connections allowed at once. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) NSInteger maxConnections</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionQueue.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/multitaskEnabled" title="multitaskEnabled"></a>
+	<h3 class="subsubtitle method-title">multitaskEnabled</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Sets the connection as multitask enabled for the iOS platform. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, assign) BOOL multitaskEnabled</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionQueue+UIKitAdditions.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/nonMultitaskingQueuedConnectionControllers" title="nonMultitaskingQueuedConnectionControllers"></a>
+	<h3 class="subsubtitle method-title">nonMultitaskingQueuedConnectionControllers</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Background task identifier given when we ask for background completion. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSArray *nonMultitaskingQueuedConnectionControllers</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionQueue+UIKitAdditions.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/queuedConnectionControllers" title="queuedConnectionControllers"></a>
+	<h3 class="subsubtitle method-title">queuedConnectionControllers</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Returns all the connection controllers currently queued. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSArray *queuedConnectionControllers</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTConnectionQueue.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+				</div>
+				
+				
+			</div>
+			<div id="footer">
+				<hr />
+				<div class="footer-copyright">
+					<p><span class="copyright">&copy; 2010 Daniel Tull. All rights reserved. (Last updated: 2010-12-19)</span><br />
+					<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc</a>.</span></p>
+				</div>
+			</div>
+		</article>
+	</body>
+</html>
