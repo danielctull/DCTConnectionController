@@ -22,7 +22,7 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
 	NSArray *externalConnectionCountKeys;
 	
 	// Needed for multitasking on the iPhone, which is added as a category.	
-	NSMutableArray *nonMultitaskingConnections;
+	NSMutableArray *nonMultitaskingConnectionControllers;
 	NSUInteger backgroundTaskIdentifier;
 	BOOL inBackground;
 	BOOL multitaskEnabled;
@@ -47,6 +47,15 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
 
 /// @name Managing Connection Controllers
 
+/** Returns all the connection controllers currently in progress and queued. */
+@property (nonatomic, readonly) NSArray *connectionControllers;
+
+/** Returns all the connection controllers currently in progress. */
+@property (nonatomic, readonly) NSArray *activeConnectionControllers;
+
+/** Returns all the connection controllers currently queued. */
+@property (nonatomic, readonly) NSArray *queuedConnectionControllers;
+
 /**
  Add a connection controller to the queue. This method causes the connection queue to
  find the next connection and run it.
@@ -65,24 +74,13 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
  */
 - (void)requeueConnectionController:(DCTConnectionController *)connectionController;
 
-/// @name Accessing Connection Controllers
+/// @name Connection Counting
 
 /** The total amount of connection controllers queued and active. */
 @property (nonatomic, readonly) NSInteger connectionCount;
 
 /** The amount of connection controllers currently in progress. */
 @property (nonatomic, readonly) NSInteger activeConnectionCount;
-
-/** Returns all the connection controllers currently in progress and queued. */
-@property (nonatomic, readonly) NSArray *connectionControllers;
-
-/** Returns all the connection controllers currently in progress. */
-@property (nonatomic, readonly) NSArray *activeConnectionControllers;
-
-/** Returns all the connection controllers currently queued. */
-@property (nonatomic, readonly) NSArray *queuedConnectionControllers;
-
-/// @name External Connection Counting
 
 /** Increments the external conneciton count */
 - (void)incrementExternalConnectionCount;

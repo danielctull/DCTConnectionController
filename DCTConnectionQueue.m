@@ -212,7 +212,7 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 }
 
 - (NSInteger)connectionCount {
-	return self.activeConnectionCount + [queuedConnections count] + [nonMultitaskingConnections count];
+	return self.activeConnectionCount + [queuedConnections count] + [nonMultitaskingConnectionControllers count];
 }
 
 #pragma mark -

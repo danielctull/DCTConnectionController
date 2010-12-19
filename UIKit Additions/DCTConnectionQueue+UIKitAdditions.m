@@ -110,10 +110,10 @@
 	}
 }
 
-- (NSArray *)nonMultitaskingQueuedConnections {
-	if (!nonMultitaskingConnections) return nil;
+- (NSArray *)nonMultitaskingQueuedConnectionControllers {
+	if (!nonMultitaskingConnectionControllers) return nil;
 	
-	return [NSArray arrayWithArray:nonMultitaskingConnections];
+	return [NSArray arrayWithArray:nonMultitaskingConnectionControllers];
 }
 
 - (void)dctInternal_didEnterBackground:(NSNotification *)notification {
@@ -134,7 +134,7 @@
 	// Remove non-multitasking connections from the queue
 	for (DCTConnectionController *c in self.queuedConnectionControllers) {
 		if (!c.multitaskEnabled) {
-			[nonMultitaskingConnections addObject:c]; 
+			[nonMultitaskingConnectionControllers addObject:c]; 
 			[self removeConnectionController:c];
 		}
 	}
@@ -144,7 +144,7 @@
 		if (!c.multitaskEnabled) {
 			[c dctConnectionQueueUIKitAdditions_reset];
 			[c dctConnectionQueueUIKitAdditions_setQueued];
-			[nonMultitaskingConnections addObject:c];
+			[nonMultitaskingConnectionControllers addObject:c];
 			[self removeConnectionController:c];
 		}
 	}
@@ -154,11 +154,11 @@
 	if (!inBackground) return;
 	inBackground = NO;
 	
-	for (DCTConnectionController *c in nonMultitaskingConnections)
+	for (DCTConnectionController *c in nonMultitaskingConnectionControllers)
 		[self addConnectionController:c];
 	
-	[nonMultitaskingConnections release];
-	nonMultitaskingConnections = nil;
+	[nonMultitaskingConnectionControllers release];
+	nonMultitaskingConnectionControllers = nil;
 	[self start];
 }
 

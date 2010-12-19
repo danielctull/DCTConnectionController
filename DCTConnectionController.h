@@ -153,7 +153,17 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 /** The type of connection to use.
  
- Specifies the type of connection to use. DTConnectionType is a typedef enum and possible values can be seen in the header file.
+ Specifies the type of connection to use. Types include:
+ 
+ * `DCTConnectionControllerTypeGet` for GET requests
+ * `DCTConnectionControllerTypePost` for POST requests
+ * `DCTConnectionControllerTypePut` for PUT requests
+ * `DCTConnectionControllerTypeDelete` for DELETE requests
+ * `DCTConnectionControllerTypeOptions` for OPTIONS requests
+ * `DCTConnectionControllerTypeHead` for HEAD requests
+ * `DCTConnectionControllerTypeTrace` for TRACE requests
+ * `DCTConnectionControllerTypeConnect` for CONNECT requests
+ 
  */
 @property (nonatomic, assign) DCTConnectionType type;
 
@@ -164,11 +174,26 @@ extern NSString *const DCTConnectionControllerTypeString[];
  handled first. If two connections are in the queue with equal priorities, then they will be started in the order 
  they were added to the conneciton queue. Generally it's a good idea to use the highest priority free for login
  connections and lowest priority for connections the user didn't directly initiate.
+ 
+ Priorities include:
+ 
+ * `DCTConnectionControllerPriorityVeryHigh`
+ * `DCTConnectionControllerPriorityHigh`
+ * `DCTConnectionControllerPriorityMedium`
+ * `DCTConnectionControllerPriorityLow`
+ * `DCTConnectionControllerPriorityVeryLow`
+ 
  */
 @property (nonatomic, assign) DCTConnectionControllerPriority priority;
 
 
 
+/** The delegate for the connection controller.
+ 
+ Setting this will cause the connection controller to call the methods defined in DCTConnectionControllerDelegate,
+ when the appropriate events occur.
+ */
+@property (nonatomic, retain) id<DCTConnectionControllerDelegate> delegate;
 
 /// @name Managing the Connection
 
@@ -232,15 +257,6 @@ extern NSString *const DCTConnectionControllerTypeString[];
  @param connectionController The connection controller to be removed from the dependency list.
  */
 - (void)removeDependency:(DCTConnectionController *)connectionController;
-
-
-/// @name Managing the delegate
-
-/** The set of objects that are called when events happen.
- 
- @return The set of delegates.
- */
-@property (nonatomic, retain) id<DCTConnectionControllerDelegate> delegate;
 
 /// @name Managing event blocks
 
@@ -354,6 +370,36 @@ extern NSString *const DCTConnectionControllerTypeString[];
 /// @name Connection Status
 
 /** The status of the connection controller.
+ 
+ Possible statuses include:
+ 
+ * `DCTConnectionControllerStatusNotStarted` When the connection has not started. It is also currently in 
+ this state if it has not been queued up due to an existing connection controller being equal existing.
+ 
+ * `DCTConnectionControllerStatusQueued` The connection controller has been queued up by the DCTConnectionQueue 
+ and it is waiting to be started.
+ 
+ * `DCTConnectionControllerStatusStarted` The connection controller has started and is awaiting a response.
+ 
+ 
+ * `DCTConnectionControllerStatusResponded` A repsonse has been received.
+ 
+ * `DCTConnectionControllerStatusComplete` The connection controller has completed successfully.
+ 
+ * `DCTConnectionControllerStatusFailed` The connection controller has failed at some point, either due to a connection 
+ issue or an issue with the API usage.
+ 
+ * `DCTConnectionControllerStatusCancelled`	The connection was cancelled by an external entity.
+ 
+ A connection controller is never gauranteed to be `Queued`; If an equal connection controller exists, the DCTConnectionQueue won't
+ queue up the duplicate. I'd imagine a new status will be born for this later on.
+ 
+ Generally a finished connection controller will only ever be `Complete`, `Failed` or `Cancelled`. That is to say that a completed 
+ connection controller won't become failed or cancelled later on.
+ 
+ Currently, connection controllers generally go through `NotStarted`, `Responded` and (`Complete`|`Failed`|`Cancelled`) statuses, 
+ though it is probably not wise to use this as a way of listening for events.
+ 
  */
 @property (nonatomic, readonly) DCTConnectionControllerStatus status;
 

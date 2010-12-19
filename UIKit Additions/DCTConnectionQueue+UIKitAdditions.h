@@ -13,7 +13,7 @@
 
 /** Background task identifier given when we ask for background completion.
  */
-@property (nonatomic, readonly) NSArray *nonMultitaskingQueuedConnections;
+@property (nonatomic, readonly) NSArray *nonMultitaskingQueuedConnectionControllers;
 
 /** Background task identifier given when we ask for background completion.
  */
