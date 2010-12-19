@@ -39,7 +39,7 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
 - (void)stop;
 
 /** Pauses the conneciton queue. */
-- (void)pause;
+//- (void)pause;
 
 /** Starts the conneciton queue. */
 - (void)start;

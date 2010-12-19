@@ -69,10 +69,16 @@
 	
 	DCTURLLoadingConnectionController *engadget = [DCTURLLoadingConnectionController connectionController];
 	engadget.URL = [NSURL URLWithString:@"http://www.engadget.com/"];
-	engadget.priority = DCTConnectionControllerPriorityHigh;
 	[engadget addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];	
 	[engadget connect];
 	
+	// Make a duplicate, won't get queued.
+	DCTURLLoadingConnectionController *engadget2 = [DCTURLLoadingConnectionController connectionController];
+	engadget2.URL = [NSURL URLWithString:@"http://www.engadget.com/"];
+	[engadget2 addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+	engadget.priority = DCTConnectionControllerPriorityHigh;
+	[engadget2 connect];
+		
 	DCTURLLoadingConnectionController *ebay = [DCTURLLoadingConnectionController connectionController];
 	ebay.URL = [NSURL URLWithString:@"http://www.ebay.com/"];
 	ebay.priority = DCTConnectionControllerPriorityLow;

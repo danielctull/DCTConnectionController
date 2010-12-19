@@ -113,10 +113,10 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 	active = YES;
 	[self dctInternal_runNextConnection];
 }
-
+/*
 - (void)pause {
 	active = NO;
-}
+}*/
 
 - (void)stop {
 	active = NO;

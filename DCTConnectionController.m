@@ -87,7 +87,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	return self;
 }
 
-- (void)dealloc {
+- (void)dealloc {	
 	[responseBlocks release], responseBlocks = nil;
 	[completionBlocks release], completionBlocks = nil;
 	[failureBlocks release], failureBlocks = nil;
@@ -149,6 +149,9 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	if (existingConnectionControllerIndex != NSNotFound) {
 		
 		DCTConnectionController *existingConnectionController = [queue.connectionControllers objectAtIndex:existingConnectionControllerIndex];
+		
+		if (existingConnectionController.priority > self.priority)
+			existingConnectionController.priority = self.priority;
 		
 		self.status = existingConnectionController.status;
 		
