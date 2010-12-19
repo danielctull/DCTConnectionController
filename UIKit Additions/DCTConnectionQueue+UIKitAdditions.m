@@ -11,6 +11,9 @@
 @interface DCTConnectionQueue ()
 - (void)dctInternal_didEnterBackground:(NSNotification *)notification;
 - (void)dctInternal_willEnterForeground:(NSNotification *)notification;
+- (void)uikit_init;
+- (void)uikit_dealloc;
+
 //- (void)dctInternal_hush;
 //- (void)dctInternal_finishedBackgroundConnections;
 @end
@@ -111,15 +114,6 @@
 	if (!nonMultitaskingConnections) return nil;
 	
 	return [NSArray arrayWithArray:nonMultitaskingConnections];
-}
-
-- (DCTConnectionController *)uikit_queuedConnectionControllerToURL:(NSURL *)URL {
-		
-	for (DCTConnectionController *c in nonMultitaskingConnections)
-		if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
-			return c;
-	
-	return nil;
 }
 
 - (void)dctInternal_didEnterBackground:(NSNotification *)notification {

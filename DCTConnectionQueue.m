@@ -181,30 +181,6 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 		[self dctInternal_removeActiveConnection:connection];
 }
 
-- (BOOL)isConnectingToURL:(NSURL *)URL {
-	for (DCTConnectionController *c in activeConnections)
-		if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
-			return YES;
-	
-	return NO;
-}
-
-- (BOOL)hasQueuedConnectionControllerToURL:(NSURL *)URL {
-	if ([self queuedConnectionControllerToURL:URL])
-		return YES;
-	
-	return NO;
-}
-
-- (DCTConnectionController *)queuedConnectionControllerToURL:(NSURL *)URL {
-	for (DCTConnectionController *c in queuedConnections)
-		if ([[URL absoluteString] isEqualToString:[c.URL absoluteString]])
-			return c;
-	
-	return [self dct_safePerformSelector:@selector(uikit_queuedConnectionControllerToURL) withObject:URL];
-}
-
-
 - (void)incrementExternalConnectionCount {
 	[self dct_changeValueForKeys:externalConnectionCountKeys withChange:^{
 		externalConnectionCount++;

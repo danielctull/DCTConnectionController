@@ -65,26 +65,7 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
  */
 - (void)requeueConnectionController:(DCTConnectionController *)connectionController;
 
-
-/// @name Checking Connection Controllers
-
-/** Checks connection controllers to see if there is a connection to the given URL in progress.
- 
- Needed?
- */
-- (BOOL)isConnectingToURL:(NSURL *)URL;
-
-/** Checks the queued connection controllers to see if there is a connection to the given URL in waiting.
- 
- Needed?
- */
-- (BOOL)hasQueuedConnectionControllerToURL:(NSURL *)URL;
-
-/** Needed?
- */
-- (DCTConnectionController *)queuedConnectionControllerToURL:(NSURL *)URL;
-
-/// @name Accessing Connection Controller Information
+/// @name Accessing Connection Controllers
 
 /** The total amount of connection controllers queued and active. */
 @property (nonatomic, readonly) NSInteger connectionCount;
