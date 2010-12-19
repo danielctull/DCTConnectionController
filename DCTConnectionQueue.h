@@ -45,7 +45,16 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
 - (void)start;
 
 
-/// @name Managing Connection Controllers
+
+/// @name Connection Counts
+
+/** The total amount of connection controllers queued and active. */
+@property (nonatomic, readonly) NSInteger connectionCount;
+
+/** The amount of connection controllers currently in progress. */
+@property (nonatomic, readonly) NSInteger activeConnectionCount;
+
+/// @name Accessing Connection Controllers
 
 /** Returns all the connection controllers currently in progress and queued. */
 @property (nonatomic, readonly) NSArray *connectionControllers;
@@ -55,6 +64,8 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
 
 /** Returns all the connection controllers currently queued. */
 @property (nonatomic, readonly) NSArray *queuedConnectionControllers;
+
+/// @name Managing Connection Controllers
 
 /**
  Add a connection controller to the queue. This method causes the connection queue to
@@ -74,13 +85,7 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
  */
 - (void)requeueConnectionController:(DCTConnectionController *)connectionController;
 
-/// @name Connection Counting
-
-/** The total amount of connection controllers queued and active. */
-@property (nonatomic, readonly) NSInteger connectionCount;
-
-/** The amount of connection controllers currently in progress. */
-@property (nonatomic, readonly) NSInteger activeConnectionCount;
+/// @name External Connection Counting
 
 /** Increments the external conneciton count */
 - (void)incrementExternalConnectionCount;

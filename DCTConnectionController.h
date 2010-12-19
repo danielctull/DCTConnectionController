@@ -138,7 +138,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 	NSMutableSet *cancelationBlocks;
 }
 
-/// @name Getting a Connection Controller
+/// @name Creating a Connection Controller
 
 /** Creates and returns an autoreleased connection controller. 
  */
@@ -195,44 +195,15 @@ extern NSString *const DCTConnectionControllerTypeString[];
  */
 @property (nonatomic, retain) id<DCTConnectionControllerDelegate> delegate;
 
-/// @name Managing the Connection
-
-/** Adds the connection controller to the queue, checking to make sure it is unique and if not, 
- returning the duplicate that is already queued.
- 
- If there is a connection controller in the queue or already running that exists with the same details as
- the receiver, this will merge accross the delegate, completeion blocks, KVO and notification observers, then
- return with the connection controller that already exists. This uses isEqualToConnectionController: to determine
- equality, which checks the URL of the desitnation and each property added by subclasses.
- 
- In the case that a connection controller is already running, delegates and completion blocks will be 
- called as soon as they are added to the existing connection controller. Due to this, it may be wise to
- 
- Connection controllers with dependencies do not currently get merged into an existing 
- 
- @return The actual connection controller that is added to the queue or already running.
- */
-- (void)connect;
-
-
-/** Cancels the connection.
- 
- Canceling the connection causes any cancelation blocks to be called and sends connectionControllerWasCancelled:
- to its delegates.
- */
-- (void)cancel;
-
-
-/** Requeue the connection.
- */
-- (void)requeue;
 
 
 
 
 
+/// @name Setting Dependencies
 
-/// @name Managing dependencies
+
+
 
 /** The dependencies for this connection controller.
  */
@@ -258,7 +229,10 @@ extern NSString *const DCTConnectionControllerTypeString[];
  */
 - (void)removeDependency:(DCTConnectionController *)connectionController;
 
-/// @name Managing event blocks
+
+
+
+/// @name Event Blocks
 
 /** Adds a response block.
  
@@ -306,7 +280,57 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 
 
-/// @name Methods to subclass
+
+
+
+
+
+
+
+
+
+/// @name Managing the Connection
+
+/** Adds the connection controller to the queue, checking to make sure it is unique and if not, 
+ returning the duplicate that is already queued.
+ 
+ If there is a connection controller in the queue or already running that exists with the same details as
+ the receiver, this will merge accross the delegate, completeion blocks, KVO and notification observers, then
+ return with the connection controller that already exists. This uses isEqualToConnectionController: to determine
+ equality, which checks the URL of the desitnation and each property added by subclasses.
+ 
+ In the case that a connection controller is already running, delegates and completion blocks will be 
+ called as soon as they are added to the existing connection controller. Due to this, it may be wise to
+ 
+ Connection controllers with dependencies do not currently get merged into an existing 
+ 
+ @return The actual connection controller that is added to the queue or already running.
+ */
+- (void)connect;
+
+
+/** Cancels the connection.
+ 
+ Canceling the connection causes any cancelation blocks to be called and sends connectionControllerWasCancelled:
+ to its delegates.
+ */
+- (void)cancel;
+
+
+/** Requeue the connection.
+ */
+- (void)requeue;
+
+
+
+
+
+
+
+
+
+
+/// @name Methods to use in Subclasses
 
 /** This method should be used in subclasses to give custom requests.
  
