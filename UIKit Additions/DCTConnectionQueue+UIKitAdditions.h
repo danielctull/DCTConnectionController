@@ -11,6 +11,8 @@
 
 @interface DCTConnectionQueue (UIKitAdditions)
 
+/// @name Multitasking Additions
+
 /** Background task identifier given when we ask for background completion.
  */
 @property (nonatomic, readonly) NSArray *nonMultitaskingQueuedConnectionControllers;

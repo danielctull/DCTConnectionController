@@ -11,6 +11,8 @@
 
 @interface DCTConnectionController (Equality)
 
+/// @name Checking for Equality
+
 /** Determines whether the given connection controller is equal to the receiver. 
  
  Connection controllers are determined equal by checking the URL , the type and

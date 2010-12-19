@@ -10,7 +10,7 @@
 
 @interface DCTConnectionQueue (Singleton)
 
-/// @name Accessing the connection queue
+/// @name Accessing the Connection Queue
 
 /** The shared connection queue.
  */
