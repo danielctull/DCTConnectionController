@@ -1,0 +1,441 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<title>DCTOAuthConnectionController Class Reference</title>
+		<meta http-equiv="Content-Type" content="application/xhtml+xml;charset=utf-8" />
+		<link rel="stylesheet" type="text/css" href="../css/styles.css" />
+		<meta name="generator" content="appledoc" />
+	</head>
+	<body>
+		<article>
+			<div id="header">
+				<div class="section-header">
+					<h1 class="title title-header">DCTOAuthConnectionController Class Reference</h1>
+				</div>		
+			</div>
+			<div id="container">	
+				
+				<div class="section section-specification"><table cellspacing="0"><tbody>
+					<tr>
+	<td class="specification-title">Inherits from</td>
+	<td class="specification-value"><a href="DCTRESTController.html">DCTRESTController</a> : <a href="DCTConnectionController.html">DCTConnectionController</a> : NSObject</td>
+</tr><tr>
+	<td class="specification-title">Declared in</td>
+	<td class="specification-value">DCTOAuthConnectionController.h</td>
+</tr>
+					</tbody></table></div>
+				
+				
+				
+				<div class="section section-overview">
+					<h2 class="subtitle subtitle-overview">Overview</h2>
+					
+<p> A  <a href="DCTConnectionController.html">DCTConnectionController</a> to make loading OAuth connections easier. </p>
+
+				</div>
+				
+				
+				
+				
+				<div class="section section-tasks">
+					<h2 class="subtitle subtitle-tasks">Tasks</h2>
+					
+					<h3 class="subsubtitle task-title">Methods to subclass</h3>
+
+					<ul class="task-list">
+						<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/oauthProperties">+ oauthProperties</a></code>
+		<span class="tooltip"></span>
+	</span>
+	
+</li>
+					</ul>
+					
+					<h3 class="subsubtitle task-title">OAuth Properties</h3>
+
+					<ul class="task-list">
+						<li>
+	<span class="tooltip">
+		<code><a href="#//api/name/nonce"> nonce</a></code>
+		<span class="tooltip"> The nonce. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/consumerKey"> consumerKey</a></code>
+		<span class="tooltip"> Consumer key. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/secretConsumerKey"> secretConsumerKey</a></code>
+		<span class="tooltip"> Secret consumer key. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/token"> token</a></code>
+		<span class="tooltip"> Token. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/secretToken"> secretToken</a></code>
+		<span class="tooltip"> Secret token, if available. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/version"> version</a></code>
+		<span class="tooltip"> Version. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/timestamp"> timestamp</a></code>
+		<span class="tooltip"> The timestamp. </span>
+	</span>
+	
+</li><li>
+	<span class="tooltip">
+		<code><a href="#//api/name/signature"> signature</a></code>
+		<span class="tooltip"> The generated signature. </span>
+	</span>
+	
+</li>
+					</ul>
+					
+				</div>
+				
+				
+				
+				
+				
+				<div class="section section-methods">
+					<h2 class="subtitle subtitle-methods">Class Methods</h2>
+					
+					<div class="section-method">
+	<a name="//api/name/oauthProperties" title="oauthProperties"></a>
+	<h3 class="subsubtitle method-title">oauthProperties</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p></p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>+ (NSArray *)oauthProperties</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection see-also-section">
+		<h4 class="method-subtitle">See Also</h4>
+		<ul>
+			
+			<li><code><a href="DCTRESTController.html#//api/name/queryProperties">[DCTRESTController queryProperties]</a></code></li>
+			
+			<li><code><a href="DCTRESTController.html#//api/name/headerProperties">[DCTRESTController headerProperties]</a></code></li>
+			
+			<li><code><a href="DCTRESTController.html#//api/name/bodyProperties">[DCTRESTController bodyProperties]</a></code></li>
+			
+		</ul>
+	</div>
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTOAuthConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+				</div>
+				
+				
+				
+				
+				
+				<div class="section section-methods">
+					<h2 class="subtitle subtitle-methods">Properties</h2>
+					
+					<div class="section-method">
+	<a name="//api/name/consumerKey" title="consumerKey"></a>
+	<h3 class="subsubtitle method-title">consumerKey</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Consumer key. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain) NSString *consumerKey</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTOAuthConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/nonce" title="nonce"></a>
+	<h3 class="subsubtitle method-title">nonce</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> The nonce. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain) NSString *nonce</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTOAuthConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/secretConsumerKey" title="secretConsumerKey"></a>
+	<h3 class="subsubtitle method-title">secretConsumerKey</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Secret consumer key. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain) NSString *secretConsumerKey</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTOAuthConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/secretToken" title="secretToken"></a>
+	<h3 class="subsubtitle method-title">secretToken</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Secret token, if available. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain) NSString *secretToken</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTOAuthConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/signature" title="signature"></a>
+	<h3 class="subsubtitle method-title">signature</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> The generated signature. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) DCTOAuthSignature *signature</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTOAuthConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/timestamp" title="timestamp"></a>
+	<h3 class="subsubtitle method-title">timestamp</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> The timestamp. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, readonly) NSString *timestamp</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTOAuthConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/token" title="token"></a>
+	<h3 class="subsubtitle method-title">token</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Token. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain) NSString *token</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTOAuthConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+					<div class="section-method">
+	<a name="//api/name/version" title="version"></a>
+	<h3 class="subsubtitle method-title">version</h3>
+	
+	
+	
+	<div class="method-subsection brief-description">
+		<p> Version. </p>
+	</div>		
+	
+	
+	<div class="method-subsection method-declaration"><code>@property (nonatomic, retain) NSString *version</code></div>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<div class="method-subsection declared-in-section">
+		<h4 class="method-subtitle">Declared In</h4>
+		<code class="declared-in-ref">DCTOAuthConnectionController.h</code><br />
+	</div>				
+	
+	
+</div>
+					
+				</div>
+				
+				
+			</div>
+			<div id="footer">
+				<hr />
+				<div class="footer-copyright">
+					<p><span class="copyright">&copy; 2010 Daniel Tull. All rights reserved. (Last updated: 2010-12-19)</span><br />
+					<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc</a>.</span></p>
+				</div>
+			</div>
+		</article>
+	</body>
+</html>
