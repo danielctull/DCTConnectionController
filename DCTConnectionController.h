@@ -103,15 +103,14 @@ extern NSString *const DCTConnectionControllerTypeString[];
  Many web services respond succesfully with error codes for the API in the returned data. Because 
  a connection controller represents the higher level web service more than the actual connection, 
  these failures should be reported as such. To achieve this, the subclass implementation of 
- receivedObject: should look for error codes and if one is found, call receivedError: with an NSError
+ `receivedObject:` should look for error codes and if one is found, call `receivedError:` with an NSError
  created from the data from the web service. This allows delegates to be informed correctly, the 
- correct blocks to be called and the correct status to be set. Again, with the right class
+ correct blocks to be called and the correct `status` to be set. Again, with the right class
  hierarchy, this will likely only have to be done once.
  
  *General Usage*
  
  An example of how you may use a connection controller:
-
 
 	DCTConnectionController *cc = [DCTConnectionController connectionController];
 	
@@ -123,6 +122,19 @@ extern NSString *const DCTConnectionControllerTypeString[];
 	}];
 	
 	[cc connect]; 
+ 
+ *Connection Controller Piggy Backing*
+ 
+ Connection Controllers have a built in proceedure for piggy backing onto other connection controllers
+ that are fetching the same data. To achieve this, when a connection controller is asked to `connect`, it 
+ will check with the `DCTConnectionQueue` to see if a connection controller exists that is equal to iself.
+ By default two connection controllers are equal if they are of the same class, are connecting to the same `URL`, 
+ have the same `type` and have the same properties; In this way, for the majority of subclasses this will remain
+ true as `isEqualToConnectionController:` checks properties defined in all classes.
+
+ For this reason it is a good idea for subclasses to define their parameters as properties, that way each will get
+ checked for equality by `isEqualToConnectionController:`. In the future the implementation of
+ `isEqualToConnectionController:` may change to one a little more concrete, but so far this has worked well for me. 
  */
 @interface DCTConnectionController : NSObject {
 	DCTURLConnection *urlConnection;
@@ -292,14 +304,13 @@ extern NSString *const DCTConnectionControllerTypeString[];
  returning the duplicate that is already queued.
  
  If there is a connection controller in the queue or already running that exists with the same details as
- the receiver, this will merge accross the delegate, completeion blocks, KVO and notification observers, then
- return with the connection controller that already exists. This uses isEqualToConnectionController: to determine
- equality, which checks the URL of the desitnation and each property added by subclasses.
+ the receiver, instead of calling to `DCTConnectionQueue` to enqueue itself, the connection controller will
+ register some blocks with the existing connection controller. This uses `isEqualToConnectionController:` to 
+ determine equality, which checks the `URL` of the desitnation, the `type` and each property added by subclasses.
  
- In the case that a connection controller is already running, delegates and completion blocks will be 
- called as soon as they are added to the existing connection controller. Due to this, it may be wise to
- 
- Connection controllers with dependencies do not currently get merged into an existing 
+ In the case that an existing connection controller is already running, the receiver will never be queued.
+ It will pass through, in all the usual ways of delegation, KVO, NSNotifications and block calling, the results
+ of the existing connection controller.
  
  @return The actual connection controller that is added to the queue or already running.
  */
