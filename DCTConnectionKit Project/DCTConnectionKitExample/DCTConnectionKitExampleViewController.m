@@ -116,7 +116,7 @@
 	DCTURLLoadingConnectionController *connectionController = (DCTURLLoadingConnectionController *)object;
 	
 	if ([keyPath isEqualToString:@"percentDownloaded"]) {
-		NSLog(@"%@:%@ %f", self, NSStringFromSelector(_cmd), connectionController.percentDownloaded);
+		NSLog(@"%@", connectionController.percentDownloaded);
 		return;
 	}
 	
@@ -144,35 +144,29 @@
 			break;
 		case DCTConnectionControllerStatusQueued:
 			NSLog(@"%@Queued", logPrefixString);
-			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Queued", prefixString];
 			break;
 		case DCTConnectionControllerStatusFailed:
 			NSLog(@"%@Failed", logPrefixString);
 			[connectionController removeObserver:self forKeyPath:@"status"];
-			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Failed", prefixString];
 			break;
 		case DCTConnectionControllerStatusNotStarted:
 			NSLog(@"%@Not Started", logPrefixString);
-			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Not Started", prefixString];
 			break;
 		case DCTConnectionControllerStatusResponded:
 			NSLog(@"%@Responded", logPrefixString);
-			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Responded", prefixString];
 			break;
 		case DCTConnectionControllerStatusComplete:
 			NSLog(@"%@Complete", logPrefixString);
 			[connectionController removeObserver:self forKeyPath:@"status"];
-			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Complete", prefixString];
 			break;
 		case DCTConnectionControllerStatusCancelled:
 			NSLog(@"%@Cancelled", logPrefixString);
 			[connectionController removeObserver:self forKeyPath:@"status"];
-			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%Cancelled", prefixString];
 			break;
 		default:

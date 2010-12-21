@@ -436,7 +436,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  */
 @property (nonatomic, readonly) DCTConnectionControllerStatus status;
 
-@property (nonatomic, assign) float percentDownloaded;
+@property (nonatomic, readonly) NSNumber *percentDownloaded;
 
 
 /** The URL the connection controller is managing.

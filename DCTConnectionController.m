@@ -11,6 +11,7 @@
 #import "DCTConnectionController+Equality.h"
 #import "DCTObservationInfo.h"
 #import "NSMutableSet+DCTExtras.h"
+#import "NSObject+DCTKVOExtras.h"
 
 NSString * const DCTConnectionControllerTypeString[] = {
 	@"GET",
@@ -87,7 +88,8 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	return self;
 }
 
-- (void)dealloc {	
+- (void)dealloc {
+	[percentDownloaded release], percentDownloaded = nil;
 	[responseBlocks release], responseBlocks = nil;
 	[completionBlocks release], completionBlocks = nil;
 	[failureBlocks release], failureBlocks = nil;
@@ -288,7 +290,11 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
 	if (contentLength > 0) {
 		downloadedLength += (float)[data length];
-		self.percentDownloaded = downloadedLength / contentLength;
+		[self dct_changeValueForKey:@"percentDownloaded" withChange:^{
+			[percentDownloaded release];
+			percentDownloaded = [[NSNumber numberWithFloat:(downloadedLength / contentLength)] retain];
+			
+		}];
 	}
 	
 	[(DCTURLConnection *)connection appendData:data];
@@ -296,8 +302,13 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	
-	if (self.percentDownloaded < 1.0) 
-		self.percentDownloaded = 1.0;
+	if ([self.percentDownloaded integerValue] < 1.0) {
+		[self dct_changeValueForKey:@"percentDownloaded" withChange:^{
+			[percentDownloaded release];
+			percentDownloaded = [[NSNumber numberWithInteger:1] retain];
+			
+		}];
+	}
 	
 	NSData *data = ((DCTURLConnection *)connection).data;
 	
