@@ -69,7 +69,7 @@
 	
 	DCTURLLoadingConnectionController *engadget = [DCTURLLoadingConnectionController connectionController];
 	engadget.URL = [NSURL URLWithString:@"http://www.engadget.com/"];
-	[engadget addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];	
+	[engadget addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[engadget connect];
 	
 	// Make a duplicate, won't get queued.
@@ -83,6 +83,7 @@
 	ebay.URL = [NSURL URLWithString:@"http://www.ebay.com/"];
 	ebay.priority = DCTConnectionControllerPriorityLow;
 	[ebay addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+	[ebay addObserver:self forKeyPath:@"percentDownloaded" options:NSKeyValueObservingOptionNew context:nil];	
 	[ebay connect];
 	
 	DCTURLLoadingConnectionController *google = [DCTURLLoadingConnectionController connectionController];
@@ -113,6 +114,12 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	
 	DCTURLLoadingConnectionController *connectionController = (DCTURLLoadingConnectionController *)object;
+	
+	if ([keyPath isEqualToString:@"percentDownloaded"]) {
+		NSLog(@"%@:%@ %f", self, NSStringFromSelector(_cmd), connectionController.percentDownloaded);
+		return;
+	}
+	
 	[self statusUpdate:connectionController];
 }
 	

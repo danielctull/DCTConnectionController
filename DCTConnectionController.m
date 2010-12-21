@@ -73,7 +73,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 @implementation DCTConnectionController
 
-@synthesize status, type, priority, multitaskEnabled, URL, returnedObject, returnedError, returnedResponse, delegate;
+@synthesize status, type, priority, multitaskEnabled, URL, returnedObject, returnedError, returnedResponse, delegate, percentDownloaded;
 
 + (id)connectionController {
 	return [[[self alloc] init] autorelease];
@@ -276,16 +276,29 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 #pragma mark NSURLConnection delegate methods
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+	
+	contentLength = (float)[response expectedContentLength];
+	
 	self.returnedResponse = response;
     [self receivedResponse:response];
 	[self dctInternal_announceResponse];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+	
+	if (contentLength > 0) {
+		downloadedLength += (float)[data length];
+		self.percentDownloaded = downloadedLength / contentLength;
+	}
+	
 	[(DCTURLConnection *)connection appendData:data];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+	
+	if (self.percentDownloaded < 1.0) 
+		self.percentDownloaded = 1.0;
+	
 	NSData *data = ((DCTURLConnection *)connection).data;
 	
 	[urlConnection cancel];

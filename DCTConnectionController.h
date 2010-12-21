@@ -145,6 +145,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 	NSMutableSet *completionBlocks;
 	NSMutableSet *failureBlocks;
 	NSMutableSet *cancelationBlocks;
+	float contentLength, downloadedLength;
 }
 
 /// @name Creating a Connection Controller
@@ -434,6 +435,9 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  */
 @property (nonatomic, readonly) DCTConnectionControllerStatus status;
+
+@property (nonatomic, assign) float percentDownloaded;
+
 
 /** The URL the connection controller is managing.
  */
