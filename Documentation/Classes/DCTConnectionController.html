@@ -8,6 +8,12 @@
 	</head>
 	<body>
 		<article>
+			<div class="main-navigation navigation-top">
+				<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+			</div>
 			<div id="header">
 				<div class="section-header">
 					<h1 class="title title-header">DCTConnectionController Class Reference</h1>
@@ -34,17 +40,17 @@
 
 <p> This class is an abstract class, which should always be subclassed in order to work. Included is a simple subclass, DCTURLLoadingConnectionController, which loads the given URL. </p>
 
-<p> Benefits to using a connection controller over using an NSURLConnection directly include:  <ul><li> Easy ability to split up funtionality. </li></ul> <ul><li> Setting up connections in a queue. </li></ul> <ul><li> Adding dependencies, so that connections only start once all  <a href="#//api/name/dependencies">dependencies</a> are complete, useful for when a connection is dependent on a login connection for example. </li></ul> <ul><li> Queueing duplicate connection controllers to one already queued or active, will cause the duplicates to &quot;piggy back&quot; the existing connection controller. This way the application could need fewer connections without having to check each time you make the connection. </li></ul> <ul><li> Automatic benefits when  <a href="DCTConnectionController.html">DCTConnectionController</a> is improved! </li></ul></p>
+<p> Benefits to using a connection controller over using an NSURLConnection directly include: <ul><li> Easy ability to split up funtionality. </li></ul> <ul><li> Setting up connections in a queue. </li></ul> <ul><li> Adding dependencies, so that connections only start once all <a href="#//api/name/dependencies">dependencies</a> are complete, useful for when a connection is dependent on a login connection for example. </li></ul> <ul><li> Queueing duplicate connection controllers to one already queued or active, will cause the duplicates to &quot;piggy back&quot; the existing connection controller. This way the application could need fewer connections without having to check each time you make the connection. </li></ul> <ul><li> Automatic benefits when <a href="DCTConnectionController.html">DCTConnectionController</a> is improved! </li></ul></p>
 
 <p> Most of the time when working with connection controllers, you will want to have a separate controller for different calls. You may have one for fetching all tweets and another for fetching tweets from a particular user. The benefits here are that in the different implmenetations you know that one class does just the one task, meaning a lot less conditional statements. </p>
 
 <p> It also allows you to build clever class hierarchies, for instance you may want to have another abstract class used for all Twitter calls (for example TwitterConnectionController), where if it fails due to an authentication issue, it starts a login connection controller, requeues itself and adds the login controller to its dependencies. All connection controllers inheriting from TwitterConnectionController would then gain the ability to authenticate when they receive an authentication challenge. </p>
 
-<p> Many web services respond succesfully with error codes for the API in the returned data. Because a connection controller represents the higher level web service more than the actual connection, these failures should be reported as such. To achieve this, the subclass implementation of  <a href="#//api/name/receivedObject:">receivedObject:</a> should look for error codes and if one is found, call  <a href="#//api/name/receivedError:">receivedError:</a> with an NSError created from the data from the web service. This allows delegates to be informed correctly, the correct blocks to be called and the correct  <a href="#//api/name/status">status</a> to be set. Again, with the right class hierarchy, this will likely only have to be done once. </p>
+<p> Many web services respond succesfully with error codes for the API in the returned data. Because a connection controller represents the higher level web service more than the actual connection, these failures should be reported as such. To achieve this, the subclass implementation of <code><a href="#//api/name/receivedObject:">receivedObject:</a></code> should look for error codes and if one is found, call <code><a href="#//api/name/receivedError:">receivedError:</a></code> with an NSError created from the data from the web service. This allows delegates to be informed correctly, the correct blocks to be called and the correct <code><a href="#//api/name/status">status</a></code> to be set. Again, with the right class hierarchy, this will likely only have to be done once. </p>
 
 <p> <strong> General Usage </strong></p>
 
-<p> An example of how you may use a connection controller:  <pre> DCTConnectionController *cc = [DCTConnectionController connectionController];
+<p> An example of how you may use a connection controller: <pre> DCTConnectionController *cc = [DCTConnectionController connectionController];
 
 cc.delegate = self;
 cc.priority = DCTConnectionControllerPriorityHigh;
@@ -54,6 +60,12 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 }];
 
 [cc connect]; </pre></p>
+
+<p> <strong> Connection Controller Piggy Backing </strong></p>
+
+<p> Connection Controllers have a built in proceedure for piggy backing onto other connection controllers that are fetching the same data. To achieve this, when a connection controller is asked to <code><a href="#//api/name/connect">connect</a></code>, it will check with the <code><a href="DCTConnectionQueue.html">DCTConnectionQueue</a></code> to see if a connection controller exists that is equal to iself. By default two connection controllers are equal if they are of the same class, are connecting to the same <code><a href="#//api/name/URL">URL</a></code>, have the same <code><a href="#//api/name/type">type</a></code> and have the same properties; In this way, for the majority of subclasses this will remain true as <code><a href="#//api/name/isEqualToConnectionController:">isEqualToConnectionController:</a></code> checks properties defined in all classes. </p>
+
+<p> For this reason it is a good idea for subclasses to define their parameters as properties, that way each will get checked for equality by <code><a href="#//api/name/isEqualToConnectionController:">isEqualToConnectionController:</a></code>. In the future the implementation of <code><a href="#//api/name/isEqualToConnectionController:">isEqualToConnectionController:</a></code> may change to one a little more concrete, but so far this has worked well for me. </p>
 
 				</div>
 				
@@ -87,19 +99,19 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/type"> type</a></code>
-		<span class="tooltip"> The  <a href="#//api/name/type">type</a> of connection to use. </span>
+		<span class="tooltip"> The <a href="#//api/name/type">type</a> of connection to use. </span>
 	</span>
 	
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/priority"> priority</a></code>
-		<span class="tooltip"> The  <a href="#//api/name/priority">priority</a> of the connection controller. </span>
+		<span class="tooltip"> The <a href="#//api/name/priority">priority</a> of the connection controller. </span>
 	</span>
 	
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/delegate"> delegate</a></code>
-		<span class="tooltip"> The  <a href="#//api/name/delegate">delegate</a> for the connection controller. </span>
+		<span class="tooltip"> The <a href="#//api/name/delegate">delegate</a> for the connection controller. </span>
 	</span>
 	
 </li>
@@ -111,7 +123,7 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 						<li>
 	<span class="tooltip">
 		<code><a href="#//api/name/dependencies"> dependencies</a></code>
-		<span class="tooltip"> The  <a href="#//api/name/dependencies">dependencies</a> for this connection controller. </span>
+		<span class="tooltip"> The <a href="#//api/name/dependencies">dependencies</a> for this connection controller. </span>
 	</span>
 	
 </li><li>
@@ -219,13 +231,13 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 						<li>
 	<span class="tooltip">
 		<code><a href="#//api/name/status"> status</a></code>
-		<span class="tooltip"> The  <a href="#//api/name/status">status</a> of the connection controller. </span>
+		<span class="tooltip"> The <a href="#//api/name/status">status</a> of the connection controller. </span>
 	</span>
 	
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/URL"> URL</a></code>
-		<span class="tooltip"> The  <a href="#//api/name/URL">URL</a> the connection controller is managing. </span>
+		<span class="tooltip"> The <a href="#//api/name/URL">URL</a> the connection controller is managing. </span>
 	</span>
 	
 </li><li>
@@ -344,7 +356,7 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 		
 		<p> DCTConnectionControllerCancelationBlock is defined as such: </p>
 		
-		<p> <code> typedef void (^DCTConnectionControllerCancelationBlock) (); </code></p>
+		<p> <code>typedef void (^DCTConnectionControllerCancelationBlock) ();</code></p>
 		
 	</div>
 	
@@ -397,7 +409,7 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 		
 		<p> DCTConnectionControllerCompletionBlock is defined as such: </p>
 		
-		<p> <code> typedef void (^DCTConnectionControllerCompletionBlock) (NSObject *object); </code></p>
+		<p> <code>typedef void (^DCTConnectionControllerCompletionBlock) (NSObject *object);</code></p>
 		
 	</div>
 	
@@ -501,7 +513,7 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 		
 		<p> DCTConnectionControllerFailureBlock is defined as such: </p>
 		
-		<p> <code> typedef void (^DCTConnectionControllerFailureBlock) (NSError *error); </code></p>
+		<p> <code>typedef void (^DCTConnectionControllerFailureBlock) (NSError *error);</code></p>
 		
 	</div>
 	
@@ -554,7 +566,7 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 		
 		<p> DCTConnectionControllerResponseBlock is defined as such: </p>
 		
-		<p> <code> typedef void (^DCTConnectionControllerResponseBlock) (NSURLResponse *response); </code></p>
+		<p> <code>typedef void (^DCTConnectionControllerResponseBlock) (NSURLResponse *response);</code></p>
 		
 	</div>
 	
@@ -641,11 +653,9 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 		
 		<p> Adds the connection controller to the queue, checking to make sure it is unique and if not, returning the duplicate that is already queued. </p>
 		
-		<p> If there is a connection controller in the queue or already running that exists with the same details as the receiver, this will merge accross the delegate, completeion blocks, KVO and notification observers, then return with the connection controller that already exists. This uses  <a href="#//api/name/isEqualToConnectionController:">isEqualToConnectionController:</a> to determine equality, which checks the  <a href="#//api/name/URL">URL</a> of the desitnation and each property added by subclasses. </p>
+		<p> If there is a connection controller in the queue or already running that exists with the same details as the receiver, instead of calling to <code><a href="DCTConnectionQueue.html">DCTConnectionQueue</a></code> to enqueue itself, the connection controller will register some blocks with the existing connection controller. This uses <code><a href="#//api/name/isEqualToConnectionController:">isEqualToConnectionController:</a></code> to determine equality, which checks the <code><a href="#//api/name/URL">URL</a></code> of the desitnation, the <code><a href="#//api/name/type">type</a></code> and each property added by subclasses. </p>
 		
-		<p> In the case that a connection controller is already running, delegates and completion blocks will be called as soon as they are added to the existing connection controller. Due to this, it may be wise to </p>
-		
-		<p> Connection controllers with  <a href="#//api/name/dependencies">dependencies</a> do not currently get merged into an existing </p>
+		<p> In the case that an existing connection controller is already running, the receiver will never be queued. It will pass through, in all the usual ways of delegation, KVO, NSNotifications and block calling, the results of the existing connection controller. </p>
 		
 	</div>
 	
@@ -701,7 +711,7 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 		
 		<p> Determines whether the given connection controller is equal to the receiver. </p>
 		
-		<p> Connection controllers are determined equal by checking the  <a href="#//api/name/URL">URL</a> , the  <a href="#//api/name/type">type</a> and their properties for equality. </p>
+		<p> Connection controllers are determined equal by checking the <a href="#//api/name/URL">URL</a> , the <a href="#//api/name/type">type</a> and their properties for equality. </p>
 		
 	</div>
 	
@@ -737,7 +747,7 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 	
 	<div class="method-subsection return">
 		<h4 class="method-subtitle parameter-title">Return Value</h4>
-		<p> A  <a href="#//api/name/URL">URL</a> request which will form the connection. </p>
+		<p> A <a href="#//api/name/URL">URL</a> request which will form the connection. </p>
 	</div>
 	
 	
@@ -747,7 +757,7 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 		
 		<p> This method should be used in subclasses to give custom requests. </p>
 		
-		<p> Calling super from the subclass will give a mutable request of  <a href="#//api/name/type">type</a> &apos;type&apos;, this is the prefered way to get the request object in subclasses. </p>
+		<p> Calling super from the subclass will give a mutable request of <a href="#//api/name/type">type</a> &apos;type&apos;, this is the prefered way to get the request object in subclasses. </p>
 		
 	</div>
 	
@@ -798,7 +808,7 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 		
 		<p> This method should be used in subclasses to handle the returned error. </p>
 		
-		<p> Subclasses should handle the error, taking any course of action given in the API documentation. The default implementation of this method notifies the  <a href="#//api/name/delegate">delegate</a> and observers of the error, so at the end of this method subclasses should call the super implementation. This could be provided with a new error message created specifically for delegates and observers or just passing the error returned from the connection. </p>
+		<p> Subclasses should handle the error, taking any course of action given in the API documentation. The default implementation of this method notifies the <a href="#//api/name/delegate">delegate</a> and observers of the error, so at the end of this method subclasses should call the super implementation. This could be provided with a new error message created specifically for delegates and observers or just passing the error returned from the connection. </p>
 		
 	</div>
 	
@@ -858,9 +868,9 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 		
 		<p> This method should be used in subclasses to handle the returned data. </p>
 		
-		<p> Subclasses should handle the incoming data, creating a wrapper or data object for the  <a href="#//api/name/delegate">delegate</a> and observers to use. The default implementation of this method notifies the  <a href="#//api/name/delegate">delegate</a> and observers of the new data. Therefore, at the end of this method subclasses should call the super implementation with the handled data object as the parameter. </p>
+		<p> Subclasses should handle the incoming data, creating a wrapper or data object for the <a href="#//api/name/delegate">delegate</a> and observers to use. The default implementation of this method notifies the <a href="#//api/name/delegate">delegate</a> and observers of the new data. Therefore, at the end of this method subclasses should call the super implementation with the handled data object as the parameter. </p>
 		
-		<p> If connecting to a web service always responds successful, but returns it&apos;s error in JSON, a subclass can call  <a href="#//api/name/receivedError:">receivedError:</a> from its implementation of this method and this would propigate up and the  <a href="#//api/name/status">status</a> of the connection controller would be reported as DCTConnectionControllerStatusFailed. As well as this, instead of notifying delgates and observers that it had succeeded, it would report as failed and again would call the failureBlocks rather than the completionBlocks. </p>
+		<p> If connecting to a web service always responds successful, but returns it&apos;s error in JSON, a subclass can call <a href="#//api/name/receivedError:">receivedError:</a> from its implementation of this method and this would propigate up and the <a href="#//api/name/status">status</a> of the connection controller would be reported as DCTConnectionControllerStatusFailed. As well as this, instead of notifying delgates and observers that it had succeeded, it would report as failed and again would call the failureBlocks rather than the completionBlocks. </p>
 		
 	</div>
 	
@@ -920,7 +930,7 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 		
 		<p> This method should be used in subclasses to handle the returned response. </p>
 		
-		<p> Subclasses should handle the response, taking any course of action given in the API documentation. The default implementation of this method notifies the  <a href="#//api/name/delegate">delegate</a> and observers of the response, so at the end of this method subclasses should call the super implementation. </p>
+		<p> Subclasses should handle the response, taking any course of action given in the API documentation. The default implementation of this method notifies the <a href="#//api/name/delegate">delegate</a> and observers of the response, so at the end of this method subclasses should call the super implementation. </p>
 		
 	</div>
 	
@@ -1035,7 +1045,7 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 	
 	
 	<div class="method-subsection brief-description">
-		<p> The  <a href="#//api/name/URL">URL</a> the connection controller is managing. </p>
+		<p> The <a href="#//api/name/URL">URL</a> the connection controller is managing. </p>
 	</div>		
 	
 	
@@ -1067,7 +1077,7 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 	
 	
 	<div class="method-subsection brief-description">
-		<p> The  <a href="#//api/name/delegate">delegate</a> for the connection controller. </p>
+		<p> The <a href="#//api/name/delegate">delegate</a> for the connection controller. </p>
 	</div>		
 	
 	
@@ -1081,7 +1091,7 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
 		
-		<p> The  <a href="#//api/name/delegate">delegate</a> for the connection controller. </p>
+		<p> The <a href="#//api/name/delegate">delegate</a> for the connection controller. </p>
 		
 		<p> Setting this will cause the connection controller to call the methods defined in DCTConnectionControllerDelegate, when the appropriate events occur. </p>
 		
@@ -1108,7 +1118,7 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 	
 	
 	<div class="method-subsection brief-description">
-		<p> The  <a href="#//api/name/dependencies">dependencies</a> for this connection controller. </p>
+		<p> The <a href="#//api/name/dependencies">dependencies</a> for this connection controller. </p>
 	</div>		
 	
 	
@@ -1172,7 +1182,7 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 	
 	
 	<div class="method-subsection brief-description">
-		<p> The  <a href="#//api/name/priority">priority</a> of the connection controller. </p>
+		<p> The <a href="#//api/name/priority">priority</a> of the connection controller. </p>
 	</div>		
 	
 	
@@ -1186,11 +1196,11 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
 		
-		<p> The  <a href="#//api/name/priority">priority</a> of the connection controller. </p>
+		<p> The <a href="#//api/name/priority">priority</a> of the connection controller. </p>
 		
-		<p> Connection controllers will be sorted in order of their  <a href="#//api/name/priority">priority</a> and as such high  <a href="#//api/name/priority">priority</a> connections will be handled first. If two connections are in the queue with equal priorities, then they will be started in the order they were added to the conneciton queue. Generally it&apos;s a good idea to use the highest  <a href="#//api/name/priority">priority</a> free for login connections and lowest  <a href="#//api/name/priority">priority</a> for connections the user didn&apos;t directly initiate. </p>
+		<p> Connection controllers will be sorted in order of their <a href="#//api/name/priority">priority</a> and as such high <a href="#//api/name/priority">priority</a> connections will be handled first. If two connections are in the queue with equal priorities, then they will be started in the order they were added to the conneciton queue. Generally it&apos;s a good idea to use the highest <a href="#//api/name/priority">priority</a> free for login connections and lowest <a href="#//api/name/priority">priority</a> for connections the user didn&apos;t directly initiate. </p>
 		
-		<p> Priorities include:  <ul><li> <code> DCTConnectionControllerPriorityVeryHigh </code></li><li> <code> DCTConnectionControllerPriorityHigh </code></li><li> <code> DCTConnectionControllerPriorityMedium </code></li><li> <code> DCTConnectionControllerPriorityLow </code></li><li> <code> DCTConnectionControllerPriorityVeryLow </code></li></ul></p>
+		<p> Priorities include: <ul><li> <code>DCTConnectionControllerPriorityVeryHigh</code></li><li> <code>DCTConnectionControllerPriorityHigh</code></li><li> <code>DCTConnectionControllerPriorityMedium</code></li><li> <code>DCTConnectionControllerPriorityLow</code></li><li> <code>DCTConnectionControllerPriorityVeryLow</code></li></ul></p>
 		
 	</div>
 	
@@ -1338,7 +1348,7 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 	
 	
 	<div class="method-subsection brief-description">
-		<p> The  <a href="#//api/name/status">status</a> of the connection controller. </p>
+		<p> The <a href="#//api/name/status">status</a> of the connection controller. </p>
 	</div>		
 	
 	
@@ -1352,15 +1362,15 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
 		
-		<p> The  <a href="#//api/name/status">status</a> of the connection controller. </p>
+		<p> The <a href="#//api/name/status">status</a> of the connection controller. </p>
 		
-		<p> Possible statuses include:  <ul><li> <code> DCTConnectionControllerStatusNotStarted </code> When the connection has not started. It is also currently in this state if it has not been queued up due to an existing connection controller being equal existing. </li></ul> <ul><li> <code> DCTConnectionControllerStatusQueued </code> The connection controller has been queued up by the  <a href="DCTConnectionQueue.html">DCTConnectionQueue</a> and it is waiting to be started. </li></ul> <ul><li> <code> DCTConnectionControllerStatusStarted </code> The connection controller has started and is awaiting a response. </li></ul> <ul><li> <code> DCTConnectionControllerStatusResponded </code> A repsonse has been received. </li></ul> <ul><li> <code> DCTConnectionControllerStatusComplete </code> The connection controller has completed successfully. </li></ul> <ul><li> <code> DCTConnectionControllerStatusFailed </code> The connection controller has failed at some point, either due to a connection issue or an issue with the API usage. </li></ul> <ul><li> <code> DCTConnectionControllerStatusCancelled </code> The connection was cancelled by an external entity. </li></ul></p>
+		<p> Possible statuses include: <ul><li> <code>DCTConnectionControllerStatusNotStarted</code> When the connection has not started. It is also currently in this state if it has not been queued up due to an existing connection controller being equal existing. </li></ul> <ul><li> <code>DCTConnectionControllerStatusQueued</code> The connection controller has been queued up by the <a href="DCTConnectionQueue.html">DCTConnectionQueue</a> and it is waiting to be started. </li></ul> <ul><li> <code>DCTConnectionControllerStatusStarted</code> The connection controller has started and is awaiting a response. </li></ul> <ul><li> <code>DCTConnectionControllerStatusResponded</code> A repsonse has been received. </li></ul> <ul><li> <code>DCTConnectionControllerStatusComplete</code> The connection controller has completed successfully. </li></ul> <ul><li> <code>DCTConnectionControllerStatusFailed</code> The connection controller has failed at some point, either due to a connection issue or an issue with the API usage. </li></ul> <ul><li> <code>DCTConnectionControllerStatusCancelled</code> The connection was cancelled by an external entity. </li></ul></p>
 		
-		<p> A connection controller is never gauranteed to be  <code> Queued </code> ; If an equal connection controller exists, the  <a href="DCTConnectionQueue.html">DCTConnectionQueue</a> won&apos;t queue up the duplicate. I&apos;d imagine a new  <a href="#//api/name/status">status</a> will be born for this later on. </p>
+		<p> A connection controller is never gauranteed to be <code>Queued</code>; If an equal connection controller exists, the <a href="DCTConnectionQueue.html">DCTConnectionQueue</a> won&apos;t queue up the duplicate. I&apos;d imagine a new <a href="#//api/name/status">status</a> will be born for this later on. </p>
 		
-		<p> Generally a finished connection controller will only ever be  <code> Complete </code> ,  <code> Failed </code> or  <code> Cancelled </code> . That is to say that a completed connection controller won&apos;t become failed or cancelled later on. </p>
+		<p> Generally a finished connection controller will only ever be <code>Complete</code>, <code>Failed</code> or <code>Cancelled</code>. That is to say that a completed connection controller won&apos;t become failed or cancelled later on. </p>
 		
-		<p> Currently, connection controllers generally go through  <code> NotStarted </code> ,  <code> Responded </code> and (  <code> Complete </code> |  <code> Failed </code> |  <code> Cancelled </code> ) statuses, though it is probably not wise to use this as a way of listening for events. </p>
+		<p> Currently, connection controllers generally go through <code>NotStarted</code>, <code>Responded</code> and ( <code>Complete</code> | <code>Failed</code> | <code>Cancelled</code>) statuses, though it is probably not wise to use this as a way of listening for events. </p>
 		
 	</div>
 	
@@ -1385,7 +1395,7 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 	
 	
 	<div class="method-subsection brief-description">
-		<p> The  <a href="#//api/name/type">type</a> of connection to use. </p>
+		<p> The <a href="#//api/name/type">type</a> of connection to use. </p>
 	</div>		
 	
 	
@@ -1399,9 +1409,9 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 	<div class="method-subsection discussion-section">
 		<h4 class="method-subtitle">Discussion</h4>
 		
-		<p> The  <a href="#//api/name/type">type</a> of connection to use. </p>
+		<p> The <a href="#//api/name/type">type</a> of connection to use. </p>
 		
-		<p> Specifies the  <a href="#//api/name/type">type</a> of connection to use. Types include:  <ul><li> <code> DCTConnectionControllerTypeGet </code> for GET requests </li><li> <code> DCTConnectionControllerTypePost </code> for POST requests </li><li> <code> DCTConnectionControllerTypePut </code> for PUT requests </li><li> <code> DCTConnectionControllerTypeDelete </code> for DELETE requests </li><li> <code> DCTConnectionControllerTypeOptions </code> for OPTIONS requests </li><li> <code> DCTConnectionControllerTypeHead </code> for HEAD requests </li><li> <code> DCTConnectionControllerTypeTrace </code> for TRACE requests </li><li> <code> DCTConnectionControllerTypeConnect </code> for CONNECT requests </li></ul></p>
+		<p> Specifies the <a href="#//api/name/type">type</a> of connection to use. Types include: <ul><li> <code>DCTConnectionControllerTypeGet</code> for GET requests </li><li> <code>DCTConnectionControllerTypePost</code> for POST requests </li><li> <code>DCTConnectionControllerTypePut</code> for PUT requests </li><li> <code>DCTConnectionControllerTypeDelete</code> for DELETE requests </li><li> <code>DCTConnectionControllerTypeOptions</code> for OPTIONS requests </li><li> <code>DCTConnectionControllerTypeHead</code> for HEAD requests </li><li> <code>DCTConnectionControllerTypeTrace</code> for TRACE requests </li><li> <code>DCTConnectionControllerTypeConnect</code> for CONNECT requests </li></ul></p>
 		
 	</div>
 	
@@ -1423,10 +1433,16 @@ cc.priority = DCTConnectionControllerPriorityHigh;
 				
 				
 			</div>
+			<div class="main-navigation navigation-bottom">
+				<ul>
+	<li><a href="../index.html">Index</a></li>
+	<li><a href="../hierarchy.html">Hierarchy</a></li>
+</ul>
+			</div>
 			<div id="footer">
 				<hr />
 				<div class="footer-copyright">
-					<p><span class="copyright">&copy; 2010 Daniel Tull. All rights reserved. (Last updated: 2010-12-19)</span><br />
+					<p><span class="copyright">&copy; 2010 Daniel Tull. All rights reserved. (Last updated: 2010-12-26)</span><br />
 					<span class="generator">Generated by <a href="http://appledoc.gentlebytes.com">appledoc</a>.</span></p>
 				</div>
 			</div>
