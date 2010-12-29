@@ -24,3 +24,5 @@ build/
 .hg
 .svn
 CVS
+
+Documentation

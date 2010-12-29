@@ -11,13 +11,20 @@
 
 @interface DCTConnectionQueue (UIKitAdditions)
 
-@property (nonatomic, readonly) NSArray *nonMultitaskingQueuedConnections;
+/// @name Multitasking Additions
+
+/** Background task identifier given when we ask for background completion.
+ */
+@property (nonatomic, readonly) NSArray *nonMultitaskingQueuedConnectionControllers;
+
+/** Background task identifier given when we ask for background completion.
+ */
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
 
+/** Sets the connection as multitask enabled for the iOS platform.
+ */
+@property (nonatomic, assign) BOOL multitaskEnabled;
 
-// Methods called by the queue proper to enable UIKit functionality
-- (DCTConnectionController *)uikit_queuedConnectionControllerToURL:(NSURL *)URL;
-- (void)uikit_dealloc;
-- (void)uikit_init;
+@property (nonatomic, readonly) BOOL inBackground;
 
 @end

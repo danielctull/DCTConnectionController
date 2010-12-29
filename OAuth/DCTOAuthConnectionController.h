@@ -20,12 +20,23 @@ extern NSString *const DCTOAuthTokenKey;
 extern NSString *const DCTOAuthVerifierKey;
 extern NSString *const DTOAuthVerifierKey;
 
+
+/** A DCTConnectionController to make loading OAuth connections easier.
+ */
 @interface DCTOAuthConnectionController : DCTRESTController {
 	NSDictionary *oauthParameters;
 	DCTOAuthSignature *signature;	
 	NSString *timestamp;
 }
 
+/// @name Methods to subclass
+
+/**
+ 
+ @see [DCTRESTController queryProperties] 
+ @see [DCTRESTController headerProperties] 
+ @see [DCTRESTController bodyProperties]
+ */
 + (NSArray *)oauthProperties;
 
 
@@ -33,15 +44,38 @@ extern NSString *const DTOAuthVerifierKey;
 + (NSDictionary *)oauthDictionaryFromString:(NSString *)string;
 - (void)receivedOAuthDictionary:(NSDictionary *)dictionary;
 
+/// @name OAuth Properties
+
+/** The nonce.
+ */
 @property (nonatomic, retain) NSString *nonce;
+
+/** Consumer key.
+ */
 @property (nonatomic, retain) NSString *consumerKey;
+
+/** Secret consumer key.
+ */
 @property (nonatomic, retain) NSString *secretConsumerKey;
+
+/** Token.
+ */
 @property (nonatomic, retain) NSString *token;
+
+/** Secret token, if available.
+ */
 @property (nonatomic, retain) NSString *secretToken;
+
+/** Version.
+ */
 @property (nonatomic, retain) NSString *version;
 
-
+/** The timestamp.
+ */
 @property (nonatomic, readonly) NSString *timestamp;
+
+/** The generated signature.
+ */
 @property (nonatomic, readonly) DCTOAuthSignature *signature;
 
 @end
