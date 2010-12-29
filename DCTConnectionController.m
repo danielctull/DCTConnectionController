@@ -311,8 +311,6 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 - (void)dctInternal_announceResponse {
 	
-	self.status = DCTConnectionControllerStatusResponded;
-	
 	NSURLResponse *response = self.returnedResponse;
 	
 	for (DCTConnectionControllerResponseBlock block in responseBlocks)
@@ -320,13 +318,13 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
 	[self dctInternal_sendResponseToDelegate:response];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerResponseNotification object:self];	
+	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerResponseNotification object:self];
+	
+	self.status = DCTConnectionControllerStatusResponded;
 }
 
 - (void)dctInternal_finishWithSuccess {
 	if ([self dctInternal_hasFinished]) return;
-	
-	self.status = DCTConnectionControllerStatusComplete;
 	
 	id object = self.returnedObject;
 	
@@ -338,12 +336,12 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerCompletedNotification object:self];
 	
 	[self dctInternal_finish];
+	
+	self.status = DCTConnectionControllerStatusComplete;
 }
 
 - (void)dctInternal_finishWithFailure {
 	if ([self dctInternal_hasFinished]) return;
-	
-	self.status = DCTConnectionControllerStatusFailed;
 	
 	NSError *error = self.returnedError;
 	
@@ -355,12 +353,12 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerFailedNotification object:self];
 
 	[self dctInternal_finish];
+	
+	self.status = DCTConnectionControllerStatusFailed;
 }
 
 - (void)dctInternal_finishWithCancelation {
 	if ([self dctInternal_hasFinished]) return;
-
-	self.status = DCTConnectionControllerStatusCancelled;	
 	
 	for (DCTConnectionControllerCancelationBlock block in cancelationBlocks)
 		block();
@@ -370,6 +368,8 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerCancellationNotification object:self];
 
 	[self dctInternal_finish];
+	
+	self.status = DCTConnectionControllerStatusCancelled;
 }
 
 - (void)dctInternal_finish {
