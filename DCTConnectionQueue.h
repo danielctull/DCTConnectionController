@@ -22,13 +22,50 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
 	NSArray *externalConnectionCountKeys;
 	
 	// Needed for multitasking on the iPhone, which is added as a category.	
-	NSMutableArray *nonMultitaskingConnections;
+	NSMutableArray *nonMultitaskingConnectionControllers;
 	NSUInteger backgroundTaskIdentifier;
 	BOOL inBackground;
+	BOOL multitaskEnabled;
 }
 
-// Property to set for multitasking on iOS platforms. Default is YES.
-@property (nonatomic, assign) BOOL multitaskEnabled;
+/// @name Queue Settings
+
+/** The maximum number of simultaneous connections allowed at once. */
+@property (nonatomic, assign) NSInteger maxConnections;
+
+/// @name Managing the queue
+
+/** Stops the conneciton queue. */
+- (void)stop;
+
+/** Pauses the conneciton queue. */
+//- (void)pause;
+
+/** Starts the conneciton queue. */
+- (void)start;
+
+
+
+/// @name Connection Counts
+
+/** The total amount of connection controllers queued and active. */
+@property (nonatomic, readonly) NSInteger connectionCount;
+
+/** The amount of connection controllers currently in progress. */
+@property (nonatomic, readonly) NSInteger activeConnectionCount;
+
+/// @name Accessing Connection Controllers
+
+/** Returns all the connection controllers currently in progress and queued. */
+@property (nonatomic, readonly) NSArray *connectionControllers;
+
+/** Returns all the connection controllers currently in progress. */
+@property (nonatomic, readonly) NSArray *activeConnectionControllers;
+
+/** Returns all the connection controllers currently queued. */
+@property (nonatomic, readonly) NSArray *queuedConnectionControllers;
+
+/// @name Managing Connection Controllers
 
 /**
  Add a connection controller to the queue. This method causes the connection queue to
@@ -40,24 +77,20 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
  
  */
 - (void)removeConnectionController:(DCTConnectionController *)connectionController;
+
+/** Requeues a connection controller.
+ 
+ This will stop the url connection in progress for the given connection controller and 
+ reset its internals back to before it started connecting.
+ */
 - (void)requeueConnectionController:(DCTConnectionController *)connectionController;
 
-- (BOOL)isConnectingToURL:(NSURL *)URL;
-- (BOOL)hasQueuedConnectionControllerToURL:(NSURL *)URL;
-- (DCTConnectionController *)queuedConnectionControllerToURL:(NSURL *)URL;
+/// @name External Connection Counting
 
-- (void)stop;
-- (void)pause;
-- (void)start;
-
-@property (nonatomic, assign) NSInteger maxConnections;
-
-@property (nonatomic, readonly) NSInteger connectionCount, activeConnectionCount;
-@property (nonatomic, readonly) NSArray *activeConnectionControllers;
-@property (nonatomic, readonly) NSArray *queuedConnectionControllers;
-@property (nonatomic, readonly) NSArray *connectionControllers;
-
+/** Increments the external conneciton count */
 - (void)incrementExternalConnectionCount;
+
+/** Decrements the external conneciton count */
 - (void)decrementExternalConnectionCount;
 
 @end

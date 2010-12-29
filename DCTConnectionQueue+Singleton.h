@@ -9,5 +9,10 @@
 #import "DCTConnectionQueue.h"
 
 @interface DCTConnectionQueue (Singleton)
+
+/// @name Accessing the Connection Queue
+
+/** The shared connection queue.
+ */
 + (DCTConnectionQueue *)sharedConnectionQueue;
 @end
