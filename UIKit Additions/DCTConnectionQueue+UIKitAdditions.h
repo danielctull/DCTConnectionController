@@ -25,4 +25,6 @@
  */
 @property (nonatomic, assign) BOOL multitaskEnabled;
 
+@property (nonatomic, readonly) BOOL inBackground;
+
 @end

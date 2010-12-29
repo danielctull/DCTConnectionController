@@ -59,6 +59,10 @@
 	return multitaskEnabled;
 }
 
+- (BOOL)inBackground {
+	return inBackground;
+}
+
 - (void)uikit_dealloc {
 	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 	
