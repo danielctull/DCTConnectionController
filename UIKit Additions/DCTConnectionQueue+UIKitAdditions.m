@@ -123,8 +123,10 @@
 - (void)dctInternal_didEnterBackground:(NSNotification *)notification {
 	
 	if (inBackground) return;
-	
 	inBackground = YES;
+	
+	[nonMultitaskingConnectionControllers release];
+	nonMultitaskingConnectionControllers = [[NSMutableArray alloc] init];
 	
 	if (!self.multitaskEnabled) {
 		[self stop];

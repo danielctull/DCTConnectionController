@@ -134,8 +134,7 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 }
 
 - (void)removeConnectionController:(DCTConnectionController *)connectionController {
-
-	[connectionController removeObserver:self forKeyPath:@"status"];
+	
 	[connectionController dctConnectionQueue_reset];
 	
 	if ([activeConnections containsObject:connectionController])
