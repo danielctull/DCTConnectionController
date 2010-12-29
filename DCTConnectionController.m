@@ -73,7 +73,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 @implementation DCTConnectionController
 
-@synthesize status, type, priority, multitaskEnabled, URL, returnedObject, returnedError, returnedResponse, delegate;
+@synthesize status, type, priority, multitaskEnabled, URL, returnedObject, returnedError, returnedResponse, delegate, downloadPath;
 
 + (id)connectionController {
 	return [[[self alloc] init] autorelease];
@@ -87,7 +87,9 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	return self;
 }
 
-- (void)dealloc {	
+- (void)dealloc {
+	[downloadPath release], downloadPath = nil;
+	[fileHandle release], fileHandle = nil;
 	[responseBlocks release], responseBlocks = nil;
 	[completionBlocks release], completionBlocks = nil;
 	[failureBlocks release], failureBlocks = nil;
@@ -226,11 +228,11 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[urlConnection cancel];
 	[urlConnection release];
 	urlConnection = nil;
-		
+	
 	NSURLRequest *request = [self newRequest];
 	
 	self.URL = [request URL];
-		
+	
 	urlConnection = [[DCTURLConnection alloc] initWithRequest:request delegate:self];
 	[request release];
 	
@@ -276,17 +278,46 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 #pragma mark NSURLConnection delegate methods
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+	
+	
+	if (self.downloadPath) {
+		NSFileManager *fileManager = [NSFileManager defaultManager];
+		
+		
+		if ([fileManager fileExistsAtPath:self.downloadPath])
+			[fileManager removeItemAtPath:self.downloadPath error:nil];
+		
+		[fileManager createFileAtPath:self.downloadPath
+							 contents:nil
+						   attributes:nil];
+	
+		fileHandle = [[NSFileHandle fileHandleForUpdatingAtPath:self.downloadPath] retain];
+	}
+	
 	self.returnedResponse = response;
     [self receivedResponse:response];
 	[self dctInternal_announceResponse];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+	
+	if (fileHandle) {
+		[fileHandle seekToEndOfFile];
+		[fileHandle writeData:data];
+		return;
+	}
+	
 	[(DCTURLConnection *)connection appendData:data];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+	
 	NSData *data = ((DCTURLConnection *)connection).data;
+	
+	if (fileHandle) {
+		[fileHandle closeFile];
+		data = nil;
+	}
 	
 	[urlConnection cancel];
 	[urlConnection release]; urlConnection = nil;

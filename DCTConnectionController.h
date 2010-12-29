@@ -145,6 +145,8 @@ extern NSString *const DCTConnectionControllerTypeString[];
 	NSMutableSet *completionBlocks;
 	NSMutableSet *failureBlocks;
 	NSMutableSet *cancelationBlocks;
+	
+	NSFileHandle *fileHandle; // Used if a path is given.
 }
 
 /// @name Creating a Connection Controller
@@ -205,8 +207,12 @@ extern NSString *const DCTConnectionControllerTypeString[];
 @property (nonatomic, retain) id<DCTConnectionControllerDelegate> delegate;
 
 
-
-
+/** The path to download the data to.
+ 
+ If supplied the connection will save the data to a file on disk rather
+ than in memory.
+ */
+@property (nonatomic, copy) NSString *downloadPath;
 
 
 /// @name Setting Dependencies
