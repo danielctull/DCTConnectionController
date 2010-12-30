@@ -147,6 +147,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 	NSMutableSet *cancelationBlocks;
 	
 	NSFileHandle *fileHandle; // Used if a path is given.
+	float contentLength, downloadedLength;
 }
 
 /// @name Creating a Connection Controller
@@ -440,6 +441,9 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  */
 @property (nonatomic, readonly) DCTConnectionControllerStatus status;
+
+@property (nonatomic, readonly) NSNumber *percentDownloaded;
+
 
 /** The URL the connection controller is managing.
  */

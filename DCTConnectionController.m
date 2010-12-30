@@ -11,6 +11,7 @@
 #import "DCTConnectionController+Equality.h"
 #import "DCTObservationInfo.h"
 #import "NSMutableSet+DCTExtras.h"
+#import "NSObject+DCTKVOExtras.h"
 
 NSString * const DCTConnectionControllerTypeString[] = {
 	@"GET",
@@ -73,7 +74,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 @implementation DCTConnectionController
 
-@synthesize status, type, priority, multitaskEnabled, URL, returnedObject, returnedError, returnedResponse, delegate, downloadPath;
+@synthesize status, type, priority, multitaskEnabled, URL, returnedObject, returnedError, returnedResponse, delegate, downloadPath, percentDownloaded;
 
 + (id)connectionController {
 	return [[[self alloc] init] autorelease];
@@ -90,6 +91,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 - (void)dealloc {
 	[downloadPath release], downloadPath = nil;
 	[fileHandle release], fileHandle = nil;
+	[percentDownloaded release], percentDownloaded = nil;
 	[responseBlocks release], responseBlocks = nil;
 	[completionBlocks release], completionBlocks = nil;
 	[failureBlocks release], failureBlocks = nil;
@@ -279,6 +281,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
 	
+	contentLength = (float)[response expectedContentLength];
 	
 	if (self.downloadPath) {
 		NSFileManager *fileManager = [NSFileManager defaultManager];
@@ -301,6 +304,15 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
 	
+	if (contentLength > 0) {
+		downloadedLength += (float)[data length];
+		[self dct_changeValueForKey:@"percentDownloaded" withChange:^{
+			[percentDownloaded release];
+			percentDownloaded = [[NSNumber numberWithFloat:(downloadedLength / contentLength)] retain];
+			
+		}];
+	}
+	
 	if (fileHandle) {
 		[fileHandle seekToEndOfFile];
 		[fileHandle writeData:data];
@@ -311,6 +323,14 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+	
+	if ([self.percentDownloaded integerValue] < 1.0) {
+		[self dct_changeValueForKey:@"percentDownloaded" withChange:^{
+			[percentDownloaded release];
+			percentDownloaded = [[NSNumber numberWithInteger:1] retain];
+			
+		}];
+	}
 	
 	NSData *data = ((DCTURLConnection *)connection).data;
 	
