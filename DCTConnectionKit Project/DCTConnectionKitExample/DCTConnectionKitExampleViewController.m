@@ -69,7 +69,7 @@
 	
 	DCTURLLoadingConnectionController *engadget = [DCTURLLoadingConnectionController connectionController];
 	engadget.URL = [NSURL URLWithString:@"http://www.engadget.com/"];
-	[engadget addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];	
+	[engadget addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[engadget connect];
 	
 	// Make a duplicate, won't get queued.
@@ -83,6 +83,7 @@
 	ebay.URL = [NSURL URLWithString:@"http://www.ebay.com/"];
 	ebay.priority = DCTConnectionControllerPriorityLow;
 	[ebay addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+	[ebay addObserver:self forKeyPath:@"percentDownloaded" options:NSKeyValueObservingOptionNew context:nil];	
 	[ebay connect];
 	
 	DCTURLLoadingConnectionController *google = [DCTURLLoadingConnectionController connectionController];
@@ -113,6 +114,12 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	
 	DCTURLLoadingConnectionController *connectionController = (DCTURLLoadingConnectionController *)object;
+	
+	if ([keyPath isEqualToString:@"percentDownloaded"]) {
+		NSLog(@"%@", connectionController.percentDownloaded);
+		return;
+	}
+	
 	[self statusUpdate:connectionController];
 }
 	
@@ -137,35 +144,29 @@
 			break;
 		case DCTConnectionControllerStatusQueued:
 			NSLog(@"%@Queued", logPrefixString);
-			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Queued", prefixString];
 			break;
 		case DCTConnectionControllerStatusFailed:
 			NSLog(@"%@Failed", logPrefixString);
 			[connectionController removeObserver:self forKeyPath:@"status"];
-			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Failed", prefixString];
 			break;
 		case DCTConnectionControllerStatusNotStarted:
 			NSLog(@"%@Not Started", logPrefixString);
-			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Not Started", prefixString];
 			break;
 		case DCTConnectionControllerStatusResponded:
 			NSLog(@"%@Responded", logPrefixString);
-			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Responded", prefixString];
 			break;
 		case DCTConnectionControllerStatusComplete:
 			NSLog(@"%@Complete", logPrefixString);
 			[connectionController removeObserver:self forKeyPath:@"status"];
-			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Complete", prefixString];
 			break;
 		case DCTConnectionControllerStatusCancelled:
 			NSLog(@"%@Cancelled", logPrefixString);
 			[connectionController removeObserver:self forKeyPath:@"status"];
-			return;
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%Cancelled", prefixString];
 			break;
 		default:
