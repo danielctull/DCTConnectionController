@@ -1,8 +1,16 @@
-h1. DCTConnectionKit
+h1. DCTConnectionController
 
-DCTConnectionKit is yet another framework to handle URL connections, specifically those made to RESTful services.
+DCTConnectionController and the associated classes are my developed way to handle URL connections, specifically those made to RESTful services.
 
-*Warning version 0.6 I did a force push because I altered some of the history. Sorry about that guys, but needed to remove some stuff to make this public.*
+Connection controller subclasses should manage the connection and handle callbacks, most likely translating them into model objects that make sense to the rest of the application. In this way connection controllers can be called by other objects without needing any knowledge of how the connection is performed or the web API calls that are needed.
+
+The DCTConnectionQueue is a singleton and is used to queue up connection controllers, and managed the order in which they are run. It also allows the limiting of the amount of connections occurring.
+
+The UIKit category on DCTConnectionQueue allows it to handle iOS multitasking and the application-wide network activity indicator. This category should be removed to use connection controllers on Mac OS X.
+
+h2. Documentation
+
+There exists some pretty extensive "DCTConnectionController documentation":http://danieltull.co.uk/DCTConnectionController/Documentation/ generated with "appledoc":https://github.com/tomaz/appledoc.
 
 h2. Branch Structure
 
