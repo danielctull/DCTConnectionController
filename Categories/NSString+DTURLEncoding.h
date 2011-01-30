@@ -11,13 +11,8 @@
 
 @interface NSString (DTURLEncoding)
 
-
 /** Get a URL encoded string.
  */
-- (NSString *)dt_urlEncodedString;
-
-/** Get a URL encoded string, disregarding the slash.
- */
-- (NSString *)dt_urlEncodedStringNoSlash;
+- (NSString *)dct_urlEncodedString;
 
 @end

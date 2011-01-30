@@ -57,7 +57,7 @@ typedef id (^DCTInternalRESTControllerKeyValueStringConvertor) (id, id);
 	}
 	
 	DCTInternalRESTControllerKeyValueStringConvertor convertor = ^(id key, id value) {
-		return [NSString stringWithFormat:@"%@=%@", key, [value dt_urlEncodedString]];
+		return [NSString stringWithFormat:@"%@=%@", key, [value dct_urlEncodedString]];
 	};
 	
 	if ([queries count] == 0) {
