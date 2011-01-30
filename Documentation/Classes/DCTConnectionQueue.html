@@ -123,7 +123,7 @@
 </li><li>
 	<span class="tooltip">
 		<code><a href="#//api/name/removeConnectionController:">- removeConnectionController:</a></code>
-		
+		<span class="tooltip"> Remove the given connection controller from the queue. </span>
 	</span>
 	
 </li><li>
@@ -141,7 +141,7 @@
 						<li>
 	<span class="tooltip">
 		<code><a href="#//api/name/incrementExternalConnectionCount">- incrementExternalConnectionCount</a></code>
-		<span class="tooltip"> Increments the external conneciton count </span>
+		<span class="tooltip"> Increments the external conneciton count. </span>
 	</span>
 	
 </li><li>
@@ -251,6 +251,16 @@
 	<div class="method-subsection method-declaration"><code>- (DCTConnectionController *)addConnectionController:(DCTConnectionController *)<em>connectionController</em></code></div>
 	
 	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>connectionController</em></dt>
+			<dd> The connection controller to add to the queue. </dd>
+		</dl>
+		
+	</div>
+	
 	
 	
 	
@@ -308,7 +318,7 @@
 	
 	
 	<div class="method-subsection brief-description">
-		<p> Increments the external conneciton count </p>
+		<p> Increments the external conneciton count. </p>
 	</div>		
 	
 	
@@ -339,9 +349,23 @@
 	
 	
 	
+	<div class="method-subsection brief-description">
+		<p> Remove the given connection controller from the queue. </p>
+	</div>		
+	
 	
 	<div class="method-subsection method-declaration"><code>- (void)removeConnectionController:(DCTConnectionController *)<em>connectionController</em></code></div>
 	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>connectionController</em></dt>
+			<dd> The connection controller to remove. </dd>
+		</dl>
+		
+	</div>
 	
 	
 	
@@ -374,6 +398,16 @@
 	
 	<div class="method-subsection method-declaration"><code>- (void)requeueConnectionController:(DCTConnectionController *)<em>connectionController</em></code></div>
 	
+	
+	<div class="method-subsection arguments-section parameters">
+		<h4 class="method-subtitle parameter-title">Parameters</h4>
+		
+		<dl class="argument-def parameter-def">
+			<dt><em>connectionController</em></dt>
+			<dd> The connection controller to requeue. </dd>
+		</dl>
+		
+	</div>
 	
 	
 	
