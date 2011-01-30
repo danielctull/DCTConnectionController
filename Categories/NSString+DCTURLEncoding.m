@@ -1,8 +1,8 @@
 /*
- DTRequestConnectionController.h
+ NSString+DCTURLEncoding.m
  DCTConnectionController
  
- Created by Daniel Tull on 14.7.2010.
+ Created by Daniel Tull on 4.7.2010.
  
  
  
@@ -34,17 +34,21 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "DCTConnectionController.h"
-
-/** Simplest workable subclass of DCTConnectionController possible.
- 
- Adds a request property which it loads when newRequest is called. 
- */
-@interface DCTRequestConnectionController : DCTConnectionController {}
+#import "NSString+DCTURLEncoding.h"
 
 
-/** The request to load. 
- */
-@property (nonatomic, retain) NSURLRequest *request;
+@implementation NSString (DCTURLEncoding)
+- (NSString *)dct_urlEncodedString {
+	
+	CFStringRef encodedString = CFURLCreateStringByAddingPercentEscapes(NULL,
+																		(CFStringRef)self,
+																		NULL,
+																		(CFStringRef)@"!*'();:@&=+$,/?%#[]",
+																		kCFStringEncodingUTF8);
+	
+	NSString *string = [[(NSString *)encodedString retain] autorelease];
+	CFRelease(encodedString);
+	return string;
+}
 
 @end
