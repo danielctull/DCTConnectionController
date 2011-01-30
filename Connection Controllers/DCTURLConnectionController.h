@@ -1,8 +1,8 @@
 /*
- DTRequestConnectionController.h
+ DCTURLConnectionController.h
  DCTConnectionController
  
- Created by Daniel Tull on 14.7.2010.
+ Created by Daniel Tull on 25.1.2010.
  
  
  
@@ -34,17 +34,14 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#import <Foundation/Foundation.h>
 #import "DCTConnectionController.h"
 
-/** Simplest workable subclass of DCTConnectionController possible.
- 
- Adds a request property which it loads when newRequest is called. 
- */
-@interface DCTRequestConnectionController : DCTConnectionController {}
+/** Another simple connection controller subclass.*/
+@interface DCTURLConnectionController : DCTConnectionController {
+}
 
-
-/** The request to load. 
- */
-@property (nonatomic, retain) NSURLRequest *request;
+/** The URL to load. */
+@property (nonatomic, retain, readwrite) NSURL *URL;
 
 @end

@@ -8,12 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "DCTConnectionKitExampleViewController.h"
-#import "DCTURLLoadingConnectionController.h"
+#import "DCTURLConnectionController.h"
 #import "DCTConnectionQueue+Singleton.h"
 
 @interface DCTConnectionKitExampleViewController ()
 - (NSString *)stringFromURL:(NSURL *)url;
-- (void)statusUpdate:(DCTURLLoadingConnectionController *)connectionController;
+- (void)statusUpdate:(DCTURLConnectionController *)connectionController;
 @end
 
 
@@ -59,7 +59,7 @@
 					 nil];
 	
 	for (NSString *s in urls) {
-		DCTURLLoadingConnectionController *connection = [DCTURLLoadingConnectionController connectionController];
+		DCTURLConnectionController *connection = [DCTURLConnectionController connectionController];
 		connection.multitaskEnabled = YES;
 		connection.delegate = self;
 		connection.URL = [NSURL URLWithString:s];
@@ -67,40 +67,40 @@
 		[connection connect];
 	}
 	
-	DCTURLLoadingConnectionController *engadget = [DCTURLLoadingConnectionController connectionController];
+	DCTURLConnectionController *engadget = [DCTURLConnectionController connectionController];
 	engadget.URL = [NSURL URLWithString:@"http://www.engadget.com/"];
 	[engadget addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[engadget connect];
 	
 	// Make a duplicate, won't get queued.
-	DCTURLLoadingConnectionController *engadget2 = [DCTURLLoadingConnectionController connectionController];
+	DCTURLConnectionController *engadget2 = [DCTURLConnectionController connectionController];
 	engadget2.URL = [NSURL URLWithString:@"http://www.engadget.com/"];
 	[engadget2 addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	engadget.priority = DCTConnectionControllerPriorityHigh;
 	[engadget2 connect];
 		
-	DCTURLLoadingConnectionController *ebay = [DCTURLLoadingConnectionController connectionController];
+	DCTURLConnectionController *ebay = [DCTURLConnectionController connectionController];
 	ebay.URL = [NSURL URLWithString:@"http://www.ebay.com/"];
 	ebay.priority = DCTConnectionControllerPriorityLow;
 	[ebay addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[ebay addObserver:self forKeyPath:@"percentDownloaded" options:NSKeyValueObservingOptionNew context:nil];	
 	[ebay connect];
 	
-	DCTURLLoadingConnectionController *google = [DCTURLLoadingConnectionController connectionController];
+	DCTURLConnectionController *google = [DCTURLConnectionController connectionController];
 	google.URL = [NSURL URLWithString:@"http://www.google.com/"];
 	google.priority = DCTConnectionControllerPriorityLow;
 	[google addDependency:ebay];
 	[google addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[google connect];
 	
-	DCTURLLoadingConnectionController *apple = [DCTURLLoadingConnectionController connectionController];
+	DCTURLConnectionController *apple = [DCTURLConnectionController connectionController];
 	apple.URL = [NSURL URLWithString:@"http://www.apple.com/"];
 	apple.priority = DCTConnectionControllerPriorityLow;
 	[apple addDependency:google];
 	[apple addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[apple connect];
 	
-	DCTURLLoadingConnectionController *bbc = [DCTURLLoadingConnectionController connectionController];
+	DCTURLConnectionController *bbc = [DCTURLConnectionController connectionController];
 	bbc.URL = [NSURL URLWithString:@"http://www.bbc.co.uk/"];
 	bbc.priority = DCTConnectionControllerPriorityHigh;
 	[bbc addDependency:apple];
@@ -113,7 +113,7 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	
-	DCTURLLoadingConnectionController *connectionController = (DCTURLLoadingConnectionController *)object;
+	DCTURLConnectionController *connectionController = (DCTURLConnectionController *)object;
 	
 	if ([keyPath isEqualToString:@"percentDownloaded"]) {
 		NSLog(@"%@", connectionController.percentDownloaded);
@@ -123,7 +123,7 @@
 	[self statusUpdate:connectionController];
 }
 	
-- (void)statusUpdate:(DCTURLLoadingConnectionController *)connectionController {
+- (void)statusUpdate:(DCTURLConnectionController *)connectionController {
 	NSDateFormatter *df = [[NSDateFormatter alloc] init];
 	[df setDateFormat:@"HH:mm:ss.SSS"];
 	NSString *dateString = [df stringFromDate:[NSDate date]]; 

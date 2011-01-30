@@ -8,13 +8,10 @@
 
 #import "DCTConnectionKitAppDelegate.h"
 #import "DCTConnectionKitExampleViewController.h"
-#import "DCTOAuthRequestTokenConnectionController.h"
-#import "DCTOAuthAccessTokenConnectionController.h"
-#import "DCTOAuthController.h"
 #import "DCTConnectionQueue+Singleton.h"
 #import "DCTConnectionQueue+UIKitAdditions.h"
 
-#import "DCTURLLoadingConnectionController.h"
+#import "DCTURLConnectionController.h"
 #import "DCTConnectionController+Equality.h"
 
 @implementation DCTConnectionKitAppDelegate
@@ -23,14 +20,14 @@
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
 	/*
-	DCTURLLoadingConnectionController *c = [[DCTURLLoadingConnectionController alloc] init];
+	DCTURLConnectionController *c = [[DCTURLConnectionController alloc] init];
 	c.URL = [NSURL URLWithString:@"www.google.com"];
 	c.delegate = self;
 	DCTConnectionController *cRunning = [c connect];
 	
 	NSLog(@"%@", cRunning);
 	
-	DCTURLLoadingConnectionController *c2 = [[DCTURLLoadingConnectionController alloc] init];
+	DCTURLConnectionController *c2 = [[DCTURLConnectionController alloc] init];
 	c2.URL = [NSURL URLWithString:@"www.google.com"];
 	c2.delegate = self;
 	DCTConnectionController *c2Running = [c2 connect];
@@ -51,24 +48,6 @@
 	[window addSubview:nav.view];
 	[viewController release];
     [window makeKeyAndVisible];
-	
-	/*
-	DTOAuthRequestTokenConnection *connection = [DTOAuthRequestTokenConnection connectionController];
-	connection.URL = [NSURL URLWithString:@"http://term.ie/oauth/example/request_token.php"];
-	connection.type = DCTConnectionControllerTypeGet;
-	connection.consumerKey = @"key";
-	connection.secretConsumerKey = @"secret";
-	[connection connect];
-	
-	DTOAuthAccessTokenConnection *accessTokenConnection = [DTOAuthAccessTokenConnection connectionController];
-	accessTokenConnection.URL = [NSURL URLWithString:@"http://term.ie/oauth/example/access_token.php"];
-	accessTokenConnection.type = DCTConnectionControllerTypeGet;
-	accessTokenConnection.consumerKey = @"key";
-	accessTokenConnection.secretConsumerKey = @"secret";
-	accessTokenConnection.token = @"requestkey";
-	accessTokenConnection.secretToken = @"requestsecret";
-	[accessTokenConnection connect];
-*/		
 }
 
 
