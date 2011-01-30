@@ -8,9 +8,6 @@
 
 #import "DCTConnectionKitAppDelegate.h"
 #import "DCTConnectionKitExampleViewController.h"
-#import "DCTOAuthRequestTokenConnectionController.h"
-#import "DCTOAuthAccessTokenConnectionController.h"
-#import "DCTOAuthController.h"
 #import "DCTConnectionQueue+Singleton.h"
 #import "DCTConnectionQueue+UIKitAdditions.h"
 
@@ -51,24 +48,6 @@
 	[window addSubview:nav.view];
 	[viewController release];
     [window makeKeyAndVisible];
-	
-	/*
-	DTOAuthRequestTokenConnection *connection = [DTOAuthRequestTokenConnection connectionController];
-	connection.URL = [NSURL URLWithString:@"http://term.ie/oauth/example/request_token.php"];
-	connection.type = DCTConnectionControllerTypeGet;
-	connection.consumerKey = @"key";
-	connection.secretConsumerKey = @"secret";
-	[connection connect];
-	
-	DTOAuthAccessTokenConnection *accessTokenConnection = [DTOAuthAccessTokenConnection connectionController];
-	accessTokenConnection.URL = [NSURL URLWithString:@"http://term.ie/oauth/example/access_token.php"];
-	accessTokenConnection.type = DCTConnectionControllerTypeGet;
-	accessTokenConnection.consumerKey = @"key";
-	accessTokenConnection.secretConsumerKey = @"secret";
-	accessTokenConnection.token = @"requestkey";
-	accessTokenConnection.secretToken = @"requestsecret";
-	[accessTokenConnection connect];
-*/		
 }
 
 
