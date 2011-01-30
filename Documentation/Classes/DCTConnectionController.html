@@ -38,7 +38,7 @@
 					
 <p> A class to handle one connection. </p>
 
-<p> This class is an abstract class, which should always be subclassed in order to work. Included is a simple subclass, DCTURLLoadingConnectionController, which loads the given URL. </p>
+<p> This class is an abstract class, which should always be subclassed in order to work. Included is a simple subclass, DCTURLConnectionController, which loads the given URL. </p>
 
 <p> Benefits to using a connection controller over using an NSURLConnection directly include: <ul><li> Easy ability to split up funtionality. </li></ul> <ul><li> Setting up connections in a queue. </li></ul> <ul><li> Adding dependencies, so that connections only start once all <a href="#//api/name/dependencies">dependencies</a> are complete, useful for when a connection is dependent on a login connection for example. </li></ul> <ul><li> Queueing duplicate connection controllers to one already queued or active, will cause the duplicates to &quot;piggy back&quot; the existing connection controller. This way the application could need fewer connections without having to check each time you make the connection. </li></ul> <ul><li> Automatic benefits when <a href="DCTConnectionController.html">DCTConnectionController</a> is improved! </li></ul></p>
 
