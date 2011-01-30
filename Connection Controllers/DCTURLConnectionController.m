@@ -6,10 +6,10 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DCTURLLoadingConnectionController.h"
+#import "DCTURLConnectionController.h"
 
 
-@implementation DCTURLLoadingConnectionController
+@implementation DCTURLConnectionController
 
 @dynamic URL;
 

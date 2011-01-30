@@ -10,7 +10,7 @@
 #import "DCTConnectionController.h"
 
 /** Another simple connection controller subclass.*/
-@interface DCTURLLoadingConnectionController : DCTConnectionController {
+@interface DCTURLConnectionController : DCTConnectionController {
 }
 
 /** The URL to load. */

@@ -71,7 +71,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 /** A class to handle one connection.
  
  This class is an abstract class, which should always be subclassed in order to work.
- Included is a simple subclass, DCTURLLoadingConnectionController, which loads the given URL.
+ Included is a simple subclass, DCTURLConnectionController, which loads the given URL.
  
  Benefits to using a connection controller over using an NSURLConnection directly include:
  
