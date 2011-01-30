@@ -8,7 +8,7 @@
 
 #import "DCTRESTController.h"
 #import <objc/runtime.h>
-#import "NSString+DTURLEncoding.h"
+#import "NSString+DCTURLEncoding.h"
 
 typedef id (^DCTInternalRESTControllerKeyValueStringConvertor) (id, id);
 

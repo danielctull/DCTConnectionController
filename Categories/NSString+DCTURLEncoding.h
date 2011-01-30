@@ -1,5 +1,5 @@
 //
-//  NSString+DTURLEncoding.h
+//  NSString+DCTURLEncoding.h
 //  DCTConnectionKit
 //
 //  Created by Daniel Tull on 04.07.2010.
@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 
-@interface NSString (DTURLEncoding)
+@interface NSString (DCTURLEncoding)
 
 /** Get a URL encoded string.
  */

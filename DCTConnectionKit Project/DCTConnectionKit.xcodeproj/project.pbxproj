@@ -13,7 +13,7 @@
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		24306A9B114E894B008BBE38 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24306A9A114E894B008BBE38 /* MainWindow-iPad.xib */; };
 		24491FA312AF9A8B005F5821 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 244918D712AF9A8A005F5821 /* NSData+Base64.m */; };
-		24491FA512AF9A8B005F5821 /* NSString+DTURLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 244918DB12AF9A8A005F5821 /* NSString+DTURLEncoding.m */; };
+		24491FA512AF9A8B005F5821 /* NSString+DCTURLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 244918DB12AF9A8A005F5821 /* NSString+DCTURLEncoding.m */; };
 		24491FA612AF9A8B005F5821 /* DCTRequestConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 244918DE12AF9A8A005F5821 /* DCTRequestConnectionController.m */; };
 		24491FA712AF9A8B005F5821 /* DCTURLConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 244918E012AF9A8A005F5821 /* DCTURLConnectionController.m */; };
 		24491FA812AF9A8B005F5821 /* DCTConnectionController+Equality.m in Sources */ = {isa = PBXBuildFile; fileRef = 244918E212AF9A8A005F5821 /* DCTConnectionController+Equality.m */; };
@@ -63,8 +63,8 @@
 		243DB58F126A4B8500A5AF1F /* DCTConnectionKit_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionKit_Prefix.pch; sourceTree = "<group>"; };
 		244918D612AF9A8A005F5821 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
 		244918D712AF9A8A005F5821 /* NSData+Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+Base64.m"; sourceTree = "<group>"; };
-		244918DA12AF9A8A005F5821 /* NSString+DTURLEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+DTURLEncoding.h"; sourceTree = "<group>"; };
-		244918DB12AF9A8A005F5821 /* NSString+DTURLEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+DTURLEncoding.m"; sourceTree = "<group>"; };
+		244918DA12AF9A8A005F5821 /* NSString+DCTURLEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+DCTURLEncoding.h"; sourceTree = "<group>"; };
+		244918DB12AF9A8A005F5821 /* NSString+DCTURLEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+DCTURLEncoding.m"; sourceTree = "<group>"; };
 		244918DD12AF9A8A005F5821 /* DCTRequestConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTRequestConnectionController.h; sourceTree = "<group>"; };
 		244918DE12AF9A8A005F5821 /* DCTRequestConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTRequestConnectionController.m; sourceTree = "<group>"; };
 		244918DF12AF9A8A005F5821 /* DCTURLConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTURLConnectionController.h; sourceTree = "<group>"; };
@@ -204,8 +204,8 @@
 			children = (
 				244918D612AF9A8A005F5821 /* NSData+Base64.h */,
 				244918D712AF9A8A005F5821 /* NSData+Base64.m */,
-				244918DA12AF9A8A005F5821 /* NSString+DTURLEncoding.h */,
-				244918DB12AF9A8A005F5821 /* NSString+DTURLEncoding.m */,
+				244918DA12AF9A8A005F5821 /* NSString+DCTURLEncoding.h */,
+				244918DB12AF9A8A005F5821 /* NSString+DCTURLEncoding.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -442,7 +442,7 @@
 				1D3623260D0F684500981E51 /* DCTConnectionKitAppDelegate.m in Sources */,
 				24E4DC5D126A5FD500C19D4B /* DCTConnectionKitExampleViewController.m in Sources */,
 				24491FA312AF9A8B005F5821 /* NSData+Base64.m in Sources */,
-				24491FA512AF9A8B005F5821 /* NSString+DTURLEncoding.m in Sources */,
+				24491FA512AF9A8B005F5821 /* NSString+DCTURLEncoding.m in Sources */,
 				24491FA612AF9A8B005F5821 /* DCTRequestConnectionController.m in Sources */,
 				24491FA712AF9A8B005F5821 /* DCTURLConnectionController.m in Sources */,
 				24491FA812AF9A8B005F5821 /* DCTConnectionController+Equality.m in Sources */,
