@@ -70,11 +70,15 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
 /**
  Add a connection controller to the queue. This method causes the connection queue to
  find the next connection and run it.
+ 
+ @param connectionController The connection controller to add to the queue.
  */
 - (DCTConnectionController *)addConnectionController:(DCTConnectionController *)connectionController;
 
 /**
+ Remove the given connection controller from the queue.
  
+ @param connectionController The connection controller to remove.
  */
 - (void)removeConnectionController:(DCTConnectionController *)connectionController;
 
@@ -82,12 +86,15 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
  
  This will stop the url connection in progress for the given connection controller and 
  reset its internals back to before it started connecting.
+ 
+ @param connectionController The connection controller to requeue.
  */
 - (void)requeueConnectionController:(DCTConnectionController *)connectionController;
 
 /// @name External Connection Counting
 
-/** Increments the external conneciton count */
+/** Increments the external conneciton count.
+ */
 - (void)incrementExternalConnectionCount;
 
 /** Decrements the external conneciton count */
