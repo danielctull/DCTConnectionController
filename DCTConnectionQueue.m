@@ -73,31 +73,21 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 - (void)dctInternal_removeConnectionFromQueue:(DCTConnectionController *)connectionController;
 
 - (void)dctInternal_dequeueAndStartConnection:(DCTConnectionController *)connectionController;
+
+- (void)uikit_dealloc;
+- (void)uikit_init;
 @end
 
 
 
 
 @interface DCTConnectionController (DCTConnectionQueue)
-- (void)dctConnectionQueue_start;
-- (void)dctConnectionQueue_reset;
-- (void)dctConnectionQueue_setQueued;
-@end
-
-@implementation DCTConnectionController (DCTConnectionQueue)
-
-- (void)dctConnectionQueue_start {
-	[self performSelector:@selector(dctInternal_start)];
-}
-
-- (void)dctConnectionQueue_reset {
-	[self performSelector:@selector(dctInternal_reset)];
-}
-
-- (void)dctConnectionQueue_setQueued {
-	[self performSelector:@selector(dctInternal_setQueued)];
-}
-
+//- (void)dctConnectionQueue_start;
+//- (void)dctConnectionQueue_reset;
+//- (void)dctConnectionQueue_setQueued;
+- (void)dctInternal_start;
+- (void)dctInternal_reset;
+- (void)dctInternal_setQueued;
 @end
 
 @implementation DCTConnectionQueue
@@ -125,6 +115,8 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 	return self;	
 }
 
+- (void)uikit_init {}
+
 - (void)dealloc {
 	[self dct_safePerformSelector:@selector(uikit_dealloc)];
 	
@@ -133,6 +125,8 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 	[queuedConnections release]; queuedConnections = nil;
 	[super dealloc];
 }
+
+- (void)uikit_dealloc {}
 
 #pragma mark -
 #pragma mark DCTConnection Queue
@@ -163,7 +157,7 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 
 - (void)removeConnectionController:(DCTConnectionController *)connectionController {
 	
-	[connectionController dctConnectionQueue_reset];
+	[connectionController dctInternal_reset];
 	
 	if ([activeConnections containsObject:connectionController])
 		[self dctInternal_removeActiveConnection:connectionController];
@@ -175,7 +169,7 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 - (void)requeueConnectionController:(DCTConnectionController *)connectionController {
 	[connectionController retain];
 	[self dctInternal_removeActiveConnection:connectionController];
-	[connectionController dctConnectionQueue_reset];
+	[connectionController dctInternal_reset];
 	[self dctInternal_addConnectionControllerToQueue:connectionController];
 	[connectionController release];
 }
@@ -329,7 +323,7 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 		[queuedConnections addObject:connectionController];
 	}];
 	
-	[connectionController dctConnectionQueue_setQueued];
+	[connectionController dctInternal_setQueued];
 	[queuedConnections sortUsingComparator:compareConnections];
 	
 	if (active) [self dctInternal_runNextConnection];
@@ -365,7 +359,7 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 		[queuedConnections removeObject:connectionController];
 	}];
 	
-	[connectionController dctConnectionQueue_start];
+	[connectionController dctInternal_start];
 }
 
 @end
