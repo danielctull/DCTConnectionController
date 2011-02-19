@@ -59,7 +59,7 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
 /// @name Queue Settings
 
 /** The maximum number of simultaneous connections allowed at once. */
-@property (nonatomic, assign) NSInteger maxConnections;
+@property (nonatomic, assign) NSUInteger maxConnections;
 
 /// @name Managing the queue
 

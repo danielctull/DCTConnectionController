@@ -39,6 +39,7 @@
 @interface DCTConnectionQueue ()
 - (void)dctInternal_didEnterBackground:(NSNotification *)notification;
 - (void)dctInternal_willEnterForeground:(NSNotification *)notification;
+- (void)dctInternal_activeConnectionCountChanged:(NSNotification *)notificaiton;
 - (void)uikit_init;
 - (void)uikit_dealloc;
 
@@ -51,22 +52,10 @@
 
 
 @interface DCTConnectionController (DCTConnectionQueueUIKitAdditions)
-- (void)dctConnectionQueueUIKitAdditions_start;
-- (void)dctConnectionQueueUIKitAdditions_reset;
-- (void)dctConnectionQueueUIKitAdditions_setQueued;
+- (void)dctInternal_start;
+- (void)dctInternal_reset;
+- (void)dctInternal_setQueued;
 @end
-@implementation DCTConnectionController (DCTConnectionQueue)
-- (void)dctConnectionQueueUIKitAdditions_start {
-	[self performSelector:@selector(dctInternal_start)];
-}
-- (void)dctConnectionQueueUIKitAdditions_reset {
-	[self performSelector:@selector(dctInternal_reset)];
-}
-- (void)dctConnectionQueueUIKitAdditions_setQueued {
-	[self performSelector:@selector(dctInternal_setQueued)];
-}
-@end
-
 
 
 @implementation DCTConnectionQueue (UIKitAdditions)
@@ -176,8 +165,8 @@
 	// Remove connections that are active, but not multitasking and put them in our own queue.
 	for (DCTConnectionController *c in self.activeConnectionControllers) {
 		if (!c.multitaskEnabled) {
-			[c dctConnectionQueueUIKitAdditions_reset];
-			[c dctConnectionQueueUIKitAdditions_setQueued];
+			[c dctInternal_reset];
+			[c dctInternal_setQueued];
 			[nonMultitaskingConnectionControllers addObject:c];
 			[self removeConnectionController:c];
 		}
