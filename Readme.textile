@@ -12,6 +12,14 @@ h2. Documentation
 
 There exists some pretty extensive "DCTConnectionController documentation":http://danieltull.co.uk/DCTConnectionController/Documentation/ generated with "appledoc":https://github.com/tomaz/appledoc.
 
+h2. Services
+
+The following services have been written using connection controllers:
+
+* "DCTInstapaper":https://github.com/danielctull/DCTInstapaper
+* "DCTGravatar":https://github.com/danielctull/DCTGravatar
+
+
 h2. Branch Structure
 
 There are two branches to this repository, *master* and *production*, these are described below. (Thanks to "Abizer":https://github.com/Abizern for showing me this method and for his initial writeup below.)
