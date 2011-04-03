@@ -29,7 +29,6 @@
 		240567A71348C814004FF828 /* DCTURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 240567901348C814004FF828 /* DCTURLConnection.m */; };
 		240567A81348C814004FF828 /* DCTConnectionQueue+UIKitAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = 240567921348C814004FF828 /* DCTConnectionQueue+UIKitAdditions.h */; };
 		240567A91348C814004FF828 /* DCTConnectionQueue+UIKitAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 240567931348C814004FF828 /* DCTConnectionQueue+UIKitAdditions.m */; };
-		240567B81348C8DD004FF828 /* libDCTFoundation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 240567B71348C8DD004FF828 /* libDCTFoundation.a */; };
 		2426CF221348C34700412223 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2426CF211348C34700412223 /* Foundation.framework */; };
 		2426CF2D1348C34700412223 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2426CF2C1348C34700412223 /* UIKit.framework */; };
 		2426CF2E1348C34700412223 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2426CF211348C34700412223 /* Foundation.framework */; };
@@ -108,7 +107,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				2426CF221348C34700412223 /* Foundation.framework in Frameworks */,
-				240567B81348C8DD004FF828 /* libDCTFoundation.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
