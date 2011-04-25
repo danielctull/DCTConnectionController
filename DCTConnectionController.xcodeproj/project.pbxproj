@@ -37,28 +37,24 @@
 		2426CF391348C34700412223 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2426CF371348C34700412223 /* InfoPlist.strings */; };
 		2426CF3C1348C34700412223 /* DCTConnectionControllerTests.h in Resources */ = {isa = PBXBuildFile; fileRef = 2426CF3B1348C34700412223 /* DCTConnectionControllerTests.h */; };
 		2426CF3E1348C34700412223 /* DCTConnectionControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 2426CF3D1348C34700412223 /* DCTConnectionControllerTests.m */; };
-		24B1A9C5134D230D00450E28 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2426CF2C1348C34700412223 /* UIKit.framework */; };
-		24B1A9C6134D230D00450E28 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2426CF211348C34700412223 /* Foundation.framework */; };
-		24B1A9C7134D230D00450E28 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2426CF2F1348C34700412223 /* CoreGraphics.framework */; };
-		24B1A9CD134D230D00450E28 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 24B1A9CB134D230D00450E28 /* InfoPlist.strings */; };
-		24B1A9D0134D230D00450E28 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 24B1A9CF134D230D00450E28 /* main.m */; };
-		24B1A9D3134D230D00450E28 /* DCTConnectionControllerAppAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 24B1A9D2134D230D00450E28 /* DCTConnectionControllerAppAppDelegate.m */; };
-		24B1A9D6134D230D00450E28 /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24B1A9D4134D230D00450E28 /* MainWindow.xib */; };
-		24B1A9DC134D245200450E28 /* libDCTConnectionController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2426CF1E1348C34700412223 /* libDCTConnectionController.a */; };
-		24B1A9DE134D245500450E28 /* libDCTFoundation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 24B1A9DD134D245500450E28 /* libDCTFoundation.a */; };
-		24B1A9E2134D24A500450E28 /* DCTConnectionKitExampleView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24B1A9DF134D24A500450E28 /* DCTConnectionKitExampleView.xib */; };
-		24B1A9E3134D24A500450E28 /* DCTConnectionKitExampleViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24B1A9E1134D24A500450E28 /* DCTConnectionKitExampleViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		2426CF311348C34700412223 /* PBXContainerItemProxy */ = {
+		240567B31348C8C5004FF828 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
-			containerPortal = 2426CF151348C34700412223 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 2426CF1D1348C34700412223;
-			remoteInfo = DCTConnectionController;
+			containerPortal = 240567AB1348C8C5004FF828 /* DCTFoundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 24C46E791348AE1500758AE8;
+			remoteInfo = DCTFoundation;
 		};
-		24B1A9DA134D243F00450E28 /* PBXContainerItemProxy */ = {
+		240567B51348C8C5004FF828 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 240567AB1348C8C5004FF828 /* DCTFoundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 24C46E861348AE1500758AE8;
+			remoteInfo = DCTFoundationTests;
+		};
+		2426CF311348C34700412223 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 2426CF151348C34700412223 /* Project object */;
 			proxyType = 1;
@@ -90,6 +86,7 @@
 		240567901348C814004FF828 /* DCTURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTURLConnection.m; sourceTree = "<group>"; };
 		240567921348C814004FF828 /* DCTConnectionQueue+UIKitAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionQueue+UIKitAdditions.h"; sourceTree = "<group>"; };
 		240567931348C814004FF828 /* DCTConnectionQueue+UIKitAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionQueue+UIKitAdditions.m"; sourceTree = "<group>"; };
+		240567AB1348C8C5004FF828 /* DCTFoundation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = DCTFoundation.xcodeproj; path = DCTFoundation/DCTFoundation.xcodeproj; sourceTree = "<group>"; };
 		240567B71348C8DD004FF828 /* libDCTFoundation.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libDCTFoundation.a; sourceTree = SOURCE_ROOT; };
 		2426CF1E1348C34700412223 /* libDCTConnectionController.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDCTConnectionController.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		2426CF211348C34700412223 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -102,18 +99,6 @@
 		2426CF3A1348C34700412223 /* DCTConnectionControllerTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionControllerTests-Prefix.pch"; sourceTree = "<group>"; };
 		2426CF3B1348C34700412223 /* DCTConnectionControllerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DCTConnectionControllerTests.h; sourceTree = "<group>"; };
 		2426CF3D1348C34700412223 /* DCTConnectionControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionControllerTests.m; sourceTree = "<group>"; };
-		24B1A9C3134D230D00450E28 /* DCTConnectionControllerApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DCTConnectionControllerApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		24B1A9CA134D230D00450E28 /* DCTConnectionControllerApp-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DCTConnectionControllerApp-Info.plist"; sourceTree = "<group>"; };
-		24B1A9CC134D230D00450E28 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
-		24B1A9CE134D230D00450E28 /* DCTConnectionControllerApp-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionControllerApp-Prefix.pch"; sourceTree = "<group>"; };
-		24B1A9CF134D230D00450E28 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		24B1A9D1134D230D00450E28 /* DCTConnectionControllerAppAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DCTConnectionControllerAppAppDelegate.h; sourceTree = "<group>"; };
-		24B1A9D2134D230D00450E28 /* DCTConnectionControllerAppAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionControllerAppAppDelegate.m; sourceTree = "<group>"; };
-		24B1A9D5134D230D00450E28 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainWindow.xib; sourceTree = "<group>"; };
-		24B1A9DD134D245500450E28 /* libDCTFoundation.a */ = {isa = PBXFileReference; lastKnownFileType = file; name = libDCTFoundation.a; path = "DCTFoundation/build/Release-iphoneos/libDCTFoundation.a"; sourceTree = "<group>"; };
-		24B1A9DF134D24A500450E28 /* DCTConnectionKitExampleView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = DCTConnectionKitExampleView.xib; sourceTree = "<group>"; };
-		24B1A9E0134D24A500450E28 /* DCTConnectionKitExampleViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionKitExampleViewController.h; sourceTree = "<group>"; };
-		24B1A9E1134D24A500450E28 /* DCTConnectionKitExampleViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionKitExampleViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,18 +118,6 @@
 				2426CF2E1348C34700412223 /* Foundation.framework in Frameworks */,
 				2426CF301348C34700412223 /* CoreGraphics.framework in Frameworks */,
 				2426CF331348C34700412223 /* libDCTConnectionController.a in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		24B1A9C0134D230D00450E28 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				24B1A9DE134D245500450E28 /* libDCTFoundation.a in Frameworks */,
-				24B1A9DC134D245200450E28 /* libDCTConnectionController.a in Frameworks */,
-				24B1A9C5134D230D00450E28 /* UIKit.framework in Frameworks */,
-				24B1A9C6134D230D00450E28 /* Foundation.framework in Frameworks */,
-				24B1A9C7134D230D00450E28 /* CoreGraphics.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -182,10 +155,18 @@
 			path = "UIKit Additions";
 			sourceTree = "<group>";
 		};
+		240567AC1348C8C5004FF828 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				240567B41348C8C5004FF828 /* libDCTFoundation.a */,
+				240567B61348C8C5004FF828 /* DCTFoundationTests.octest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		240567B91348C8E9004FF828 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				24B1A9DD134D245500450E28 /* libDCTFoundation.a */,
 				240567B71348C8DD004FF828 /* libDCTFoundation.a */,
 			);
 			name = Libraries;
@@ -194,6 +175,7 @@
 		2426CF131348C34700412223 = {
 			isa = PBXGroup;
 			children = (
+				240567AB1348C8C5004FF828 /* DCTFoundation.xcodeproj */,
 				2405677B1348C814004FF828 /* Categories */,
 				240567801348C814004FF828 /* Connection Controllers */,
 				240567851348C814004FF828 /* DCTConnectionController.h */,
@@ -211,7 +193,6 @@
 				240567911348C814004FF828 /* UIKit Additions */,
 				2426CF231348C34700412223 /* DCTConnectionController */,
 				2426CF341348C34700412223 /* DCTConnectionControllerTests */,
-				24B1A9C8134D230D00450E28 /* DCTConnectionControllerApp */,
 				240567B91348C8E9004FF828 /* Libraries */,
 				2426CF201348C34700412223 /* Frameworks */,
 				2426CF1F1348C34700412223 /* Products */,
@@ -223,7 +204,6 @@
 			children = (
 				2426CF1E1348C34700412223 /* libDCTConnectionController.a */,
 				2426CF2B1348C34700412223 /* DCTConnectionControllerTests.octest */,
-				24B1A9C3134D230D00450E28 /* DCTConnectionControllerApp.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -270,31 +250,6 @@
 				2426CF361348C34700412223 /* DCTConnectionControllerTests-Info.plist */,
 				2426CF371348C34700412223 /* InfoPlist.strings */,
 				2426CF3A1348C34700412223 /* DCTConnectionControllerTests-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
-		24B1A9C8134D230D00450E28 /* DCTConnectionControllerApp */ = {
-			isa = PBXGroup;
-			children = (
-				24B1A9D1134D230D00450E28 /* DCTConnectionControllerAppAppDelegate.h */,
-				24B1A9D2134D230D00450E28 /* DCTConnectionControllerAppAppDelegate.m */,
-				24B1A9D4134D230D00450E28 /* MainWindow.xib */,
-				24B1A9DF134D24A500450E28 /* DCTConnectionKitExampleView.xib */,
-				24B1A9E0134D24A500450E28 /* DCTConnectionKitExampleViewController.h */,
-				24B1A9E1134D24A500450E28 /* DCTConnectionKitExampleViewController.m */,
-				24B1A9C9134D230D00450E28 /* Supporting Files */,
-			);
-			path = DCTConnectionControllerApp;
-			sourceTree = "<group>";
-		};
-		24B1A9C9134D230D00450E28 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				24B1A9CA134D230D00450E28 /* DCTConnectionControllerApp-Info.plist */,
-				24B1A9CB134D230D00450E28 /* InfoPlist.strings */,
-				24B1A9CE134D230D00450E28 /* DCTConnectionControllerApp-Prefix.pch */,
-				24B1A9CF134D230D00450E28 /* main.m */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -359,24 +314,6 @@
 			productReference = 2426CF2B1348C34700412223 /* DCTConnectionControllerTests.octest */;
 			productType = "com.apple.product-type.bundle";
 		};
-		24B1A9C2134D230D00450E28 /* DCTConnectionControllerApp */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 24B1A9D7134D230D00450E28 /* Build configuration list for PBXNativeTarget "DCTConnectionControllerApp" */;
-			buildPhases = (
-				24B1A9BF134D230D00450E28 /* Sources */,
-				24B1A9C0134D230D00450E28 /* Frameworks */,
-				24B1A9C1134D230D00450E28 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				24B1A9DB134D243F00450E28 /* PBXTargetDependency */,
-			);
-			name = DCTConnectionControllerApp;
-			productName = DCTConnectionControllerApp;
-			productReference = 24B1A9C3134D230D00450E28 /* DCTConnectionControllerApp.app */;
-			productType = "com.apple.product-type.application";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -395,14 +332,36 @@
 			mainGroup = 2426CF131348C34700412223;
 			productRefGroup = 2426CF1F1348C34700412223 /* Products */;
 			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 240567AC1348C8C5004FF828 /* Products */;
+					ProjectRef = 240567AB1348C8C5004FF828 /* DCTFoundation.xcodeproj */;
+				},
+			);
 			projectRoot = "";
 			targets = (
 				2426CF1D1348C34700412223 /* DCTConnectionController */,
 				2426CF2A1348C34700412223 /* DCTConnectionControllerTests */,
-				24B1A9C2134D230D00450E28 /* DCTConnectionControllerApp */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		240567B41348C8C5004FF828 /* libDCTFoundation.a */ = {
+			isa = PBXReferenceProxy;
+			fileType = archive.ar;
+			path = libDCTFoundation.a;
+			remoteRef = 240567B31348C8C5004FF828 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		240567B61348C8C5004FF828 /* DCTFoundationTests.octest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = DCTFoundationTests.octest;
+			remoteRef = 240567B51348C8C5004FF828 /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		2426CF281348C34700412223 /* Resources */ = {
@@ -411,16 +370,6 @@
 			files = (
 				2426CF391348C34700412223 /* InfoPlist.strings in Resources */,
 				2426CF3C1348C34700412223 /* DCTConnectionControllerTests.h in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		24B1A9C1134D230D00450E28 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				24B1A9CD134D230D00450E28 /* InfoPlist.strings in Resources */,
-				24B1A9D6134D230D00450E28 /* MainWindow.xib in Resources */,
-				24B1A9E2134D24A500450E28 /* DCTConnectionKitExampleView.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -469,16 +418,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		24B1A9BF134D230D00450E28 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				24B1A9D0134D230D00450E28 /* main.m in Sources */,
-				24B1A9D3134D230D00450E28 /* DCTConnectionControllerAppAppDelegate.m in Sources */,
-				24B1A9E3134D24A500450E28 /* DCTConnectionKitExampleViewController.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -486,11 +425,6 @@
 			isa = PBXTargetDependency;
 			target = 2426CF1D1348C34700412223 /* DCTConnectionController */;
 			targetProxy = 2426CF311348C34700412223 /* PBXContainerItemProxy */;
-		};
-		24B1A9DB134D243F00450E28 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 2426CF1D1348C34700412223 /* DCTConnectionController */;
-			targetProxy = 24B1A9DA134D243F00450E28 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -501,22 +435,6 @@
 				2426CF381348C34700412223 /* en */,
 			);
 			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		24B1A9CB134D230D00450E28 /* InfoPlist.strings */ = {
-			isa = PBXVariantGroup;
-			children = (
-				24B1A9CC134D230D00450E28 /* en */,
-			);
-			name = InfoPlist.strings;
-			sourceTree = "<group>";
-		};
-		24B1A9D4134D230D00450E28 /* MainWindow.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				24B1A9D5134D230D00450E28 /* en */,
-			);
-			name = MainWindow.xib;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -530,7 +448,7 @@
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = DEBUG;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = DCTFoundation/;
@@ -544,7 +462,7 @@
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
-				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
+				GCC_VERSION = com.apple.compilers.llvmgcc42;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = DCTFoundation/;
@@ -631,46 +549,6 @@
 			};
 			name = Release;
 		};
-		24B1A9D8134D230D00450E28 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = NO;
-				GCC_DYNAMIC_NO_PIC = NO;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "DCTConnectionControllerApp/DCTConnectionControllerApp-Prefix.pch";
-				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
-				INFOPLIST_FILE = "DCTConnectionControllerApp/DCTConnectionControllerApp-Info.plist";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				WRAPPER_EXTENSION = app;
-			};
-			name = Debug;
-		};
-		24B1A9D9134D230D00450E28 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				COPY_PHASE_STRIP = YES;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "DCTConnectionControllerApp/DCTConnectionControllerApp-Prefix.pch";
-				INFOPLIST_FILE = "DCTConnectionControllerApp/DCTConnectionControllerApp-Info.plist";
-				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
-				OTHER_LDFLAGS = (
-					"-ObjC",
-					"-all_load",
-				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				VALIDATE_PRODUCT = YES;
-				WRAPPER_EXTENSION = app;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -700,14 +578,6 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
-		};
-		24B1A9D7134D230D00450E28 /* Build configuration list for PBXNativeTarget "DCTConnectionControllerApp" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				24B1A9D8134D230D00450E28 /* Debug */,
-				24B1A9D9134D230D00450E28 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
 		};
 /* End XCConfigurationList section */
 	};
