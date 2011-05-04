@@ -392,7 +392,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  @param response The response returned from the connection.
  */
-- (void)receivedResponse:(NSURLResponse *)response;
+- (void)connectionDidReceiveResponse:(NSURLResponse *)response;
 
 /** This method should be used in subclasses to handle the returned data.
  
@@ -411,7 +411,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  @see receivedError:
  */
-- (void)receivedObject:(NSObject *)object;
+- (void)connectionDidReceiveObject:(NSObject *)object;
 
 /** This method should be used in subclasses to handle the returned error.
  
@@ -425,7 +425,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  @see receivedObject:
  */
-- (void)receivedError:(NSError *)error;
+- (void)connectionDidReceiveError:(NSError *)error;
 
 
 

@@ -284,7 +284,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	return request;
 }
 
-- (void)receivedObject:(NSObject *)object {
+- (void)connectionDidReceiveObject:(NSObject *)object {
 	self.returnedObject = object;
 	// Call to finish here allows subclasses to change whether a connection was successfully or not. 
 	// For example if the web service always responds successful, but returns an error in JSON, a 
@@ -292,11 +292,11 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[self dctInternal_finishWithSuccess];
 }
 
-- (void)receivedResponse:(NSURLResponse *)response {
+- (void)connectionDidReceiveResponse:(NSURLResponse *)response {
 	self.returnedResponse = response;
 }
 
-- (void)receivedError:(NSError *)error {
+- (void)connectionDidReceiveError:(NSError *)error {
 	self.returnedError = error;
 	// Call to finish here allows subclasses to change whether a connection was successfully or not. 
 	// For example if the web service always responds successful, but returns an error in JSON, a 
@@ -326,7 +326,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	}
 	
 	self.returnedResponse = response;
-    [self receivedResponse:response];
+    [self connectionDidReceiveResponse:response];
 	[self dctInternal_announceResponse];
 }
 
@@ -371,7 +371,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[urlConnection release]; urlConnection = nil;
 	
 	self.returnedObject = data;
-    [self receivedObject:data];
+    [self connectionDidReceiveObject:data];
 	[self dctInternal_finishWithSuccess];
 }
 
@@ -381,7 +381,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[urlConnection cancel];
 	[urlConnection release]; urlConnection = nil;
 	
-    [self receivedError:error];
+    [self connectionDidReceiveError:error];
 	[self dctInternal_finishWithFailure];
 }
 
