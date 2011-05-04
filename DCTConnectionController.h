@@ -80,15 +80,15 @@ typedef void (^DCTConnectionControllerCancelationBlock) ();
 
 /** Name of the notification sent out when the connection has successfully completed.
  */
-extern NSString *const DCTConnectionControllerCompletedNotification;
+extern NSString *const DCTConnectionControllerDidReceiveObjectNotification;
 
 /** Name of the notification sent out when the connection has failed.
  */
-extern NSString *const DCTConnectionControllerFailedNotification;
+extern NSString *const DCTConnectionControllerDidReceiveErrorNotification;
 
 /** Name of the notification sent out when the connection has recieved a response.
  */
-extern NSString *const DCTConnectionControllerResponseNotification;
+extern NSString *const DCTConnectionControllerDidReceiveResponseNotification;
 
 extern NSString *const DCTConnectionControllerTypeString[];
 
@@ -514,13 +514,13 @@ extern NSString *const DCTConnectionControllerTypeString[];
  @param connectionController The connection controller informing the delegate of the event.
  @param object The object returned by the connection.
  */
-- (void)connectionController:(DCTConnectionController *)connectionController didSucceedWithObject:(NSObject *)object;
+- (void)connectionController:(DCTConnectionController *)connectionController didReceiveObject:(NSObject *)object;
 /** Tells the delegate the connection has failed.
  
  @param connectionController The connection controller informing the delegate of the event.
  @param error The error received from the server.
  */
-- (void)connectionController:(DCTConnectionController *)connectionController didFailWithError:(NSError *)error;
+- (void)connectionController:(DCTConnectionController *)connectionController didReceiveError:(NSError *)error;
 
 /** Tells the delegate the connection was cancelled.
  
