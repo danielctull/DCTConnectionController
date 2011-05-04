@@ -48,7 +48,8 @@ typedef enum {
 	DCTConnectionControllerTypeOptions,		/**< Uses a OPTIONS connection. */
 	DCTConnectionControllerTypeHead,		/**< Uses a HEAD connection. */
 	DCTConnectionControllerTypeTrace,		/**< Uses a TRACE connection. */
-	DCTConnectionControllerTypeConnect		/**< Uses a CONNECT connection. */
+	DCTConnectionControllerTypeConnect,
+	DCTConnectionControllerTypePatch
 } DCTConnectionType;
 
 /** Specifies the different stages of a connection.

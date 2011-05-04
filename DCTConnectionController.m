@@ -49,7 +49,8 @@ NSString * const DCTConnectionControllerTypeString[] = {
 	@"OPTIONS",
 	@"HEAD",
 	@"TRACE",
-	@"CONNECT"
+	@"CONNECT",
+	@"PATCH"
 };
 
 
