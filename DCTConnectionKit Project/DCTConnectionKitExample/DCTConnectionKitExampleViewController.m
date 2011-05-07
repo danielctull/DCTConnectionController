@@ -24,7 +24,7 @@
 - (id)init {
 	if (!(self = [self initWithNibName:@"DCTConnectionKitExampleView" bundle:nil])) return nil;
 	
-	self.title = @"DCTConnectionKit";
+	self.title = @"DCTConnectionController";
 	
 	return self;
 }
