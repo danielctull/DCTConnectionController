@@ -39,12 +39,11 @@
 
 @implementation DCTURLConnectionController
 
-@dynamic URL;
-
+@synthesize URL=url;
 
 - (NSMutableURLRequest *)newRequest {
 	NSMutableURLRequest *request = [super newRequest];
-	[request setURL:URL];
+	[request setURL:self.URL];
 	return request;
 }
 

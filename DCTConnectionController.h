@@ -164,19 +164,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  checked for equality by `isEqualToConnectionController:`. In the future the implementation of
  `isEqualToConnectionController:` may change to one a little more concrete, but so far this has worked well for me. 
  */
-@interface DCTConnectionController : NSObject {
-	DCTURLConnection *urlConnection;
-	NSURL *URL;
-	NSMutableSet *dependencies;
-	NSMutableSet *dependents;
-	NSMutableSet *responseBlocks;
-	NSMutableSet *completionBlocks;
-	NSMutableSet *failureBlocks;
-	NSMutableSet *cancelationBlocks;
-	
-	NSFileHandle *fileHandle; // Used if a path is given.
-	float contentLength, downloadedLength;
-}
+@interface DCTConnectionController : NSObject
 
 /// @name Creating a Connection Controller
 
@@ -233,7 +221,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  Setting this will cause the connection controller to call the methods defined in DCTConnectionControllerDelegate,
  when the appropriate events occur.
  */
-@property (nonatomic, retain) id<DCTConnectionControllerDelegate> delegate;
+@property (nonatomic, strong) id<DCTConnectionControllerDelegate> delegate;
 
 
 /** The path to download the data to.

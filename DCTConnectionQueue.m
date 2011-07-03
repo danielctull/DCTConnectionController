@@ -90,7 +90,15 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 - (void)dctInternal_setQueued;
 @end
 
-@implementation DCTConnectionQueue
+@implementation DCTConnectionQueue {
+    __strong NSMutableArray *activeConnections;
+	__strong NSMutableArray *queuedConnections;
+	BOOL active;
+	NSInteger externalConnectionCount;
+	NSInteger connectionCount;
+	
+	__strong NSArray *externalConnectionCountKeys;	
+}
 
 @synthesize maxConnections;
 
@@ -119,10 +127,6 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 
 - (void)dealloc {
 	[self dct_safePerformSelector:@selector(uikit_dealloc)];
-	
-	externalConnectionCountKeys = nil;
-	 activeConnections = nil;
-	 queuedConnections = nil;
 }
 
 - (void)uikit_dealloc {}

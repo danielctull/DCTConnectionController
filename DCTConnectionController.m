@@ -100,7 +100,19 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 @end
 
 
-@implementation DCTConnectionController
+@implementation DCTConnectionController {
+	__strong DCTURLConnection *urlConnection;
+	__strong NSURL *URL;
+	__strong NSMutableSet *dependencies;
+	__strong NSMutableSet *dependents;
+	__strong NSMutableSet *responseBlocks;
+	__strong NSMutableSet *completionBlocks;
+	__strong NSMutableSet *failureBlocks;
+	__strong NSMutableSet *cancelationBlocks;
+	
+	__strong NSFileHandle *fileHandle; // Used if a path is given.
+	float contentLength, downloadedLength;
+}
 
 @synthesize status, type, priority, multitaskEnabled, URL, returnedObject, returnedError, returnedResponse, delegate, downloadPath, percentDownloaded;
 
@@ -116,20 +128,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	return self;
 }
 
-- (void)dealloc {
-	downloadPath = nil;
-	fileHandle = nil;
-	percentDownloaded = nil;
-	responseBlocks = nil;
-	completionBlocks = nil;
-	failureBlocks = nil;
-	cancelationBlocks = nil;
-	dependencies = nil;
-	dependents = nil;
-}
-
-#pragma mark -
-#pragma mark Block methods
+#pragma mark - Block methods
 
 - (void)addResponseBlock:(DCTConnectionControllerResponseBlock)block {
 	
@@ -168,8 +167,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 }
 
 
-#pragma mark -
-#pragma mark Managing the connection
+#pragma mark - Managing the connection
 
 - (void)connect {
 		
@@ -226,8 +224,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	self.status = DCTConnectionControllerStatusNotStarted;
 }
 
-#pragma mark -
-#pragma mark Dependency methods
+#pragma mark - Dependency methods
 
 - (NSArray *)dependencies {
 	return [dependencies allObjects];
@@ -272,8 +269,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	self.status = DCTConnectionControllerStatusQueued;
 }
 
-#pragma mark -
-#pragma mark Subclass methods
+#pragma mark - Subclass methods
 
 - (NSMutableURLRequest *)newRequest {
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
@@ -301,8 +297,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[self dctInternal_finishWithFailure];
 }
 
-#pragma mark -
-#pragma mark NSURLConnection delegate methods
+#pragma mark - NSURLConnection delegate methods
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
 	
@@ -380,8 +375,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[self dctInternal_finishWithFailure];
 }
 
-#pragma mark -
-#pragma mark Private methods
+#pragma mark - Private methods
 
 - (void)dctInternal_announceResponse {
 	
@@ -455,8 +449,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	dependents = nil;
 }
 
-#pragma mark -
-#pragma mark Delegate handling
+#pragma mark - Delegate handling
 
 - (void)dctInternal_sendResponseToDelegate:(NSURLResponse *)response {
 	if ([self.delegate respondsToSelector:@selector(connectionController:didReceiveResponse:)])
@@ -478,8 +471,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 		[self.delegate connectionController:self didReceiveError:error];
 }
 
-#pragma mark -
-#pragma mark Duplication handling
+#pragma mark - Duplication handling
 
 - (BOOL)isEqual:(id)object {
 	
@@ -488,8 +480,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	return [self isEqualToConnectionController:object];
 }
 
-#pragma mark -
-#pragma mark Useful checks
+#pragma mark - Useful checks
 
 - (BOOL)dctInternal_hasResponded {
 	return (self.status >= DCTConnectionControllerStatusResponded);
@@ -511,8 +502,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	return (self.status == DCTConnectionControllerStatusCancelled);
 }
 
-#pragma mark -
-#pragma mark Internal getters
+#pragma mark - Internal getters
 
 - (NSSet *)dctInternal_responseBlocks {
 	
