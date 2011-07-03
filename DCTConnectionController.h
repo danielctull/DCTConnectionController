@@ -81,15 +81,15 @@ typedef void (^DCTConnectionControllerCancelationBlock) ();
 
 /** Name of the notification sent out when the connection has successfully completed.
  */
-extern NSString *const DCTConnectionControllerCompletedNotification;
+extern NSString *const DCTConnectionControllerDidReceiveObjectNotification;
 
 /** Name of the notification sent out when the connection has failed.
  */
-extern NSString *const DCTConnectionControllerFailedNotification;
+extern NSString *const DCTConnectionControllerDidReceiveErrorNotification;
 
 /** Name of the notification sent out when the connection has recieved a response.
  */
-extern NSString *const DCTConnectionControllerResponseNotification;
+extern NSString *const DCTConnectionControllerDidReceiveResponseNotification;
 
 extern NSString *const DCTConnectionControllerTypeString[];
 
@@ -165,19 +165,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  checked for equality by `isEqualToConnectionController:`. In the future the implementation of
  `isEqualToConnectionController:` may change to one a little more concrete, but so far this has worked well for me. 
  */
-@interface DCTConnectionController : NSObject {
-	DCTURLConnection *urlConnection;
-	NSURL *URL;
-	NSMutableSet *dependencies;
-	NSMutableSet *dependents;
-	NSMutableSet *responseBlocks;
-	NSMutableSet *completionBlocks;
-	NSMutableSet *failureBlocks;
-	NSMutableSet *cancelationBlocks;
-	
-	NSFileHandle *fileHandle; // Used if a path is given.
-	float contentLength, downloadedLength;
-}
+@interface DCTConnectionController : NSObject
 
 /// @name Creating a Connection Controller
 
@@ -234,7 +222,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  Setting this will cause the connection controller to call the methods defined in DCTConnectionControllerDelegate,
  when the appropriate events occur.
  */
-@property (nonatomic, retain) id<DCTConnectionControllerDelegate> delegate;
+@property (nonatomic, strong) id<DCTConnectionControllerDelegate> delegate;
 
 
 /** The path to download the data to.
@@ -393,7 +381,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  @param response The response returned from the connection.
  */
-- (void)receivedResponse:(NSURLResponse *)response;
+- (void)connectionDidReceiveResponse:(NSURLResponse *)response;
 
 /** This method should be used in subclasses to handle the returned data.
  
@@ -412,7 +400,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  @see receivedError:
  */
-- (void)receivedObject:(NSObject *)object;
+- (void)connectionDidReceiveObject:(NSObject *)object;
 
 /** This method should be used in subclasses to handle the returned error.
  
@@ -426,7 +414,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  @see receivedObject:
  */
-- (void)receivedError:(NSError *)error;
+- (void)connectionDidReceiveError:(NSError *)error;
 
 
 
@@ -515,13 +503,13 @@ extern NSString *const DCTConnectionControllerTypeString[];
  @param connectionController The connection controller informing the delegate of the event.
  @param object The object returned by the connection.
  */
-- (void)connectionController:(DCTConnectionController *)connectionController didSucceedWithObject:(NSObject *)object;
+- (void)connectionController:(DCTConnectionController *)connectionController didReceiveObject:(NSObject *)object;
 /** Tells the delegate the connection has failed.
  
  @param connectionController The connection controller informing the delegate of the event.
  @param error The error received from the server.
  */
-- (void)connectionController:(DCTConnectionController *)connectionController didFailWithError:(NSError *)error;
+- (void)connectionController:(DCTConnectionController *)connectionController didReceiveError:(NSError *)error;
 
 /** Tells the delegate the connection was cancelled.
  

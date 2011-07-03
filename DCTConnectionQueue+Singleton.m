@@ -40,28 +40,11 @@ static DCTConnectionQueue *sharedInstance = nil;
 
 @implementation DCTConnectionQueue (Singleton)
 
-/*+ (void)initialize {
-    if (!sharedInstance) {
-        sharedInstance = [[self alloc] init];
-    }
-}*/
-
 + (DCTConnectionQueue *)sharedConnectionQueue {
 	
 	if (!sharedInstance) sharedInstance = [[self alloc] init];
 	
     return sharedInstance;
-}
-
-+ (id)allocWithZone:(NSZone *)zone {
-    //Usually already set by +initialize.
-    if (sharedInstance) {
-        //The caller expects to receive a new object, so implicitly retain it to balance out the caller's eventual release message.
-        return [sharedInstance retain];
-    } else {
-        //When not already set, +initialize is our caller—it's creating the shared instance. Let this go through.
-        return [super allocWithZone:zone];
-    }
 }
 
 @end
