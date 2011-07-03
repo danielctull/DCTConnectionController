@@ -46,16 +46,10 @@
 	DCTConnectionKitExampleViewController *viewController = [[DCTConnectionKitExampleViewController alloc] init];
 	nav = [[UINavigationController alloc] initWithRootViewController:viewController];
 	[window addSubview:nav.view];
-	[viewController release];
     [window makeKeyAndVisible];
 }
 
 
-- (void)dealloc {
-	[nav release];
-    [window release];
-    [super dealloc];
-}
 
 
 @end

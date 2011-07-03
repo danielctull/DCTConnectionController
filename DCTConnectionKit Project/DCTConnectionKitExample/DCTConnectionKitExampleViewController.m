@@ -31,8 +31,6 @@
 
 - (void)dealloc {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	[textView release];
-    [super dealloc];
 }
 
 - (void)viewDidLoad {
@@ -127,7 +125,6 @@
 	NSDateFormatter *df = [[NSDateFormatter alloc] init];
 	[df setDateFormat:@"HH:mm:ss.SSS"];
 	NSString *dateString = [df stringFromDate:[NSDate date]]; 
-	[df release];
 		
 	NSString *newLine = @"";
 	if ([self.textView.text length] > 0) {

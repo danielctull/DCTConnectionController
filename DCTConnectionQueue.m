@@ -107,7 +107,7 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 	queuedConnections = [[NSMutableArray alloc] init];
 	active = YES;
 	self.maxConnections = 5;
-	externalConnectionCountKeys = [[NSArray arrayWithObjects:DCTConnectionQueueActiveConnectionCountKey, DCTConnectionQueueConnectionCountKey, nil] retain];
+	externalConnectionCountKeys = [NSArray arrayWithObjects:DCTConnectionQueueActiveConnectionCountKey, DCTConnectionQueueConnectionCountKey, nil];
 	
 	[self addObserver:self forKeyPath:DCTConnectionQueueConnectionCountKey options:NSKeyValueObservingOptionNew context:nil];
 	[self addObserver:self forKeyPath:DCTConnectionQueueActiveConnectionCountKey options:NSKeyValueObservingOptionNew context:nil];
@@ -120,10 +120,9 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 - (void)dealloc {
 	[self dct_safePerformSelector:@selector(uikit_dealloc)];
 	
-	[externalConnectionCountKeys release], externalConnectionCountKeys = nil;
-	[activeConnections release]; activeConnections = nil;
-	[queuedConnections release]; queuedConnections = nil;
-	[super dealloc];
+	externalConnectionCountKeys = nil;
+	 activeConnections = nil;
+	 queuedConnections = nil;
 }
 
 - (void)uikit_dealloc {}
@@ -167,11 +166,9 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 }
 
 - (void)requeueConnectionController:(DCTConnectionController *)connectionController {
-	[connectionController retain];
 	[self dctInternal_removeActiveConnection:connectionController];
 	[connectionController dctInternal_reset];
 	[self dctInternal_addConnectionControllerToQueue:connectionController];
-	[connectionController release];
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath

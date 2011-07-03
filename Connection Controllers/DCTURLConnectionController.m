@@ -41,9 +41,6 @@
 
 @dynamic URL;
 
-- (void)dealloc {
-	[super dealloc];
-}
 
 - (NSMutableURLRequest *)newRequest {
 	NSMutableURLRequest *request = [super newRequest];

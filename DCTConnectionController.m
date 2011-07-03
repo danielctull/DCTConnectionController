@@ -105,7 +105,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 @synthesize status, type, priority, multitaskEnabled, URL, returnedObject, returnedError, returnedResponse, delegate, downloadPath, percentDownloaded;
 
 + (id)connectionController {
-	return [[[self alloc] init] autorelease];
+	return [[self alloc] init];
 }
 
 - (id)init {
@@ -117,16 +117,15 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 }
 
 - (void)dealloc {
-	[downloadPath release], downloadPath = nil;
-	[fileHandle release], fileHandle = nil;
-	[percentDownloaded release], percentDownloaded = nil;
-	[responseBlocks release], responseBlocks = nil;
-	[completionBlocks release], completionBlocks = nil;
-	[failureBlocks release], failureBlocks = nil;
-	[cancelationBlocks release], cancelationBlocks = nil;
-	[dependencies release], dependencies = nil;
-	[dependents release], dependents = nil;
-	[super dealloc];
+	downloadPath = nil;
+	fileHandle = nil;
+	percentDownloaded = nil;
+	responseBlocks = nil;
+	completionBlocks = nil;
+	failureBlocks = nil;
+	cancelationBlocks = nil;
+	dependencies = nil;
+	dependents = nil;
 }
 
 #pragma mark -
@@ -215,12 +214,12 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 - (void)cancel {
 	[urlConnection cancel];
 	[self dctInternal_finishWithCancelation];
-	[urlConnection release]; urlConnection = nil;
+	 urlConnection = nil;
 }
 
 - (void)dctInternal_reset {
 	[urlConnection cancel];
-	[urlConnection release]; urlConnection = nil;
+	 urlConnection = nil;
 	self.returnedResponse = nil;
 	self.returnedError = nil;
 	self.returnedObject = nil;
@@ -256,7 +255,6 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
 	// Make sure it isn't there
 	[urlConnection cancel];
-	[urlConnection release];
 	urlConnection = nil;
 	
 	NSURLRequest *request = [self newRequest];
@@ -264,7 +262,6 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	self.URL = [request URL];
 	
 	urlConnection = [[DCTURLConnection alloc] initWithRequest:request delegate:self];
-	[request release];
 	
 	self.status = DCTConnectionControllerStatusStarted;
 	
@@ -322,7 +319,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 							 contents:nil
 						   attributes:nil];
 	
-		fileHandle = [[NSFileHandle fileHandleForUpdatingAtPath:self.downloadPath] retain];
+		fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.downloadPath];
 	}
 	
 	self.returnedResponse = response;
@@ -335,8 +332,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	if (contentLength > 0) {
 		downloadedLength += (float)[data length];
 		[self dct_changeValueForKey:@"percentDownloaded" withChange:^{
-			[percentDownloaded release];
-			percentDownloaded = [[NSNumber numberWithFloat:(downloadedLength / contentLength)] retain];
+			percentDownloaded = [NSNumber numberWithFloat:(downloadedLength / contentLength)];
 			
 		}];
 	}
@@ -354,8 +350,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
 	if ([self.percentDownloaded integerValue] < 1.0) {
 		[self dct_changeValueForKey:@"percentDownloaded" withChange:^{
-			[percentDownloaded release];
-			percentDownloaded = [[NSNumber numberWithInteger:1] retain];
+			percentDownloaded = [NSNumber numberWithInteger:1];
 			
 		}];
 	}
@@ -368,7 +363,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	}
 	
 	[urlConnection cancel];
-	[urlConnection release]; urlConnection = nil;
+	 urlConnection = nil;
 	
 	self.returnedObject = data;
     [self connectionDidReceiveObject:data];
@@ -379,7 +374,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	self.returnedError = error;
 	
 	[urlConnection cancel];
-	[urlConnection release]; urlConnection = nil;
+	 urlConnection = nil;
 	
     [self connectionDidReceiveError:error];
 	[self dctInternal_finishWithFailure];
@@ -452,12 +447,12 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 }
 
 - (void)dctInternal_finish {
-	[delegate release]; delegate = nil;
+	 delegate = nil;
 	
 	for (DCTConnectionController *dependent in self.dctInternal_dependents)
 		[dependent removeDependency:self];
 	
-	[dependents release], dependents = nil;
+	dependents = nil;
 }
 
 #pragma mark -
