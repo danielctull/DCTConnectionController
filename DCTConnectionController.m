@@ -49,13 +49,14 @@ NSString * const DCTConnectionControllerTypeString[] = {
 	@"OPTIONS",
 	@"HEAD",
 	@"TRACE",
-	@"CONNECT"
+	@"CONNECT",
+	@"PATCH"
 };
 
 
-NSString *const DCTConnectionControllerCompletedNotification = @"DCTConnectionControllerCompletedNotification";
-NSString *const DCTConnectionControllerFailedNotification = @"DCTConnectionControllerFailedNotification";
-NSString *const DCTConnectionControllerResponseNotification = @"DCTConnectionControllerResponseNotification";
+NSString *const DCTConnectionControllerDidReceiveObjectNotification = @"DCTConnectionControllerDidReceiveObjectNotification";
+NSString *const DCTConnectionControllerDidReceiveErrorNotification = @"DCTConnectionControllerDidReceiveErrorNotification";
+NSString *const DCTConnectionControllerDidReceiveResponseNotification = @"DCTConnectionControllerDidReceiveResponseNotification";
 NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectionControllerCancellationNotification";
 
 @interface DCTConnectionController ()
@@ -100,12 +101,24 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 @end
 
 
-@implementation DCTConnectionController
+@implementation DCTConnectionController {
+	__strong DCTURLConnection *urlConnection;
+	__strong NSURL *URL;
+	__strong NSMutableSet *dependencies;
+	__strong NSMutableSet *dependents;
+	__strong NSMutableSet *responseBlocks;
+	__strong NSMutableSet *completionBlocks;
+	__strong NSMutableSet *failureBlocks;
+	__strong NSMutableSet *cancelationBlocks;
+	
+	__strong NSFileHandle *fileHandle; // Used if a path is given.
+	float contentLength, downloadedLength;
+}
 
 @synthesize status, type, priority, multitaskEnabled, URL, returnedObject, returnedError, returnedResponse, delegate, downloadPath, percentDownloaded;
 
 + (id)connectionController {
-	return [[[self alloc] init] autorelease];
+	return [[self alloc] init];
 }
 
 - (id)init {
@@ -116,21 +129,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	return self;
 }
 
-- (void)dealloc {
-	[downloadPath release], downloadPath = nil;
-	[fileHandle release], fileHandle = nil;
-	[percentDownloaded release], percentDownloaded = nil;
-	[responseBlocks release], responseBlocks = nil;
-	[completionBlocks release], completionBlocks = nil;
-	[failureBlocks release], failureBlocks = nil;
-	[cancelationBlocks release], cancelationBlocks = nil;
-	[dependencies release], dependencies = nil;
-	[dependents release], dependents = nil;
-	[super dealloc];
-}
-
-#pragma mark -
-#pragma mark Block methods
+#pragma mark - Block methods
 
 - (void)addResponseBlock:(DCTConnectionControllerResponseBlock)block {
 	
@@ -169,8 +168,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 }
 
 
-#pragma mark -
-#pragma mark Managing the connection
+#pragma mark - Managing the connection
 
 - (void)connect {
 		
@@ -215,20 +213,19 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 - (void)cancel {
 	[urlConnection cancel];
 	[self dctInternal_finishWithCancelation];
-	[urlConnection release]; urlConnection = nil;
+	 urlConnection = nil;
 }
 
 - (void)dctInternal_reset {
 	[urlConnection cancel];
-	[urlConnection release]; urlConnection = nil;
+	 urlConnection = nil;
 	self.returnedResponse = nil;
 	self.returnedError = nil;
 	self.returnedObject = nil;
 	self.status = DCTConnectionControllerStatusNotStarted;
 }
 
-#pragma mark -
-#pragma mark Dependency methods
+#pragma mark - Dependency methods
 
 - (NSArray *)dependencies {
 	return [dependencies allObjects];
@@ -256,7 +253,6 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
 	// Make sure it isn't there
 	[urlConnection cancel];
-	[urlConnection release];
 	urlConnection = nil;
 	
 	NSURLRequest *request = [self newRequest];
@@ -264,7 +260,6 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	self.URL = [request URL];
 	
 	urlConnection = [[DCTURLConnection alloc] initWithRequest:request delegate:self];
-	[request release];
 	
 	self.status = DCTConnectionControllerStatusStarted;
 	
@@ -275,8 +270,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	self.status = DCTConnectionControllerStatusQueued;
 }
 
-#pragma mark -
-#pragma mark Subclass methods
+#pragma mark - Subclass methods
 
 - (NSMutableURLRequest *)newRequest {
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
@@ -284,7 +278,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	return request;
 }
 
-- (void)receivedObject:(NSObject *)object {
+- (void)connectionDidReceiveObject:(NSObject *)object {
 	self.returnedObject = object;
 	// Call to finish here allows subclasses to change whether a connection was successfully or not. 
 	// For example if the web service always responds successful, but returns an error in JSON, a 
@@ -292,11 +286,11 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[self dctInternal_finishWithSuccess];
 }
 
-- (void)receivedResponse:(NSURLResponse *)response {
+- (void)connectionDidReceiveResponse:(NSURLResponse *)response {
 	self.returnedResponse = response;
 }
 
-- (void)receivedError:(NSError *)error {
+- (void)connectionDidReceiveError:(NSError *)error {
 	self.returnedError = error;
 	// Call to finish here allows subclasses to change whether a connection was successfully or not. 
 	// For example if the web service always responds successful, but returns an error in JSON, a 
@@ -304,8 +298,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[self dctInternal_finishWithFailure];
 }
 
-#pragma mark -
-#pragma mark NSURLConnection delegate methods
+#pragma mark - NSURLConnection delegate methods
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
 	
@@ -322,11 +315,11 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 							 contents:nil
 						   attributes:nil];
 	
-		fileHandle = [[NSFileHandle fileHandleForUpdatingAtPath:self.downloadPath] retain];
+		fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.downloadPath];
 	}
 	
 	self.returnedResponse = response;
-    [self receivedResponse:response];
+    [self connectionDidReceiveResponse:response];
 	[self dctInternal_announceResponse];
 }
 
@@ -335,8 +328,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	if (contentLength > 0) {
 		downloadedLength += (float)[data length];
 		[self dct_changeValueForKey:@"percentDownloaded" withChange:^{
-			[percentDownloaded release];
-			percentDownloaded = [[NSNumber numberWithFloat:(downloadedLength / contentLength)] retain];
+			percentDownloaded = [NSNumber numberWithFloat:(downloadedLength / contentLength)];
 			
 		}];
 	}
@@ -354,8 +346,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
 	if ([self.percentDownloaded integerValue] < 1.0) {
 		[self dct_changeValueForKey:@"percentDownloaded" withChange:^{
-			[percentDownloaded release];
-			percentDownloaded = [[NSNumber numberWithInteger:1] retain];
+			percentDownloaded = [NSNumber numberWithInteger:1];
 			
 		}];
 	}
@@ -368,10 +359,10 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	}
 	
 	[urlConnection cancel];
-	[urlConnection release]; urlConnection = nil;
+	 urlConnection = nil;
 	
 	self.returnedObject = data;
-    [self receivedObject:data];
+    [self connectionDidReceiveObject:data];
 	[self dctInternal_finishWithSuccess];
 }
 
@@ -379,14 +370,13 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	self.returnedError = error;
 	
 	[urlConnection cancel];
-	[urlConnection release]; urlConnection = nil;
+	 urlConnection = nil;
 	
-    [self receivedError:error];
+    [self connectionDidReceiveError:error];
 	[self dctInternal_finishWithFailure];
 }
 
-#pragma mark -
-#pragma mark Private methods
+#pragma mark - Private methods
 
 - (void)dctInternal_announceResponse {
 	
@@ -397,7 +387,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
 	[self dctInternal_sendResponseToDelegate:response];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerResponseNotification object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerDidReceiveResponseNotification object:self];
 	
 	self.status = DCTConnectionControllerStatusResponded;
 }
@@ -412,7 +402,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
 	[self dctInternal_sendObjectToDelegate:object];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerCompletedNotification object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerDidReceiveObjectNotification object:self];
 	
 	[self dctInternal_finish];
 	
@@ -429,7 +419,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
 	[self dctInternal_sendErrorToDelegate:error];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerFailedNotification object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerDidReceiveErrorNotification object:self];
 
 	[self dctInternal_finish];
 	
@@ -452,16 +442,15 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 }
 
 - (void)dctInternal_finish {
-	[delegate release]; delegate = nil;
+	 delegate = nil;
 	
 	for (DCTConnectionController *dependent in self.dctInternal_dependents)
 		[dependent removeDependency:self];
 	
-	[dependents release], dependents = nil;
+	dependents = nil;
 }
 
-#pragma mark -
-#pragma mark Delegate handling
+#pragma mark - Delegate handling
 
 - (void)dctInternal_sendResponseToDelegate:(NSURLResponse *)response {
 	if ([self.delegate respondsToSelector:@selector(connectionController:didReceiveResponse:)])
@@ -474,17 +463,16 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 }
 
 - (void)dctInternal_sendObjectToDelegate:(id)object {
-	if ([self.delegate respondsToSelector:@selector(connectionController:didSucceedWithObject:)])
-		[self.delegate connectionController:self didSucceedWithObject:object];
+	if ([self.delegate respondsToSelector:@selector(connectionController:didReceiveObject:)])
+		[self.delegate connectionController:self didReceiveObject:object];
 }
 
 - (void)dctInternal_sendErrorToDelegate:(NSError *)error {
-	if ([self.delegate respondsToSelector:@selector(connectionController:didFailWithError:)])
-		[self.delegate connectionController:self didFailWithError:error];
+	if ([self.delegate respondsToSelector:@selector(connectionController:didReceiveError:)])
+		[self.delegate connectionController:self didReceiveError:error];
 }
 
-#pragma mark -
-#pragma mark Duplication handling
+#pragma mark - Duplication handling
 
 - (BOOL)isEqual:(id)object {
 	
@@ -493,8 +481,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	return [self isEqualToConnectionController:object];
 }
 
-#pragma mark -
-#pragma mark Useful checks
+#pragma mark - Useful checks
 
 - (BOOL)dctInternal_hasResponded {
 	return (self.status >= DCTConnectionControllerStatusResponded);
@@ -516,8 +503,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	return (self.status == DCTConnectionControllerStatusCancelled);
 }
 
-#pragma mark -
-#pragma mark Internal getters
+#pragma mark - Internal getters
 
 - (NSSet *)dctInternal_responseBlocks {
 	

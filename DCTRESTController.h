@@ -43,8 +43,7 @@
  implement these methods to allow DCTRESTController to build the request, rather than implementing newRequest as you
  would with other connection controllers.
  */
-@interface DCTRESTController : DCTConnectionController {
-}
+@interface DCTRESTController : DCTConnectionController
 
 /// @name Methods to subclass
 

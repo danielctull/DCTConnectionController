@@ -51,7 +51,7 @@
 	
 	data = [[NSData alloc] init];
 	self.identifier = [[NSProcessInfo processInfo] globallyUniqueString];
-	URL = [[request URL] retain];
+	URL = [request URL];
 		
 	return self;
 }
@@ -69,28 +69,20 @@
 }
 
 + (id)connectionWithRequest:(NSURLRequest *)request delegate:(id)delegate {
-	return [[[DCTURLConnection alloc] initWithRequest:request delegate:delegate] autorelease];
+	return [[DCTURLConnection alloc] initWithRequest:request delegate:delegate];
 }
 
-- (void)dealloc {
-    [data release];
-    [identifier release];
-	[URL release];
-    [super dealloc];
-}
 
 - (void)resetDataLength {
 	NSMutableData *mData = [self.data mutableCopy];
 	[mData setLength:0];
 	self.data = mData;
-	[mData release];
 }
 
 - (void)appendData:(NSData *)someData {
 	NSMutableData *mData = [self.data mutableCopy];
 	[mData appendData:someData];
 	self.data = (NSData *)mData;
-	[mData release];
 }
 
 - (NSString *)description {

@@ -142,7 +142,6 @@
 	if (inBackground) return;
 	inBackground = YES;
 	
-	[nonMultitaskingConnectionControllers release];
 	nonMultitaskingConnectionControllers = [[NSMutableArray alloc] init];
 	
 	if (!self.multitaskEnabled) {
@@ -180,7 +179,6 @@
 	for (DCTConnectionController *c in nonMultitaskingConnectionControllers)
 		[self addConnectionController:c];
 	
-	[nonMultitaskingConnectionControllers release];
 	nonMultitaskingConnectionControllers = nil;
 	[self start];
 }

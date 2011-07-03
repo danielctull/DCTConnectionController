@@ -41,16 +41,8 @@ extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotification;
 
 @interface DCTConnectionQueue : NSObject {
-    NSMutableArray *activeConnections;
-	NSMutableArray *queuedConnections;
-	BOOL active;
-	NSInteger externalConnectionCount;
-	NSInteger connectionCount;
-	
-	NSArray *externalConnectionCountKeys;
-	
 	// Needed for multitasking on the iPhone, which is added as a category.	
-	NSMutableArray *nonMultitaskingConnectionControllers;
+	__strong NSMutableArray *nonMultitaskingConnectionControllers;
 	NSUInteger backgroundTaskIdentifier;
 	BOOL inBackground;
 	BOOL multitaskEnabled;

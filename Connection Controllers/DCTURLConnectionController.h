@@ -38,10 +38,9 @@
 #import "DCTConnectionController.h"
 
 /** Another simple connection controller subclass.*/
-@interface DCTURLConnectionController : DCTConnectionController {
-}
+@interface DCTURLConnectionController : DCTConnectionController
 
 /** The URL to load. */
-@property (nonatomic, retain, readwrite) NSURL *URL;
+@property (nonatomic, strong) NSURL *URL;
 
 @end

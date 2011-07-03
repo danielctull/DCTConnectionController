@@ -40,15 +40,11 @@
 @implementation NSString (DCTURLEncoding)
 - (NSString *)dct_urlEncodedString {
 	
-	CFStringRef encodedString = CFURLCreateStringByAddingPercentEscapes(NULL,
-																		(CFStringRef)self,
-																		NULL,
-																		(CFStringRef)@"!*'();:@&=+$,/?%#[]",
-																		kCFStringEncodingUTF8);
-	
-	NSString *string = [[(NSString *)encodedString retain] autorelease];
-	CFRelease(encodedString);
-	return string;
+	return (__bridge_transfer NSString *) CFURLCreateStringByAddingPercentEscapes(NULL,
+																				  (CFStringRef)objc_unretainedPointer(self),
+																				  NULL,
+																				  (CFStringRef)@"!*'();:@&=+$,/?%#[]",
+																				  kCFStringEncodingUTF8);
 }
 
 @end

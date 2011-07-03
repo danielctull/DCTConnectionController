@@ -78,7 +78,7 @@
 		aClass = [aClass superclass];
 	}
 	
-	return [array autorelease];
+	return array;
 }
 
 - (NSArray *)dctInternal_propertiesOfClass:(Class)class {
@@ -92,13 +92,13 @@
 	for (NSUInteger i = 0; i < outCount; i++) {
 		objc_property_t property = properties[i];
 		const char *propertyName = property_getName(property);
-		NSString *nameString = [[[NSString alloc] initWithCString:propertyName] autorelease];
+		NSString *nameString = [[NSString alloc] initWithCString:propertyName encoding:NSUTF8StringEncoding];
 		[array addObject:nameString];
 	}
 	
 	free(properties);
 	
-	return [array autorelease];
+	return array;
 	
 }
 
