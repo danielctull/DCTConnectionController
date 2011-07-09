@@ -125,6 +125,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	if (!(self = [super init])) return nil;
 	
 	priority = DCTConnectionControllerPriorityMedium;
+	percentDownloaded = [[NSNumber alloc] initWithInteger:0];
 	
 	return self;
 }
