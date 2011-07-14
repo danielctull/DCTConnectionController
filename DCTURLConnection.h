@@ -59,7 +59,7 @@
 
 /** The URL of the given request.
  */
-@property (readonly, retain) NSURL *URL;
+@property (readonly, strong) NSURL *URL;
 
 /**
  @}

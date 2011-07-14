@@ -45,6 +45,6 @@
 
 /** The request to load. 
  */
-@property (nonatomic, retain) NSURLRequest *request;
+@property (nonatomic, strong) NSURLRequest *request;
 
 @end
