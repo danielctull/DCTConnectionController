@@ -132,7 +132,9 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 	float contentLength, downloadedLength;
 }
 
-@synthesize status, type, priority, multitaskEnabled, URL, returnedObject, returnedError, returnedResponse, delegate, downloadPath, percentDownloaded;
+@synthesize status, type, priority, multitaskEnabled, delegate, downloadPath, percentDownloaded;
+@synthesize returnedObject, returnedError, returnedResponse;
+@synthesize URL, URLRequest;
 
 + (id)connectionController {
 	return [[self alloc] init];
@@ -289,11 +291,11 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 	[urlConnection cancel];
 	urlConnection = nil;
 	
-	NSURLRequest *request = [self newRequest];
+	if (!self.URLRequest) URLRequest = [self newRequest];
 	
-	[self dctInternal_setURL:[request URL]];
+	[self dctInternal_setURL:[URLRequest URL]];
 	
-	urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
+	urlConnection = [[NSURLConnection alloc] initWithRequest:URLRequest delegate:self];
 	
 	self.status = DCTConnectionControllerStatusStarted;
 	
