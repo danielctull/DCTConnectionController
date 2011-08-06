@@ -120,7 +120,6 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 
 
 @implementation DCTConnectionController {
-	__strong NSURLConnection *urlConnection;
 	__strong NSMutableSet *dependencies;
 	__strong NSMutableSet *dependents;
 	__strong NSMutableSet *responseBlocks;
@@ -134,7 +133,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 
 @synthesize status, type, priority, multitaskEnabled, delegate, downloadPath, percentDownloaded;
 @synthesize returnedObject, returnedError, returnedResponse;
-@synthesize URL, URLRequest;
+@synthesize URL, URLRequest, URLConnection;
 
 + (id)connectionController {
 	return [[self alloc] init];
@@ -245,14 +244,14 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 }
 
 - (void)cancel {
-	[urlConnection cancel];
+	[self.URLConnection cancel];
 	[self dctInternal_cancelled];
-	 urlConnection = nil;
+	URLConnection = nil;
 }
 
 - (void)dctInternal_reset {
-	[urlConnection cancel];
-	 urlConnection = nil;
+	[self.URLConnection cancel];
+	URLConnection = nil;
 	self.returnedResponse = nil;
 	self.returnedError = nil;
 	self.returnedObject = nil;
@@ -285,21 +284,20 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 
 - (void)dctInternal_start {
 	
-	[self dctInternal_calculatePercentDownloaded];
-	
-	// Make sure it isn't there
-	[urlConnection cancel];
-	urlConnection = nil;
-	
-	if (!self.URLRequest) URLRequest = [self newRequest];
-	
-	[self dctInternal_setURL:[URLRequest URL]];
-	
-	urlConnection = [[NSURLConnection alloc] initWithRequest:URLRequest delegate:self];
+	[self URLConnection];
 	
 	self.status = DCTConnectionControllerStatusStarted;
 	
-	if (!urlConnection) [self dctInternal_failed];
+	if (!self.URLConnection) [self dctInternal_failed];
+}
+
+- (NSURLConnection *)URLConnection {
+	
+	if (!URLConnection) {
+		URLConnection = [[NSURLConnection alloc] initWithRequest:self.URLRequest delegate:self];
+	}
+	
+	return URLConnection;
 }
 
 - (void)dctInternal_setQueued {
@@ -381,8 +379,8 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 		[fileHandle closeFile];
 	}
 	
-	[urlConnection cancel];
-	urlConnection = nil;
+	[connection cancel];
+	connection = nil;
 	
 	SEL oldRecievedDataSelector = @selector(connectionDidReceiveObject:);
 	if ([self respondsToSelector:oldRecievedDataSelector])
@@ -395,8 +393,8 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
 	self.returnedError = error;
 	
-	[urlConnection cancel];
-	urlConnection = nil;
+	[connection cancel];
+	connection = nil;
 	
     [self connectionDidReceiveError:error];
 	[self dctInternal_failed];
@@ -565,6 +563,16 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 
 #pragma mark - Setters
 
+- (void)setURLRequest:(NSURLRequest *)newURLRequest {
+	
+	if (self.started) return;
+	
+	if ([newURLRequest isEqual:self.URLRequest]) return;
+	
+	URLRequest = newURLRequest;
+	[self dctInternal_setURL:URLRequest.URL];
+}
+
 - (void)setURL:(NSURL *)newURL {
 	
 	if (self.started) return;
@@ -577,6 +585,19 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 	if ([newURL isEqual:self.URL]) return;
 	
 	URL = newURL;
+}
+
+#pragma mark - Getters
+
+
+
+- (NSURLRequest *)URLRequest {
+	
+	if (!URLRequest) URLRequest = [self URLRequest];
+	
+	[self dctInternal_setURL:[URLRequest URL]];
+	
+	return URLRequest;
 }
 
 #pragma mark - Internal getters

@@ -353,10 +353,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 - (void)requeue;
 
 
-
-
-
-
+@property (nonatomic, strong, readonly) NSURLConnection *URLConnection;
 
 
 
