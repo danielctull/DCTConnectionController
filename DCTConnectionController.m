@@ -158,40 +158,40 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 
 #pragma mark - Block methods
 
-- (void)addResponseBlock:(DCTConnectionControllerResponseBlock)block {
+- (void)addResponseHandler:(DCTConnectionControllerResponseBlock)handler {
 	
 	if (!responseBlocks) responseBlocks = [[NSMutableSet alloc] initWithCapacity:1];
 	
-	if (self.didReceiveResponse) block(self.returnedResponse);
+	if (self.didReceiveResponse) handler(self.returnedResponse);
 	
-	[responseBlocks dct_addBlock:block];
+	[responseBlocks dct_addBlock:handler];
 }
 
-- (void)addCompletionBlock:(DCTConnectionControllerCompletionBlock)block {
+- (void)addFinishHandler:(DCTConnectionControllerFinishBlock)handler {
 	
 	if (!completionBlocks) completionBlocks = [[NSMutableSet alloc] initWithCapacity:1];
 	
-	if (self.finished) block(self.returnedObject);
+	if (self.finished) handler();
 	
-	[completionBlocks dct_addBlock:block];
+	[completionBlocks dct_addBlock:handler];
 }
 
-- (void)addFailureBlock:(DCTConnectionControllerFailureBlock)block {
+- (void)addFailureHandler:(DCTConnectionControllerFailureBlock)handler {
 	
 	if (!failureBlocks) failureBlocks = [[NSMutableSet alloc] initWithCapacity:1];
 	
-	if (self.failed) block(self.returnedError);
+	if (self.failed) handler(self.returnedError);
 	
-	[failureBlocks dct_addBlock:block];
+	[failureBlocks dct_addBlock:handler];
 }
 
-- (void)addCancelationBlock:(DCTConnectionControllerCancelationBlock)block {
+- (void)addCancelationHandler:(DCTConnectionControllerCancelationBlock)handler {
 	
 	if (!cancelationBlocks) cancelationBlocks = [[NSMutableSet alloc] initWithCapacity:1];
 	
-	if (self.cancelled) block();
+	if (self.cancelled) handler();
 		
-	[cancelationBlocks dct_addBlock:block];
+	[cancelationBlocks dct_addBlock:handler];
 }
 
 
@@ -212,22 +212,24 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 		
 		self.status = existingConnectionController.status;
 		
-		[existingConnectionController addResponseBlock:^(NSURLResponse *response) {
+		[existingConnectionController addResponseHandler:^(NSURLResponse *response) {
 			self.returnedResponse = response;
 			[self dctInternal_responded];
 		}];
 		
-		[existingConnectionController addCompletionBlock:^(NSObject *object) {
-			self.returnedObject = object;
+		__block DCTConnectionController *cc = existingConnectionController;
+		
+		[existingConnectionController addFinishHandler:^() {
+			self.returnedObject = cc.returnedObject;
 			[self dctInternal_finished];
 		}];
 		
-		[existingConnectionController addFailureBlock:^(NSError *error) {
+		[existingConnectionController addFailureHandler:^(NSError *error) {
 			self.returnedError = error;
 			[self dctInternal_failed];
 		}];
 		
-		[existingConnectionController addCancelationBlock:^(void) {
+		[existingConnectionController addCancelationHandler:^(void) {
 			[self dctInternal_cancelled];
 		}];
 		
@@ -458,8 +460,8 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 	
 	id object = self.returnedObject;
 	
-	for (DCTConnectionControllerCompletionBlock block in completionBlocks)
-		block(object);
+	for (DCTConnectionControllerFinishBlock block in completionBlocks)
+		block();
 	
 	[self dctInternal_sendObjectToDelegate:object];
 	

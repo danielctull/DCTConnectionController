@@ -75,19 +75,17 @@ typedef enum {
 } DCTConnectionControllerPriority;
 
 typedef void (^DCTConnectionControllerResponseBlock) (NSURLResponse *response);
-typedef void (^DCTConnectionControllerCompletionBlock) (NSObject *object);
 typedef void (^DCTConnectionControllerFailureBlock) (NSError *error);
 typedef void (^DCTConnectionControllerCancelationBlock) ();
+typedef void (^DCTConnectionControllerFinishBlock) ();
 
 /** Name of the notification sent out when the connection has successfully completed.
  */
 extern NSString *const DCTConnectionControllerDidFinishNotification;
-extern NSString *const DCTConnectionControllerDidReceiveObjectNotification; // DEPRICATED
 
 /** Name of the notification sent out when the connection has failed.
  */
 extern NSString *const DCTConnectionControllerDidFailNotification;
-extern NSString *const DCTConnectionControllerDidReceiveErrorNotification; //DEPRICATED
 
 /** Name of the notification sent out when the connection has recieved a response.
  */
@@ -229,14 +227,8 @@ extern NSString *const DCTConnectionControllerTypeString[];
 @property (nonatomic, strong) id<DCTConnectionControllerDelegate> delegate;
 
 
-/** The path to download the data to.
- 
- If supplied the connection will save the data to a file on disk rather
- than in memory.
- */
-@property (nonatomic, copy) NSString *downloadPath;
+@property (nonatomic, strong, readonly) NSString *downloadPath;
 
-//@property (nonatomic, strong, readonly) NSURL *downloadURL;
 
 
 /// @name Setting Dependencies
@@ -281,17 +273,19 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  @param responseBlock The response block to add.
  */
-- (void)addResponseBlock:(DCTConnectionControllerResponseBlock)responseBlock;
+- (void)addResponseHandler:(DCTConnectionControllerResponseBlock)handler;
 
 /** Adds a completion block.
  
  DCTConnectionControllerCompletionBlock is defined as such:
  
- `typedef void (^DCTConnectionControllerCompletionBlock) (NSObject *object);`
+ `typedef void (^DCTConnectionControllerFinishBlock) ();`
  
  @param completionBlock The completion block to add.
  */
-- (void)addCompletionBlock:(DCTConnectionControllerCompletionBlock)completionBlock;
+- (void)addFinishHandler:(DCTConnectionControllerFinishBlock)handler;
+
+
 
 /** Adds a failure block.
  
@@ -301,7 +295,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  @param failureBlock The failure block to add.
  */
-- (void)addFailureBlock:(DCTConnectionControllerFailureBlock)failureBlock;
+- (void)addFailureHandler:(DCTConnectionControllerFailureBlock)handler;
 
 /** Adds a completion block.
  
@@ -311,7 +305,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  @param cancelationBlock The cancelation block to add.
  */
-- (void)addCancelationBlock:(DCTConnectionControllerCancelationBlock)cancelationBlock;
+- (void)addCancelationHandler:(DCTConnectionControllerCancelationBlock)handler;
 
 
 
