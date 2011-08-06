@@ -412,7 +412,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  @see receivedObject:
  */
-- (void)connectionDidReceiveError:(NSError *)error;
+- (void)connectionDidFailWithError:(NSError *)error;
 
 
 
