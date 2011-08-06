@@ -93,7 +93,6 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 @property (nonatomic, readonly) NSSet *dctInternal_failureBlocks;
 @property (nonatomic, readonly) NSSet *dctInternal_cancelationBlocks;
 
-@property (nonatomic, strong, readwrite) NSURL *URL;
 @property (nonatomic, readwrite) DCTConnectionControllerStatus status;
 @property (nonatomic, strong, readwrite) NSObject *returnedObject;
 @property (nonatomic, strong, readwrite) NSError *returnedError;
@@ -115,13 +114,13 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 @property (nonatomic, readonly) NSSet *dctInternal_dependents;
 - (void)dctInternal_addDependent:(DCTConnectionController *)connectionController;
 - (void)dctInternal_removeDependent:(DCTConnectionController *)connectionController;
+- (void)dctInternal_setURL:(NSURL *)newURL;
 
 @end
 
 
 @implementation DCTConnectionController {
 	__strong NSURLConnection *urlConnection;
-	__strong NSURL *URL;
 	__strong NSMutableSet *dependencies;
 	__strong NSMutableSet *dependents;
 	__strong NSMutableSet *responseBlocks;
@@ -292,7 +291,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 	
 	NSURLRequest *request = [self newRequest];
 	
-	self.URL = [request URL];
+	[self dctInternal_setURL:[request URL]];
 	
 	urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	
@@ -309,6 +308,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 
 - (NSMutableURLRequest *)newRequest {
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
+	[request setURL:self.URL];
 	[request setHTTPMethod:DCTConnectionControllerTypeString[type]];	
 	return request;
 }
@@ -559,6 +559,22 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 	[self dct_changeValueForKey:@"percentDownloaded" withChange:^{
 		percentDownloaded = [[NSNumber alloc] initWithFloat:(downloadedLength / contentLength)];
 	}];
+}
+
+#pragma mark - Setters
+
+- (void)setURL:(NSURL *)newURL {
+	
+	if (self.started) return;
+	
+	[self dctInternal_setURL:newURL];
+}
+
+- (void)dctInternal_setURL:(NSURL *)newURL {
+	
+	if ([newURL isEqual:self.URL]) return;
+	
+	URL = newURL;
 }
 
 #pragma mark - Internal getters

@@ -465,7 +465,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 /** The URL the connection controller is managing.
  */
-@property (nonatomic, strong, readonly) NSURL *URL;
+@property (nonatomic, strong) NSURL *URL;
 
 
 /** The response returned from the connection.

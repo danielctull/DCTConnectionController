@@ -34,4 +34,8 @@
 	return (self.status > DCTConnectionControllerStatusResponded);
 }
 
+- (BOOL)isStarted {
+	return (self.status >= DCTConnectionControllerStatusQueued);
+}
+
 @end
