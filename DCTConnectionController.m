@@ -41,6 +41,24 @@
 #import "NSMutableSet+DCTExtras.h"
 #import "NSObject+DCTKVOExtras.h"
 
+NSString * const DCTConnectionControllerStatusString[] = {
+	@"NotStarted",
+	@"Queued",
+	@"Started",
+	@"Responded",
+	@"Complete",
+	@"Failed",
+	@"Cancelled"
+};
+
+NSString * const DCTConnectionControllerPriorityString[] = {
+	@"VeryHigh",
+	@"High",
+	@"Medium",
+	@"Low",
+	@"VeryLow"
+};
+
 NSString * const DCTConnectionControllerTypeString[] = {
 	@"GET",
 	@"POST",
@@ -53,11 +71,15 @@ NSString * const DCTConnectionControllerTypeString[] = {
 	@"PATCH"
 };
 
+NSString *const DCTConnectionControllerDidFinishLoadingNotification = @"DCTConnectionControllerDidFinishLoadingNotification";
+NSString *const DCTConnectionControllerDidReceiveObjectNotification = @"DCTConnectionControllerDidFinishLoadingNotification";
 
-NSString *const DCTConnectionControllerDidReceiveObjectNotification = @"DCTConnectionControllerDidReceiveObjectNotification";
-NSString *const DCTConnectionControllerDidReceiveErrorNotification = @"DCTConnectionControllerDidReceiveErrorNotification";
+NSString *const DCTConnectionControllerDidReceiveErrorNotification = @"DCTConnectionControllerDidFailNotification";
+NSString *const DCTConnectionControllerDidFailNotification = @"DCTConnectionControllerDidFailNotification";
+
 NSString *const DCTConnectionControllerDidReceiveResponseNotification = @"DCTConnectionControllerDidReceiveResponseNotification";
-NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectionControllerCancellationNotification";
+
+NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectionControllerWasCancelledNotification";
 
 @interface DCTConnectionController ()
 
@@ -82,17 +104,16 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 - (void)dctInternal_finishWithCancelation;
 - (void)dctInternal_finish;
 
-
 - (void)dctInternal_sendResponseToDelegate:(NSURLResponse *)response;
 - (void)dctInternal_sendCancelationToDelegate:(id<DCTConnectionControllerDelegate>)delegate;
 - (void)dctInternal_sendObjectToDelegate:(id)object;
 - (void)dctInternal_sendErrorToDelegate:(NSError *)error;
 
-- (BOOL)dctInternal_hasResponded;
-- (BOOL)dctInternal_hasFinished;
-- (BOOL)dctInternal_hasFailed;
-- (BOOL)dctInternal_hasCompleted;
-- (BOOL)dctInternal_hasCancelled;
+@property (nonatomic, readonly) BOOL dctInternal_hasResponded;
+@property (nonatomic, readonly) BOOL dctInternal_hasFinished;
+@property (nonatomic, readonly) BOOL dctInternal_hasFailed;
+@property (nonatomic, readonly) BOOL dctInternal_hasCompleted;
+@property (nonatomic, readonly) BOOL dctInternal_hasCancelled;
 
 - (void)dctInternal_calculatePercentDownloaded;
 
@@ -104,7 +125,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 
 @implementation DCTConnectionController {
-	__strong DCTURLConnection *urlConnection;
+	__strong NSURLConnection *urlConnection;
 	__strong NSURL *URL;
 	__strong NSMutableSet *dependencies;
 	__strong NSMutableSet *dependents;
@@ -123,6 +144,14 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	return [[self alloc] init];
 }
 
+- (void)dealloc {
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	NSError *error = nil;
+	if ([fileManager fileExistsAtPath:self.downloadPath] && ![fileManager removeItemAtPath:self.downloadPath error:&error])
+		NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), error);
+	
+}
+
 - (id)init {
 	if (!(self = [super init])) return nil;
 	
@@ -138,7 +167,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
 	if (!responseBlocks) responseBlocks = [[NSMutableSet alloc] initWithCapacity:1];
 	
-	if ([self dctInternal_hasResponded]) block(self.returnedResponse);
+	if (self.dctInternal_hasResponded) block(self.returnedResponse);
 	
 	[responseBlocks dct_addBlock:block];
 }
@@ -147,7 +176,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
 	if (!completionBlocks) completionBlocks = [[NSMutableSet alloc] initWithCapacity:1];
 	
-	if ([self dctInternal_hasCompleted]) block(self.returnedObject);
+	if (self.dctInternal_hasCompleted) block(self.returnedObject);
 	
 	[completionBlocks dct_addBlock:block];
 }
@@ -156,7 +185,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
 	if (!failureBlocks) failureBlocks = [[NSMutableSet alloc] initWithCapacity:1];
 	
-	if ([self dctInternal_hasFailed]) block(self.returnedError);
+	if (self.dctInternal_hasFailed) block(self.returnedError);
 	
 	[failureBlocks dct_addBlock:block];
 }
@@ -165,7 +194,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
 	if (!cancelationBlocks) cancelationBlocks = [[NSMutableSet alloc] initWithCapacity:1];
 	
-	if ([self dctInternal_hasCancelled]) block();
+	if (self.dctInternal_hasCancelled) block();
 		
 	[cancelationBlocks dct_addBlock:block];
 }
@@ -203,6 +232,10 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 			[self dctInternal_finishWithFailure];
 		}];
 		
+		[existingConnectionController addCancelationBlock:^(void) {
+			[self dctInternal_finishWithCancelation];
+		}];
+		
 		return;
 	}
 		
@@ -236,7 +269,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 - (void)addDependency:(DCTConnectionController *)connectionController {
 	
-	if (!connectionController) return;
+	NSAssert(connectionController != nil, @"connectionController is nil");
 	
 	if (!dependencies) dependencies = [[NSMutableSet alloc] initWithCapacity:1];
 	
@@ -254,6 +287,8 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 - (void)dctInternal_start {
 	
+	[self dctInternal_calculatePercentDownloaded];
+	
 	// Make sure it isn't there
 	[urlConnection cancel];
 	urlConnection = nil;
@@ -262,7 +297,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
 	self.URL = [request URL];
 	
-	urlConnection = [[DCTURLConnection alloc] initWithRequest:request delegate:self];
+	urlConnection = [[NSURLConnection alloc] initWithRequest:request delegate:self];
 	
 	self.status = DCTConnectionControllerStatusStarted;
 	
@@ -281,8 +316,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	return request;
 }
 
-- (void)connectionDidReceiveObject:(NSObject *)object {
-	self.returnedObject = object;
+- (void)connectionDidFinishLoading {	
 	// Call to finish here allows subclasses to change whether a connection was successfully or not. 
 	// For example if the web service always responds successful, but returns an error in JSON, a 
 	// subclass could call receivedError: and this would mean the core connection controller fails.
@@ -306,10 +340,22 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
 	
 	contentLength = (float)[response expectedContentLength];
-	
-	if (self.downloadPath) {
-		NSFileManager *fileManager = [NSFileManager defaultManager];
 		
+	self.returnedResponse = response;
+    [self connectionDidReceiveResponse:response];
+	[self dctInternal_announceResponse];
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+		
+	if (contentLength > 0) {
+		downloadedLength += (float)[data length];
+		[self dctInternal_calculatePercentDownloaded];
+	}
+	
+	if (!fileHandle) {
+		
+		NSFileManager *fileManager = [NSFileManager defaultManager];
 		
 		if ([fileManager fileExistsAtPath:self.downloadPath])
 			[fileManager removeItemAtPath:self.downloadPath error:nil];
@@ -317,51 +363,33 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 		[fileManager createFileAtPath:self.downloadPath
 							 contents:nil
 						   attributes:nil];
-	
-		fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.downloadPath];
+		
+		fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.downloadPath];	
 	}
 	
-	self.returnedResponse = response;
-    [self connectionDidReceiveResponse:response];
-	[self dctInternal_announceResponse];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-	
-	NSLog(@"%@:%@", self, NSStringFromSelector(_cmd));
-	
-	if (contentLength > 0) {
-		downloadedLength += (float)[data length];
-		[self dctInternal_calculatePercentDownloaded];
-	}
-	
-	if (fileHandle) {
-		[fileHandle seekToEndOfFile];
-		[fileHandle writeData:data];
-		return;
-	}
-	
-	[(DCTURLConnection *)connection appendData:data];
+	[fileHandle seekToEndOfFile];
+	[fileHandle writeData:data];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	
 	if ([self.percentDownloaded integerValue] < 1.0) {
-		
+		downloadedLength = contentLength;
+		[self dctInternal_calculatePercentDownloaded];
 	}
-	
-	NSData *data = ((DCTURLConnection *)connection).data;
 	
 	if (fileHandle) {
 		[fileHandle closeFile];
-		data = nil;
 	}
 	
 	[urlConnection cancel];
-	 urlConnection = nil;
+	urlConnection = nil;
 	
-	self.returnedObject = data;
-    [self connectionDidReceiveObject:data];
+	SEL oldRecievedDataSelector = @selector(connectionDidReceiveObject:);
+	if ([self respondsToSelector:oldRecievedDataSelector])
+		[self performSelector:oldRecievedDataSelector withObject:[[NSData alloc] initWithContentsOfFile:self.downloadPath]];
+	
+    [self connectionDidFinishLoading];
 	[self dctInternal_finishWithSuccess];
 }
 
@@ -369,31 +397,50 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	self.returnedError = error;
 	
 	[urlConnection cancel];
-	 urlConnection = nil;
+	urlConnection = nil;
 	
     [self connectionDidReceiveError:error];
 	[self dctInternal_finishWithFailure];
 }
 
 #pragma mark - NSURLConnectionDownloadDelegate
-
+/*
 - (void)connection:(NSURLConnection *)connection didWriteData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long)expectedTotalBytes {
-	downloadedLength = (float)expectedTotalBytes;
-	contentLength = (float)totalBytesWritten;
+	downloadedLength = (float)totalBytesWritten;
+	contentLength = (float)expectedTotalBytes;
 	[self dctInternal_calculatePercentDownloaded];
 }
 
 - (void)connectionDidResumeDownloading:(NSURLConnection *)connection totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long)expectedTotalBytes {
-	downloadedLength = (float)expectedTotalBytes;
-	contentLength = (float)totalBytesWritten;
+	downloadedLength = (float)totalBytesWritten;
+	contentLength = (float)expectedTotalBytes;
 	[self dctInternal_calculatePercentDownloaded];
 }
 
 - (void)connectionDidFinishDownloading:(NSURLConnection *)connection destinationURL:(NSURL *)destinationURL {
 	
-	NSLog(@"%@:%@", self, NSStringFromSelector(_cmd));
+	NSLog(@"MainThread: %d", [[NSThread currentThread] isMainThread]);
+    NSLog(@"Exists: %d", [[NSFileManager defaultManager] fileExistsAtPath:[destinationURL path]]);
+    NSLog(@"Data: %@", [NSData dataWithContentsOfFile:[destinationURL path]]);
+    NSLog(@"Path: %@", [destinationURL path]);
 	
-}
+	NSURL *pathURL = [[NSURL alloc] initFileURLWithPath:self.downloadPath];
+	
+	NSLog(@"destinationURL: %@", destinationURL);
+	NSLog(@"downloadPath URL: %@", pathURL);
+	
+	
+	if ([[NSFileManager defaultManager] isReadableFileAtPath:[destinationURL path]])
+		NSLog(@"CAN READ");
+	else
+		NSLog(@"CANNOT READ");
+	
+	NSError *error = nil;	
+	if (![[NSFileManager defaultManager] moveItemAtPath:[destinationURL path] toPath:self.downloadPath error:&error])
+		NSLog(@"NOT MOVED!!!!: %@\n\n", error);
+	
+	[self connectionDidFinishLoading:connection];
+}*/
 
 #pragma mark - Private methods
 
@@ -453,7 +500,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
 	[self dctInternal_sendCancelationToDelegate:self.delegate];
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerCancellationNotification object:self];
+	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerWasCancelledNotification object:self];
 
 	[self dctInternal_finish];
 	
@@ -500,6 +547,15 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	return [self isEqualToConnectionController:object];
 }
 
+- (NSString *)description {
+	return [NSString stringWithFormat:@"<%@: %p; url = \"%@\"; status = %@; priority = %@>", 
+			NSStringFromClass([self class]),
+			self,
+			self.URL,
+			DCTConnectionControllerStatusString[self.status],
+			DCTConnectionControllerPriorityString[self.priority]];
+}
+
 #pragma mark - Useful checks
 
 - (BOOL)dctInternal_hasResponded {
@@ -526,12 +582,39 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 - (void)dctInternal_calculatePercentDownloaded {
 	[self dct_changeValueForKey:@"percentDownloaded" withChange:^{
-		percentDownloaded = [NSNumber numberWithFloat:(downloadedLength / contentLength)];
-		
+		percentDownloaded = [[NSNumber alloc] initWithFloat:(downloadedLength / contentLength)];
 	}];
 }
 
 #pragma mark - Internal getters
+
+- (NSObject *)returnedObject {
+	
+	if (!returnedObject) {
+		returnedObject = [[NSData alloc] initWithContentsOfFile:self.downloadPath];
+	}
+	
+	return returnedObject;
+}
+
+- (NSString *)downloadPath {
+	
+	if (!downloadPath) {
+		NSString *temporaryDirectory = NSTemporaryDirectory();
+		temporaryDirectory = [temporaryDirectory stringByAppendingPathComponent:@"DCTConnectionController"];
+		
+		NSError *error = nil;
+		if (![[NSFileManager defaultManager] createDirectoryAtPath:temporaryDirectory
+								  withIntermediateDirectories:YES
+												   attributes:nil
+														error:&error])
+			NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), error);
+		
+		downloadPath = [temporaryDirectory stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+	}
+	
+	return downloadPath;
+}
 
 - (NSSet *)dctInternal_responseBlocks {
 	

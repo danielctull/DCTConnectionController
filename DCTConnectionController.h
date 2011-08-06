@@ -36,7 +36,6 @@
 
 #import <Foundation/Foundation.h>
 #import "DCTConnectionController.h"
-#import "DCTURLConnection.h"
 
 /** Specifies the type of connection to use.
  */
@@ -81,11 +80,13 @@ typedef void (^DCTConnectionControllerCancelationBlock) ();
 
 /** Name of the notification sent out when the connection has successfully completed.
  */
-extern NSString *const DCTConnectionControllerDidReceiveObjectNotification;
+extern NSString *const DCTConnectionControllerDidFinishLoadingNotification;
+extern NSString *const DCTConnectionControllerDidReceiveObjectNotification; // DEPRICATED
 
 /** Name of the notification sent out when the connection has failed.
  */
-extern NSString *const DCTConnectionControllerDidReceiveErrorNotification;
+extern NSString *const DCTConnectionControllerDidFailNotification;
+extern NSString *const DCTConnectionControllerDidReceiveErrorNotification; //DEPRICATED
 
 /** Name of the notification sent out when the connection has recieved a response.
  */
@@ -165,7 +166,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  checked for equality by `isEqualToConnectionController:`. In the future the implementation of
  `isEqualToConnectionController:` may change to one a little more concrete, but so far this has worked well for me. 
  */
-@interface DCTConnectionController : NSObject <NSURLConnectionDownloadDelegate, NSURLConnectionDelegate, NSURLConnectionDataDelegate>
+@interface DCTConnectionController : NSObject <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 
 /// @name Creating a Connection Controller
 
@@ -231,6 +232,8 @@ extern NSString *const DCTConnectionControllerTypeString[];
  than in memory.
  */
 @property (nonatomic, copy) NSString *downloadPath;
+
+//@property (nonatomic, strong, readonly) NSURL *downloadURL;
 
 
 /// @name Setting Dependencies
@@ -398,9 +401,11 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  @param object The data object returned from the connection.
  
+ @depricated
+ 
  @see receivedError:
  */
-- (void)connectionDidReceiveObject:(NSObject *)object;
+- (void)connectionDidFinishLoading;
 
 /** This method should be used in subclasses to handle the returned error.
  
