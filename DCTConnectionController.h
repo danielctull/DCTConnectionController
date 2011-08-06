@@ -92,6 +92,8 @@ extern NSString *const DCTConnectionControllerDidReceiveErrorNotification; //DEP
  */
 extern NSString *const DCTConnectionControllerDidReceiveResponseNotification;
 
+extern NSString *const DCTConnectionControllerWasCancelledNotification;
+
 extern NSString *const DCTConnectionControllerTypeString[];
 
 @protocol DCTConnectionControllerDelegate;
