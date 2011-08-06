@@ -61,7 +61,6 @@ typedef enum {
 	DCTConnectionControllerStatusFinished,			/**< The connection completed without any errors. */
 	DCTConnectionControllerStatusFailed,			/**< The connection failed. */
 	DCTConnectionControllerStatusCancelled,			/**< The connection was cancelled. */
-	DCTConnectionControllerStatusComplete = DCTConnectionControllerStatusFinished // DEPRICATED
 } DCTConnectionControllerStatus;
 
 /** Specifies the possible priorities for a connection.

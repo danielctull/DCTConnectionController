@@ -30,4 +30,8 @@
 	return (self.status >= DCTConnectionControllerStatusStarted && self.status <= DCTConnectionControllerStatusResponded);
 }
 
+- (BOOL)isEnded {
+	return (self.status > DCTConnectionControllerStatusResponded);
+}
+
 @end

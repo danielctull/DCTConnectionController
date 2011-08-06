@@ -456,7 +456,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 }
 
 - (void)dctInternal_finished {
-	if (!self.active) return;
+	if (self.ended) return;
 	
 	id object = self.returnedObject;
 	
@@ -473,7 +473,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 }
 
 - (void)dctInternal_failed {
-	if (!self.active) return;
+	if (self.ended) return;
 	
 	NSError *error = self.returnedError;
 	
@@ -490,7 +490,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 }
 
 - (void)dctInternal_cancelled {
-	if (!self.active) return;
+	if (self.ended) return;
 	
 	for (DCTConnectionControllerCancelationBlock block in cancelationBlocks)
 		block();

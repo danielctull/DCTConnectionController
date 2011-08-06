@@ -15,5 +15,5 @@
 @property (nonatomic, readonly, getter = isFailed) BOOL failed;
 @property (nonatomic, readonly, getter = isCancelled) BOOL cancelled;
 @property (nonatomic, readonly, getter = isActive) BOOL active;
-
+@property (nonatomic, readonly, getter = isEnded) BOOL ended;
 @end

@@ -38,6 +38,7 @@
 #import "NSObject+DCTKVOExtras.h"
 #import "DCTObservationInfo.h"
 #import "NSObject+DCTPerformSelector.h"
+#import "DCTConnectionController+UsefulChecks.h"
 
 NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2) {
 	
@@ -199,7 +200,7 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 	
 	DCTConnectionController *connection = (DCTConnectionController *)object;
 	
-	if (connection.status >= DCTConnectionControllerStatusComplete)
+	if (connection.ended)
 		[self dctInternal_removeActiveConnection:connection];
 }
 
