@@ -73,13 +73,8 @@ NSString * const DCTConnectionControllerTypeString[] = {
 };
 
 NSString *const DCTConnectionControllerDidFinishNotification = @"DCTConnectionControllerDidFinishNotification";
-NSString *const DCTConnectionControllerDidReceiveObjectNotification = @"DCTConnectionControllerDidFinishNotification";
-
-NSString *const DCTConnectionControllerDidReceiveErrorNotification = @"DCTConnectionControllerDidFailNotification";
 NSString *const DCTConnectionControllerDidFailNotification = @"DCTConnectionControllerDidFailNotification";
-
 NSString *const DCTConnectionControllerDidReceiveResponseNotification = @"DCTConnectionControllerDidReceiveResponseNotification";
-
 NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectionControllerWasCancelledNotification";
 
 @interface DCTConnectionController ()
@@ -593,7 +588,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 
 - (NSURLRequest *)URLRequest {
 	
-	if (!URLRequest) URLRequest = [self URLRequest];
+	if (!URLRequest) URLRequest = [[self newRequest] copy];
 	
 	[self dctInternal_setURL:[URLRequest URL]];
 	

@@ -8,6 +8,9 @@
 
 #import "DCTConnectionController+Deprication.h"
 
+NSString *const DCTConnectionControllerDidReceiveObjectNotification = @"DCTConnectionControllerDidFinishNotification";
+NSString *const DCTConnectionControllerDidReceiveErrorNotification = @"DCTConnectionControllerDidFailNotification";
+
 @implementation DCTConnectionController (Deprication)
 
 - (void)addResponseBlock:(DCTConnectionControllerResponseBlock)responseBlock {
