@@ -58,9 +58,10 @@ typedef enum {
 	DCTConnectionControllerStatusQueued,			/**< The connection has been placed in a queue and is awaiting a free slot to perform. */
 	DCTConnectionControllerStatusStarted,			/**< The request has been sent and a response is being awaited. */
 	DCTConnectionControllerStatusResponded,			/**< A response has been received by the server and the connection is awaiting completion. */
-	DCTConnectionControllerStatusComplete,			/**< The connection completed without any errors. */
+	DCTConnectionControllerStatusFinished,			/**< The connection completed without any errors. */
 	DCTConnectionControllerStatusFailed,			/**< The connection failed. */
-	DCTConnectionControllerStatusCancelled			/**< The connection was cancelled. */
+	DCTConnectionControllerStatusCancelled,			/**< The connection was cancelled. */
+	DCTConnectionControllerStatusComplete = DCTConnectionControllerStatusFinished // DEPRICATED
 } DCTConnectionControllerStatus;
 
 /** Specifies the possible priorities for a connection.
@@ -80,7 +81,7 @@ typedef void (^DCTConnectionControllerCancelationBlock) ();
 
 /** Name of the notification sent out when the connection has successfully completed.
  */
-extern NSString *const DCTConnectionControllerDidFinishLoadingNotification;
+extern NSString *const DCTConnectionControllerDidFinishNotification;
 extern NSString *const DCTConnectionControllerDidReceiveObjectNotification; // DEPRICATED
 
 /** Name of the notification sent out when the connection has failed.
