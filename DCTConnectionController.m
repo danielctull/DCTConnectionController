@@ -94,6 +94,8 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 - (BOOL)dctInternal_hasCompleted;
 - (BOOL)dctInternal_hasCancelled;
 
+- (void)dctInternal_calculatePercentDownloaded;
+
 @property (nonatomic, readonly) NSSet *dctInternal_dependents;
 - (void)dctInternal_addDependent:(DCTConnectionController *)connectionController;
 - (void)dctInternal_removeDependent:(DCTConnectionController *)connectionController;
@@ -299,7 +301,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	[self dctInternal_finishWithFailure];
 }
 
-#pragma mark - NSURLConnection delegate methods
+#pragma mark - NSURLConnectionDelegate
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
 	
@@ -326,12 +328,11 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
 	
+	NSLog(@"%@:%@", self, NSStringFromSelector(_cmd));
+	
 	if (contentLength > 0) {
 		downloadedLength += (float)[data length];
-		[self dct_changeValueForKey:@"percentDownloaded" withChange:^{
-			percentDownloaded = [NSNumber numberWithFloat:(downloadedLength / contentLength)];
-			
-		}];
+		[self dctInternal_calculatePercentDownloaded];
 	}
 	
 	if (fileHandle) {
@@ -346,10 +347,7 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	
 	if ([self.percentDownloaded integerValue] < 1.0) {
-		[self dct_changeValueForKey:@"percentDownloaded" withChange:^{
-			percentDownloaded = [NSNumber numberWithInteger:1];
-			
-		}];
+		
 	}
 	
 	NSData *data = ((DCTURLConnection *)connection).data;
@@ -375,6 +373,26 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 	
     [self connectionDidReceiveError:error];
 	[self dctInternal_finishWithFailure];
+}
+
+#pragma mark - NSURLConnectionDownloadDelegate
+
+- (void)connection:(NSURLConnection *)connection didWriteData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long)expectedTotalBytes {
+	downloadedLength = (float)expectedTotalBytes;
+	contentLength = (float)totalBytesWritten;
+	[self dctInternal_calculatePercentDownloaded];
+}
+
+- (void)connectionDidResumeDownloading:(NSURLConnection *)connection totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long)expectedTotalBytes {
+	downloadedLength = (float)expectedTotalBytes;
+	contentLength = (float)totalBytesWritten;
+	[self dctInternal_calculatePercentDownloaded];
+}
+
+- (void)connectionDidFinishDownloading:(NSURLConnection *)connection destinationURL:(NSURL *)destinationURL {
+	
+	NSLog(@"%@:%@", self, NSStringFromSelector(_cmd));
+	
 }
 
 #pragma mark - Private methods
@@ -502,6 +520,15 @@ NSString *const DCTConnectionControllerCancellationNotification = @"DCTConnectio
 
 - (BOOL)dctInternal_hasCancelled {
 	return (self.status == DCTConnectionControllerStatusCancelled);
+}
+
+#pragma mark - Internal setup
+
+- (void)dctInternal_calculatePercentDownloaded {
+	[self dct_changeValueForKey:@"percentDownloaded" withChange:^{
+		percentDownloaded = [NSNumber numberWithFloat:(downloadedLength / contentLength)];
+		
+	}];
 }
 
 #pragma mark - Internal getters
