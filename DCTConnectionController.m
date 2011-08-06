@@ -37,6 +37,7 @@
 #import "DCTConnectionController.h"
 #import "DCTConnectionQueue+Singleton.h"
 #import "DCTConnectionController+Equality.h"
+#import "DCTConnectionController+UsefulChecks.h"
 #import "DCTObservationInfo.h"
 #import "NSMutableSet+DCTExtras.h"
 #import "NSObject+DCTKVOExtras.h"
@@ -109,12 +110,6 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 - (void)dctInternal_sendObjectToDelegate:(id)object;
 - (void)dctInternal_sendErrorToDelegate:(NSError *)error;
 
-@property (nonatomic, readonly) BOOL dctInternal_hasResponded;
-@property (nonatomic, readonly) BOOL dctInternal_hasFinished;
-@property (nonatomic, readonly) BOOL dctInternal_hasFailed;
-@property (nonatomic, readonly) BOOL dctInternal_hasCompleted;
-@property (nonatomic, readonly) BOOL dctInternal_hasCancelled;
-
 - (void)dctInternal_calculatePercentDownloaded;
 
 @property (nonatomic, readonly) NSSet *dctInternal_dependents;
@@ -167,7 +162,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 	
 	if (!responseBlocks) responseBlocks = [[NSMutableSet alloc] initWithCapacity:1];
 	
-	if (self.dctInternal_hasResponded) block(self.returnedResponse);
+	if (self.didReceiveResponse) block(self.returnedResponse);
 	
 	[responseBlocks dct_addBlock:block];
 }
@@ -176,7 +171,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 	
 	if (!completionBlocks) completionBlocks = [[NSMutableSet alloc] initWithCapacity:1];
 	
-	if (self.dctInternal_hasCompleted) block(self.returnedObject);
+	if (self.finished) block(self.returnedObject);
 	
 	[completionBlocks dct_addBlock:block];
 }
@@ -185,7 +180,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 	
 	if (!failureBlocks) failureBlocks = [[NSMutableSet alloc] initWithCapacity:1];
 	
-	if (self.dctInternal_hasFailed) block(self.returnedError);
+	if (self.failed) block(self.returnedError);
 	
 	[failureBlocks dct_addBlock:block];
 }
@@ -194,7 +189,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 	
 	if (!cancelationBlocks) cancelationBlocks = [[NSMutableSet alloc] initWithCapacity:1];
 	
-	if (self.dctInternal_hasCancelled) block();
+	if (self.cancelled) block();
 		
 	[cancelationBlocks dct_addBlock:block];
 }
@@ -459,7 +454,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 }
 
 - (void)dctInternal_finished {
-	if ([self dctInternal_hasFinished]) return;
+	if (!self.active) return;
 	
 	id object = self.returnedObject;
 	
@@ -476,7 +471,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 }
 
 - (void)dctInternal_failed {
-	if ([self dctInternal_hasFinished]) return;
+	if (!self.active) return;
 	
 	NSError *error = self.returnedError;
 	
@@ -493,7 +488,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 }
 
 - (void)dctInternal_cancelled {
-	if ([self dctInternal_hasFinished]) return;
+	if (!self.active) return;
 	
 	for (DCTConnectionControllerCancelationBlock block in cancelationBlocks)
 		block();
@@ -554,28 +549,6 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 			self.URL,
 			DCTConnectionControllerStatusString[self.status],
 			DCTConnectionControllerPriorityString[self.priority]];
-}
-
-#pragma mark - Useful checks
-
-- (BOOL)dctInternal_hasResponded {
-	return (self.status >= DCTConnectionControllerStatusResponded);
-}
-
-- (BOOL)dctInternal_hasFinished {
-	return (self.status > DCTConnectionControllerStatusResponded);
-}
-
-- (BOOL)dctInternal_hasFailed {
-	return (self.status == DCTConnectionControllerStatusFailed);
-}
-
-- (BOOL)dctInternal_hasCompleted {
-	return (self.status == DCTConnectionControllerStatusComplete);
-}
-
-- (BOOL)dctInternal_hasCancelled {
-	return (self.status == DCTConnectionControllerStatusCancelled);
 }
 
 #pragma mark - Internal setup
