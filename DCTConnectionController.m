@@ -443,11 +443,11 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 	
 	[connection cancel];
 	connection = nil;
-	
+	/*
 	SEL oldRecievedDataSelector = @selector(connectionDidReceiveObject:);
 	if ([self respondsToSelector:oldRecievedDataSelector])
 		[self performSelector:oldRecievedDataSelector withObject:[[NSData alloc] initWithContentsOfFile:self.downloadPath]];
-	
+	*/
     [self connectionDidFinishLoading];
 	[self dctInternal_finished];
 }
@@ -457,53 +457,54 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 	
 	[connection cancel];
 	connection = nil;
-	
+	/*
 	SEL oldRecieveErrorSelector = @selector(connectionDidReceiveError:);
 	if ([self respondsToSelector:oldRecieveErrorSelector])
 		[self performSelector:oldRecieveErrorSelector withObject:error];
-	
+	*/
     [self connectionDidFailWithError:error];
 	[self dctInternal_failed];
 }
 
-#pragma mark - NSURLConnectionDownloadDelegate
 /*
-- (void)connection:(NSURLConnection *)connection didWriteData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long)expectedTotalBytes {
-	downloadedLength = (float)totalBytesWritten;
-	contentLength = (float)expectedTotalBytes;
-	[self dctInternal_calculatePercentDownloaded];
-}
-
-- (void)connectionDidResumeDownloading:(NSURLConnection *)connection totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long)expectedTotalBytes {
-	downloadedLength = (float)totalBytesWritten;
-	contentLength = (float)expectedTotalBytes;
-	[self dctInternal_calculatePercentDownloaded];
-}
-
-- (void)connectionDidFinishDownloading:(NSURLConnection *)connection destinationURL:(NSURL *)destinationURL {
-	
-	NSLog(@"MainThread: %d", [[NSThread currentThread] isMainThread]);
-    NSLog(@"Exists: %d", [[NSFileManager defaultManager] fileExistsAtPath:[destinationURL path]]);
-    NSLog(@"Data: %@", [NSData dataWithContentsOfFile:[destinationURL path]]);
-    NSLog(@"Path: %@", [destinationURL path]);
-	
-	NSURL *pathURL = [[NSURL alloc] initFileURLWithPath:self.downloadPath];
-	
-	NSLog(@"destinationURL: %@", destinationURL);
-	NSLog(@"downloadPath URL: %@", pathURL);
-	
-	
-	if ([[NSFileManager defaultManager] isReadableFileAtPath:[destinationURL path]])
-		NSLog(@"CAN READ");
-	else
-		NSLog(@"CANNOT READ");
-	
-	NSError *error = nil;	
-	if (![[NSFileManager defaultManager] moveItemAtPath:[destinationURL path] toPath:self.downloadPath error:&error])
-		NSLog(@"NOT MOVED!!!!: %@\n\n", error);
-	
-	[self connectionDidFinishLoading:connection];
-}*/
+ #pragma mark - NSURLConnectionDownloadDelegate
+ 
+ - (void)connection:(NSURLConnection *)connection didWriteData:(long long)bytesWritten totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long)expectedTotalBytes {
+ downloadedLength = (float)totalBytesWritten;
+ contentLength = (float)expectedTotalBytes;
+ [self dctInternal_calculatePercentDownloaded];
+ }
+ 
+ - (void)connectionDidResumeDownloading:(NSURLConnection *)connection totalBytesWritten:(long long)totalBytesWritten expectedTotalBytes:(long long)expectedTotalBytes {
+ downloadedLength = (float)totalBytesWritten;
+ contentLength = (float)expectedTotalBytes;
+ [self dctInternal_calculatePercentDownloaded];
+ }
+ 
+ - (void)connectionDidFinishDownloading:(NSURLConnection *)connection destinationURL:(NSURL *)destinationURL {
+ 
+ NSLog(@"MainThread: %d", [[NSThread currentThread] isMainThread]);
+ NSLog(@"Exists: %d", [[NSFileManager defaultManager] fileExistsAtPath:[destinationURL path]]);
+ NSLog(@"Data: %@", [NSData dataWithContentsOfFile:[destinationURL path]]);
+ NSLog(@"Path: %@", [destinationURL path]);
+ 
+ NSURL *pathURL = [[NSURL alloc] initFileURLWithPath:self.downloadPath];
+ 
+ NSLog(@"destinationURL: %@", destinationURL);
+ NSLog(@"downloadPath URL: %@", pathURL);
+ 
+ 
+ if ([[NSFileManager defaultManager] isReadableFileAtPath:[destinationURL path]])
+ NSLog(@"CAN READ");
+ else
+ NSLog(@"CANNOT READ");
+ 
+ NSError *error = nil;	
+ if (![[NSFileManager defaultManager] moveItemAtPath:[destinationURL path] toPath:self.downloadPath error:&error])
+ NSLog(@"NOT MOVED!: %@\n\n", error);
+ 
+ [self connectionDidFinishLoading:connection];
+ }*/
 
 #pragma mark - Internal methods
 
