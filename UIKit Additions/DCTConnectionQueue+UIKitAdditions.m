@@ -42,9 +42,6 @@
 - (void)dctInternal_activeConnectionCountChanged:(NSNotification *)notificaiton;
 - (void)uikit_init;
 - (void)uikit_dealloc;
-
-//- (void)dctInternal_hush;
-//- (void)dctInternal_finishedBackgroundConnections;
 @end
 
 
@@ -90,10 +87,6 @@
 	[notificationCenter removeObserver:self
 								  name:UIApplicationWillEnterForegroundNotification
 								object:nil];
-	
-	[notificationCenter removeObserver:self
-								  name:DCTConnectionQueueActiveConnectionCountChangedNotification
-								object:self];
 }
 
 - (void)uikit_init {
@@ -110,31 +103,16 @@
 						   selector:@selector(dctInternal_willEnterForeground:) 
 							   name:UIApplicationWillEnterForegroundNotification 
 							 object:nil];
-	
-	[notificationCenter addObserver:self 
-						   selector:@selector(dctInternal_activeConnectionCountChanged:) 
-							   name:DCTConnectionQueueActiveConnectionCountChangedNotification 
-							 object:self];
-}
-
-- (void)dctInternal_activeConnectionCountChanged:(NSNotification *)notificaiton {
-	
-	UIApplication *application = [UIApplication sharedApplication];
-	
-	if (self.activeConnectionCount > 0) {
-		[application setNetworkActivityIndicatorVisible:YES];
-	
-	} else {
-		[application setNetworkActivityIndicatorVisible:NO];
-		
-		if (inBackground) [application endBackgroundTask:self.backgroundTaskIdentifier];
-	}
 }
 
 - (NSArray *)nonMultitaskingQueuedConnectionControllers {
 	if (!nonMultitaskingConnectionControllers) return nil;
 	
 	return [NSArray arrayWithArray:nonMultitaskingConnectionControllers];
+}
+
+- (NSUInteger)nonMultitaskingQueuedConnectionControllersCount {
+	return [nonMultitaskingConnectionControllers count];
 }
 
 - (void)dctInternal_didEnterBackground:(NSNotification *)notification {

@@ -60,6 +60,9 @@ NSString *const DCTConnectionQueueActiveConnectionCountChangedNotification = @"D
 NSString *const DCTConnectionQueueActiveConnectionCountKey = @"activeConnectionCount";
 NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 
+NSString *const DCTConnectionQueueActiveConnectionCountIncreasedNotification = @"DCTConnectionQueueActiveConnectionCountIncreasedNotification";
+NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @"DCTConnectionQueueActiveConnectionCountDecreasedNotification";
+
 @interface DCTConnectionQueue ()
 
 - (void)dctInternal_runNextConnection;
@@ -79,13 +82,7 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 - (void)uikit_init;
 @end
 
-
-
-
 @interface DCTConnectionController (DCTConnectionQueue)
-//- (void)dctConnectionQueue_start;
-//- (void)dctConnectionQueue_reset;
-//- (void)dctConnectionQueue_setQueued;
 - (void)dctInternal_start;
 - (void)dctInternal_reset;
 - (void)dctInternal_setQueued;
@@ -102,8 +99,7 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 
 @synthesize maxConnections;
 
-#pragma mark -
-#pragma mark NSObject
+#pragma mark - NSObject
 
 - (id)init {
 	
@@ -114,10 +110,7 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 	active = YES;
 	self.maxConnections = 5;
 	externalConnectionCountKeys = [NSArray arrayWithObjects:DCTConnectionQueueActiveConnectionCountKey, DCTConnectionQueueConnectionCountKey, nil];
-	
-	[self addObserver:self forKeyPath:DCTConnectionQueueConnectionCountKey options:NSKeyValueObservingOptionNew context:nil];
-	[self addObserver:self forKeyPath:DCTConnectionQueueActiveConnectionCountKey options:NSKeyValueObservingOptionNew context:nil];
-	
+		
 	[self uikit_init];
 	
 	return self;	
@@ -131,17 +124,12 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 
 - (void)uikit_dealloc {}
 
-#pragma mark -
-#pragma mark DCTConnection Queue
+#pragma mark - DCTConnectionQueue
 
 - (void)start {
 	active = YES;
 	[self dctInternal_runNextConnection];
 }
-/*
-- (void)pause {
-	active = NO;
-}*/
 
 - (void)stop {
 	active = NO;
@@ -178,23 +166,6 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 	[self dctInternal_removeActiveConnection:connectionController];
 	[connectionController dctInternal_reset];
 	[self dctInternal_addConnectionControllerToQueue:connectionController];
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath
-					  ofObject:(id)object
-						change:(NSDictionary *)change
-					   context:(void *)context {
-	
-	if (object == self) {
-		
-		if ([keyPath isEqualToString:DCTConnectionQueueActiveConnectionCountKey])
-			[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountChangedNotification object:self];
-		
-		else if ([keyPath isEqualToString:DCTConnectionQueueConnectionCountKey])
-			[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueConnectionCountChangedNotification object:self];
-		
-		return;
-	}
 }
 
 #pragma mark - DCTConnectionQueue Accessors
@@ -322,6 +293,8 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 
 - (void)dctInternal_removeActiveConnection:(DCTConnectionController *)connection {
 	
+	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountDecreasedNotification object:self];
+	
 	[self dct_changeValueForKeys:externalConnectionCountKeys withChange:^{
 		[activeConnections removeObject:connection];
 	}];
@@ -342,6 +315,8 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 		[activeConnections addObject:connectionController];
 		[queuedConnections removeObject:connectionController];
 	}];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountIncreasedNotification object:self];
 	
 	[connectionController dctInternal_start];
 }

@@ -45,6 +45,8 @@
  */
 @property (nonatomic, readonly) NSArray *nonMultitaskingQueuedConnectionControllers;
 
+@property (nonatomic, readonly) NSUInteger nonMultitaskingQueuedConnectionControllersCount;
+
 /** Background task identifier given when we ask for background completion.
  */
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskIdentifier;
@@ -54,5 +56,11 @@
 @property (nonatomic, assign) BOOL multitaskEnabled;
 
 @property (nonatomic, readonly) BOOL inBackground;
+
+
+
+
+
+
 
 @end

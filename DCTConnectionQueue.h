@@ -40,6 +40,9 @@
 extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotification;
 
+extern NSString *const DCTConnectionQueueActiveConnectionCountIncreasedNotification;
+extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification;
+
 @interface DCTConnectionQueue : NSObject {
 	// Needed for multitasking on the iPhone, which is added as a category.	
 	__strong NSMutableArray *nonMultitaskingConnectionControllers;
@@ -57,9 +60,6 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
 
 /** Stops the conneciton queue. */
 - (void)stop;
-
-/** Pauses the conneciton queue. */
-//- (void)pause;
 
 /** Starts the conneciton queue. */
 - (void)start;
