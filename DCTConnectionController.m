@@ -121,6 +121,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 	__strong NSMutableSet *completionBlocks;
 	__strong NSMutableSet *failureBlocks;
 	__strong NSMutableSet *cancelationBlocks;
+	__strong NSMutableSet *statusChangeHandlers;
 	
 	__strong NSFileHandle *fileHandle; // Used if a path is given.
 	float contentLength, downloadedLength;
@@ -277,6 +278,20 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 
 #pragma mark - DCTConnectionController: Setters
 
+- (void)setStatus:(DCTConnectionControllerStatus)newStatus {
+	
+	if (newStatus == status) return;
+	
+	[self dct_changeValueForKey:@"status" withChange:^{
+		status = newStatus;
+	}];
+	
+	[statusChangeHandlers enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+		DCTConnectionControllerStatusBlock block = obj;
+		block(newStatus);
+	}];
+}
+
 - (void)setURLRequest:(NSURLRequest *)newURLRequest {
 	
 	if (self.started) return;
@@ -380,7 +395,14 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 	[cancelationBlocks dct_addBlock:handler];
 }
 
-
+- (void)addStatusChangeHandler:(DCTConnectionControllerStatusBlock)handler {
+	
+	if (!statusChangeHandlers) statusChangeHandlers = [[NSMutableSet alloc] initWithCapacity:1];
+	
+	if (self.cancelled) handler(self.status);
+	
+	[statusChangeHandlers dct_addBlock:handler];
+}
 
 
 

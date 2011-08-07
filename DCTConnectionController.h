@@ -77,6 +77,7 @@ typedef void (^DCTConnectionControllerResponseBlock) (NSURLResponse *response);
 typedef void (^DCTConnectionControllerFailureBlock) (NSError *error);
 typedef void (^DCTConnectionControllerCancelationBlock) ();
 typedef void (^DCTConnectionControllerFinishBlock) ();
+typedef void (^DCTConnectionControllerStatusBlock) (DCTConnectionControllerStatus status);
 
 /** Name of the notification sent out when the connection has successfully completed.
  */
@@ -308,7 +309,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 
 
-
+- (void)addStatusChangeHandler:(DCTConnectionControllerStatusBlock)handler;
 
 
 

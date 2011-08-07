@@ -95,10 +95,9 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
     __strong NSMutableArray *activeConnections;
 	__strong NSMutableArray *queuedConnections;
 	BOOL active;
-	NSInteger externalConnectionCount;
 	NSInteger connectionCount;
 	
-	__strong NSArray *externalConnectionCountKeys;	
+	__strong NSArray *externalConnectionCountKeys;
 }
 
 @synthesize maxConnections;
@@ -110,8 +109,6 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 	
 	if (!(self = [super init])) return nil;
 	
-	[self dct_safePerformSelector:@selector(uikit_init)];
-		
 	activeConnections = [[NSMutableArray alloc] init];
 	queuedConnections = [[NSMutableArray alloc] init];
 	active = YES;
@@ -121,13 +118,15 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 	[self addObserver:self forKeyPath:DCTConnectionQueueConnectionCountKey options:NSKeyValueObservingOptionNew context:nil];
 	[self addObserver:self forKeyPath:DCTConnectionQueueActiveConnectionCountKey options:NSKeyValueObservingOptionNew context:nil];
 	
+	[self uikit_init];
+	
 	return self;	
 }
 
 - (void)uikit_init {}
 
 - (void)dealloc {
-	[self dct_safePerformSelector:@selector(uikit_dealloc)];
+	[self uikit_dealloc];
 }
 
 - (void)uikit_dealloc {}
@@ -153,7 +152,12 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 
 - (DCTConnectionController *)addConnectionController:(DCTConnectionController *)connectionController {
 	
-	[connectionController addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
+	__block DCTConnectionController *blockConnectionController = connectionController;
+	
+	[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
+		if (blockConnectionController.ended)
+			[self removeConnectionController:blockConnectionController];
+	}];
 	
 	[self dctInternal_addConnectionControllerToQueue:connectionController];
 	return connectionController;
@@ -191,33 +195,9 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 		
 		return;
 	}
-	
-	if (![object isKindOfClass:[DCTConnectionController class]]) return;
-	
-	if (![keyPath isEqualToString:@"status"]) return;
-	
-	if (!active) return;
-	
-	DCTConnectionController *connection = (DCTConnectionController *)object;
-	
-	if (connection.ended)
-		[self removeConnectionController:connection];
 }
 
-- (void)incrementExternalConnectionCount {
-	[self dct_changeValueForKeys:externalConnectionCountKeys withChange:^{
-		externalConnectionCount++;
-	}];
-}
-
-- (void)decrementExternalConnectionCount {
-	[self dct_changeValueForKeys:externalConnectionCountKeys withChange:^{
-		externalConnectionCount--;
-	}];
-}
-
-#pragma mark -
-#pragma mark DCTConnectionQueue Accessors
+#pragma mark - DCTConnectionQueue Accessors
 
 - (NSArray *)activeConnectionControllers {
 	return [NSArray arrayWithArray:activeConnections];
@@ -231,15 +211,18 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 }
 
 - (NSInteger)activeConnectionCount {
-	return [activeConnections count] + externalConnectionCount;
+	return [activeConnections count];
+}
+
+- (NSInteger)queuedConnectionCount {
+	return [queuedConnections count];
 }
 
 - (NSInteger)connectionCount {
 	return self.activeConnectionCount + [queuedConnections count] + [nonMultitaskingConnectionControllers count];
 }
 
-#pragma mark -
-#pragma mark Internals
+#pragma mark - Internals
 
 - (void)dctInternal_runNextConnection {
 	
@@ -338,7 +321,6 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 }
 
 - (void)dctInternal_removeActiveConnection:(DCTConnectionController *)connection {
-	[connection removeObserver:self forKeyPath:@"status"];
 	
 	[self dct_changeValueForKeys:externalConnectionCountKeys withChange:^{
 		[activeConnections removeObject:connection];

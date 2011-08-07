@@ -74,6 +74,8 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
 /** The amount of connection controllers currently in progress. */
 @property (nonatomic, readonly) NSInteger activeConnectionCount;
 
+@property (nonatomic, readonly) NSInteger queuedConnectionCount;
+
 /// @name Accessing Connection Controllers
 
 /** Returns all the connection controllers currently in progress and queued. */
@@ -110,14 +112,5 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
  @param connectionController The connection controller to requeue.
  */
 - (void)requeueConnectionController:(DCTConnectionController *)connectionController;
-
-/// @name External Connection Counting
-
-/** Increments the external conneciton count.
- */
-- (void)incrementExternalConnectionCount;
-
-/** Decrements the external conneciton count */
-- (void)decrementExternalConnectionCount;
 
 @end
