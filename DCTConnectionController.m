@@ -172,9 +172,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 
 #pragma mark - DCTConnectionController: Managing the connection
 
-- (void)connect {
-		
-	DCTConnectionQueue *queue = [DCTConnectionQueue sharedConnectionQueue];
+- (void)connectOnQueue:(DCTConnectionQueue *)queue {
 	
 	NSUInteger existingConnectionControllerIndex = [queue.connectionControllers indexOfObject:self];
 	

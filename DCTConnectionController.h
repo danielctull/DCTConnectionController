@@ -35,7 +35,8 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "DCTConnectionController.h"
+
+@class DCTConnectionQueue;
 
 /** Specifies the type of connection to use.
  */
@@ -338,7 +339,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  @return The actual connection controller that is added to the queue or already running.
  */
-- (void)connect;
+- (void)connectOnQueue:(DCTConnectionQueue *)queue;
 
 
 /** Cancels the connection.

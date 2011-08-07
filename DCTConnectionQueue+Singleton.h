@@ -35,6 +35,7 @@
  */
 
 #import "DCTConnectionQueue.h"
+#import "DCTConnectionController.h"
 
 @interface DCTConnectionQueue (Singleton)
 
@@ -43,4 +44,10 @@
 /** The shared connection queue.
  */
 + (DCTConnectionQueue *)sharedConnectionQueue;
+@end
+
+@interface DCTConnectionController (QueueSingleton)
+
+- (void)connect;
+
 @end
