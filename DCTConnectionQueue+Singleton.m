@@ -42,7 +42,10 @@ static DCTConnectionQueue *sharedInstance = nil;
 
 + (DCTConnectionQueue *)sharedConnectionQueue {
 	
-	if (!sharedInstance) sharedInstance = [[self alloc] init];
+	static dispatch_once_t sharedToken;
+	dispatch_once(&sharedToken, ^{
+		sharedInstance = [[self alloc] init];
+	});
 	
     return sharedInstance;
 }
