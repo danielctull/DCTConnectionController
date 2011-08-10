@@ -89,9 +89,6 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 @property (nonatomic, readonly) NSSet *dctInternal_cancelationBlocks;
 
 @property (nonatomic, readwrite) DCTConnectionControllerStatus status;
-@property (nonatomic, strong, readwrite) NSObject *returnedObject;
-@property (nonatomic, strong, readwrite) NSError *returnedError;
-@property (nonatomic, strong, readwrite) NSURLResponse *returnedResponse;
 
 - (void)dctInternal_responded;
 - (void)dctInternal_failed;

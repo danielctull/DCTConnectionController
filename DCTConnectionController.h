@@ -473,19 +473,19 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  This holds the response given to the notifyDelegateAndObserversOfResponse: method, for observers to access.
  */
-@property (nonatomic, strong, readonly) NSURLResponse *returnedResponse;
+@property (nonatomic, strong) NSURLResponse *returnedResponse;
 
 /** The object, if there is one, returned from the connection.
  
  This holds the object given to the notifyDelegateAndObserversOfReturnedObject: method, for observers to access.
  */
-@property (nonatomic, strong, readonly) NSObject *returnedObject;
+@property (nonatomic, strong) NSObject *returnedObject;
 
 /** The error, if there is one, returned from the connection.
  
  This holds the error given to the notifyDelegateAndObserversOfReturnedError: method, for observers to access.
  */
-@property (nonatomic, strong, readonly) NSError *returnedError;
+@property (nonatomic, strong) NSError *returnedError;
 
 
 @end
