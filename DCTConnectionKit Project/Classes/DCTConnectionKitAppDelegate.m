@@ -11,7 +11,7 @@
 #import "DCTConnectionQueue+Singleton.h"
 #import "DCTConnectionQueue+UIKitAdditions.h"
 
-#import "DCTURLConnectionController.h"
+#import "DCTConnectionController.h"
 #import "DCTConnectionController+Equality.h"
 
 @implementation DCTConnectionKitAppDelegate
@@ -20,14 +20,14 @@
 
 - (void)applicationDidFinishLaunching:(UIApplication *)application {
 	/*
-	DCTURLConnectionController *c = [[DCTURLConnectionController alloc] init];
+	DCTConnectionController *c = [[DCTConnectionController alloc] init];
 	c.URL = [NSURL URLWithString:@"www.google.com"];
 	c.delegate = self;
 	DCTConnectionController *cRunning = [c connect];
 	
 	NSLog(@"%@", cRunning);
 	
-	DCTURLConnectionController *c2 = [[DCTURLConnectionController alloc] init];
+	DCTConnectionController *c2 = [[DCTConnectionController alloc] init];
 	c2.URL = [NSURL URLWithString:@"www.google.com"];
 	c2.delegate = self;
 	DCTConnectionController *c2Running = [c2 connect];

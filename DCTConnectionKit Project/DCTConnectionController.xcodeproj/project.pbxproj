@@ -12,17 +12,8 @@
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
 		1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		24306A9B114E894B008BBE38 /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24306A9A114E894B008BBE38 /* MainWindow-iPad.xib */; };
-		24491FA512AF9A8B005F5821 /* NSString+DCTURLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 244918DB12AF9A8A005F5821 /* NSString+DCTURLEncoding.m */; };
-		24491FA612AF9A8B005F5821 /* DCTRequestConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 244918DE12AF9A8A005F5821 /* DCTRequestConnectionController.m */; };
-		24491FA712AF9A8B005F5821 /* DCTURLConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 244918E012AF9A8A005F5821 /* DCTURLConnectionController.m */; };
-		24491FA812AF9A8B005F5821 /* DCTConnectionController+Equality.m in Sources */ = {isa = PBXBuildFile; fileRef = 244918E212AF9A8A005F5821 /* DCTConnectionController+Equality.m */; };
-		24491FA912AF9A8B005F5821 /* DCTConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 244918E412AF9A8A005F5821 /* DCTConnectionController.m */; };
-		24491FB612AF9A8B005F5821 /* DCTConnectionQueue+Singleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2449190112AF9A8A005F5821 /* DCTConnectionQueue+Singleton.m */; };
-		24491FB712AF9A8B005F5821 /* DCTConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 2449190312AF9A8A005F5821 /* DCTConnectionQueue.m */; };
-		24491FB812AF9A8B005F5821 /* DCTRESTController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2449190612AF9A8A005F5821 /* DCTRESTController.m */; };
-		24491FB912AF9A8B005F5821 /* DCTURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 2449190812AF9A8A005F5821 /* DCTURLConnection.m */; };
-		24491FBF12AF9A8B005F5821 /* DCTConnectionQueue+UIKitAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2449191612AF9A8A005F5821 /* DCTConnectionQueue+UIKitAdditions.m */; };
 		2456D8E1110B6F54009A4F1E /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2456D8E0110B6F54009A4F1E /* CoreData.framework */; };
+		2478173913EEF72A00638E02 /* DCTNetworkActivityIndicatorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2478173813EEF72A00638E02 /* DCTNetworkActivityIndicatorController.m */; };
 		2478954712F57CA200DFA61C /* DCTBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 2478951712F57CA200DFA61C /* DCTBlock.m */; };
 		2478954812F57CA200DFA61C /* DCTObservationInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 2478951912F57CA200DFA61C /* DCTObservationInfo.m */; };
 		2478954912F57CA200DFA61C /* DCTQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 2478951B12F57CA200DFA61C /* DCTQueue.m */; };
@@ -34,11 +25,18 @@
 		2478954F12F57CA200DFA61C /* NSMutableArray+DCTExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 2478952712F57CA200DFA61C /* NSMutableArray+DCTExtras.m */; };
 		2478955012F57CA200DFA61C /* NSMutableSet+DCTExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 2478952912F57CA200DFA61C /* NSMutableSet+DCTExtras.m */; };
 		2478955112F57CA200DFA61C /* NSObject+DCTKVOExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 2478952B12F57CA200DFA61C /* NSObject+DCTKVOExtras.m */; };
-		2478955212F57CA200DFA61C /* NSObject+DCTPerformSelector.m in Sources */ = {isa = PBXBuildFile; fileRef = 2478952D12F57CA200DFA61C /* NSObject+DCTPerformSelector.m */; };
-		2478955312F57D8600DFA61C /* DCTConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 244918E412AF9A8A005F5821 /* DCTConnectionController.m */; };
-		2478955412F57D8A00DFA61C /* DCTConnectionController+Equality.m in Sources */ = {isa = PBXBuildFile; fileRef = 244918E212AF9A8A005F5821 /* DCTConnectionController+Equality.m */; };
-		2478955512F57D8E00DFA61C /* DCTConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 2449190312AF9A8A005F5821 /* DCTConnectionQueue.m */; };
-		2478955612F57DA500DFA61C /* DCTURLConnection.m in Sources */ = {isa = PBXBuildFile; fileRef = 2449190812AF9A8A005F5821 /* DCTURLConnection.m */; };
+		2492728E13ED3F2D00D8D2DB /* NSString+DCTURLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 2492726313ED3F2D00D8D2DB /* NSString+DCTURLEncoding.m */; };
+		2492729113ED3F2D00D8D2DB /* DCTConnectionController+Equality.m in Sources */ = {isa = PBXBuildFile; fileRef = 2492726A13ED3F2D00D8D2DB /* DCTConnectionController+Equality.m */; };
+		2492729213ED3F2D00D8D2DB /* DCTConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2492726C13ED3F2D00D8D2DB /* DCTConnectionController.m */; };
+		2492729313ED3F2D00D8D2DB /* DCTConnectionQueue+Singleton.m in Sources */ = {isa = PBXBuildFile; fileRef = 2492726E13ED3F2D00D8D2DB /* DCTConnectionQueue+Singleton.m */; };
+		2492729413ED3F2D00D8D2DB /* DCTConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 2492727013ED3F2D00D8D2DB /* DCTConnectionQueue.m */; };
+		2492729513ED3F2D00D8D2DB /* DCTRESTController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2492727213ED3F2D00D8D2DB /* DCTRESTController.m */; };
+		2492729713ED3F2D00D8D2DB /* DCTConnectionQueue+UIKitAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2492727713ED3F2D00D8D2DB /* DCTConnectionQueue+UIKitAdditions.m */; };
+		2492729A13ED89FB00D8D2DB /* DCTConnectionController+UsefulChecks.m in Sources */ = {isa = PBXBuildFile; fileRef = 2492729913ED89FB00D8D2DB /* DCTConnectionController+UsefulChecks.m */; };
+		2492729D13ED907400D8D2DB /* DCTConnectionController+Deprication.m in Sources */ = {isa = PBXBuildFile; fileRef = 2492729C13ED907400D8D2DB /* DCTConnectionController+Deprication.m */; };
+		249272A113ED9A6100D8D2DB /* DCTNewsstandConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 249272A013ED9A6100D8D2DB /* DCTNewsstandConnectionController.m */; };
+		249272A713ED9AC700D8D2DB /* DCTConnectionQueue+NewsstandKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 249272A613ED9AC600D8D2DB /* DCTConnectionQueue+NewsstandKit.m */; };
+		249272A913ED9DE100D8D2DB /* NewsstandKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 249272A813ED9DE100D8D2DB /* NewsstandKit.framework */; };
 		24BD77ED11DCD1090094DB11 /* DCTConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD77EC11DCD1090094DB11 /* DCTConnectionTests.m */; };
 		24BD781E11DCD37B0094DB11 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
 		24BD782311DCD3870094DB11 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -55,32 +53,14 @@
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* DCTConnectionKitAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionKitAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* DCTConnectionKitAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionKitAppDelegate.m; sourceTree = "<group>"; };
-		1D6058910D05DD3D006BFB54 /* DCTConnectionController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DCTConnectionController.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		1D6058910D05DD3D006BFB54 /* DCT Connection Controller.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DCT Connection Controller.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		1DF5F4DF0D08C38300B7A737 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		24306A9A114E894B008BBE38 /* MainWindow-iPad.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "Resources-iPad/MainWindow-iPad.xib"; sourceTree = "<group>"; };
 		243DB58D126A4B4F00A5AF1F /* DCTConnectionController-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist; path = "DCTConnectionController-Info.plist"; sourceTree = "<group>"; };
 		243DB58F126A4B8500A5AF1F /* DCTConnectionController_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionController_Prefix.pch; sourceTree = "<group>"; };
-		244918DA12AF9A8A005F5821 /* NSString+DCTURLEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+DCTURLEncoding.h"; sourceTree = "<group>"; };
-		244918DB12AF9A8A005F5821 /* NSString+DCTURLEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+DCTURLEncoding.m"; sourceTree = "<group>"; };
-		244918DD12AF9A8A005F5821 /* DCTRequestConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTRequestConnectionController.h; sourceTree = "<group>"; };
-		244918DE12AF9A8A005F5821 /* DCTRequestConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTRequestConnectionController.m; sourceTree = "<group>"; };
-		244918DF12AF9A8A005F5821 /* DCTURLConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTURLConnectionController.h; sourceTree = "<group>"; };
-		244918E012AF9A8A005F5821 /* DCTURLConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTURLConnectionController.m; sourceTree = "<group>"; };
-		244918E112AF9A8A005F5821 /* DCTConnectionController+Equality.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionController+Equality.h"; sourceTree = "<group>"; };
-		244918E212AF9A8A005F5821 /* DCTConnectionController+Equality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionController+Equality.m"; sourceTree = "<group>"; };
-		244918E312AF9A8A005F5821 /* DCTConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionController.h; sourceTree = "<group>"; };
-		244918E412AF9A8A005F5821 /* DCTConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionController.m; sourceTree = "<group>"; };
-		2449190012AF9A8A005F5821 /* DCTConnectionQueue+Singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionQueue+Singleton.h"; sourceTree = "<group>"; };
-		2449190112AF9A8A005F5821 /* DCTConnectionQueue+Singleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionQueue+Singleton.m"; sourceTree = "<group>"; };
-		2449190212AF9A8A005F5821 /* DCTConnectionQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionQueue.h; sourceTree = "<group>"; };
-		2449190312AF9A8A005F5821 /* DCTConnectionQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionQueue.m; sourceTree = "<group>"; };
-		2449190512AF9A8A005F5821 /* DCTRESTController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTRESTController.h; sourceTree = "<group>"; };
-		2449190612AF9A8A005F5821 /* DCTRESTController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTRESTController.m; sourceTree = "<group>"; };
-		2449190712AF9A8A005F5821 /* DCTURLConnection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTURLConnection.h; sourceTree = "<group>"; };
-		2449190812AF9A8A005F5821 /* DCTURLConnection.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTURLConnection.m; sourceTree = "<group>"; };
-		2449191512AF9A8A005F5821 /* DCTConnectionQueue+UIKitAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionQueue+UIKitAdditions.h"; sourceTree = "<group>"; };
-		2449191612AF9A8A005F5821 /* DCTConnectionQueue+UIKitAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionQueue+UIKitAdditions.m"; sourceTree = "<group>"; };
 		2456D8E0110B6F54009A4F1E /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		2478173713EEF72A00638E02 /* DCTNetworkActivityIndicatorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTNetworkActivityIndicatorController.h; sourceTree = "<group>"; };
+		2478173813EEF72A00638E02 /* DCTNetworkActivityIndicatorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTNetworkActivityIndicatorController.m; sourceTree = "<group>"; };
 		2478951612F57CA200DFA61C /* DCTBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTBlock.h; sourceTree = "<group>"; };
 		2478951712F57CA200DFA61C /* DCTBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTBlock.m; sourceTree = "<group>"; };
 		2478951812F57CA200DFA61C /* DCTObservationInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTObservationInfo.h; sourceTree = "<group>"; };
@@ -103,8 +83,29 @@
 		2478952912F57CA200DFA61C /* NSMutableSet+DCTExtras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableSet+DCTExtras.m"; sourceTree = "<group>"; };
 		2478952A12F57CA200DFA61C /* NSObject+DCTKVOExtras.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+DCTKVOExtras.h"; sourceTree = "<group>"; };
 		2478952B12F57CA200DFA61C /* NSObject+DCTKVOExtras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+DCTKVOExtras.m"; sourceTree = "<group>"; };
-		2478952C12F57CA200DFA61C /* NSObject+DCTPerformSelector.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+DCTPerformSelector.h"; sourceTree = "<group>"; };
-		2478952D12F57CA200DFA61C /* NSObject+DCTPerformSelector.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+DCTPerformSelector.m"; sourceTree = "<group>"; };
+		2492726213ED3F2D00D8D2DB /* NSString+DCTURLEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+DCTURLEncoding.h"; sourceTree = "<group>"; };
+		2492726313ED3F2D00D8D2DB /* NSString+DCTURLEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+DCTURLEncoding.m"; sourceTree = "<group>"; };
+		2492726913ED3F2D00D8D2DB /* DCTConnectionController+Equality.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionController+Equality.h"; sourceTree = "<group>"; };
+		2492726A13ED3F2D00D8D2DB /* DCTConnectionController+Equality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionController+Equality.m"; sourceTree = "<group>"; };
+		2492726B13ED3F2D00D8D2DB /* DCTConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionController.h; sourceTree = "<group>"; };
+		2492726C13ED3F2D00D8D2DB /* DCTConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionController.m; sourceTree = "<group>"; };
+		2492726D13ED3F2D00D8D2DB /* DCTConnectionQueue+Singleton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionQueue+Singleton.h"; sourceTree = "<group>"; };
+		2492726E13ED3F2D00D8D2DB /* DCTConnectionQueue+Singleton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionQueue+Singleton.m"; sourceTree = "<group>"; };
+		2492726F13ED3F2D00D8D2DB /* DCTConnectionQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionQueue.h; sourceTree = "<group>"; };
+		2492727013ED3F2D00D8D2DB /* DCTConnectionQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionQueue.m; sourceTree = "<group>"; };
+		2492727113ED3F2D00D8D2DB /* DCTRESTController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTRESTController.h; sourceTree = "<group>"; };
+		2492727213ED3F2D00D8D2DB /* DCTRESTController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTRESTController.m; sourceTree = "<group>"; };
+		2492727613ED3F2D00D8D2DB /* DCTConnectionQueue+UIKitAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionQueue+UIKitAdditions.h"; sourceTree = "<group>"; };
+		2492727713ED3F2D00D8D2DB /* DCTConnectionQueue+UIKitAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionQueue+UIKitAdditions.m"; sourceTree = "<group>"; };
+		2492729813ED89FB00D8D2DB /* DCTConnectionController+UsefulChecks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionController+UsefulChecks.h"; sourceTree = "<group>"; };
+		2492729913ED89FB00D8D2DB /* DCTConnectionController+UsefulChecks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionController+UsefulChecks.m"; sourceTree = "<group>"; };
+		2492729B13ED907400D8D2DB /* DCTConnectionController+Deprication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionController+Deprication.h"; sourceTree = "<group>"; };
+		2492729C13ED907400D8D2DB /* DCTConnectionController+Deprication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionController+Deprication.m"; sourceTree = "<group>"; };
+		2492729F13ED9A6100D8D2DB /* DCTNewsstandConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTNewsstandConnectionController.h; sourceTree = "<group>"; };
+		249272A013ED9A6100D8D2DB /* DCTNewsstandConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTNewsstandConnectionController.m; sourceTree = "<group>"; };
+		249272A513ED9AC600D8D2DB /* DCTConnectionQueue+NewsstandKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionQueue+NewsstandKit.h"; sourceTree = "<group>"; };
+		249272A613ED9AC600D8D2DB /* DCTConnectionQueue+NewsstandKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionQueue+NewsstandKit.m"; sourceTree = "<group>"; };
+		249272A813ED9DE100D8D2DB /* NewsstandKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NewsstandKit.framework; path = System/Library/Frameworks/NewsstandKit.framework; sourceTree = SDKROOT; };
 		24BD77D711DCCE340094DB11 /* Unit Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unit Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		24BD77D811DCCE340094DB11 /* Unit Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Unit Tests-Info.plist"; sourceTree = "<group>"; };
 		24BD77EB11DCD1090094DB11 /* DCTConnectionTests.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionTests.h; sourceTree = "<group>"; };
@@ -128,6 +129,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				249272A913ED9DE100D8D2DB /* NewsstandKit.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
@@ -159,7 +161,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				1D6058910D05DD3D006BFB54 /* DCTConnectionController.app */,
+				1D6058910D05DD3D006BFB54 /* DCT Connection Controller.app */,
 				24BD77D711DCCE340094DB11 /* Unit Tests.octest */,
 			);
 			name = Products;
@@ -171,58 +173,6 @@
 				24306A9A114E894B008BBE38 /* MainWindow-iPad.xib */,
 			);
 			name = "Resources-iPad";
-			sourceTree = "<group>";
-		};
-		2449112E12AF9A85005F5821 /* DCTConnectionController */ = {
-			isa = PBXGroup;
-			children = (
-				244918D312AF9A8A005F5821 /* Categories */,
-				244918DC12AF9A8A005F5821 /* Connection Controllers */,
-				244918E112AF9A8A005F5821 /* DCTConnectionController+Equality.h */,
-				244918E212AF9A8A005F5821 /* DCTConnectionController+Equality.m */,
-				244918E312AF9A8A005F5821 /* DCTConnectionController.h */,
-				244918E412AF9A8A005F5821 /* DCTConnectionController.m */,
-				2449190012AF9A8A005F5821 /* DCTConnectionQueue+Singleton.h */,
-				2449190112AF9A8A005F5821 /* DCTConnectionQueue+Singleton.m */,
-				2449190212AF9A8A005F5821 /* DCTConnectionQueue.h */,
-				2449190312AF9A8A005F5821 /* DCTConnectionQueue.m */,
-				2449190512AF9A8A005F5821 /* DCTRESTController.h */,
-				2449190612AF9A8A005F5821 /* DCTRESTController.m */,
-				2449190712AF9A8A005F5821 /* DCTURLConnection.h */,
-				2449190812AF9A8A005F5821 /* DCTURLConnection.m */,
-				2449191412AF9A8A005F5821 /* UIKit Additions */,
-			);
-			name = DCTConnectionController;
-			path = /Users/danielctull/Dropbox/Programs/Cocoa/Frameworks/DCTConnectionController;
-			sourceTree = "<absolute>";
-		};
-		244918D312AF9A8A005F5821 /* Categories */ = {
-			isa = PBXGroup;
-			children = (
-				244918DA12AF9A8A005F5821 /* NSString+DCTURLEncoding.h */,
-				244918DB12AF9A8A005F5821 /* NSString+DCTURLEncoding.m */,
-			);
-			path = Categories;
-			sourceTree = "<group>";
-		};
-		244918DC12AF9A8A005F5821 /* Connection Controllers */ = {
-			isa = PBXGroup;
-			children = (
-				244918DD12AF9A8A005F5821 /* DCTRequestConnectionController.h */,
-				244918DE12AF9A8A005F5821 /* DCTRequestConnectionController.m */,
-				244918DF12AF9A8A005F5821 /* DCTURLConnectionController.h */,
-				244918E012AF9A8A005F5821 /* DCTURLConnectionController.m */,
-			);
-			path = "Connection Controllers";
-			sourceTree = "<group>";
-		};
-		2449191412AF9A8A005F5821 /* UIKit Additions */ = {
-			isa = PBXGroup;
-			children = (
-				2449191512AF9A8A005F5821 /* DCTConnectionQueue+UIKitAdditions.h */,
-				2449191612AF9A8A005F5821 /* DCTConnectionQueue+UIKitAdditions.m */,
-			);
-			path = "UIKit Additions";
 			sourceTree = "<group>";
 		};
 		247894ED12F57CA200DFA61C /* DCTFoundation */ = {
@@ -250,11 +200,65 @@
 				2478952912F57CA200DFA61C /* NSMutableSet+DCTExtras.m */,
 				2478952A12F57CA200DFA61C /* NSObject+DCTKVOExtras.h */,
 				2478952B12F57CA200DFA61C /* NSObject+DCTKVOExtras.m */,
-				2478952C12F57CA200DFA61C /* NSObject+DCTPerformSelector.h */,
-				2478952D12F57CA200DFA61C /* NSObject+DCTPerformSelector.m */,
 			);
 			name = DCTFoundation;
 			path = ../DCTFoundation;
+			sourceTree = "<group>";
+		};
+		2492723B13ED3F2D00D8D2DB /* DCTConnectionController */ = {
+			isa = PBXGroup;
+			children = (
+				2492726113ED3F2D00D8D2DB /* Categories */,
+				2492726B13ED3F2D00D8D2DB /* DCTConnectionController.h */,
+				2492726C13ED3F2D00D8D2DB /* DCTConnectionController.m */,
+				2492729B13ED907400D8D2DB /* DCTConnectionController+Deprication.h */,
+				2492729C13ED907400D8D2DB /* DCTConnectionController+Deprication.m */,
+				2492726913ED3F2D00D8D2DB /* DCTConnectionController+Equality.h */,
+				2492726A13ED3F2D00D8D2DB /* DCTConnectionController+Equality.m */,
+				2492729813ED89FB00D8D2DB /* DCTConnectionController+UsefulChecks.h */,
+				2492729913ED89FB00D8D2DB /* DCTConnectionController+UsefulChecks.m */,
+				2492726D13ED3F2D00D8D2DB /* DCTConnectionQueue+Singleton.h */,
+				2492726E13ED3F2D00D8D2DB /* DCTConnectionQueue+Singleton.m */,
+				2492726F13ED3F2D00D8D2DB /* DCTConnectionQueue.h */,
+				2492727013ED3F2D00D8D2DB /* DCTConnectionQueue.m */,
+				2492727113ED3F2D00D8D2DB /* DCTRESTController.h */,
+				2492727213ED3F2D00D8D2DB /* DCTRESTController.m */,
+				2492727513ED3F2D00D8D2DB /* UIKit Additions */,
+				2478173713EEF72A00638E02 /* DCTNetworkActivityIndicatorController.h */,
+				2478173813EEF72A00638E02 /* DCTNetworkActivityIndicatorController.m */,
+			);
+			name = DCTConnectionController;
+			path = ../DCTConnectionController;
+			sourceTree = "<group>";
+		};
+		2492726113ED3F2D00D8D2DB /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				2492726213ED3F2D00D8D2DB /* NSString+DCTURLEncoding.h */,
+				2492726313ED3F2D00D8D2DB /* NSString+DCTURLEncoding.m */,
+			);
+			path = Categories;
+			sourceTree = "<group>";
+		};
+		2492727513ED3F2D00D8D2DB /* UIKit Additions */ = {
+			isa = PBXGroup;
+			children = (
+				2492727613ED3F2D00D8D2DB /* DCTConnectionQueue+UIKitAdditions.h */,
+				2492727713ED3F2D00D8D2DB /* DCTConnectionQueue+UIKitAdditions.m */,
+			);
+			path = "UIKit Additions";
+			sourceTree = "<group>";
+		};
+		2492729E13ED9A4500D8D2DB /* DCTConnectionController+NewsstandKit */ = {
+			isa = PBXGroup;
+			children = (
+				2492729F13ED9A6100D8D2DB /* DCTNewsstandConnectionController.h */,
+				249272A013ED9A6100D8D2DB /* DCTNewsstandConnectionController.m */,
+				249272A513ED9AC600D8D2DB /* DCTConnectionQueue+NewsstandKit.h */,
+				249272A613ED9AC600D8D2DB /* DCTConnectionQueue+NewsstandKit.m */,
+			);
+			name = "DCTConnectionController+NewsstandKit";
+			path = "../DCTConnectionController+NewsstandKit";
 			sourceTree = "<group>";
 		};
 		24BD77E811DCD0BE0094DB11 /* Unit Tests */ = {
@@ -286,7 +290,8 @@
 			isa = PBXGroup;
 			children = (
 				247894ED12F57CA200DFA61C /* DCTFoundation */,
-				2449112E12AF9A85005F5821 /* DCTConnectionController */,
+				2492729E13ED9A4500D8D2DB /* DCTConnectionController+NewsstandKit */,
+				2492723B13ED3F2D00D8D2DB /* DCTConnectionController */,
 				24E4DC45126A5FD500C19D4B /* DCTConnectionKitExample */,
 				24BD77E811DCD0BE0094DB11 /* Unit Tests */,
 				080E96DDFE201D6D7F000001 /* Classes */,
@@ -322,6 +327,7 @@
 			isa = PBXGroup;
 			children = (
 				1DF5F4DF0D08C38300B7A737 /* UIKit.framework */,
+				249272A813ED9DE100D8D2DB /* NewsstandKit.framework */,
 				1D30AB110D05D00D00671497 /* Foundation.framework */,
 				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
 				2456D8E0110B6F54009A4F1E /* CoreData.framework */,
@@ -346,7 +352,7 @@
 			);
 			name = DCTConnectionController;
 			productName = DTConnectionKit;
-			productReference = 1D6058910D05DD3D006BFB54 /* DCTConnectionController.app */;
+			productReference = 1D6058910D05DD3D006BFB54 /* DCT Connection Controller.app */;
 			productType = "com.apple.product-type.application";
 		};
 		24BD77D611DCCE340094DB11 /* Unit Tests */ = {
@@ -373,7 +379,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0410;
+				LastUpgradeCheck = 0420;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "DCTConnectionController" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -439,16 +445,6 @@
 				1D60589B0D05DD56006BFB54 /* main.m in Sources */,
 				1D3623260D0F684500981E51 /* DCTConnectionKitAppDelegate.m in Sources */,
 				24E4DC5D126A5FD500C19D4B /* DCTConnectionKitExampleViewController.m in Sources */,
-				24491FA512AF9A8B005F5821 /* NSString+DCTURLEncoding.m in Sources */,
-				24491FA612AF9A8B005F5821 /* DCTRequestConnectionController.m in Sources */,
-				24491FA712AF9A8B005F5821 /* DCTURLConnectionController.m in Sources */,
-				24491FA812AF9A8B005F5821 /* DCTConnectionController+Equality.m in Sources */,
-				24491FA912AF9A8B005F5821 /* DCTConnectionController.m in Sources */,
-				24491FB612AF9A8B005F5821 /* DCTConnectionQueue+Singleton.m in Sources */,
-				24491FB712AF9A8B005F5821 /* DCTConnectionQueue.m in Sources */,
-				24491FB812AF9A8B005F5821 /* DCTRESTController.m in Sources */,
-				24491FB912AF9A8B005F5821 /* DCTURLConnection.m in Sources */,
-				24491FBF12AF9A8B005F5821 /* DCTConnectionQueue+UIKitAdditions.m in Sources */,
 				2478954712F57CA200DFA61C /* DCTBlock.m in Sources */,
 				2478954812F57CA200DFA61C /* DCTObservationInfo.m in Sources */,
 				2478954912F57CA200DFA61C /* DCTQueue.m in Sources */,
@@ -460,7 +456,18 @@
 				2478954F12F57CA200DFA61C /* NSMutableArray+DCTExtras.m in Sources */,
 				2478955012F57CA200DFA61C /* NSMutableSet+DCTExtras.m in Sources */,
 				2478955112F57CA200DFA61C /* NSObject+DCTKVOExtras.m in Sources */,
-				2478955212F57CA200DFA61C /* NSObject+DCTPerformSelector.m in Sources */,
+				2492728E13ED3F2D00D8D2DB /* NSString+DCTURLEncoding.m in Sources */,
+				2492729113ED3F2D00D8D2DB /* DCTConnectionController+Equality.m in Sources */,
+				2492729213ED3F2D00D8D2DB /* DCTConnectionController.m in Sources */,
+				2492729313ED3F2D00D8D2DB /* DCTConnectionQueue+Singleton.m in Sources */,
+				2492729413ED3F2D00D8D2DB /* DCTConnectionQueue.m in Sources */,
+				2492729513ED3F2D00D8D2DB /* DCTRESTController.m in Sources */,
+				2492729713ED3F2D00D8D2DB /* DCTConnectionQueue+UIKitAdditions.m in Sources */,
+				2492729A13ED89FB00D8D2DB /* DCTConnectionController+UsefulChecks.m in Sources */,
+				2492729D13ED907400D8D2DB /* DCTConnectionController+Deprication.m in Sources */,
+				249272A113ED9A6100D8D2DB /* DCTNewsstandConnectionController.m in Sources */,
+				249272A713ED9AC700D8D2DB /* DCTConnectionQueue+NewsstandKit.m in Sources */,
+				2478173913EEF72A00638E02 /* DCTNetworkActivityIndicatorController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -472,10 +479,6 @@
 				24BD783511DCD3C30094DB11 /* DCTConnectionQueueTests.m in Sources */,
 				24BD78CC11DCE1630094DB11 /* DCTMockConnection.m in Sources */,
 				24BD78D511DCE24C0094DB11 /* DCTConnectionQueue+DCTInternalAccess.m in Sources */,
-				2478955312F57D8600DFA61C /* DCTConnectionController.m in Sources */,
-				2478955412F57D8A00DFA61C /* DCTConnectionController+Equality.m in Sources */,
-				2478955512F57D8E00DFA61C /* DCTConnectionQueue.m in Sources */,
-				2478955612F57DA500DFA61C /* DCTURLConnection.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -486,7 +489,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -495,8 +498,8 @@
 				GCC_PREFIX_HEADER = DCTConnectionController_Prefix.pch;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "DCTConnectionController-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
-				PRODUCT_NAME = DCTConnectionController;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PRODUCT_NAME = "DCT Connection Controller";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -506,15 +509,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
-				ARCHS = "$(ARCHS_UNIVERSAL_IPHONE_OS)";
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CLANG_ENABLE_OBJC_ARC = YES;
 				COPY_PHASE_STRIP = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = DCTConnectionController_Prefix.pch;
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "DCTConnectionController-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
-				PRODUCT_NAME = DCTConnectionController;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				PRODUCT_NAME = "DCT Connection Controller";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -580,10 +583,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_PEDANTIC = NO;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				SDKROOT = iphoneos;
@@ -595,10 +603,15 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_C_LANGUAGE_STANDARD = c99;
-				GCC_VERSION = com.apple.compilers.llvmgcc42;
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_PEDANTIC = NO;
+				GCC_WARN_SHADOW = YES;
+				GCC_WARN_UNKNOWN_PRAGMAS = YES;
+				GCC_WARN_UNUSED_PARAMETER = NO;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 4.1;
 				SDKROOT = iphoneos;

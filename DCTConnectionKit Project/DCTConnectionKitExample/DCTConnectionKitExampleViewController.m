@@ -8,34 +8,45 @@
 
 #import <UIKit/UIKit.h>
 #import "DCTConnectionKitExampleViewController.h"
-#import "DCTURLConnectionController.h"
+#import "DCTConnectionController.h"
 #import "DCTConnectionQueue+Singleton.h"
+#import "DCTNetworkActivityIndicatorController.h"
 
 @interface DCTConnectionKitExampleViewController ()
 - (NSString *)stringFromURL:(NSURL *)url;
-- (void)statusUpdate:(DCTURLConnectionController *)connectionController;
+- (void)statusUpdate:(DCTConnectionController *)connectionController;
 @end
 
 
 @implementation DCTConnectionKitExampleViewController
 
-@synthesize textView, toolbar, connectionsLabel;
+@synthesize textView, toolbar;
+@synthesize activeAmountLabel, connectionsAmountLabel, queuedAmountLabel;
 
 - (id)init {
 	if (!(self = [self initWithNibName:@"DCTConnectionKitExampleView" bundle:nil])) return nil;
 	
 	self.title = @"DCTConnectionController";
 	
+	DCTNetworkActivityIndicatorController *indicatorController = [DCTNetworkActivityIndicatorController sharedNetworkActivityIndicatorController];	
+	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+	[notificationCenter addObserver:self
+						   selector:@selector(connectionCountChanged:) 
+							   name:DCTNetworkActivityIndicatorControllerNetworkActivityChangedNotification
+							 object:indicatorController];
+	
 	return self;
 }
 
 - (void)dealloc {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:DCTConnectionQueueConnectionCountChangedNotification
+												  object:nil];
 }
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
-	
+		
 	self.navigationController.toolbarHidden = NO;
 	
 	[[DCTConnectionQueue sharedConnectionQueue] setMaxConnections:3];
@@ -57,7 +68,7 @@
 					 nil];
 	
 	for (NSString *s in urls) {
-		DCTURLConnectionController *connection = [DCTURLConnectionController connectionController];
+		DCTConnectionController *connection = [DCTConnectionController connectionController];
 		connection.multitaskEnabled = YES;
 		connection.delegate = self;
 		connection.URL = [NSURL URLWithString:s];
@@ -65,40 +76,40 @@
 		[connection connect];
 	}
 	
-	DCTURLConnectionController *engadget = [DCTURLConnectionController connectionController];
+	DCTConnectionController *engadget = [DCTConnectionController connectionController];
 	engadget.URL = [NSURL URLWithString:@"http://www.engadget.com/"];
 	[engadget addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[engadget connect];
 	
 	// Make a duplicate, won't get queued.
-	DCTURLConnectionController *engadget2 = [DCTURLConnectionController connectionController];
+	DCTConnectionController *engadget2 = [DCTConnectionController connectionController];
 	engadget2.URL = [NSURL URLWithString:@"http://www.engadget.com/"];
 	[engadget2 addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	engadget.priority = DCTConnectionControllerPriorityHigh;
 	[engadget2 connect];
 		
-	DCTURLConnectionController *ebay = [DCTURLConnectionController connectionController];
+	DCTConnectionController *ebay = [DCTConnectionController connectionController];
 	ebay.URL = [NSURL URLWithString:@"http://www.ebay.com/"];
 	ebay.priority = DCTConnectionControllerPriorityLow;
 	[ebay addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
-	[ebay addObserver:self forKeyPath:@"percentDownloaded" options:NSKeyValueObservingOptionNew context:nil];	
+	[ebay addObserver:self forKeyPath:@"percentDownloaded" options:NSKeyValueObservingOptionNew context:nil];
 	[ebay connect];
 	
-	DCTURLConnectionController *google = [DCTURLConnectionController connectionController];
+	DCTConnectionController *google = [DCTConnectionController connectionController];
 	google.URL = [NSURL URLWithString:@"http://www.google.com/"];
 	google.priority = DCTConnectionControllerPriorityLow;
 	[google addDependency:ebay];
 	[google addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[google connect];
 	
-	DCTURLConnectionController *apple = [DCTURLConnectionController connectionController];
+	DCTConnectionController *apple = [DCTConnectionController connectionController];
 	apple.URL = [NSURL URLWithString:@"http://www.apple.com/"];
 	apple.priority = DCTConnectionControllerPriorityLow;
 	[apple addDependency:google];
 	[apple addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
-	[apple connect];
+	[[DCTConnectionQueue sharedConnectionQueue] addConnectionController:apple];
 	
-	DCTURLConnectionController *bbc = [DCTURLConnectionController connectionController];
+	DCTConnectionController *bbc = [DCTConnectionController connectionController];
 	bbc.URL = [NSURL URLWithString:@"http://www.bbc.co.uk/"];
 	bbc.priority = DCTConnectionControllerPriorityHigh;
 	[bbc addDependency:apple];
@@ -111,17 +122,21 @@
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	
-	DCTURLConnectionController *connectionController = (DCTURLConnectionController *)object;
+	DCTConnectionController *connectionController = (DCTConnectionController *)object;
 	
 	if ([keyPath isEqualToString:@"percentDownloaded"]) {
-		NSLog(@"%@", connectionController.percentDownloaded);
+		
+		if ([connectionController.percentDownloaded integerValue] == 1)
+			[connectionController removeObserver:self forKeyPath:@"percentDownloaded"];
+		
+		//NSLog(@"%@", connectionController.percentDownloaded);
 		return;
 	}
 	
 	[self statusUpdate:connectionController];
 }
 	
-- (void)statusUpdate:(DCTURLConnectionController *)connectionController {
+- (void)statusUpdate:(DCTConnectionController *)connectionController {
 	NSDateFormatter *df = [[NSDateFormatter alloc] init];
 	[df setDateFormat:@"HH:mm:ss.SSS"];
 	NSString *dateString = [df stringFromDate:[NSDate date]]; 
@@ -130,39 +145,33 @@
 	if ([self.textView.text length] > 0) {
 		newLine = @"\n";
 	}
-	 
-	NSString *logPrefixString = [NSString stringWithFormat:@"%@ %@: ", dateString, [self stringFromURL:connectionController.URL]];
+	
 	NSString *prefixString = [NSString stringWithFormat:@"%@%@ %@: ", newLine, dateString, [self stringFromURL:connectionController.URL]];
+	
+	//NSLog(@"%@", connectionController);
 	
 	switch (connectionController.status) {
 		case DCTConnectionControllerStatusStarted:
-			NSLog(@"%@Started", logPrefixString);
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Started", prefixString];
 			break;
 		case DCTConnectionControllerStatusQueued:
-			NSLog(@"%@Queued", logPrefixString);
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Queued", prefixString];
 			break;
 		case DCTConnectionControllerStatusFailed:
-			NSLog(@"%@Failed", logPrefixString);
 			[connectionController removeObserver:self forKeyPath:@"status"];
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Failed", prefixString];
 			break;
 		case DCTConnectionControllerStatusNotStarted:
-			NSLog(@"%@Not Started", logPrefixString);
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Not Started", prefixString];
 			break;
 		case DCTConnectionControllerStatusResponded:
-			NSLog(@"%@Responded", logPrefixString);
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Responded", prefixString];
 			break;
-		case DCTConnectionControllerStatusComplete:
-			NSLog(@"%@Complete", logPrefixString);
+		case DCTConnectionControllerStatusFinished:
 			[connectionController removeObserver:self forKeyPath:@"status"];
-			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Complete", prefixString];
+			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Finished", prefixString];
 			break;
 		case DCTConnectionControllerStatusCancelled:
-			NSLog(@"%@Cancelled", logPrefixString);
 			[connectionController removeObserver:self forKeyPath:@"status"];
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%Cancelled", prefixString];
 			break;
@@ -189,7 +198,11 @@
 }
 
 - (void)connectionCountChanged:(NSNotification *)notification {
-	self.connectionsLabel.text = [NSString stringWithFormat:@"Connections: %i", [DCTConnectionQueue sharedConnectionQueue].activeConnectionCount];
+	DCTConnectionQueue *queue = [DCTConnectionQueue sharedConnectionQueue];
+	
+	self.connectionsAmountLabel.text = [NSString stringWithFormat:@"%i", queue.connectionCount];
+	self.queuedAmountLabel.text = [NSString stringWithFormat:@"%i", [queue.queuedConnectionControllers count]];
+	self.activeAmountLabel.text = [NSString stringWithFormat:@"%i", [[DCTNetworkActivityIndicatorController sharedNetworkActivityIndicatorController] networkActivity]];
 }
 
 @end
