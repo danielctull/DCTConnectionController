@@ -120,6 +120,8 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 	__strong NSMutableSet *cancelationBlocks;
 	__strong NSMutableSet *statusChangeHandlers;
 	
+	__weak DCTConnectionQueue *queue;
+	
 	__strong NSFileHandle *fileHandle; // Used if a path is given.
 	float contentLength, downloadedLength;
 }
@@ -169,7 +171,9 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 
 #pragma mark - DCTConnectionController: Managing the connection
 
-- (void)connectOnQueue:(DCTConnectionQueue *)queue {
+- (void)connectOnQueue:(DCTConnectionQueue *)theQueue {
+	
+	queue = theQueue;
 	
 	NSUInteger existingConnectionControllerIndex = [queue.connectionControllers indexOfObject:self];
 	
@@ -210,7 +214,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 }
 
 - (void)requeue {
-	[[DCTConnectionQueue sharedConnectionQueue] requeueConnectionController:self];
+	[queue requeueConnectionController:self];
 }
 
 - (void)cancel {
@@ -416,7 +420,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
 	
 	contentLength = (float)[response expectedContentLength];
-		
+	
 	self.returnedResponse = response;
     [self connectionDidReceiveResponse:response];
 	[self dctInternal_responded];
@@ -620,6 +624,9 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 }
 
 - (void)dctInternal_calculatePercentDownloaded {
+	
+	if (downloadedLength > contentLength) downloadedLength = contentLength;
+	
 	[self dct_changeValueForKey:@"percentDownloaded" withChange:^{
 		percentDownloaded = [[NSNumber alloc] initWithFloat:(downloadedLength / contentLength)];
 	}];

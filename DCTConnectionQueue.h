@@ -95,7 +95,7 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotificat
  
  @param connectionController The connection controller to add to the queue.
  */
-- (DCTConnectionController *)addConnectionController:(DCTConnectionController *)connectionController;
+- (void)addConnectionController:(DCTConnectionController *)connectionController;
 
 /**
  Remove the given connection controller from the queue.

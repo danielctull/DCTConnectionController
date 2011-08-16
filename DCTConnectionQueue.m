@@ -137,7 +137,7 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 		[self requeueConnectionController:[activeConnections lastObject]];
 }
 
-- (DCTConnectionController *)addConnectionController:(DCTConnectionController *)connectionController {
+- (void)addConnectionController:(DCTConnectionController *)connectionController {
 	
 	__block DCTConnectionController *blockConnectionController = connectionController;
 	
@@ -147,7 +147,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	}];
 	
 	[self dctInternal_addConnectionControllerToQueue:connectionController];
-	return connectionController;
 }
 
 - (void)removeConnectionController:(DCTConnectionController *)connectionController {
