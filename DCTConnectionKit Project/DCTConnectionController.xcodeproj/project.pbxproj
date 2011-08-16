@@ -34,8 +34,6 @@
 		2492729713ED3F2D00D8D2DB /* DCTConnectionQueue+UIKitAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 2492727713ED3F2D00D8D2DB /* DCTConnectionQueue+UIKitAdditions.m */; };
 		2492729A13ED89FB00D8D2DB /* DCTConnectionController+UsefulChecks.m in Sources */ = {isa = PBXBuildFile; fileRef = 2492729913ED89FB00D8D2DB /* DCTConnectionController+UsefulChecks.m */; };
 		2492729D13ED907400D8D2DB /* DCTConnectionController+Deprication.m in Sources */ = {isa = PBXBuildFile; fileRef = 2492729C13ED907400D8D2DB /* DCTConnectionController+Deprication.m */; };
-		249272A113ED9A6100D8D2DB /* DCTNewsstandConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 249272A013ED9A6100D8D2DB /* DCTNewsstandConnectionController.m */; };
-		249272A713ED9AC700D8D2DB /* DCTConnectionQueue+NewsstandKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 249272A613ED9AC600D8D2DB /* DCTConnectionQueue+NewsstandKit.m */; };
 		249272A913ED9DE100D8D2DB /* NewsstandKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 249272A813ED9DE100D8D2DB /* NewsstandKit.framework */; };
 		24BD77ED11DCD1090094DB11 /* DCTConnectionTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BD77EC11DCD1090094DB11 /* DCTConnectionTests.m */; };
 		24BD781E11DCD37B0094DB11 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1DF5F4DF0D08C38300B7A737 /* UIKit.framework */; };
@@ -101,10 +99,6 @@
 		2492729913ED89FB00D8D2DB /* DCTConnectionController+UsefulChecks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionController+UsefulChecks.m"; sourceTree = "<group>"; };
 		2492729B13ED907400D8D2DB /* DCTConnectionController+Deprication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionController+Deprication.h"; sourceTree = "<group>"; };
 		2492729C13ED907400D8D2DB /* DCTConnectionController+Deprication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionController+Deprication.m"; sourceTree = "<group>"; };
-		2492729F13ED9A6100D8D2DB /* DCTNewsstandConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTNewsstandConnectionController.h; sourceTree = "<group>"; };
-		249272A013ED9A6100D8D2DB /* DCTNewsstandConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTNewsstandConnectionController.m; sourceTree = "<group>"; };
-		249272A513ED9AC600D8D2DB /* DCTConnectionQueue+NewsstandKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionQueue+NewsstandKit.h"; sourceTree = "<group>"; };
-		249272A613ED9AC600D8D2DB /* DCTConnectionQueue+NewsstandKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionQueue+NewsstandKit.m"; sourceTree = "<group>"; };
 		249272A813ED9DE100D8D2DB /* NewsstandKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NewsstandKit.framework; path = System/Library/Frameworks/NewsstandKit.framework; sourceTree = SDKROOT; };
 		24BD77D711DCCE340094DB11 /* Unit Tests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Unit Tests.octest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		24BD77D811DCCE340094DB11 /* Unit Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Unit Tests-Info.plist"; sourceTree = "<group>"; };
@@ -249,18 +243,6 @@
 			path = "UIKit Additions";
 			sourceTree = "<group>";
 		};
-		2492729E13ED9A4500D8D2DB /* DCTConnectionController+NewsstandKit */ = {
-			isa = PBXGroup;
-			children = (
-				2492729F13ED9A6100D8D2DB /* DCTNewsstandConnectionController.h */,
-				249272A013ED9A6100D8D2DB /* DCTNewsstandConnectionController.m */,
-				249272A513ED9AC600D8D2DB /* DCTConnectionQueue+NewsstandKit.h */,
-				249272A613ED9AC600D8D2DB /* DCTConnectionQueue+NewsstandKit.m */,
-			);
-			name = "DCTConnectionController+NewsstandKit";
-			path = "../DCTConnectionController+NewsstandKit";
-			sourceTree = "<group>";
-		};
 		24BD77E811DCD0BE0094DB11 /* Unit Tests */ = {
 			isa = PBXGroup;
 			children = (
@@ -290,7 +272,6 @@
 			isa = PBXGroup;
 			children = (
 				247894ED12F57CA200DFA61C /* DCTFoundation */,
-				2492729E13ED9A4500D8D2DB /* DCTConnectionController+NewsstandKit */,
 				2492723B13ED3F2D00D8D2DB /* DCTConnectionController */,
 				24E4DC45126A5FD500C19D4B /* DCTConnectionKitExample */,
 				24BD77E811DCD0BE0094DB11 /* Unit Tests */,
@@ -465,8 +446,6 @@
 				2492729713ED3F2D00D8D2DB /* DCTConnectionQueue+UIKitAdditions.m in Sources */,
 				2492729A13ED89FB00D8D2DB /* DCTConnectionController+UsefulChecks.m in Sources */,
 				2492729D13ED907400D8D2DB /* DCTConnectionController+Deprication.m in Sources */,
-				249272A113ED9A6100D8D2DB /* DCTNewsstandConnectionController.m in Sources */,
-				249272A713ED9AC700D8D2DB /* DCTConnectionQueue+NewsstandKit.m in Sources */,
 				2478173913EEF72A00638E02 /* DCTNetworkActivityIndicatorController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
