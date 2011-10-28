@@ -3,4 +3,4 @@
 	url = git://github.com/danielctull/DCTConnectionController.git
 [submodule "DCTFoundation"]
 	path = DCTFoundation
-	url = file:///Users/danielctull/Dropbox/.gitbox/repos/DCTFoundation.git
+	url = git://github.com/danielctull/DCTFoundation.git
