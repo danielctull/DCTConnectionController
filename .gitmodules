@@ -1,9 +1,6 @@
 [submodule "DCTConnectionController"]
 	path = DCTConnectionController
-	url = file:///Users/danielctull/Dropbox/.gitbox/repos/DCTConnectionController.git
+	url = git://github.com/danielctull/DCTConnectionController.git
 [submodule "DCTFoundation"]
 	path = DCTFoundation
 	url = file:///Users/danielctull/Dropbox/.gitbox/repos/DCTFoundation.git
-[submodule "DCTConnectionController+NewsstandKit"]
-	path = DCTConnectionController+NewsstandKit
-	url = file:///Users/danielctull/Dropbox/.gitbox/repos/DCTConnectionController+NewsstandKit.git
