@@ -43,7 +43,7 @@
  implement these methods to allow DCTRESTController to build the request, rather than implementing loadURLRequest as you
  would with other connection controllers.
  */
-@interface DCTRESTController : DCTConnectionController
+@interface DCTRESTConnectionController : DCTConnectionController
 
 /// @name Methods to subclass
 

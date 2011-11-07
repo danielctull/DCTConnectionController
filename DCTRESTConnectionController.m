@@ -34,17 +34,17 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#import "DCTRESTController.h"
+#import "DCTRESTConnectionController.h"
 #import <objc/runtime.h>
 #import "NSString+DCTURLEncoding.h"
 
 typedef id (^DCTInternalRESTControllerKeyValueStringConvertor) (id, id);
 
-@interface DCTRESTController ()
+@interface DCTRESTConnectionController ()
 - (NSArray *)dctInternal_keyValueStringsForKeys:(NSSet *)keys stringConvertor:(DCTInternalRESTControllerKeyValueStringConvertor)convertor;
 @end
 
-@implementation DCTRESTController
+@implementation DCTRESTConnectionController
 
 + (NSArray *)headerProperties {
 	return nil;
@@ -72,7 +72,7 @@ typedef id (^DCTInternalRESTControllerKeyValueStringConvertor) (id, id);
 	NSMutableSet *headers = [NSMutableSet set];
 	
 	Class class = [self class];
-	while ([class isSubclassOfClass:[DCTRESTController class]] && ![[DCTRESTController class] isSubclassOfClass:class]) {
+	while ([class isSubclassOfClass:[DCTRESTConnectionController class]] && ![[DCTRESTConnectionController class] isSubclassOfClass:class]) {
 		
 		NSArray *classQueries = [class queryProperties];
 		if (classQueries) [queries addObjectsFromArray:classQueries];
