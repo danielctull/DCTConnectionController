@@ -271,6 +271,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	if (newStatus == status) return;
 	
+	if (self.ended) return; 
+	
 	[self dct_changeValueForKey:@"status" withChange:^{
 		status = newStatus;
 	}];
