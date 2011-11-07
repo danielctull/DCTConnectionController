@@ -23,7 +23,6 @@
 		246F8D5B146834D800F2FB74 /* DCTConnectionQueueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 246F8D55146834D800F2FB74 /* DCTConnectionQueueTests.m */; };
 		246F8D5C146834D800F2FB74 /* DCTMockConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 246F8D57146834D800F2FB74 /* DCTMockConnectionController.m */; };
 		246F8D6514683AAC00F2FB74 /* DCTNetworkActivityIndicatorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 246F8D6314683A9700F2FB74 /* DCTNetworkActivityIndicatorController.m */; };
-		246F8D7A14683B1200F2FB74 /* DCTConnectionController+Deprication.m in Sources */ = {isa = PBXBuildFile; fileRef = 246F8D6814683B1200F2FB74 /* DCTConnectionController+Deprication.m */; };
 		246F8D7B14683B1200F2FB74 /* DCTConnectionController+Equality.m in Sources */ = {isa = PBXBuildFile; fileRef = 246F8D6A14683B1200F2FB74 /* DCTConnectionController+Equality.m */; };
 		246F8D7C14683B1200F2FB74 /* DCTConnectionController+UsefulChecks.m in Sources */ = {isa = PBXBuildFile; fileRef = 246F8D6C14683B1200F2FB74 /* DCTConnectionController+UsefulChecks.m */; };
 		246F8D7D14683B1200F2FB74 /* DCTConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 246F8D6E14683B1200F2FB74 /* DCTConnectionController.m */; };
@@ -80,8 +79,6 @@
 		246F8D57146834D800F2FB74 /* DCTMockConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTMockConnectionController.m; sourceTree = "<group>"; };
 		246F8D6214683A9700F2FB74 /* DCTNetworkActivityIndicatorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTNetworkActivityIndicatorController.h; sourceTree = "<group>"; };
 		246F8D6314683A9700F2FB74 /* DCTNetworkActivityIndicatorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTNetworkActivityIndicatorController.m; sourceTree = "<group>"; };
-		246F8D6714683B1200F2FB74 /* DCTConnectionController+Deprication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionController+Deprication.h"; sourceTree = "<group>"; };
-		246F8D6814683B1200F2FB74 /* DCTConnectionController+Deprication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionController+Deprication.m"; sourceTree = "<group>"; };
 		246F8D6914683B1200F2FB74 /* DCTConnectionController+Equality.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionController+Equality.h"; sourceTree = "<group>"; };
 		246F8D6A14683B1200F2FB74 /* DCTConnectionController+Equality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionController+Equality.m"; sourceTree = "<group>"; };
 		246F8D6B14683B1200F2FB74 /* DCTConnectionController+UsefulChecks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionController+UsefulChecks.h"; sourceTree = "<group>"; };
@@ -228,8 +225,6 @@
 		246F8D6614683B1200F2FB74 /* DCTConnectionController */ = {
 			isa = PBXGroup;
 			children = (
-				246F8D6714683B1200F2FB74 /* DCTConnectionController+Deprication.h */,
-				246F8D6814683B1200F2FB74 /* DCTConnectionController+Deprication.m */,
 				246F8D6914683B1200F2FB74 /* DCTConnectionController+Equality.h */,
 				246F8D6A14683B1200F2FB74 /* DCTConnectionController+Equality.m */,
 				246F8D6B14683B1200F2FB74 /* DCTConnectionController+UsefulChecks.h */,
@@ -395,7 +390,6 @@
 				246F8CBB146831F400F2FB74 /* DCTConnectionControllerDemoAppDelegate.m in Sources */,
 				246F8CF41468337600F2FB74 /* DCTConnectionControllerDemoViewController.m in Sources */,
 				246F8D6514683AAC00F2FB74 /* DCTNetworkActivityIndicatorController.m in Sources */,
-				246F8D7A14683B1200F2FB74 /* DCTConnectionController+Deprication.m in Sources */,
 				246F8D7B14683B1200F2FB74 /* DCTConnectionController+Equality.m in Sources */,
 				246F8D7C14683B1200F2FB74 /* DCTConnectionController+UsefulChecks.m in Sources */,
 				246F8D7D14683B1200F2FB74 /* DCTConnectionController.m in Sources */,

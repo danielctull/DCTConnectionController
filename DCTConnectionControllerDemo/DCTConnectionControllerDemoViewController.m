@@ -49,7 +49,6 @@
 		
 	self.navigationController.toolbarHidden = NO;
 	
-	[[DCTConnectionQueue sharedConnectionQueue] setMaxConnections:3];
 	[[NSNotificationCenter defaultCenter] addObserver:self 
 											 selector:@selector(connectionCountChanged:) 
 												 name:DCTConnectionQueueConnectionCountChangedNotification 
