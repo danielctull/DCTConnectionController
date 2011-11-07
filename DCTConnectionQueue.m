@@ -106,7 +106,7 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	activeConnections = [[NSMutableArray alloc] init];
 	queuedConnections = [[NSMutableArray alloc] init];
 	active = YES;
-	self.maxConnections = 5;
+	self.maxConnections = NSUIntegerMax;
 	externalConnectionCountKeys = [NSArray arrayWithObjects:DCTConnectionQueueActiveConnectionCountKey, DCTConnectionQueueConnectionCountKey, nil];
 		
 	[self uikit_init];
