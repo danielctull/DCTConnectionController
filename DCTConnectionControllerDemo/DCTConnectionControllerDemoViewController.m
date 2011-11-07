@@ -55,6 +55,11 @@
 												 name:DCTConnectionQueueConnectionCountChangedNotification 
 											   object:nil];
 	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(statusUpdate:)
+												 name:DCTConnectionControllerStatusChangedNotification
+											   object:nil];
+	
 	NSArray *urls = [NSArray arrayWithObjects:
 					 @"http://www.tesco.com/",
 					 @"http://www.nike.com/",
@@ -72,71 +77,50 @@
 		connection.multitaskEnabled = YES;
 		connection.delegate = self;
 		connection.URL = [NSURL URLWithString:s];
-		[connection addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 		[connection connect];
 	}
 	
 	DCTConnectionController *engadget = [[DCTConnectionController alloc] init];
 	engadget.URL = [NSURL URLWithString:@"http://www.engadget.com/"];
-	[engadget addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[engadget connect];
 	
 	// Make a duplicate, won't get queued.
 	DCTConnectionController *engadget2 = [[DCTConnectionController alloc] init];
 	engadget2.URL = [NSURL URLWithString:@"http://www.engadget.com/"];
-	[engadget2 addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	engadget.priority = DCTConnectionControllerPriorityHigh;
 	[engadget2 connect];
 		
 	DCTConnectionController *ebay = [[DCTConnectionController alloc] init];
 	ebay.URL = [NSURL URLWithString:@"http://www.ebay.com/"];
 	ebay.priority = DCTConnectionControllerPriorityLow;
-	[ebay addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
-	[ebay addObserver:self forKeyPath:@"percentDownloaded" options:NSKeyValueObservingOptionNew context:nil];
 	[ebay connect];
 	
 	DCTConnectionController *google = [[DCTConnectionController alloc] init];
 	google.URL = [NSURL URLWithString:@"http://www.google.com/"];
 	google.priority = DCTConnectionControllerPriorityLow;
 	[google addDependency:ebay];
-	[google addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[google connect];
 	
 	DCTConnectionController *apple = [[DCTConnectionController alloc] init];
 	apple.URL = [NSURL URLWithString:@"http://www.apple.com/"];
 	apple.priority = DCTConnectionControllerPriorityLow;
 	[apple addDependency:google];
-	[apple addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
-	[[DCTConnectionQueue sharedConnectionQueue] addConnectionController:apple];
+	[apple connect];
 	
 	DCTConnectionController *bbc = [[DCTConnectionController alloc] init];
 	bbc.URL = [NSURL URLWithString:@"http://www.bbc.co.uk/"];
 	bbc.priority = DCTConnectionControllerPriorityHigh;
 	[bbc addDependency:apple];
-	[bbc addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[bbc connect];
 	
 	self.toolbarItems = self.toolbar.items;
 	
 }
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
 	
-	DCTConnectionController *connectionController = (DCTConnectionController *)object;
+- (void)statusUpdate:(NSNotification *)notification {
 	
-	if ([keyPath isEqualToString:@"percentDownloaded"]) {
-		
-		if ([connectionController.percentDownloaded integerValue] == 1)
-			[connectionController removeObserver:self forKeyPath:@"percentDownloaded"];
-		
-		//NSLog(@"%@", connectionController.percentDownloaded);
-		return;
-	}
+	DCTConnectionController *connectionController = [notification object];
 	
-	[self statusUpdate:connectionController];
-}
-	
-- (void)statusUpdate:(DCTConnectionController *)connectionController {
 	NSDateFormatter *df = [[NSDateFormatter alloc] init];
 	[df setDateFormat:@"HH:mm:ss.SSS"];
 	NSString *dateString = [df stringFromDate:[NSDate date]]; 
@@ -148,8 +132,6 @@
 	
 	NSString *prefixString = [NSString stringWithFormat:@"%@%@ %@: ", newLine, dateString, [self stringFromURL:connectionController.URL]];
 	
-	//NSLog(@"%@", connectionController);
-	
 	switch (connectionController.status) {
 		case DCTConnectionControllerStatusStarted:
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Started", prefixString];
@@ -158,7 +140,6 @@
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Queued", prefixString];
 			break;
 		case DCTConnectionControllerStatusFailed:
-			[connectionController removeObserver:self forKeyPath:@"status"];
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Failed", prefixString];
 			break;
 		case DCTConnectionControllerStatusNotStarted:
@@ -168,16 +149,15 @@
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Responded", prefixString];
 			break;
 		case DCTConnectionControllerStatusFinished:
-			[connectionController removeObserver:self forKeyPath:@"status"];
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Finished", prefixString];
 			break;
 		case DCTConnectionControllerStatusCancelled:
-			[connectionController removeObserver:self forKeyPath:@"status"];
 			self.textView.text = [self.textView.text stringByAppendingFormat:@"%Cancelled", prefixString];
 			break;
 		default:
 			break;
 	}
+	
 	[self.textView scrollRectToVisible:CGRectMake(0.0, self.textView.contentSize.height - self.textView.bounds.size.height, self.textView.bounds.size.width, self.textView.bounds.size.height) animated:NO];
 }
 
