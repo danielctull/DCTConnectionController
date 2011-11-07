@@ -7,7 +7,7 @@
 //
 
 #import "DCTConnectionQueueTests.h"
-#import "DCTMockConnection.h"
+#import "DCTMockConnectionController.h"
 #import "DCTConnectionQueue+DCTInternalAccess.h"
 
 @implementation DCTConnectionQueueTests
@@ -18,19 +18,19 @@
 	
 	[queue stop];
 	
-	DCTMockConnection *veryHigh = [DCTMockConnection connectionController];
+	DCTMockConnectionController *veryHigh = [DCTMockConnection connectionController];
 	veryHigh.priority = DCTConnectionControllerPriorityVeryHigh;
 	
-	DCTMockConnection *high = [DCTMockConnection connectionController];
+	DCTMockConnectionController *high = [DCTMockConnection connectionController];
 	high.priority = DCTConnectionControllerPriorityHigh;
 	
-	DCTMockConnection *medium = [DCTMockConnection connectionController];
+	DCTMockConnectionController *medium = [DCTMockConnection connectionController];
 	medium.priority = DCTConnectionControllerPriorityMedium;
 	
-	DCTMockConnection *low = [DCTMockConnection connectionController];
+	DCTMockConnectionController *low = [DCTMockConnection connectionController];
 	low.priority = DCTConnectionControllerPriorityLow;
 	
-	DCTMockConnection *veryLow = [DCTMockConnection connectionController];
+	DCTMockConnectionController *veryLow = [DCTMockConnection connectionController];
 	veryLow.priority = DCTConnectionControllerPriorityVeryLow;
 	
 	[queue addConnectionController:veryLow];

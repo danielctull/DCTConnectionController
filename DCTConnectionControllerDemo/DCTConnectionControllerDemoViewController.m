@@ -7,33 +7,33 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "DCTConnectionKitExampleViewController.h"
+#import "DCTConnectionControllerDemoViewController.h"
 #import "DCTConnectionController.h"
 #import "DCTConnectionQueue+Singleton.h"
 #import "DCTNetworkActivityIndicatorController.h"
 
-@interface DCTConnectionKitExampleViewController ()
+@interface DCTConnectionControllerDemoViewController ()
 - (NSString *)stringFromURL:(NSURL *)url;
 - (void)statusUpdate:(DCTConnectionController *)connectionController;
 @end
 
 
-@implementation DCTConnectionKitExampleViewController
+@implementation DCTConnectionControllerDemoViewController
 
 @synthesize textView, toolbar;
 @synthesize activeAmountLabel, connectionsAmountLabel, queuedAmountLabel;
 
-- (id)init {
-	if (!(self = [self initWithNibName:@"DCTConnectionKitExampleView" bundle:nil])) return nil;
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
+	if (!(self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) return nil;
 	
 	self.title = @"DCTConnectionController";
 	
-	DCTNetworkActivityIndicatorController *indicatorController = [DCTNetworkActivityIndicatorController sharedNetworkActivityIndicatorController];	
+	//DCTNetworkActivityIndicatorController *indicatorController = [DCTNetworkActivityIndicatorController sharedNetworkActivityIndicatorController];
 	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 	[notificationCenter addObserver:self
 						   selector:@selector(connectionCountChanged:) 
 							   name:DCTNetworkActivityIndicatorControllerNetworkActivityChangedNotification
-							 object:indicatorController];
+							 object:nil];
 	
 	return self;
 }

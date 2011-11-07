@@ -6,12 +6,12 @@
 //  Copyright 2010 Daniel Tull. All rights reserved.
 //
 
-#import "DCTMockConnection.h"
+#import "DCTMockConnectionController.h"
 
-@implementation DCTMockConnection
+@implementation DCTMockConnectionController
 
 - (void)complete {
-	[super receivedObject:nil];
+	[super connectionDidFinishLoading];
 }
 
 @end

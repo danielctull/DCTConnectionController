@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "DCTConnectionController.h"
 
-@interface DCTConnectionKitExampleViewController : UIViewController <DCTConnectionControllerDelegate> {
+@interface DCTConnectionControllerDemoViewController : UIViewController <DCTConnectionControllerDelegate> {
 	UITextView *textView;
 	UIToolbar *toolbar;
 	UILabel *connectionsLabel;

@@ -8,8 +8,6 @@
 
 #import "DCTConnectionController.h"
 
-@interface DCTMockConnection : DCTConnectionController {
-
-}
+@interface DCTMockConnectionController : DCTConnectionController
 - (void)complete;
 @end
