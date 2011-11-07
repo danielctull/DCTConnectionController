@@ -62,9 +62,11 @@ typedef id (^DCTInternalRESTControllerKeyValueStringConvertor) (id, id);
 	return @"";	
 }
 
-- (NSMutableURLRequest *)newRequest {
+- (void)loadURLRequest {
 	
-	NSMutableURLRequest *request = [super newRequest];
+	[super loadURLRequest];
+	
+	NSMutableURLRequest *request = [self.URLRequest mutableCopy];
 	NSMutableSet *queries = [NSMutableSet set];
 	NSMutableSet *bodies = [NSMutableSet set];
 	NSMutableSet *headers = [NSMutableSet set];
@@ -105,7 +107,7 @@ typedef id (^DCTInternalRESTControllerKeyValueStringConvertor) (id, id);
 		return [NSString stringWithFormat:@"%@: %@", key, value];
 	}];
 	
-	return request;	
+	self.URLRequest = request;
 }
 
 - (NSArray *)dctInternal_keyValueStringsForKeys:(NSSet *)keys stringConvertor:(DCTInternalRESTControllerKeyValueStringConvertor)convertor {

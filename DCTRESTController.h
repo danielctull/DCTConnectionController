@@ -38,9 +38,9 @@
 
 /** The DCTRESTController subclass of DCTConnectionController allows easier building of URL requests in general.
  
- The newRequest method in this subclass asks for queryProperties , bodyProperties and headerProperties to build up 
+ The loadURLRequest method in this subclass asks for queryProperties , bodyProperties and headerProperties to build up 
  a complete URL request to the location given by baseURLString . When subclassing , you should 
- implement these methods to allow DCTRESTController to build the request, rather than implementing newRequest as you
+ implement these methods to allow DCTRESTController to build the request, rather than implementing loadURLRequest as you
  would with other connection controllers.
  */
 @interface DCTRESTController : DCTConnectionController

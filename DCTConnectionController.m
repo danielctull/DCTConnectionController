@@ -172,40 +172,41 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 	
 	NSUInteger existingConnectionControllerIndex = [queue.connectionControllers indexOfObject:self];
 	
-	if (existingConnectionControllerIndex != NSNotFound) {
-		
-		DCTConnectionController *existingConnectionController = [queue.connectionControllers objectAtIndex:existingConnectionControllerIndex];
-		
-		if (existingConnectionController.priority > self.priority)
-			existingConnectionController.priority = self.priority;
-		
-		self.status = existingConnectionController.status;
-		
-		[existingConnectionController addResponseHandler:^(NSURLResponse *response) {
-			self.returnedResponse = response;
-			[self dctInternal_responded];
-		}];
-		
-		__block DCTConnectionController *cc = existingConnectionController;
-		
-		[existingConnectionController addFinishHandler:^() {
-			self.returnedObject = cc.returnedObject;
-			[self dctInternal_finished];
-		}];
-		
-		[existingConnectionController addFailureHandler:^(NSError *error) {
-			self.returnedError = error;
-			[self dctInternal_failed];
-		}];
-		
-		[existingConnectionController addCancelationHandler:^(void) {
-			[self dctInternal_cancelled];
-		}];
-		
-		return;
+	if (existingConnectionControllerIndex == NSNotFound) {
+		[queue addConnectionController:self];
+		return;	
 	}
+	
+	DCTConnectionController *existingConnectionController = [queue.connectionControllers objectAtIndex:existingConnectionControllerIndex];
 		
-	[queue addConnectionController:self];
+	if (existingConnectionController.priority > self.priority)
+		existingConnectionController.priority = self.priority;
+	
+	self.status = existingConnectionController.status;
+	
+	[existingConnectionController addResponseHandler:^(NSURLResponse *response) {
+		self.returnedResponse = response;
+		[self dctInternal_responded];
+	}];
+	
+	__block DCTConnectionController *cc = existingConnectionController;
+	
+	[existingConnectionController addFinishHandler:^() {
+		self.returnedObject = cc.returnedObject;
+		[self dctInternal_finished];
+	}];
+	
+	[existingConnectionController addFailureHandler:^(NSError *error) {
+		self.returnedError = error;
+		[self dctInternal_failed];
+	}];
+	
+	[existingConnectionController addCancelationHandler:^(void) {
+		[self dctInternal_cancelled];
+	}];
+	
+	return;
+	
 }
 
 - (void)requeue {
@@ -244,11 +245,11 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 
 #pragma mark - DCTConnectionController: Subclass methods
 
-- (NSMutableURLRequest *)newRequest {
+- (void)loadURLRequest {
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
 	[request setURL:self.URL];
-	[request setHTTPMethod:DCTConnectionControllerTypeString[type]];	
-	return request;
+	[request setHTTPMethod:DCTConnectionControllerTypeString[self.type]];	
+	self.URLRequest = [request copy];
 }
 
 - (void)connectionDidFinishLoading {	
@@ -290,7 +291,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 	
 	if (self.started) return;
 	
-	if ([newURLRequest isEqual:self.URLRequest]) return;
+	if ([newURLRequest isEqual:URLRequest]) return;
 	
 	URLRequest = newURLRequest;
 	[self dctInternal_setURL:URLRequest.URL];
@@ -316,7 +317,7 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 
 - (NSURLRequest *)URLRequest {
 	
-	if (!URLRequest) URLRequest = [[self newRequest] copy];
+	if (!URLRequest) [self loadURLRequest];
 	
 	[self dctInternal_setURL:[URLRequest URL]];
 	

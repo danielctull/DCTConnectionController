@@ -362,7 +362,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  @return A URL request which will form the connection.
  */
-- (NSMutableURLRequest *)newRequest;
+- (void)loadURLRequest;
 
 /** This method should be used in subclasses to handle the returned response.
  
