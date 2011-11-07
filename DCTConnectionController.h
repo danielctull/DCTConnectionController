@@ -94,6 +94,8 @@ extern NSString *const DCTConnectionControllerDidReceiveResponseNotification;
 
 extern NSString *const DCTConnectionControllerWasCancelledNotification;
 
+extern NSString *const DCTConnectionControllerStatusChangedNotification;
+
 extern NSString *const DCTConnectionControllerTypeString[];
 
 @protocol DCTConnectionControllerDelegate;
@@ -357,10 +359,8 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 /** This method should be used in subclasses to give custom requests.
  
- Calling super from the subclass will give a mutable request of type 'type', this is the prefered way 
- to get the request object in subclasses.
- 
- @return A URL request which will form the connection.
+ Calling super from the subclass will generate a request of type 'type', this is the prefered way 
+ to setup an initial request object in subclasses.
  */
 - (void)loadURLRequest;
 
@@ -369,10 +369,8 @@ extern NSString *const DCTConnectionControllerTypeString[];
  Subclasses should handle the response, taking any course of action given in the API documentation.
  The default implementation of this method notifies the delegate and observers of the response, so at
  the end of this method subclasses should call the super implementation.
- 
- @param response The response returned from the connection.
  */
-- (void)connectionDidReceiveResponse:(NSURLResponse *)response;
+- (void)connectionDidReceiveResponse;
 
 /** This method should be used in subclasses to handle the returned data.
  
@@ -407,7 +405,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  @see receivedObject:
  */
-- (void)connectionDidFailWithError:(NSError *)error;
+- (void)connectionDidFail;
 
 
 
