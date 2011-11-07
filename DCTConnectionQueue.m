@@ -36,7 +36,6 @@
 
 #import "DCTConnectionQueue.h"
 #import "NSObject+DCTKVOExtras.h"
-#import "DCTObservationInfo.h"
 #import "DCTConnectionController+UsefulChecks.h"
 
 NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2) {

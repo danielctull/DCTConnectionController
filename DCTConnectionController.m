@@ -38,7 +38,6 @@
 #import "DCTConnectionQueue+Singleton.h"
 #import "DCTConnectionController+Equality.h"
 #import "DCTConnectionController+UsefulChecks.h"
-#import "DCTObservationInfo.h"
 #import "NSMutableSet+DCTExtras.h"
 #import "NSObject+DCTKVOExtras.h"
 
