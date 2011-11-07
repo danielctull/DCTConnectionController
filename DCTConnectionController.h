@@ -273,9 +273,9 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  `typedef void (^DCTConnectionControllerResponseBlock) (NSURLResponse *response);`
  
- @param responseBlock The response block to add.
+ @param responseHandler The response block to add.
  */
-- (void)addResponseHandler:(DCTConnectionControllerResponseBlock)handler;
+- (void)addResponseHandler:(DCTConnectionControllerResponseBlock)responseHandler;
 
 /** Adds a completion block.
  
@@ -283,9 +283,9 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  `typedef void (^DCTConnectionControllerFinishBlock) ();`
  
- @param completionBlock The completion block to add.
+ @param finishHandler The completion block to add.
  */
-- (void)addFinishHandler:(DCTConnectionControllerFinishBlock)handler;
+- (void)addFinishHandler:(DCTConnectionControllerFinishBlock)finishHandler;
 
 
 
@@ -295,9 +295,9 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  `typedef void (^DCTConnectionControllerFailureBlock) (NSError *error);`
  
- @param failureBlock The failure block to add.
+ @param failureHandler The failure block to add.
  */
-- (void)addFailureHandler:(DCTConnectionControllerFailureBlock)handler;
+- (void)addFailureHandler:(DCTConnectionControllerFailureBlock)failureHandler;
 
 /** Adds a completion block.
  
@@ -305,13 +305,20 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  `typedef void (^DCTConnectionControllerCancelationBlock) ();`
  
- @param cancelationBlock The cancelation block to add.
+ @param cancelationHandler The cancelation block to add.
  */
-- (void)addCancelationHandler:(DCTConnectionControllerCancelationBlock)handler;
+- (void)addCancelationHandler:(DCTConnectionControllerCancelationBlock)cancelationHandler;
 
 
-
-- (void)addStatusChangeHandler:(DCTConnectionControllerStatusBlock)handler;
+/** Adds a status change handler.
+ 
+ DCTConnectionControllerStatusBlock is defined as such:
+ 
+ `typedef void (^DCTConnectionControllerStatusBlock) ();`
+ 
+ @param statusChangeHandler The cancelation block to add.
+ */
+- (void)addStatusChangeHandler:(DCTConnectionControllerStatusBlock)statusChangeHandler;
 
 
 
@@ -325,7 +332,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 /// @name Managing the Connection
 
-/** Adds the connection controller to the queue, checking to make sure it is unique and if not, 
+/** Adds the connection controller to the given queue, checking to make sure it is unique and if not, 
  returning the duplicate that is already queued.
  
  If there is a connection controller in the queue or already running that exists with the same details as
@@ -337,7 +344,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  It will pass through, in all the usual ways of delegation, KVO, NSNotifications and block calling, the results
  of the existing connection controller.
  
- @return The actual connection controller that is added to the queue or already running.
+ @param queue The queue to add the receiver to.
  */
 - (void)connectOnQueue:(DCTConnectionQueue *)queue;
 
@@ -350,7 +357,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 - (void)cancel;
 
 
-/** Requeue the connection.
+/** Requeues the connection.
  */
 - (void)requeue;
 
