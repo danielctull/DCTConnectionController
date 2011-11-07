@@ -14,7 +14,7 @@
 
 @interface DCTConnectionControllerDemoViewController ()
 - (NSString *)stringFromURL:(NSURL *)url;
-- (void)statusUpdate:(DCTConnectionController *)connectionController;
+- (void)statusUpdatedNotification:(NSNotification *)notification;
 @end
 
 
@@ -55,7 +55,7 @@
 											   object:nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(statusUpdate:)
+											 selector:@selector(statusUpdatedNotification:)
 												 name:DCTConnectionControllerStatusChangedNotification
 											   object:nil];
 	
@@ -116,7 +116,7 @@
 	
 }
 	
-- (void)statusUpdate:(NSNotification *)notification {
+- (void)statusUpdatedNotification:(NSNotification *)notification {
 	
 	DCTConnectionController *connectionController = [notification object];
 	
