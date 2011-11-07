@@ -68,7 +68,7 @@
 					 nil];
 	
 	for (NSString *s in urls) {
-		DCTConnectionController *connection = [DCTConnectionController connectionController];
+		DCTConnectionController *connection = [[DCTConnectionController alloc] init];
 		connection.multitaskEnabled = YES;
 		connection.delegate = self;
 		connection.URL = [NSURL URLWithString:s];
@@ -76,40 +76,40 @@
 		[connection connect];
 	}
 	
-	DCTConnectionController *engadget = [DCTConnectionController connectionController];
+	DCTConnectionController *engadget = [[DCTConnectionController alloc] init];
 	engadget.URL = [NSURL URLWithString:@"http://www.engadget.com/"];
 	[engadget addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[engadget connect];
 	
 	// Make a duplicate, won't get queued.
-	DCTConnectionController *engadget2 = [DCTConnectionController connectionController];
+	DCTConnectionController *engadget2 = [[DCTConnectionController alloc] init];
 	engadget2.URL = [NSURL URLWithString:@"http://www.engadget.com/"];
 	[engadget2 addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	engadget.priority = DCTConnectionControllerPriorityHigh;
 	[engadget2 connect];
 		
-	DCTConnectionController *ebay = [DCTConnectionController connectionController];
+	DCTConnectionController *ebay = [[DCTConnectionController alloc] init];
 	ebay.URL = [NSURL URLWithString:@"http://www.ebay.com/"];
 	ebay.priority = DCTConnectionControllerPriorityLow;
 	[ebay addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[ebay addObserver:self forKeyPath:@"percentDownloaded" options:NSKeyValueObservingOptionNew context:nil];
 	[ebay connect];
 	
-	DCTConnectionController *google = [DCTConnectionController connectionController];
+	DCTConnectionController *google = [[DCTConnectionController alloc] init];
 	google.URL = [NSURL URLWithString:@"http://www.google.com/"];
 	google.priority = DCTConnectionControllerPriorityLow;
 	[google addDependency:ebay];
 	[google addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[google connect];
 	
-	DCTConnectionController *apple = [DCTConnectionController connectionController];
+	DCTConnectionController *apple = [[DCTConnectionController alloc] init];
 	apple.URL = [NSURL URLWithString:@"http://www.apple.com/"];
 	apple.priority = DCTConnectionControllerPriorityLow;
 	[apple addDependency:google];
 	[apple addObserver:self forKeyPath:@"status" options:NSKeyValueObservingOptionNew context:nil];
 	[[DCTConnectionQueue sharedConnectionQueue] addConnectionController:apple];
 	
-	DCTConnectionController *bbc = [DCTConnectionController connectionController];
+	DCTConnectionController *bbc = [[DCTConnectionController alloc] init];
 	bbc.URL = [NSURL URLWithString:@"http://www.bbc.co.uk/"];
 	bbc.priority = DCTConnectionControllerPriorityHigh;
 	[bbc addDependency:apple];
