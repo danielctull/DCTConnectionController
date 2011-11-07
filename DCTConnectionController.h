@@ -170,13 +170,6 @@ extern NSString *const DCTConnectionControllerTypeString[];
  */
 @interface DCTConnectionController : NSObject <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 
-/// @name Creating a Connection Controller
-
-/** Creates and returns an autoreleased connection controller. 
- */
-+ (id)connectionController;
-
-
 /// @name Setting up the connection details
 
 /** Sets the connection as multitask enabled for the iOS platform.

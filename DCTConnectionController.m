@@ -131,10 +131,6 @@ NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectio
 
 #pragma mark - NSObject
 
-+ (id)connectionController {
-	return [[self alloc] init];
-}
-
 - (void)dealloc {
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	NSError *error = nil;
