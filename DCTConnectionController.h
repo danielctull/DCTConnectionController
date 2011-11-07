@@ -172,6 +172,8 @@ extern NSString *const DCTConnectionControllerTypeString[];
  */
 @interface DCTConnectionController : NSObject <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 
+#pragma mark - Setting up the connection details
+
 /// @name Setting up the connection details
 
 /** Sets the connection as multitask enabled for the iOS platform.
@@ -222,15 +224,18 @@ extern NSString *const DCTConnectionControllerTypeString[];
  */
 @property (nonatomic, strong) id<DCTConnectionControllerDelegate> delegate;
 
+/** The URL the connection controller is managing.
+ */
+@property (nonatomic, strong) NSURL *URL;
 
-@property (nonatomic, strong, readonly) NSString *downloadPath;
+/** The URLRequest the connection controller is managing.
+ */
+@property (nonatomic, strong) NSURLRequest *URLRequest;
 
 
+#pragma mark - Dependencies
 
-/// @name Setting Dependencies
-
-
-
+/// @name Dependencies
 
 /** The dependencies for this connection controller.
  */
@@ -258,6 +263,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 
 
+#pragma mark - Event Blocks
 
 /// @name Event Blocks
 
@@ -315,8 +321,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 
 
-
-
+#pragma mark - Managing the Connection
 
 /// @name Managing the Connection
 
@@ -350,10 +355,8 @@ extern NSString *const DCTConnectionControllerTypeString[];
 - (void)requeue;
 
 
-@property (nonatomic, strong, readonly) NSURLConnection *URLConnection;
 
-
-
+#pragma mark - Methods to use in Subclasses
 
 /// @name Methods to use in Subclasses
 
@@ -385,11 +388,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  As well as this, instead of notifying delgates and observers that it had succeeded, it would report as
  failed and again would call the failureBlocks rather than the completionBlocks.
  
- @param object The data object returned from the connection.
- 
- @depricated
- 
- @see receivedError:
+ @see connectionDidFail
  */
 - (void)connectionDidFinishLoading;
 
@@ -401,9 +400,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  a new error message created specifically for delegates and observers or just passing the error 
  returned from the connection.
  
- @param response The response returned from the connection.
- 
- @see receivedObject:
+ @see connectionDidFinishLoading
  */
 - (void)connectionDidFail;
 
@@ -413,6 +410,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 
 
+#pragma mark - Connection Status
 
 /// @name Connection Status
 
@@ -452,13 +450,13 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 @property (nonatomic, strong, readonly) NSNumber *percentDownloaded;
 
-
-/** The URL the connection controller is managing.
+/** The URL connection that is being run by the connection controller;
  */
-@property (nonatomic, strong) NSURL *URL;
+@property (nonatomic, strong, readonly) NSURLConnection *URLConnection;
 
-@property (nonatomic, strong) NSURLRequest *URLRequest;
-
+/** The location where the connection controller is temporarily storing the downloaded data. 
+ */
+@property (nonatomic, strong, readonly) NSString *downloadPath;
 
 /** The response returned from the connection.
  
@@ -481,7 +479,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 @end
 
-
+#pragma mark
 
 /** Protocol for delegates of DCTConnectionController to conform to.
  

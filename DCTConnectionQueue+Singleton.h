@@ -39,9 +39,9 @@
 
 @interface DCTConnectionQueue (Singleton)
 
-/// @name Accessing the Connection Queue
+/// @name Accessing the global Connection Queue
 
-/** The shared connection queue.
+/** The globally shared connection queue.
  */
 + (DCTConnectionQueue *)sharedConnectionQueue;
 @end
