@@ -1,0 +1,87 @@
+h1. DCTConnectionController
+
+DCTConnectionController and the associated classes are my way to handle URL connections, specifically those made to RESTful services.
+
+Connection controller subclasses should manage the connection and handle callbacks, most likely translating them into model objects that make sense to the rest of the application. In this way connection controllers can be called by other objects without needing any knowledge of how the connection is performed or the web API calls that are needed.
+
+The DCTConnectionQueue is used to queue up connection controllers, and managed the order in which they are run. It also allows the limiting of the amount of connections occurring.
+
+There is a category on DCTConnectionQueue to allow access to a global queue, and a convenience method on DCTConnectionController to easily queue connections on this global queue. You are, however,  not bound to using this global queue and can use multiple queues as you wish.
+
+h2. DCTConnectionController 2.0 Notes
+
+* The API for the new version of DCTConnectionController has been revised and care should be handled when upgrading to the new version.
+* The functionality of DCTURLConnectionController and DCTRequestConnectionController have been moved into DCTConnectionController itself.
+* The multitasking additions to DCTConnectionQueue have been moved to their "own repository":https://github.com/danielctull/DCTConnectionController-UIKit to be further built upon.
+* Handling of the iOS activity indicator has been moved to "DCTNetworkActivityIndicatorController":https://github.com/danielctull/DCTNetworkActivityIndicatorController. To get the indicator functionality of DCTConnectionController 1.0, add DCTNetworkActivityIndicatorController and it will automatically register for notifications sent by the DCTConnectionQueue(s).
+
+h2. UIKit Additions
+
+The UIKit category on DCTConnectionQueue allows it to handle iOS multitasking and the application-wide network activity indicator. As of *DCTConnectionController 2.0*, this category is now in its "own repository":https://github.com/danielctull/DCTConnectionController-UIKit.
+
+h2. Documentation
+
+There exists some pretty extensive "DCTConnectionController documentation":http://danieltull.co.uk/DCTConnectionController/Documentation/ generated with "appledoc":https://github.com/tomaz/appledoc.
+
+h2. Services
+
+Currently, the following services have been written using connection controllers:
+
+* "DCTInstapaper":https://github.com/danielctull/DCTInstapaper
+* "DCTGravatar":https://github.com/danielctull/DCTGravatar
+
+h2. Branch Structure
+
+There is a new branch structure for DCTConnectionController 2.0, *master* and *demo*. Unlike previous versions, *master* is now the branch to use as a submodule.
+
+h3. master
+
+The master branch contains the code and should be used if you want to add these extensions as a git submodule in other projects. It will only contain the class files themselves without the Xcode project or example classes. This is preferable as it will keep your directories clean of any code which is unnecessary to your working project.
+
+To add this project as a submodule you should run the following from inside your project's git repository:
+
+bc. git submodule add git://github.com/danielctull/DCTConnectionController.git
+
+To keep up to date with the latest changes `cd` into the directory that contains this submodule and pull the newest changes as usual:
+
+bc. git pull origin
+
+h3. demo
+
+This contains an Xcode project that demonstrates the code and is the branch to use to see how to use the code. The demo branch contains a submodule reference to the master branch to bring in the library classes.
+
+To clone the demo branch, while also pulling in any necessary submodules run the following command:
+
+bc. git clone -b demo --recursive git://github.com/danielctull/DCTConnectionController.git
+
+When changing to the demo branch you will need to run through the following set of commands:
+
+bc. git checkout demo
+git submodule init
+git submodule update
+
+After these you will see the example project and the library code will be in a sub-directory.
+
+h3. Artefacts
+
+Sometimes, there may be artefacts left over when switching from demo to master. These are files that are ignored by git and are easily cleaned up by running
+
+bc. git clean -dxf
+
+h2. Examples
+
+Examples of some of these features can be found in the iPhone app delegate.
+
+h2. License
+
+Copyright (C) 2010 Daniel Tull. All rights reserved.
+ 
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+ 
+* Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+ 
+* Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+ 
+* Neither the name of the author nor the names of its contributors may be used to endorse or promote products derived from this software without specific prior written permission.
+ 
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
