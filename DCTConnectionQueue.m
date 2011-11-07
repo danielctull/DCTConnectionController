@@ -290,11 +290,11 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 - (void)dctInternal_removeActiveConnection:(DCTConnectionController *)connection {
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountDecreasedNotification object:self];
-	
 	[self dct_changeValueForKeys:externalConnectionCountKeys withChange:^{
 		[activeConnections removeObject:connection];
 	}];
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountDecreasedNotification object:self];
 	
 	[self dctInternal_runNextConnection];
 }
