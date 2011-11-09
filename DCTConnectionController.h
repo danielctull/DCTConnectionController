@@ -496,7 +496,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  This holds the object given to the notifyDelegateAndObserversOfReturnedObject: method, for observers to access.
  */
-@property (nonatomic, strong) NSObject *returnedObject;
+@property (nonatomic, strong) id returnedObject;
 
 /** The error, if there is one, returned from the connection.
  
