@@ -45,10 +45,14 @@
 	#define __dct_weak __unsafe_unretained
 	#define dct_nil(x) x = nil
 #else
-	#warning "This project uses ARC which is only available in iOS SDK 4.3 and later."
+	#warning "This library uses ARC which is only available in iOS SDK 4.3 and later."
 #endif
 
 #import <Foundation/Foundation.h>
+
+#ifndef dctconnectioncontroller
+#define dctconnectioncontroller
+#endif
 
 @class DCTConnectionQueue;
 

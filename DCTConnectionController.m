@@ -41,6 +41,10 @@
 #import "NSMutableSet+DCTExtras.h"
 #import "NSObject+DCTKVOExtras.h"
 
+#ifndef dctfoundation
+#warning "DCTFoundation is required to use DCTConnectionController. Download from https://github.com/danielctull/DCTFoundation"
+#endif
+
 NSString * const DCTConnectionControllerStatusString[] = {
 	@"NotStarted",
 	@"Queued",
