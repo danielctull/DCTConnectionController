@@ -71,6 +71,6 @@
  */
 - (NSString *)baseURLString;
 
-- (id)keyForConnectionKey:(id)key;
+- (id)keyForConnectionPropertyKey:(id)key;
 
 @end

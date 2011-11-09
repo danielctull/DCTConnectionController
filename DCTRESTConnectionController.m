@@ -62,7 +62,7 @@ typedef id (^DCTInternalRESTControllerKeyValueStringConvertor) (id, id);
 	return @"";	
 }
 
-- (id)keyForConnectionKey:(id)key {
+- (id)keyForConnectionPropertyKey:(id)key {
 	return key;
 }
 
@@ -120,7 +120,7 @@ typedef id (^DCTInternalRESTControllerKeyValueStringConvertor) (id, id);
 	
 	for (NSString *connectionKey in keys) {
 		
-		NSString *key = [self keyForConnectionKey:connectionKey];
+		NSString *key = [self keyForConnectionPropertyKey:connectionKey];
 		
 		id value = [self valueForKey:key];
 				
