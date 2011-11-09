@@ -51,7 +51,10 @@
 #import <Foundation/Foundation.h>
 
 #ifndef dctconnectioncontroller
-#define dctconnectioncontroller
+#define dctconnectioncontroller_1_0     10000
+#define dctconnectioncontroller_2_0     20000
+#define dctconnectioncontroller_2_0_1   20001
+#define dctconnectioncontroller         dctconnectioncontroller_2_0_1
 #endif
 
 @class DCTConnectionQueue;

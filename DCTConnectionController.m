@@ -41,8 +41,10 @@
 #import "NSMutableSet+DCTExtras.h"
 #import "NSObject+DCTKVOExtras.h"
 
-#ifndef dctfoundation
+#if !defined dctfoundation
 #warning "DCTFoundation is required to use DCTConnectionController. Download from https://github.com/danielctull/DCTFoundation"
+#elif dctfoundation < dctfoundation_2_0_1
+#warning "DCTFoundation 2.0.1 is required with this version of DCTConnectionController. Update at https://github.com/danielctull/DCTFoundation"
 #endif
 
 NSString * const DCTConnectionControllerStatusString[] = {
