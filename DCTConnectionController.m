@@ -120,7 +120,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	__strong NSMutableSet *cancelationBlocks;
 	__strong NSMutableSet *statusChangeHandlers;
 	
-	__weak DCTConnectionQueue *queue;
+	__dct_weak DCTConnectionQueue *queue;
 	
 	__strong NSFileHandle *fileHandle; // Used if a path is given.
 	float contentLength, downloadedLength;
@@ -133,6 +133,9 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 #pragma mark - NSObject
 
 - (void)dealloc {
+	
+	dct_nil(queue);
+	
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	NSError *error = nil;
 	if ([fileManager fileExistsAtPath:self.downloadPath] && ![fileManager removeItemAtPath:self.downloadPath error:&error])

@@ -34,6 +34,16 @@
  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_5_0
+#define dct_weak weak
+#define __dct_weak __weak
+#define dct_nil(x)
+#else
+#define dct_weak unsafe_unretained
+#define __dct_weak __unsafe_unretained
+#define dct_nil(x) x = nil
+#endif
+
 #import <Foundation/Foundation.h>
 
 @class DCTConnectionQueue;
