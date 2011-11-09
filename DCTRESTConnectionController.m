@@ -62,8 +62,8 @@ typedef id (^DCTInternalRESTControllerKeyValueStringConvertor) (id, id);
 	return @"";	
 }
 
-- (id)keyForConnectionPropertyKey:(id)key {
-	return key;
+- (id)valueForConnectionKey:(id)key {
+	return [self valueForKey:key];
 }
 
 - (void)loadURLRequest {
@@ -118,11 +118,9 @@ typedef id (^DCTInternalRESTControllerKeyValueStringConvertor) (id, id);
 	
 	NSMutableArray *strings = [NSMutableArray arrayWithCapacity:[keys count]];
 	
-	for (NSString *connectionKey in keys) {
+	for (NSString *key in keys) {
 		
-		NSString *key = [self keyForConnectionPropertyKey:connectionKey];
-		
-		id value = [self valueForKey:key];
+		id value = [self valueForConnectionKey:key];
 				
 		if (value && [value isKindOfClass:[NSString class]] && [value length] > 0)
 			[strings addObject:convertor(key, value)];

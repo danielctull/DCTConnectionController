@@ -71,6 +71,31 @@
  */
 - (NSString *)baseURLString;
 
-- (id)keyForConnectionPropertyKey:(id)key;
+/** Allows the receiver to return a different value for the given connection key.
+ 
+ There are two scenarios where you might want to use this method:
+ 
+ The first is if you want to define a connection (query, body or header) property, that
+ is the same as an existing property on DCTConnectionController. For example, if the web service
+ requires a "type" query parameter, then you can use this method to override the value used. 
+ Return @"type" as one of the keys in queryProperties, and check for the @"type" as the key.
+ 
+ The second is if you want to use a different value type than that used for the type of the 
+ object to be used as in the connection property object. For example you may have an enum to 
+ define the proprety, but the web service requires a string.
+ 
+ In general, this should return a string.
+ 
+ By default this method returns the result of valueForKey:, thus by not implementing this method,
+ this class acts the same as pre version 2.0.2.
+ 
+ @param key The connection property key.
+ @return The value for the given key.
+ 
+ @see queryProperties
+ @see bodyProperties
+ @see headerProperties
+ */
+- (id)valueForConnectionKey:(id)key;
 
 @end
