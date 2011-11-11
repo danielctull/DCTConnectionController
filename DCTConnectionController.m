@@ -88,10 +88,11 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 - (void)dctInternal_start;
 - (void)dctInternal_setQueued;
 
-@property (nonatomic, readonly) NSArray *dctInternal_responseBlocks;
-@property (nonatomic, readonly) NSArray *dctInternal_completionBlocks;
-@property (nonatomic, readonly) NSArray *dctInternal_failureBlocks;
-@property (nonatomic, readonly) NSArray *dctInternal_cancelationBlocks;
+@property (nonatomic, readonly) NSMutableArray *dctInternal_responseBlocks;
+@property (nonatomic, readonly) NSMutableArray *dctInternal_completionBlocks;
+@property (nonatomic, readonly) NSMutableArray *dctInternal_failureBlocks;
+@property (nonatomic, readonly) NSMutableArray *dctInternal_cancelationBlocks;
+@property (nonatomic, readonly) NSMutableArray *dctInternal_statusChangeBlocks;
 
 @property (nonatomic, readwrite) DCTConnectionControllerStatus status;
 
@@ -123,7 +124,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	__strong NSMutableArray *completionBlocks;
 	__strong NSMutableArray *failureBlocks;
 	__strong NSMutableArray *cancelationBlocks;
-	__strong NSMutableArray *statusChangeHandlers;
+	__strong NSMutableArray *statusChangeBlocks;
 	
 	__dct_weak DCTConnectionQueue *queue;
 	
@@ -283,7 +284,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		status = newStatus;
 	}];
 	
-	[statusChangeHandlers enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
+	[self.dctInternal_statusChangeBlocks enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
 		DCTConnectionControllerStatusBlock block = obj;
 		block(newStatus);
 	}];
@@ -362,55 +363,45 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	NSAssert(handler != nil, @"Handler should not be nil.");
 	
-	if (!responseBlocks) responseBlocks = [[NSMutableArray alloc] initWithCapacity:1];
-	
 	if (self.didReceiveResponse) handler(self.returnedResponse);
 	
-	[responseBlocks addObject:[handler copy]];
+	[self.dctInternal_responseBlocks addObject:[handler copy]];
 }
 
 - (void)addCompletionHandler:(DCTConnectionControllerCompletionBlock)handler {
 	
 	NSAssert(handler != nil, @"Handler should not be nil.");
 	
-	if (!completionBlocks) completionBlocks = [[NSMutableArray alloc] initWithCapacity:1];
-	
 	if (self.finished) handler(self.returnedObject);
 	
-	[completionBlocks addObject:[handler copy]];
+	[self.dctInternal_completionBlocks addObject:[handler copy]];
 }
 
 - (void)addFailureHandler:(DCTConnectionControllerFailureBlock)handler {
 	
 	NSAssert(handler != nil, @"Handler should not be nil.");
 	
-	if (!failureBlocks) failureBlocks = [[NSMutableArray alloc] initWithCapacity:1];
-	
 	if (self.failed) handler(self.returnedError);
 	
-	[failureBlocks addObject:[handler copy]];
+	[self.dctInternal_failureBlocks addObject:[handler copy]];
 }
 
 - (void)addCancelationHandler:(DCTConnectionControllerCancelationBlock)handler {
 	
 	NSAssert(handler != nil, @"Handler should not be nil.");
 	
-	if (!cancelationBlocks) cancelationBlocks = [[NSMutableArray alloc] initWithCapacity:1];
-	
 	if (self.cancelled) handler();
 	
-	[cancelationBlocks addObject:[handler copy]];
+	[self.dctInternal_cancelationBlocks addObject:[handler copy]];
 }
 
 - (void)addStatusChangeHandler:(DCTConnectionControllerStatusBlock)handler {
 	
 	NSAssert(handler != nil, @"Handler should not be nil.");
 	
-	if (!statusChangeHandlers) statusChangeHandlers = [[NSMutableArray alloc] initWithCapacity:1];
-	
 	if (self.cancelled) handler(self.status);
 	
-	[statusChangeHandlers addObject:[handler copy]];
+	[self.dctInternal_statusChangeBlocks addObject:[handler copy]];
 }
 
 #pragma mark - NSURLConnectionDelegate
@@ -656,23 +647,43 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 #pragma mark - Internal Getters
 
-- (NSArray *)dctInternal_responseBlocks {
-	return [responseBlocks copy];
+- (NSMutableArray *)dctInternal_responseBlocks {
+	
+	if (!responseBlocks) responseBlocks = [[NSMutableArray alloc] initWithCapacity:1];
+	
+	return responseBlocks;
 }
 
-- (NSArray *)dctInternal_completionBlocks {
-	return [completionBlocks copy];
+- (NSMutableArray *)dctInternal_completionBlocks {
+	
+	if (!completionBlocks) completionBlocks = [[NSMutableArray alloc] initWithCapacity:1];
+	
+	return completionBlocks;
 }
 
-- (NSArray *)dctInternal_failureBlocks {
-	return [failureBlocks copy];
+- (NSMutableArray *)dctInternal_failureBlocks {
+	
+	if (!failureBlocks) failureBlocks = [[NSMutableArray alloc] initWithCapacity:1];
+	
+	return failureBlocks;
 }
 
-- (NSArray *)dctInternal_cancelationBlocks {
-	return [cancelationBlocks copy];
+- (NSMutableArray *)dctInternal_cancelationBlocks {
+	
+	if (!cancelationBlocks) cancelationBlocks = [[NSMutableArray alloc] initWithCapacity:1];
+	
+	return cancelationBlocks;
 }
 
-- (NSArray *)dctInternal_dependents {
+- (NSMutableArray *)dctInternal_statusChangeBlocks {
+	
+	if (!statusChangeBlocks) statusChangeBlocks = [[NSMutableArray alloc] initWithCapacity:1];
+	
+	return statusChangeBlocks;
+	
+}
+
+- (NSSet *)dctInternal_dependents {
 	return [dependents copy];
 }
 
