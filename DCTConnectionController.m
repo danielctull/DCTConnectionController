@@ -328,7 +328,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	return URLRequest;
 }
 
-- (NSObject *)returnedObject {
+- (id)returnedObject {
 	
 	if (!returnedObject) {
 		returnedObject = [[NSData alloc] initWithContentsOfFile:self.downloadPath];
