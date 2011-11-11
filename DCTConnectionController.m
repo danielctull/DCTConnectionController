@@ -689,7 +689,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	if (returnedObject != nil)
 		return self.returnedObject;
 	
-	if ([[DCTConnectionController class] isSubclassOfClass:[self class]])
+	if ([self isMemberOfClass:[DCTConnectionController class]])
 		return self.returnedObject;
 	
 	return nil;
