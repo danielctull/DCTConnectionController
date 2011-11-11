@@ -109,7 +109,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 - (void)dctInternal_calculatePercentDownloaded;
 
-@property (nonatomic, readonly) NSSet *dctInternal_dependents;
 - (void)dctInternal_addDependent:(DCTConnectionController *)connectionController;
 - (void)dctInternal_removeDependent:(DCTConnectionController *)connectionController;
 - (void)dctInternal_setURL:(NSURL *)newURL;
@@ -599,7 +598,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 - (void)dctInternal_cleanup {
 	 delegate = nil;
 	
-	for (DCTConnectionController *dependent in self.dctInternal_dependents)
+	for (DCTConnectionController *dependent in dependents)
 		[dependent removeDependency:self];
 	
 	dependents = nil;
@@ -681,10 +680,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	return statusChangeBlocks;
 	
-}
-
-- (NSSet *)dctInternal_dependents {
-	return [dependents copy];
 }
 
 #pragma mark - Internal Setters
