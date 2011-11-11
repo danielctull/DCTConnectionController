@@ -41,9 +41,7 @@
 #import "NSObject+DCTKVOExtras.h"
 #import "DCTRESTConnectionController.h"
 
-#if !defined dctfoundation
-#warning "DCTFoundation is required to use DCTConnectionController. Download from https://github.com/danielctull/DCTFoundation"
-#elif dctfoundation < dctfoundation_2_0_1
+#if !defined(dctfoundation) || !defined(dctfoundation_2_0_1) || dctfoundation < dctfoundation_2_0_1
 #warning "DCTFoundation 2.0.1 is required with this version of DCTConnectionController. Update at https://github.com/danielctull/DCTFoundation"
 #endif
 
