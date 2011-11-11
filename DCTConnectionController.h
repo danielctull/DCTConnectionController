@@ -100,7 +100,7 @@ typedef enum {
 typedef void (^DCTConnectionControllerResponseBlock) (NSURLResponse *response);
 typedef void (^DCTConnectionControllerFailureBlock) (NSError *error);
 typedef void (^DCTConnectionControllerCancelationBlock) ();
-typedef void (^DCTConnectionControllerCompletionBlock) (id object);
+typedef void (^DCTConnectionControllerCompletionBlock) (id returnedObject);
 typedef void (^DCTConnectionControllerStatusBlock) (DCTConnectionControllerStatus status);
 
 /** Name of the notification sent out when the connection has successfully completed.
