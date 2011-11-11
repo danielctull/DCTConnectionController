@@ -360,6 +360,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 - (void)addResponseHandler:(DCTConnectionControllerResponseBlock)handler {
 	
+	NSAssert(handler != nil, @"Handler should not be nil.");
+	
 	if (!responseBlocks) responseBlocks = [[NSMutableArray alloc] initWithCapacity:1];
 	
 	if (self.didReceiveResponse) handler(self.returnedResponse);
@@ -367,16 +369,20 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	[responseBlocks addObject:[handler copy]];
 }
 
-- (void)addCompletionHandler:(DCTConnectionControllerCompletionBlock)completionHandler {
+- (void)addCompletionHandler:(DCTConnectionControllerCompletionBlock)handler {
+	
+	NSAssert(handler != nil, @"Handler should not be nil.");
 	
 	if (!completionBlocks) completionBlocks = [[NSMutableArray alloc] initWithCapacity:1];
 	
-	if (self.finished) completionHandler(self.returnedObject);
+	if (self.finished) handler(self.returnedObject);
 	
-	[completionBlocks addObject:[completionHandler copy]];
+	[completionBlocks addObject:[handler copy]];
 }
 
 - (void)addFailureHandler:(DCTConnectionControllerFailureBlock)handler {
+	
+	NSAssert(handler != nil, @"Handler should not be nil.");
 	
 	if (!failureBlocks) failureBlocks = [[NSMutableArray alloc] initWithCapacity:1];
 	
@@ -387,6 +393,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 - (void)addCancelationHandler:(DCTConnectionControllerCancelationBlock)handler {
 	
+	NSAssert(handler != nil, @"Handler should not be nil.");
+	
 	if (!cancelationBlocks) cancelationBlocks = [[NSMutableArray alloc] initWithCapacity:1];
 	
 	if (self.cancelled) handler();
@@ -396,15 +404,14 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 - (void)addStatusChangeHandler:(DCTConnectionControllerStatusBlock)handler {
 	
+	NSAssert(handler != nil, @"Handler should not be nil.");
+	
 	if (!statusChangeHandlers) statusChangeHandlers = [[NSMutableArray alloc] initWithCapacity:1];
 	
 	if (self.cancelled) handler(self.status);
 	
 	[statusChangeHandlers addObject:[handler copy]];
 }
-
-
-
 
 #pragma mark - NSURLConnectionDelegate
 
