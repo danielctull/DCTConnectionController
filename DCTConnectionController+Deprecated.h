@@ -1,5 +1,5 @@
 //
-//  DCTConnectionController+Depricated.h
+//  DCTConnectionController+Deprecated.h
 //  DCTConnectionController
 //
 //  Created by Daniel Tull on 11.11.2011.
@@ -10,9 +10,9 @@
 
 typedef void (^DCTConnectionControllerFinishBlock) ();
 
-@interface DCTConnectionController (Depricated)
+@interface DCTConnectionController (Deprecated)
 
-/// @name Depricated
+/// @name Deprecated
 
 /** Adds a finish block.
  
@@ -20,7 +20,7 @@ typedef void (^DCTConnectionControllerFinishBlock) ();
  
  `typedef void (^DCTConnectionControllerFinishBlock) ();`
  
- @depricated This method is depricated from 2.1 onwards
+ @deprecated This method is deprecated from 2.1 onwards
  
  @see addCompletionHandler:
  
