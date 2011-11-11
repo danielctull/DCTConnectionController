@@ -547,3 +547,5 @@ extern NSString *const DCTConnectionControllerTypeString[];
  */
 - (void)connectionController:(DCTConnectionController *)connectionController didReceiveResponse:(NSURLResponse *)response;
 @end
+
+#import "DCTConnectionController+Depricated.h"
