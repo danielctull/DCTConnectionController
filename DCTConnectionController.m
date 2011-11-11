@@ -688,7 +688,9 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	if ([newURL isEqual:self.URL]) return;
 	
-	URL = newURL;
+	[self dct_changeValueForKey:@"URL" withChange:^{
+		URL = newURL;
+	}];
 }
 
 - (void)dctInternal_addDependent:(DCTConnectionController *)connectionController {
