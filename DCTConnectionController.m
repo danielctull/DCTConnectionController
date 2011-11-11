@@ -83,7 +83,7 @@ NSString *const DCTConnectionControllerDidReceiveResponseNotification = @"DCTCon
 NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectionControllerWasCancelledNotification";
 NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnectionControllerStatusChangedNotification";
 
-@interface DCTConnectionController ()
+@interface DCTConnectionController () <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 
 - (void)dctInternal_reset;
 - (void)dctInternal_start;

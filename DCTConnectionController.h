@@ -193,7 +193,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  checked for equality by `isEqualToConnectionController:`. In the future the implementation of
  `isEqualToConnectionController:` may change to one a little more concrete, but so far this has worked well for me. 
  */
-@interface DCTConnectionController : NSObject <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
+@interface DCTConnectionController : NSObject
 
 #pragma mark - Setting up the connection details
 
