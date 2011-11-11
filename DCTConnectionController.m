@@ -39,6 +39,7 @@
 #import "DCTConnectionController+Equality.h"
 #import "DCTConnectionController+UsefulChecks.h"
 #import "NSObject+DCTKVOExtras.h"
+#import "DCTRESTConnectionController.h"
 
 #if !defined dctfoundation
 #warning "DCTFoundation is required to use DCTConnectionController. Download from https://github.com/danielctull/DCTFoundation"
@@ -689,7 +690,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	if (returnedObject != nil)
 		return self.returnedObject;
 	
-	if ([self isMemberOfClass:[DCTConnectionController class]])
+	if ([self isMemberOfClass:[DCTConnectionController class]] || [self isMemberOfClass:[DCTRESTConnectionController class]])
 		return self.returnedObject;
 	
 	return nil;
