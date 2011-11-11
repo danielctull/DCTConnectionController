@@ -12,6 +12,8 @@ typedef void (^DCTConnectionControllerFinishBlock) ();
 
 @interface DCTConnectionController (Depricated)
 
+/// @name Depricated
+
 /** Adds a completion block.
  
  DCTConnectionControllerCompletionBlock is defined as such:
