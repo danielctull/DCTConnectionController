@@ -38,7 +38,6 @@
 #import "DCTConnectionQueue+Singleton.h"
 #import "DCTConnectionController+Equality.h"
 #import "DCTConnectionController+UsefulChecks.h"
-#import "NSMutableSet+DCTExtras.h"
 #import "NSObject+DCTKVOExtras.h"
 
 #if !defined dctfoundation
@@ -89,10 +88,10 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 - (void)dctInternal_start;
 - (void)dctInternal_setQueued;
 
-@property (nonatomic, readonly) NSSet *dctInternal_responseBlocks;
-@property (nonatomic, readonly) NSSet *dctInternal_completionBlocks;
-@property (nonatomic, readonly) NSSet *dctInternal_failureBlocks;
-@property (nonatomic, readonly) NSSet *dctInternal_cancelationBlocks;
+@property (nonatomic, readonly) NSArray *dctInternal_responseBlocks;
+@property (nonatomic, readonly) NSArray *dctInternal_completionBlocks;
+@property (nonatomic, readonly) NSArray *dctInternal_failureBlocks;
+@property (nonatomic, readonly) NSArray *dctInternal_cancelationBlocks;
 
 @property (nonatomic, readwrite) DCTConnectionControllerStatus status;
 
@@ -120,11 +119,11 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 @implementation DCTConnectionController {
 	__strong NSMutableSet *dependencies;
 	__strong NSMutableSet *dependents;
-	__strong NSMutableSet *responseBlocks;
-	__strong NSMutableSet *completionBlocks;
-	__strong NSMutableSet *failureBlocks;
-	__strong NSMutableSet *cancelationBlocks;
-	__strong NSMutableSet *statusChangeHandlers;
+	__strong NSMutableArray *responseBlocks;
+	__strong NSMutableArray *completionBlocks;
+	__strong NSMutableArray *failureBlocks;
+	__strong NSMutableArray *cancelationBlocks;
+	__strong NSMutableArray *statusChangeHandlers;
 	
 	__dct_weak DCTConnectionQueue *queue;
 	
@@ -284,7 +283,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		status = newStatus;
 	}];
 	
-	[statusChangeHandlers enumerateObjectsUsingBlock:^(id obj, BOOL *stop) {
+	[statusChangeHandlers enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
 		DCTConnectionControllerStatusBlock block = obj;
 		block(newStatus);
 	}];
@@ -361,47 +360,47 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 - (void)addResponseHandler:(DCTConnectionControllerResponseBlock)handler {
 	
-	if (!responseBlocks) responseBlocks = [[NSMutableSet alloc] initWithCapacity:1];
+	if (!responseBlocks) responseBlocks = [[NSMutableArray alloc] initWithCapacity:1];
 	
 	if (self.didReceiveResponse) handler(self.returnedResponse);
 	
-	[responseBlocks dct_addBlock:handler];
+	[responseBlocks addObject:[handler copy]];
 }
 
 - (void)addCompletionHandler:(DCTConnectionControllerCompletionBlock)completionHandler {
 	
-	if (!completionBlocks) completionBlocks = [[NSMutableSet alloc] initWithCapacity:1];
+	if (!completionBlocks) completionBlocks = [[NSMutableArray alloc] initWithCapacity:1];
 	
 	if (self.finished) completionHandler(self.returnedObject);
 	
-	[completionBlocks dct_addBlock:completionHandler];
+	[completionBlocks addObject:[completionHandler copy]];
 }
 
 - (void)addFailureHandler:(DCTConnectionControllerFailureBlock)handler {
 	
-	if (!failureBlocks) failureBlocks = [[NSMutableSet alloc] initWithCapacity:1];
+	if (!failureBlocks) failureBlocks = [[NSMutableArray alloc] initWithCapacity:1];
 	
 	if (self.failed) handler(self.returnedError);
 	
-	[failureBlocks dct_addBlock:handler];
+	[failureBlocks addObject:[handler copy]];
 }
 
 - (void)addCancelationHandler:(DCTConnectionControllerCancelationBlock)handler {
 	
-	if (!cancelationBlocks) cancelationBlocks = [[NSMutableSet alloc] initWithCapacity:1];
+	if (!cancelationBlocks) cancelationBlocks = [[NSMutableArray alloc] initWithCapacity:1];
 	
 	if (self.cancelled) handler();
 	
-	[cancelationBlocks dct_addBlock:handler];
+	[cancelationBlocks addObject:[handler copy]];
 }
 
 - (void)addStatusChangeHandler:(DCTConnectionControllerStatusBlock)handler {
 	
-	if (!statusChangeHandlers) statusChangeHandlers = [[NSMutableSet alloc] initWithCapacity:1];
+	if (!statusChangeHandlers) statusChangeHandlers = [[NSMutableArray alloc] initWithCapacity:1];
 	
 	if (self.cancelled) handler(self.status);
 	
-	[statusChangeHandlers dct_addBlock:handler];
+	[statusChangeHandlers addObject:[handler copy]];
 }
 
 
@@ -650,39 +649,24 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 #pragma mark - Internal Getters
 
-- (NSSet *)dctInternal_responseBlocks {
-	
-	if (!responseBlocks) return nil;
-	
-	return [NSSet setWithSet:responseBlocks];
+- (NSArray *)dctInternal_responseBlocks {
+	return [responseBlocks copy];
 }
 
-- (NSSet *)dctInternal_completionBlocks {
-
-	if (!completionBlocks) return nil;
-	
-	return [NSSet setWithSet:completionBlocks];
+- (NSArray *)dctInternal_completionBlocks {
+	return [completionBlocks copy];
 }
 
-- (NSSet *)dctInternal_failureBlocks {
-	
-	if (!failureBlocks) return nil;
-	
-	return [NSSet setWithSet:failureBlocks];
+- (NSArray *)dctInternal_failureBlocks {
+	return [failureBlocks copy];
 }
 
-- (NSSet *)dctInternal_cancelationBlocks {
-	
-	if (!cancelationBlocks) return nil;
-	
-	return [NSSet setWithSet:cancelationBlocks];
+- (NSArray *)dctInternal_cancelationBlocks {
+	return [cancelationBlocks copy];
 }
 
-- (NSSet *)dctInternal_dependents {
-	
-	if (!dependents) return nil;
-	
-	return [NSSet setWithSet:dependents];
+- (NSArray *)dctInternal_dependents {
+	return [dependents copy];
 }
 
 #pragma mark - Internal Setters
