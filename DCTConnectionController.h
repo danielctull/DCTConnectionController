@@ -103,6 +103,9 @@ typedef void (^DCTConnectionControllerCancelationBlock) ();
 typedef void (^DCTConnectionControllerCompletionBlock) (id returnedObject);
 typedef void (^DCTConnectionControllerStatusBlock) (DCTConnectionControllerStatus status);
 
+
+extern NSString *const DCTConnectionControllerNeedsDisplayNotification;
+
 /** Name of the notification sent out when the connection has successfully completed.
  */
 extern NSString *const DCTConnectionControllerDidFinishNotification;

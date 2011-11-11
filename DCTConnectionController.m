@@ -77,6 +77,7 @@ NSString * const DCTConnectionControllerTypeString[] = {
 	@"PATCH"
 };
 
+NSString *const DCTConnectionControllerNeedsDisplayNotification = @"DCTConnectionControllerNeedsDisplayNotification";
 NSString *const DCTConnectionControllerDidFinishNotification = @"DCTConnectionControllerDidFinishNotification";
 NSString *const DCTConnectionControllerDidFailNotification = @"DCTConnectionControllerDidFailNotification";
 NSString *const DCTConnectionControllerDidReceiveResponseNotification = @"DCTConnectionControllerDidReceiveResponseNotification";
