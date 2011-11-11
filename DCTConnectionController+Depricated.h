@@ -14,18 +14,18 @@ typedef void (^DCTConnectionControllerFinishBlock) ();
 
 /// @name Depricated
 
-/** Adds a completion block.
+/** Adds a finish block.
  
- DCTConnectionControllerCompletionBlock is defined as such:
+ DCTConnectionControllerFinishBlock is defined as such:
  
  `typedef void (^DCTConnectionControllerFinishBlock) ();`
  
- THIS METHOD IS DEPRICATED IN 2.1
+ @depricated This method is depricated from 2.1 onwards
  
  @see addCompletionHandler:
  
  @param finishHandler The completion block to add.
  */
-- (void)addFinishHandler:(DCTConnectionControllerFinishBlock)finishHandler;
+- (void)addFinishHandler:(DCTConnectionControllerFinishBlock)finishHandler DEPRECATED_ATTRIBUTE;
 
 @end
