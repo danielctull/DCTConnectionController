@@ -100,7 +100,7 @@ typedef enum {
 typedef void (^DCTConnectionControllerResponseBlock) (NSURLResponse *response);
 typedef void (^DCTConnectionControllerFailureBlock) (NSError *error);
 typedef void (^DCTConnectionControllerCancelationBlock) ();
-typedef void (^DCTConnectionControllerFinishBlock) ();
+typedef void (^DCTConnectionControllerCompletionBlock) (id object);
 typedef void (^DCTConnectionControllerStatusBlock) (DCTConnectionControllerStatus status);
 
 /** Name of the notification sent out when the connection has successfully completed.
@@ -304,11 +304,13 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  DCTConnectionControllerCompletionBlock is defined as such:
  
- `typedef void (^DCTConnectionControllerFinishBlock) ();`
+ `typedef void (^DCTConnectionControllerCompletionBlock) (id object);`
  
- @param finishHandler The completion block to add.
+ Where the object is the returnedObject of the reciever.
+ 
+ @param completionHandler The completion block to add.
  */
-- (void)addFinishHandler:(DCTConnectionControllerFinishBlock)finishHandler;
+- (void)addCompletionHandler:(DCTConnectionControllerCompletionBlock)completionHandler;
 
 
 

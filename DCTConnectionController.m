@@ -199,10 +199,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		[self dctInternal_connectionDidRespond];
 	}];
 	
-	__block DCTConnectionController *cc = existingConnectionController;
-	
-	[existingConnectionController addFinishHandler:^() {
-		self.returnedObject = cc.returnedObject;
+	[existingConnectionController addCompletionHandler:^(id object) {
+		self.returnedObject = object;
 		[self dctInternal_connectionDidFinishLoading];
 	}];
 	
@@ -370,13 +368,13 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	[responseBlocks dct_addBlock:handler];
 }
 
-- (void)addFinishHandler:(DCTConnectionControllerFinishBlock)handler {
+- (void)addCompletionHandler:(DCTConnectionControllerCompletionBlock)completionHandler {
 	
 	if (!completionBlocks) completionBlocks = [[NSMutableSet alloc] initWithCapacity:1];
 	
-	if (self.finished) handler();
+	if (self.finished) completionHandler(self.returnedObject);
 	
-	[completionBlocks dct_addBlock:handler];
+	[completionBlocks dct_addBlock:completionHandler];
 }
 
 - (void)addFailureHandler:(DCTConnectionControllerFailureBlock)handler {
@@ -556,8 +554,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	id object = self.returnedObject;
 	
-	for (DCTConnectionControllerFinishBlock block in completionBlocks)
-		block();
+	for (DCTConnectionControllerCompletionBlock block in completionBlocks)
+		block(self.returnedObject);
 	
 	[self dctInternal_sendObjectToDelegate:object];
 	
