@@ -311,6 +311,10 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 #pragma mark - DCTConnectionController: Getters
 
+- (DCTConnectionQueue *)queue {
+	return queue;
+}
+
 - (NSURLConnection *)URLConnection {
 	
 	if (!URLConnection) {

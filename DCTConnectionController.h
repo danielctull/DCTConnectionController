@@ -510,6 +510,8 @@ extern NSString *const DCTConnectionControllerTypeString[];
 @property (nonatomic, strong) NSError *returnedError;
 
 
+@property (nonatomic, readonly) DCTConnectionQueue *queue;
+
 @end
 
 #pragma mark
