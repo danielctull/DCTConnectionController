@@ -200,7 +200,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	__weak DCTConnectionController *cc = existingConnectionController;
 	
 	[existingConnectionController addFinishHandler:^() {
-		self.returnedObject = cc.returnedObject;
+		downloadPath = cc.downloadPath;
 		[self dctInternal_connectionDidFinishLoading];
 	}];
 	
