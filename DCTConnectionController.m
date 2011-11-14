@@ -112,6 +112,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 - (void)dctInternal_removeDependent:(DCTConnectionController *)connectionController;
 - (void)dctInternal_setURL:(NSURL *)newURL;
 
+@property (nonatomic, readonly) BOOL dctInternal_hasReturnedObject;
+
 @end
 
 
@@ -201,6 +203,10 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	[existingConnectionController addFinishHandler:^() {
 		downloadPath = cc.downloadPath;
+		
+		if (cc.dctInternal_hasReturnedObject)
+			self.returnedObject = cc.returnedObject;		
+		
 		[self dctInternal_connectionDidFinishLoading];
 	}];
 	
@@ -687,6 +693,12 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	return statusChangeBlocks;
 	
+}
+
+- (BOOL)dctInternal_hasReturnedObject {
+	if (returnedObject == nil) return NO;
+	
+	return YES;
 }
 
 #pragma mark - Internal Setters
