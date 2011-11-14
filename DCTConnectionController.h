@@ -98,10 +98,12 @@ typedef enum {
 	DCTConnectionControllerPriorityVeryLow
 } DCTConnectionControllerPriority;
 
+@class DCTConnectionController;
+
 typedef void (^DCTConnectionControllerResponseBlock) (NSURLResponse *response);
 typedef void (^DCTConnectionControllerFailureBlock) (NSError *error);
 typedef void (^DCTConnectionControllerCancelationBlock) ();
-typedef void (^DCTConnectionControllerCompletionBlock) (id returnedObject);
+typedef void (^DCTConnectionControllerCompletionBlock) (DCTConnectionController *connectionController);
 typedef void (^DCTConnectionControllerStatusBlock) (DCTConnectionControllerStatus status);
 
 /** Name of the notification sent out when the connection has successfully completed.

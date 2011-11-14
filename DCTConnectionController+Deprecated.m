@@ -11,7 +11,7 @@
 @implementation DCTConnectionController (Deprecated)
 
 - (void)addFinishHandler:(DCTConnectionControllerFinishBlock)handler {
-	[self addCompletionHandler:^(id object) {
+	[self addCompletionHandler:^(DCTConnectionController *object) {
 		handler();
 	}];
 }

@@ -87,8 +87,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 - (void)dctInternal_start;
 - (void)dctInternal_setQueued;
 
-@property (nonatomic, readonly) id dctInternal_returnedObject;
-
 @property (nonatomic, readonly) NSMutableArray *dctInternal_responseBlocks;
 @property (nonatomic, readonly) NSMutableArray *dctInternal_completionBlocks;
 @property (nonatomic, readonly) NSMutableArray *dctInternal_failureBlocks;
@@ -376,7 +374,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	NSAssert(handler != nil, @"Handler should not be nil.");
 	
-	if (self.finished) handler(self.dctInternal_returnedObject);
+	if (self.finished) handler(self);
 	
 	[self.dctInternal_completionBlocks addObject:[handler copy]];
 }
@@ -553,12 +551,10 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	if (self.ended) return;
 	
-	id object = self.dctInternal_returnedObject;
-	
 	for (DCTConnectionControllerCompletionBlock block in completionBlocks)
-		block(object);
+		block(self);
 	
-	[self dctInternal_sendObjectToDelegate:object];
+	[self dctInternal_sendObjectToDelegate:nil];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerDidFinishNotification object:self];
 	
@@ -685,17 +681,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	return statusChangeBlocks;
 	
-}
-
-- (id)dctInternal_returnedObject {
-	
-	if (returnedObject != nil)
-		return self.returnedObject;
-	
-	if ([self isMemberOfClass:[DCTConnectionController class]] || [self isMemberOfClass:[DCTRESTConnectionController class]])
-		return self.returnedObject;
-	
-	return nil;
 }
 
 #pragma mark - Internal Setters
