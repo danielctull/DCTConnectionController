@@ -103,7 +103,7 @@ typedef enum {
 typedef void (^DCTConnectionControllerResponseBlock) (NSURLResponse *response);
 typedef void (^DCTConnectionControllerFailureBlock) (NSError *error);
 typedef void (^DCTConnectionControllerCancelationBlock) ();
-typedef void (^DCTConnectionControllerCompletionBlock) (DCTConnectionController *connectionController);
+typedef void (^DCTConnectionControllerFinishBlock) ();
 typedef void (^DCTConnectionControllerStatusBlock) (DCTConnectionControllerStatus status);
 
 /** Name of the notification sent out when the connection has successfully completed.
@@ -303,17 +303,15 @@ extern NSString *const DCTConnectionControllerTypeString[];
  */
 - (void)addResponseHandler:(DCTConnectionControllerResponseBlock)responseHandler;
 
-/** Adds a completion block.
+/** Adds a finish block.
  
- DCTConnectionControllerCompletionBlock is defined as such:
+ DCTConnectionControllerFinishBlock is defined as such:
  
- `typedef void (^DCTConnectionControllerCompletionBlock) (id object);`
+ `typedef void (^DCTConnectionControllerFinishBlock) ();`
  
- Where the object is the returnedObject of the reciever.
- 
- @param completionHandler The completion block to add.
+ @param finishHandler The completion block to add.
  */
-- (void)addCompletionHandler:(DCTConnectionControllerCompletionBlock)completionHandler;
+- (void)addFinishHandler:(DCTConnectionControllerFinishBlock)finishHandler;
 
 
 
@@ -563,5 +561,3 @@ extern NSString *const DCTConnectionControllerTypeString[];
  */
 - (void)connectionController:(DCTConnectionController *)connectionController didReceiveResponse:(NSURLResponse *)response;
 @end
-
-#import "DCTConnectionController+Deprecated.h"
