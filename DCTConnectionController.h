@@ -526,10 +526,21 @@ extern NSString *const DCTConnectionControllerTypeString[];
  */
 @protocol DCTConnectionControllerDelegate <NSObject>
 @optional
+
+/** Tells the delegate the connection has succeeded.
+ 
+ @param connectionController The connection controller informing the delegate of the event.
+ */
+- (void)connectionControllerDidFinish:(DCTConnectionController *)connectionController;
+
 /** Tells the delegate the connection has succeeded.
  
  @param connectionController The connection controller informing the delegate of the event.
  @param object The object returned by the connection.
+ 
+ @deprecated Use connectionControllerDidFinish: instead.
+ 
+ @see connectionControllerDidFinish: 
  */
 - (void)connectionController:(DCTConnectionController *)connectionController didReceiveObject:(NSObject *)object;
 /** Tells the delegate the connection has failed.

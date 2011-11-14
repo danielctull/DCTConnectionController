@@ -636,8 +636,12 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 }
 
 - (void)dctInternal_sendObjectToDelegate:(id)object {
+	
+	if ([self.delegate respondsToSelector:@selector(connectionControllerDidFinish:)])
+		[self.delegate connectionControllerDidFinish:self];
+	
 	if ([self.delegate respondsToSelector:@selector(connectionController:didReceiveObject:)])
-		[self.delegate connectionController:self didReceiveObject:object];
+		[self.delegate connectionController:self didReceiveObject:self.returnedObject];
 }
 
 - (void)dctInternal_sendErrorToDelegate:(NSError *)error {
