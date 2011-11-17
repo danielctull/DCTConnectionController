@@ -63,6 +63,8 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 @interface DCTConnectionQueue ()
 
+- (BOOL)dctInternal_willPerformSelectorOnMainThread:(SEL)selector withObject:(id)object;
+
 - (void)dctInternal_runNextConnection;
 - (BOOL)dctInternal_tryToRunConnection:(DCTConnectionController *)connection;
 - (void)dctInternal_removeActiveConnection:(DCTConnectionController *)connection;
@@ -106,7 +108,7 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	activeConnections = [[NSMutableArray alloc] init];
 	queuedConnections = [[NSMutableArray alloc] init];
 	active = YES;
-	self.maxConnections = NSUIntegerMax;
+	self.maxConnections = 5;
 	externalConnectionCountKeys = [NSArray arrayWithObjects:DCTConnectionQueueActiveConnectionCountKey, DCTConnectionQueueConnectionCountKey, nil];
 		
 	[self uikit_init];
@@ -138,6 +140,8 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 - (void)addConnectionController:(DCTConnectionController *)connectionController {
 	
+	if ([self dctInternal_willPerformSelectorOnMainThread:_cmd withObject:connectionController]) return;
+	
 	__block DCTConnectionController *blockConnectionController = connectionController;
 	
 	[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
@@ -150,6 +154,8 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 - (void)removeConnectionController:(DCTConnectionController *)connectionController {
 	
+	if ([self dctInternal_willPerformSelectorOnMainThread:_cmd withObject:connectionController]) return;
+	
 	if ([activeConnections containsObject:connectionController])
 		[self dctInternal_removeActiveConnection:connectionController];
 		
@@ -160,6 +166,9 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 }
 
 - (void)requeueConnectionController:(DCTConnectionController *)connectionController {
+	
+	if ([self dctInternal_willPerformSelectorOnMainThread:_cmd withObject:connectionController]) return;
+	
 	[self dctInternal_removeActiveConnection:connectionController];
 	[connectionController dctInternal_reset];
 	[self dctInternal_addConnectionControllerToQueue:connectionController];
@@ -170,6 +179,8 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 - (NSArray *)activeConnectionControllers {
 	return [NSArray arrayWithArray:activeConnections];
 }
+
+
 - (NSArray *)queuedConnectionControllers {
 	return [NSArray arrayWithArray:queuedConnections];
 }
@@ -318,4 +329,18 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	[connectionController dctInternal_start];
 }
 
+- (BOOL)dctInternal_willPerformSelectorOnMainThread:(SEL)selector withObject:(id)object {
+	
+	BOOL isMainThread = dispatch_get_current_queue() == dispatch_get_main_queue();
+	
+#if defined(DCTConnectionControllerMainQueueWarning)
+	NSAssert(isMainThread, @"%@ Queue should be main", NSStringFromSelector(selector));
+#endif
+	
+	if (!isMainThread)	
+		[self performSelectorOnMainThread:selector withObject:object waitUntilDone:NO];
+	
+	return !isMainThread;	
+}
+		 
 @end
