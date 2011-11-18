@@ -14,7 +14,7 @@ typedef DCTConnectionController * (^DCTInternalConnectionControllerWeakBlock) ()
 
 @interface DCTConnectionGroup ()
 @property (nonatomic, strong, readonly) NSMutableArray *dctInternal_connectionControllers;
-@property (nonatomic, strong, readonly) NSMutableArray *dctInternal_endedBlocks;
+@property (nonatomic, strong, readonly) NSMutableArray *dctInternal_completionBlocks;
 
 - (void)dctInternal_checkControllers;
 
@@ -23,14 +23,14 @@ typedef DCTConnectionController * (^DCTInternalConnectionControllerWeakBlock) ()
 @implementation DCTConnectionGroup
 
 @synthesize dctInternal_connectionControllers;
-@synthesize dctInternal_endedBlocks;
+@synthesize dctInternal_completionBlocks;
 
 - (NSArray *)connectionControllers {
 	return [self.dctInternal_connectionControllers copy];
 }
 
-- (void)addEndedHandler:(DCTConnectionGroupEndedBlock)endedBlock {
-	[self.dctInternal_endedBlocks addObject:[endedBlock copy]];
+- (void)addCompletionHandler:(DCTConnectionGroupCompletionBlock)completionBlock {
+	[self.dctInternal_completionBlocks addObject:[completionBlock copy]];
 }
 
 - (void)addConnectionController:(DCTConnectionController *)connectionController {
@@ -68,8 +68,8 @@ typedef DCTConnectionController * (^DCTInternalConnectionControllerWeakBlock) ()
 	}
 	
 	//typedef void (^DCTConnectionGroupEndedBlock) (NSArray *finishedConnectionControllers, NSArray *failedConnectionControllers, NSArray *cancelledConnectionControllers);
-	[self.dctInternal_endedBlocks enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
-		DCTConnectionGroupEndedBlock block = object;
+	[self.dctInternal_completionBlocks enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
+		DCTConnectionGroupCompletionBlock block = object;
 		block(finishedCCs, failedCCs, cancelledCCs);
 	}];
 }
@@ -89,9 +89,9 @@ typedef DCTConnectionController * (^DCTInternalConnectionControllerWeakBlock) ()
 
 - (NSMutableArray *)dctInternal_endedBlocks {
 	
-	if (!dctInternal_endedBlocks) dctInternal_endedBlocks = [NSMutableArray new];
+	if (!dctInternal_completionBlocks) dctInternal_completionBlocks = [NSMutableArray new];
 	
-	return dctInternal_endedBlocks;	
+	return dctInternal_completionBlocks;	
 }
 
 @end
