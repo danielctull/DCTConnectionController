@@ -38,8 +38,6 @@
 #import "DCTConnectionController+UsefulChecks.h"
 #import "DCTConnectionQueue.h"
 
-typedef DCTConnectionController * (^DCTInternalConnectionControllerWeakBlock) ();
-
 @interface DCTConnectionGroup ()
 @property (nonatomic, strong, readonly) NSMutableArray *dctInternal_connectionControllers;
 @property (nonatomic, strong, readonly) NSMutableArray *dctInternal_completionBlocks;
