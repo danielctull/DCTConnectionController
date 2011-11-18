@@ -188,7 +188,10 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	}
 	
 	DCTConnectionController *existingConnectionController = [queue.connectionControllers objectAtIndex:existingConnectionControllerIndex];
-		
+	
+	// If it's the exact same object, lets not add it again. This could happen if -connectOnQueue: is called more than once.
+	if (existingConnectionController == self) return;
+	
 	if (existingConnectionController.priority > self.priority)
 		existingConnectionController.priority = self.priority;
 	
