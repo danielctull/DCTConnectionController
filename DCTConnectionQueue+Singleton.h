@@ -49,6 +49,10 @@
 
 @interface DCTConnectionController (QueueSingleton)
 
+/// @name Dealing with the Global Queue
+
+/** Calls -connectOnQueue: with the global queue.
+ */
 - (void)connect;
 
 @end
@@ -56,6 +60,10 @@
 
 @interface DCTConnectionGroup (QueueSingleton)
 
+/// @name Dealing with the Global Queue
+
+/** Calls -connectOnQueue: with the global queue.
+ */
 - (void)connect;
 
 @end
