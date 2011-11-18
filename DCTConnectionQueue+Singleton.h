@@ -36,6 +36,7 @@
 
 #import "DCTConnectionQueue.h"
 #import "DCTConnectionController.h"
+#import "DCTConnectionGroup.h"
 
 @interface DCTConnectionQueue (Singleton)
 
@@ -47,6 +48,13 @@
 @end
 
 @interface DCTConnectionController (QueueSingleton)
+
+- (void)connect;
+
+@end
+
+
+@interface DCTConnectionGroup (QueueSingleton)
 
 - (void)connect;
 

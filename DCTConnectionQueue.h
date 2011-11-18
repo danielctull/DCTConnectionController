@@ -36,6 +36,7 @@
 
 #import <Foundation/Foundation.h>
 #import "DCTConnectionController.h"
+#import "DCTConnectionGroup.h"
 
 extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotification;
@@ -112,5 +113,9 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotificat
  @param connectionController The connection controller to requeue.
  */
 - (void)requeueConnectionController:(DCTConnectionController *)connectionController;
+
+/// @name Managing Connection Groups
+
+- (void)addConnectionGroup:(DCTConnectionGroup *)connectionGroup;
 
 @end

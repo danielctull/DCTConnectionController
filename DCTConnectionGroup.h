@@ -9,15 +9,19 @@
 #import <Foundation/Foundation.h>
 #import "DCTConnectionController.h"
 
+typedef void (^DCTConnectionGroupEndedBlock) ();
+typedef void (^DCTConnectionGroupFinishBlock) ();
 
 /** DCTConnectionGroup is experiemental code at the moment.
  
  */
 @interface DCTConnectionGroup : NSObject
 
+@property (nonatomic, readonly) NSArray *connectionControllers;
+
 - (void)addConnectionController:(DCTConnectionController *)connectionController;
-- (void)addFinishHandler:(DCTConnectionControllerFinishBlock)finishBlock;
-- (void)connect;
+- (void)addFinishHandler:(DCTConnectionGroupFinishBlock)finishBlock;
+- (void)addEndedHandler:(DCTConnectionGroupEndedBlock)endedBlock;
 - (void)connectOnQueue:(DCTConnectionQueue *)queue;
 
 @end

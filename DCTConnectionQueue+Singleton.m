@@ -60,3 +60,15 @@ static DCTConnectionQueue *sharedInstance = nil;
 }
 
 @end
+
+
+
+
+
+@implementation DCTConnectionGroup (QueueSingleton)
+
+- (void)connect {
+	[self connectOnQueue:[DCTConnectionQueue sharedConnectionQueue]];
+}
+
+@end

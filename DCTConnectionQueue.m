@@ -91,6 +91,7 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 @implementation DCTConnectionQueue {
     __strong NSMutableArray *activeConnections;
 	__strong NSMutableArray *queuedConnections;
+	__strong NSMutableArray *groups;
 	BOOL active;
 	NSInteger connectionCount;
 	
@@ -172,6 +173,23 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	[self dctInternal_removeActiveConnection:connectionController];
 	[connectionController dctInternal_reset];
 	[self dctInternal_addConnectionControllerToQueue:connectionController];
+}
+
+- (void)addConnectionGroup:(DCTConnectionGroup *)connectionGroup {
+	
+	if (!groups) groups = [[NSMutableArray alloc] initWithCapacity:1];
+	
+	[groups addObject:connectionGroup];
+	
+	__dct_weak DCTConnectionGroup *group = connectionGroup;
+	
+	[connectionGroup addEndedHandler:^{
+		[groups removeObject:group];
+	}];
+	
+	[connectionGroup.connectionControllers enumerateObjectsUsingBlock:^(DCTConnectionController *cc, NSUInteger idx, BOOL *stop) {
+		[cc connectOnQueue:self];
+	}];
 }
 
 #pragma mark - DCTConnectionQueue Accessors
