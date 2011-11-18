@@ -147,11 +147,11 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	
 	if ([self dctInternal_willPerformSelectorOnMainThread:_cmd withObject:connectionController]) return;
 	
-	__dct_weak DCTConnectionController *blockConnectionController = connectionController;
+	__dct_weak DCTConnectionController *weakConnectionController = connectionController;
 	
 	[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
-		if (blockConnectionController.ended)
-			[self removeConnectionController:blockConnectionController];
+		if (weakConnectionController.ended)
+			[self removeConnectionController:weakConnectionController];
 	}];
 	
 	[self dctInternal_addConnectionControllerToQueue:connectionController];
