@@ -183,7 +183,7 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	
 	__dct_weak DCTConnectionGroup *group = connectionGroup;
 	
-	[connectionGroup addEndedHandler:^{
+	[connectionGroup addEndedHandler:^(NSArray *finishedConnectionControllers, NSArray *failedConnectionControllers, NSArray *cancelledConnectionControllers) {
 		[groups removeObject:group];
 	}];
 	

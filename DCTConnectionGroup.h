@@ -9,8 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "DCTConnectionController.h"
 
-typedef void (^DCTConnectionGroupEndedBlock) ();
-typedef void (^DCTConnectionGroupFinishBlock) ();
+typedef void (^DCTConnectionGroupEndedBlock) (NSArray *finishedConnectionControllers, NSArray *failedConnectionControllers, NSArray *cancelledConnectionControllers);
 
 /** DCTConnectionGroup is experiemental code at the moment.
  
@@ -20,8 +19,9 @@ typedef void (^DCTConnectionGroupFinishBlock) ();
 @property (nonatomic, readonly) NSArray *connectionControllers;
 
 - (void)addConnectionController:(DCTConnectionController *)connectionController;
-- (void)addFinishHandler:(DCTConnectionGroupFinishBlock)finishBlock;
+
 - (void)addEndedHandler:(DCTConnectionGroupEndedBlock)endedBlock;
+
 - (void)connectOnQueue:(DCTConnectionQueue *)queue;
 
 @end

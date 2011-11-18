@@ -14,22 +14,19 @@ typedef DCTConnectionController * (^DCTInternalConnectionControllerWeakBlock) ()
 
 @interface DCTConnectionGroup ()
 @property (nonatomic, strong, readonly) NSMutableArray *dctInternal_connectionControllers;
-@property (nonatomic, strong, readonly) NSMutableArray *dctInternal_finishBlocks;
 @property (nonatomic, strong, readonly) NSMutableArray *dctInternal_endedBlocks;
+
+- (void)dctInternal_checkControllers;
+
 @end
 
 @implementation DCTConnectionGroup
 
 @synthesize dctInternal_connectionControllers;
-@synthesize dctInternal_finishBlocks;
 @synthesize dctInternal_endedBlocks;
 
 - (NSArray *)connectionControllers {
 	return [self.dctInternal_connectionControllers copy];
-}
-
-- (void)addFinishHandler:(DCTConnectionControllerFinishBlock)finishBlock {
-	[self.dctInternal_finishBlocks addObject:[finishBlock copy]];
 }
 
 - (void)addEndedHandler:(DCTConnectionGroupEndedBlock)endedBlock {
@@ -43,29 +40,40 @@ typedef DCTConnectionController * (^DCTInternalConnectionControllerWeakBlock) ()
 	__dct_weak DCTConnectionGroup *weakself = self;
 	
 	[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
-		
-		BOOL success = YES;
-		
-		for (DCTConnectionController *cc in weakself.dctInternal_connectionControllers) {
-			if (!cc.ended)
-				return;
-			
-			if (!cc.finished)
-				success = NO;
-		}
-		
-		for (DCTConnectionGroupEndedBlock block in weakself.dctInternal_endedBlocks)
-			block();
-		
-		if (!success) return;
-		
-		for (DCTConnectionGroupFinishBlock block in weakself.dctInternal_finishBlocks) {
-			block();
-		}
-		
+		[weakself dctInternal_checkControllers];
 	}];
 }
 
+- (void)dctInternal_checkControllers {
+	
+	for (DCTConnectionController *cc in self.dctInternal_connectionControllers)
+		if (!cc.ended)
+			return;
+		
+	NSMutableArray *failedCCs = [[NSMutableArray alloc] initWithCapacity:[self.dctInternal_connectionControllers count]];
+	NSMutableArray *finishedCCs = [[NSMutableArray alloc] initWithCapacity:[self.dctInternal_connectionControllers count]];
+	NSMutableArray *cancelledCCs = [[NSMutableArray alloc] initWithCapacity:[self.dctInternal_connectionControllers count]];
+	
+	for (DCTConnectionController *cc in self.dctInternal_connectionControllers) {
+		
+		if (cc.status == DCTConnectionControllerStatusFinished)
+			[finishedCCs addObject:cc];
+		
+		else if (cc.status == DCTConnectionControllerStatusFailed)
+			[failedCCs addObject:cc];
+		
+		else if (cc.status == DCTConnectionControllerStatusCancelled)
+			[cancelledCCs addObject:cc];
+		
+	}
+	
+	//typedef void (^DCTConnectionGroupEndedBlock) (NSArray *finishedConnectionControllers, NSArray *failedConnectionControllers, NSArray *cancelledConnectionControllers);
+	[self.dctInternal_endedBlocks enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
+		DCTConnectionGroupEndedBlock block = object;
+		block(finishedCCs, failedCCs, cancelledCCs);
+	}];
+}
+					 
 - (void)connectOnQueue:(DCTConnectionQueue *)queue {
 	[queue addConnectionGroup:self];
 }
@@ -77,13 +85,6 @@ typedef DCTConnectionController * (^DCTInternalConnectionControllerWeakBlock) ()
 	if (!dctInternal_connectionControllers) dctInternal_connectionControllers = [NSMutableArray new];
 	
 	return dctInternal_connectionControllers;	
-}
-
-- (NSMutableArray *)dctInternal_finishBlocks {
-	
-	if (!dctInternal_finishBlocks) dctInternal_finishBlocks = [NSMutableArray new];
-	
-	return dctInternal_finishBlocks;	
 }
 
 - (NSMutableArray *)dctInternal_endedBlocks {
