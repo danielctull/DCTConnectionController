@@ -140,6 +140,10 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 }
 
 - (void)addConnectionController:(DCTConnectionController *)connectionController {
+	[connectionController connectOnQueue:self];
+}
+
+- (void)dctConnectionController_addConnectionController:(DCTConnectionController *)connectionController {
 	
 	if ([self dctInternal_willPerformSelectorOnMainThread:_cmd withObject:connectionController]) return;
 	
