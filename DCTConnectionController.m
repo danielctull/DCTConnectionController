@@ -559,6 +559,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	if (self.ended) return;
 	
+	[self.URLConnection cancel];
+	
 	for (DCTConnectionControllerFinishBlock block in completionBlocks)
 		block();
 	
@@ -575,6 +577,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	if (self.ended) return;
 	
+	[self.URLConnection cancel];
+	
 	NSError *error = self.returnedError;
 	
 	for (DCTConnectionControllerFailureBlock block in failureBlocks)
@@ -590,6 +594,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 }
 
 - (void)dctInternal_cancelled {
+	
 	if (self.ended) return;
 	
 	for (DCTConnectionControllerCancelationBlock block in cancelationBlocks)
