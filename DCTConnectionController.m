@@ -222,8 +222,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		[self dctInternal_cancelled];
 	}];
 	
-	return;
-	
 }
 
 - (void)requeue {
