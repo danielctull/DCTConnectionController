@@ -51,7 +51,7 @@
 
 /// @name Dealing with the Global Queue
 
-/** Calls -connectOnQueue: with the global queue.
+/** Calls [connectOnQueue:]([DCTConnectionController connectOnQueue:]) with the global queue.
  */
 - (void)connect;
 
@@ -62,7 +62,7 @@
 
 /// @name Dealing with the Global Queue
 
-/** Calls -connectOnQueue: with the global queue.
+/** Calls [connectOnQueue:]([DCTConnectionGroup connectOnQueue:]) with the global queue.
  */
 - (void)connect;
 

@@ -26,14 +26,16 @@ typedef void (^DCTConnectionGroupCompletionBlock) (NSArray *finishedConnectionCo
 	[group addConnectionController:cc2];
  
  
-	[group addCompletionHandler:^(NSArray *finishedConnectionControllers, NSArray *failedConnectionControllers, NSArray *cancelledConnectionControllers) {
+	[group addCompletionHandler:^(NSArray *finishedCCs, NSArray *failedCCs, NSArray *cancelledCCs) {
  
-		if ([failedConnectionControllers count] == 0 && [cancelledConnectionControllers count] == 0)
+		if ([failedCCs count] == 0 && [cancelledCCs count] == 0)
 			// handle success
-		else if ([failedConnectionControllers count] == 0)
+		
+		else if ([failedCCs count] == 0)
 			// handle cancellations
+		
 		else
-			// handle failue
+			// handle failure
 	}];
  
 	[group connect];
@@ -57,7 +59,7 @@ typedef void (^DCTConnectionGroupCompletionBlock) (NSArray *finishedConnectionCo
  
  DCTConnectionGroupCompletionBlock is defined as the following:
  
-	typedef void (^DCTConnectionGroupCompletionBlock) (NSArray *finishedConnectionControllers, NSArray *failedConnectionControllers, NSArray *cancelledConnectionControllers);
+	typedef void (^DCTConnectionGroupCompletionBlock) (NSArray *finishedCCs, NSArray *failedCCs, NSArray *cancelledCCs);
  
  It gives you three arrays, once for the connection controllers that have 
  successfully finished, one for failures and one for those which have been cancelled.
@@ -68,7 +70,8 @@ typedef void (^DCTConnectionGroupCompletionBlock) (NSArray *finishedConnectionCo
 
 /** Adds this group to a queue.
  
- The queue will call connect on all the connection controllers within this group.
+ The queue will call [connectOnQueue:]([DCTConnectionController connectOnQueue:]) on 
+ all the connection controllers within this group.
  
  @param queue The queue on which to add the group (and the connection controllers).
  */
