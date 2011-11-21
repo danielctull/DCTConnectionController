@@ -39,17 +39,16 @@
 #import "DCTConnectionQueue.h"
 
 @interface DCTConnectionGroup ()
-@property (nonatomic, strong, readonly) NSMutableArray *dctInternal_connectionControllers;
-@property (nonatomic, strong, readonly) NSMutableArray *dctInternal_completionBlocks;
+@property (nonatomic, readonly) NSMutableArray *dctInternal_connectionControllers;
+@property (nonatomic, readonly) NSMutableArray *dctInternal_completionBlocks;
 
 - (void)dctInternal_checkControllers;
-
 @end
 
-@implementation DCTConnectionGroup
-
-@synthesize dctInternal_connectionControllers;
-@synthesize dctInternal_completionBlocks;
+@implementation DCTConnectionGroup {
+	__strong NSMutableArray *dctInternal_connectionControllers;
+	__strong NSMutableArray *dctInternal_completionBlocks;
+}
 
 - (NSArray *)connectionControllers {
 	return [self.dctInternal_connectionControllers copy];
