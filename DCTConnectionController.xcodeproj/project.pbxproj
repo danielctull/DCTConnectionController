@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2457CA0B147AA97400CEAE31 /* DCTLogViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2457CA0A147AA97400CEAE31 /* DCTLogViewController.m */; };
+		2457CA0E147AB38400CEAE31 /* DCTConnectionController+StatusString.m in Sources */ = {isa = PBXBuildFile; fileRef = 2457CA0D147AB38400CEAE31 /* DCTConnectionController+StatusString.m */; };
+		2457CA11147AB4B400CEAE31 /* NSURL+DomainString.m in Sources */ = {isa = PBXBuildFile; fileRef = 2457CA10147AB4B400CEAE31 /* NSURL+DomainString.m */; };
 		246F8CAB146831F300F2FB74 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 246F8CAA146831F300F2FB74 /* UIKit.framework */; };
 		246F8CAD146831F300F2FB74 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 246F8CAC146831F300F2FB74 /* Foundation.framework */; };
 		246F8CAF146831F300F2FB74 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 246F8CAE146831F300F2FB74 /* CoreGraphics.framework */; };
@@ -58,6 +60,10 @@
 /* Begin PBXFileReference section */
 		2457CA09147AA97400CEAE31 /* DCTLogViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTLogViewController.h; sourceTree = "<group>"; };
 		2457CA0A147AA97400CEAE31 /* DCTLogViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTLogViewController.m; sourceTree = "<group>"; };
+		2457CA0C147AB38400CEAE31 /* DCTConnectionController+StatusString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionController+StatusString.h"; sourceTree = "<group>"; };
+		2457CA0D147AB38400CEAE31 /* DCTConnectionController+StatusString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionController+StatusString.m"; sourceTree = "<group>"; };
+		2457CA0F147AB4B400CEAE31 /* NSURL+DomainString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSURL+DomainString.h"; sourceTree = "<group>"; };
+		2457CA10147AB4B400CEAE31 /* NSURL+DomainString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSURL+DomainString.m"; sourceTree = "<group>"; };
 		246F8CA6146831F300F2FB74 /* DCTConnectionController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DCTConnectionController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		246F8CAA146831F300F2FB74 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		246F8CAC146831F300F2FB74 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -200,6 +206,10 @@
 				246F8CF01468337600F2FB74 /* DCTConnectionControllerDemoViewController.xib */,
 				246F8CF11468337600F2FB74 /* DCTConnectionControllerDemoViewController.h */,
 				246F8CF21468337600F2FB74 /* DCTConnectionControllerDemoViewController.m */,
+				2457CA0C147AB38400CEAE31 /* DCTConnectionController+StatusString.h */,
+				2457CA0D147AB38400CEAE31 /* DCTConnectionController+StatusString.m */,
+				2457CA0F147AB4B400CEAE31 /* NSURL+DomainString.h */,
+				2457CA10147AB4B400CEAE31 /* NSURL+DomainString.m */,
 				246F8CB1146831F400F2FB74 /* Supporting Files */,
 			);
 			path = DCTConnectionControllerDemo;
@@ -424,6 +434,8 @@
 				24992EED1476BC5900AB4AF8 /* NSString+DCTURLEncoding.m in Sources */,
 				24992EF11476BC9E00AB4AF8 /* DCTConnectionGroup.m in Sources */,
 				2457CA0B147AA97400CEAE31 /* DCTLogViewController.m in Sources */,
+				2457CA0E147AB38400CEAE31 /* DCTConnectionController+StatusString.m in Sources */,
+				2457CA11147AB4B400CEAE31 /* NSURL+DomainString.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

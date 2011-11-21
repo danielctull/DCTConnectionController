@@ -12,10 +12,12 @@
 #import "DCTConnectionQueue+Singleton.h"
 #import "DCTNetworkActivityIndicatorController.h"
 #import "DCTConnectionGroup.h"
+#import "DCTConnectionController+StatusString.h"
+#import "NSURL+DomainString.h"
 
 @interface DCTConnectionControllerDemoViewController ()
-- (NSString *)stringFromURL:(NSURL *)url;
 - (void)statusUpdatedNotification:(NSNotification *)notification;
+- (void)connectionCountChanged:(NSNotification *)notification;
 @end
 
 
@@ -28,35 +30,35 @@
 	
 	self.title = @"DCTConnectionController";
 	
-	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-	[notificationCenter addObserver:self
-						   selector:@selector(connectionCountChanged:) 
-							   name:DCTNetworkActivityIndicatorControllerNetworkActivityChangedNotification
-							 object:nil];
-	
 	return self;
 }
 
 - (void)dealloc {
-	[[NSNotificationCenter defaultCenter] removeObserver:self 
-													name:DCTConnectionQueueConnectionCountChangedNotification
-												  object:nil];
+	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+	[notificationCenter removeObserver:self 
+								  name:DCTNetworkActivityIndicatorControllerNetworkActivityChangedNotification
+								object:nil];
+	[notificationCenter removeObserver:self 
+								  name:DCTConnectionControllerStatusChangedNotification
+								object:nil];
 }
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
 		
 	self.navigationController.toolbarHidden = NO;
+	self.toolbarItems = self.toolbar.items;
 	
-	[[NSNotificationCenter defaultCenter] addObserver:self 
-											 selector:@selector(connectionCountChanged:) 
-												 name:DCTConnectionQueueConnectionCountChangedNotification 
-											   object:nil];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(statusUpdatedNotification:)
-												 name:DCTConnectionControllerStatusChangedNotification
-											   object:nil];
+	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+	[notificationCenter addObserver:self
+						   selector:@selector(connectionCountChanged:) 
+							   name:DCTNetworkActivityIndicatorControllerNetworkActivityChangedNotification
+							 object:nil];
+		
+	[notificationCenter addObserver:self
+						   selector:@selector(statusUpdatedNotification:)
+							   name:DCTConnectionControllerStatusChangedNotification
+							 object:nil];
 	
 	NSArray *urls = [NSArray arrayWithObjects:
 					 @"http://www.tesco.com/",
@@ -116,55 +118,12 @@
 	bbc.URL = [NSURL URLWithString:@"http://www.bbc.co.uk/"];
 	bbc.priority = DCTConnectionControllerPriorityHigh;
 	[bbc addDependency:apple];
-	[bbc connect];
-	
-	self.toolbarItems = self.toolbar.items;
-	
+	[bbc connect];	
 }
 	
 - (void)statusUpdatedNotification:(NSNotification *)notification {
-	
 	DCTConnectionController *connectionController = [notification object];
-	
-	NSString *prefixString = [self stringFromURL:connectionController.URL];
-	
-	switch (connectionController.status) {
-		case DCTConnectionControllerStatusStarted:
-			[self log:@"%@ Started", prefixString];
-			break;
-		case DCTConnectionControllerStatusQueued:
-			[self log:@"%@ Queued", prefixString];
-			break;
-		case DCTConnectionControllerStatusFailed:
-			[self log:@"%@ Failed", prefixString];
-			break;
-		case DCTConnectionControllerStatusNotStarted:
-			[self log:@"%@ Not Started", prefixString];
-			break;
-		case DCTConnectionControllerStatusResponded:
-			[self log:@"%@ Responded", prefixString];
-			break;
-		case DCTConnectionControllerStatusFinished:
-			[self log:@"%@ Finished", prefixString];
-			break;
-		case DCTConnectionControllerStatusCancelled:
-			[self log:@"%@ Cancelled", prefixString];
-			break;
-		default:
-			break;
-	}
-}
-
-- (NSString *)stringFromURL:(NSURL *)url {
-	NSString *urlString = [url absoluteString];
-	urlString = [urlString stringByReplacingOccurrencesOfString:@"http://" withString:@""];
-	urlString = [urlString stringByReplacingOccurrencesOfString:@"www." withString:@""];
-	urlString = [urlString stringByReplacingOccurrencesOfString:@".com/" withString:@""];
-	urlString = [urlString stringByReplacingOccurrencesOfString:@".co.uk/" withString:@""];
-	urlString = [urlString stringByReplacingOccurrencesOfString:@".com" withString:@""];
-	urlString = [urlString stringByReplacingOccurrencesOfString:@".co.uk" withString:@""];
-	return urlString;
-	
+	[self log:@"%@ %@", connectionController.URL.domainString, connectionController.statusString];
 }
 
 - (void)connectionCountChanged:(NSNotification *)notification {
