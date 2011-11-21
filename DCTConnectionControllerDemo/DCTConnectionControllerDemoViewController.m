@@ -16,21 +16,18 @@
 @interface DCTConnectionControllerDemoViewController ()
 - (NSString *)stringFromURL:(NSURL *)url;
 - (void)statusUpdatedNotification:(NSNotification *)notification;
-- (void)writeToLog:(NSString *)string;
 @end
 
 
 @implementation DCTConnectionControllerDemoViewController
 
-@synthesize textView, toolbar;
-@synthesize activeAmountLabel, connectionsAmountLabel, queuedAmountLabel;
+@synthesize toolbar, activeAmountLabel, connectionsAmountLabel, queuedAmountLabel;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
 	if (!(self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) return nil;
 	
 	self.title = @"DCTConnectionController";
 	
-	//DCTNetworkActivityIndicatorController *indicatorController = [DCTNetworkActivityIndicatorController sharedNetworkActivityIndicatorController];
 	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 	[notificationCenter addObserver:self
 						   selector:@selector(connectionCountChanged:) 
@@ -84,7 +81,7 @@
 	}
 	
 	[group addCompletionHandler:^(NSArray *finishedCCs, NSArray *failedCCs, NSArray *cancelledCCs) {
-		[self writeToLog:[NSString stringWithFormat:@"Group %i finished, %i failed, %i cancelled", [finishedCCs count], [failedCCs count], [cancelledCCs count]]];
+		[self log:@"Group %i finished, %i failed, %i cancelled", [finishedCCs count], [failedCCs count], [cancelledCCs count]];
 	}];
 	
 	[group connect];
@@ -134,44 +131,29 @@
 	
 	switch (connectionController.status) {
 		case DCTConnectionControllerStatusStarted:
-			[self writeToLog:[NSString stringWithFormat:@"%@ Started", prefixString]];
+			[self log:@"%@ Started", prefixString];
 			break;
 		case DCTConnectionControllerStatusQueued:
-			[self writeToLog:[NSString stringWithFormat:@"%@ Queued", prefixString]];
+			[self log:@"%@ Queued", prefixString];
 			break;
 		case DCTConnectionControllerStatusFailed:
-			[self writeToLog:[NSString stringWithFormat:@"%@ Failed", prefixString]];
+			[self log:@"%@ Failed", prefixString];
 			break;
 		case DCTConnectionControllerStatusNotStarted:
-			[self writeToLog:[NSString stringWithFormat:@"%@ Not Started", prefixString]];
+			[self log:@"%@ Not Started", prefixString];
 			break;
 		case DCTConnectionControllerStatusResponded:
-			[self writeToLog:[NSString stringWithFormat:@"%@ Responded", prefixString]];
+			[self log:@"%@ Responded", prefixString];
 			break;
 		case DCTConnectionControllerStatusFinished:
-			[self writeToLog:[NSString stringWithFormat:@"%@ Finished", prefixString]];
+			[self log:@"%@ Finished", prefixString];
 			break;
 		case DCTConnectionControllerStatusCancelled:
-			[self writeToLog:[NSString stringWithFormat:@"%@ Cancelled", prefixString]];
+			[self log:@"%@ Cancelled", prefixString];
 			break;
 		default:
 			break;
 	}
-}
-
-- (void)writeToLog:(NSString *)string {
-	
-	NSDateFormatter *df = [[NSDateFormatter alloc] init];
-	[df setDateFormat:@"HH:mm:ss.SSS"];
-	NSString *dateString = [df stringFromDate:[NSDate date]]; 
-	
-	NSString *newLine = @"";
-	if ([self.textView.text length] > 0) {
-		newLine = @"\n";
-	}
-	
-	self.textView.text = [self.textView.text stringByAppendingFormat:@"%@%@ %@", newLine, dateString, string];
-	[self.textView scrollRectToVisible:CGRectMake(0.0, self.textView.contentSize.height - self.textView.bounds.size.height, self.textView.bounds.size.width, self.textView.bounds.size.height) animated:NO];
 }
 
 - (NSString *)stringFromURL:(NSURL *)url {
@@ -186,13 +168,8 @@
 	
 }
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation {
-	return YES;
-}
-
 - (void)connectionCountChanged:(NSNotification *)notification {
 	DCTConnectionQueue *queue = [DCTConnectionQueue sharedConnectionQueue];
-	
 	self.connectionsAmountLabel.text = [NSString stringWithFormat:@"%i", queue.connectionCount];
 	self.queuedAmountLabel.text = [NSString stringWithFormat:@"%i", [queue.queuedConnectionControllers count]];
 	self.activeAmountLabel.text = [NSString stringWithFormat:@"%i", [[DCTNetworkActivityIndicatorController sharedNetworkActivityIndicatorController] networkActivity]];

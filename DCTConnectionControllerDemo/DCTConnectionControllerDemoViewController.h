@@ -7,14 +7,17 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DCTLogViewController.h"
 #import "DCTConnectionController.h"
 
-@interface DCTConnectionControllerDemoViewController : UIViewController <DCTConnectionControllerDelegate> {
-	UITextView *textView;
+#if !defined(dctlogviewcontroller) || !defined(dctlogviewcontroller_1_0) || dctlogviewcontroller < dctlogviewcontroller_1_0
+#warning "DCTLogViewController 1.0 is required with the demo of DCTConnectionController. Update at https://github.com/danielctull/DCTLogViewController" or pull in the submodules with `git submodule init; git submodule update`.
+#endif
+
+@interface DCTConnectionControllerDemoViewController : DCTLogViewController <DCTConnectionControllerDelegate> {
 	UIToolbar *toolbar;
 	UILabel *connectionsLabel;
 }
-@property (nonatomic, retain) IBOutlet UITextView *textView;
 @property (nonatomic, retain) IBOutlet UIToolbar *toolbar;
 @property (nonatomic, retain) IBOutlet UILabel *connectionsAmountLabel;
 @property (nonatomic, retain) IBOutlet UILabel *queuedAmountLabel;

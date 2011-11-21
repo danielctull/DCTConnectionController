@@ -7,3 +7,6 @@
 [submodule "DCTNetworkActivityIndicatorController"]
 	path = DCTNetworkActivityIndicatorController
 	url = git://github.com/danielctull/DCTNetworkActivityIndicatorController.git
+[submodule "DCTLogViewController"]
+	path = DCTLogViewController
+	url = git://github.com/danielctull/DCTLogViewController.git
