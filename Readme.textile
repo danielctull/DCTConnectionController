@@ -8,6 +8,17 @@ The DCTConnectionQueue is used to queue up connection controllers, and managed t
 
 There is a category on DCTConnectionQueue to allow access to a global queue, and a convenience method on DCTConnectionController to easily queue connections on this global queue. You are, however,  not bound to using this global queue and can use multiple queues as you wish.
 
+h2. DCTConnectionController 2.1 Notes
+
+* Adds DCTConnectionGroup to manage a group of connections and be notified when they have all ended, whether they have done so successfully or not.
+* Adds a method to DCTConnectionQueue to queue up a connection group.
+* Adds a notification that the connection controller needs display (through a webview) to allow a view layer to handle things like OAuth connections.
+* Adds a queue property to DCTConnectionController
+* The returnedObject property is now of type id.
+* Fixes a bug where the same connection controller would get queued up more than once if -connect, -connectOnQueue: or -addConnectionController was called more than once.
+* Fixes a bug where called -addConnectionController: on DCTConnectionQueue would not check for duplicates on the queue.
+* Deprecates the connectionController:didReceiveObject: delegate method, use connectionControllerDidFinish: instead.
+
 h2. DCTConnectionController 2.0 Notes
 
 * The API for the new version of DCTConnectionController has been revised and care should be handled when upgrading to the new version.
