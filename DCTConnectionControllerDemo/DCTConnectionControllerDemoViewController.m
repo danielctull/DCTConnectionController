@@ -75,7 +75,6 @@
 	for (NSString *s in urls) {
 		DCTConnectionController *connectionController = [DCTConnectionController new];
 		connectionController.multitaskEnabled = YES;
-		connectionController.delegate = self;
 		connectionController.URL = [NSURL URLWithString:s];
 		[group addConnectionController:connectionController];
 	}
