@@ -45,7 +45,7 @@
 #warning "DCTFoundation 2.0.1 is required with this version of DCTConnectionController. Update at https://github.com/danielctull/DCTFoundation"
 #endif
 
-NSString * const DCTConnectionControllerStatusString[] = {
+NSString * const DCTInternalConnectionControllerStatusString[] = {
 	@"NotStarted",
 	@"Queued",
 	@"Started",
@@ -55,7 +55,7 @@ NSString * const DCTConnectionControllerStatusString[] = {
 	@"Cancelled"
 };
 
-NSString * const DCTConnectionControllerPriorityString[] = {
+NSString * const DCTInternalConnectionControllerPriorityString[] = {
 	@"VeryHigh",
 	@"High",
 	@"Medium",
@@ -63,7 +63,7 @@ NSString * const DCTConnectionControllerPriorityString[] = {
 	@"VeryLow"
 };
 
-NSString * const DCTConnectionControllerTypeString[] = {
+NSString * const DCTInternalConnectionControllerTypeString[] = {
 	@"GET",
 	@"POST",
 	@"PUT",
@@ -174,8 +174,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 			NSStringFromClass([self class]),
 			self,
 			self.URL,
-			DCTConnectionControllerStatusString[self.status],
-			DCTConnectionControllerPriorityString[self.priority]];
+			DCTInternalConnectionControllerStatusString[self.status],
+			DCTInternalConnectionControllerPriorityString[self.priority]];
 }
 
 #pragma mark - DCTConnectionController: Managing the connection
@@ -267,7 +267,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 - (void)loadURLRequest {
 	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
 	[request setURL:self.URL];
-	[request setHTTPMethod:DCTConnectionControllerTypeString[self.type]];	
+	[request setHTTPMethod:DCTInternalConnectionControllerTypeString[self.type]];	
 	self.URLRequest = request;
 }
 
