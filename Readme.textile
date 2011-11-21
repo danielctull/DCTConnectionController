@@ -1,16 +1,18 @@
 h1. DCTConnectionController
 
-DCTConnectionController and the associated classes are my way to handle URL connections, specifically those made to RESTful services.
+@DCTConnectionController@ and the associated classes are my way to handle URL connections, specifically those made to RESTful services.
 
 Connection controller subclasses should manage the connection and handle callbacks, most likely translating them into model objects that make sense to the rest of the application. In this way connection controllers can be called by other objects without needing any knowledge of how the connection is performed or the web API calls that are needed.
 
-The DCTConnectionQueue is used to queue up connection controllers, and managed the order in which they are run. It also allows the limiting of the amount of connections occurring.
+@DCTConnectionQueue@ is used to queue up connection controllers, and managed the order in which they are run. It also allows the limiting of the amount of connections occurring.
 
-There is a category on DCTConnectionQueue to allow access to a global queue, and a convenience method on DCTConnectionController to easily queue connections on this global queue. You are, however,  not bound to using this global queue and can use multiple queues as you wish.
+@DCTConnectionGroup@ is class to monitor a group of connection controllers and be notified when they have all ended; Be it through successfully finishing, failure or cancellation.
+
+There is a category on @DCTConnectionQueue@ to allow access to a global queue, and a convenience method on DCTConnectionController to easily queue connections on this global queue. You are, however,  not bound to using this global queue and can use multiple queues as you wish.
 
 h2. DCTConnectionController 2.1 Notes
 
-* Adds @DCTConnectionGroup@ class to manage a group of connections and be notified when they have all ended, whether they have done so successfully or not.
+* Adds @DCTConnectionGroup@ class to monitor a group of connections controllers.
 * Adds @-[DCTConnectionQueue addConnectionGroup:]@ to queue up a connection group.
 * Adds a notification that the connection controller needs display (through a webview) to allow a view layer to handle things like OAuth connections.
 * Adds @-[DCTConnectionController queue]@
@@ -21,14 +23,14 @@ h2. DCTConnectionController 2.1 Notes
 
 h2. DCTConnectionController 2.0 Notes
 
-* The API for the new version of DCTConnectionController has been revised and care should be handled when upgrading to the new version.
-* The functionality of DCTURLConnectionController and DCTRequestConnectionController have been moved into DCTConnectionController itself.
-* The multitasking additions to DCTConnectionQueue have been moved to their "own repository":https://github.com/danielctull/DCTConnectionController-UIKit to be further built upon.
-* Handling of the iOS activity indicator has been moved to "DCTNetworkActivityIndicatorController":https://github.com/danielctull/DCTNetworkActivityIndicatorController. To get the indicator functionality of DCTConnectionController 1.0, add DCTNetworkActivityIndicatorController and it will automatically register for notifications sent by the DCTConnectionQueue(s).
+* The API for the new version of @DCTConnectionController@ has been revised and care should be handled when upgrading to the new version.
+* The functionality of @DCTURLConnectionController@ and @DCTRequestConnectionController@ have been moved into @DCTConnectionController@ itself.
+* The multitasking additions to @DCTConnectionQueue@ have been moved to their "own repository":https://github.com/danielctull/DCTConnectionController-UIKit to be further built upon.
+* Handling of the iOS activity indicator has been moved to "DCTNetworkActivityIndicatorController":https://github.com/danielctull/DCTNetworkActivityIndicatorController. To get the indicator functionality of DCTConnectionController 1.0, add @DCTNetworkActivityIndicatorController@ and it will automatically register for notifications sent by @DCTConnectionQueue@(s).
 
 h2. UIKit Additions
 
-The UIKit category on DCTConnectionQueue allows it to handle iOS multitasking and the application-wide network activity indicator. As of *DCTConnectionController 2.0*, this category is now in its "own repository":https://github.com/danielctull/DCTConnectionController-UIKit.
+The UIKit category on @DCTConnectionQueue@ allows it to handle iOS multitasking and the application-wide network activity indicator. As of *DCTConnectionController 2.0*, this category is now in its "own repository":https://github.com/danielctull/DCTConnectionController-UIKit.
 
 h2. Documentation
 
