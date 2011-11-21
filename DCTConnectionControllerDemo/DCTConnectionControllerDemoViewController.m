@@ -11,10 +11,12 @@
 #import "DCTConnectionController.h"
 #import "DCTConnectionQueue+Singleton.h"
 #import "DCTNetworkActivityIndicatorController.h"
+#import "DCTConnectionGroup.h"
 
 @interface DCTConnectionControllerDemoViewController ()
 - (NSString *)stringFromURL:(NSURL *)url;
 - (void)statusUpdatedNotification:(NSNotification *)notification;
+- (void)writeToLog:(NSString *)string;
 @end
 
 
@@ -71,13 +73,21 @@
 					 @"http://www.play.com/",
 					 nil];
 	
+	DCTConnectionGroup *group = [DCTConnectionGroup new];
+	
 	for (NSString *s in urls) {
-		DCTConnectionController *connection = [[DCTConnectionController alloc] init];
-		connection.multitaskEnabled = YES;
-		connection.delegate = self;
-		connection.URL = [NSURL URLWithString:s];
-		[connection connect];
+		DCTConnectionController *connectionController = [DCTConnectionController new];
+		connectionController.multitaskEnabled = YES;
+		connectionController.delegate = self;
+		connectionController.URL = [NSURL URLWithString:s];
+		[group addConnectionController:connectionController];
 	}
+	
+	[group addCompletionHandler:^(NSArray *finishedCCs, NSArray *failedCCs, NSArray *cancelledCCs) {
+		[self writeToLog:[NSString stringWithFormat:@"Group %i finished, %i failed, %i cancelled", [finishedCCs count], [failedCCs count], [cancelledCCs count]]];
+	}];
+	
+	[group connect];
 	
 	DCTConnectionController *engadget = [[DCTConnectionController alloc] init];
 	engadget.URL = [NSURL URLWithString:@"http://www.engadget.com/"];
@@ -120,43 +130,48 @@
 	
 	DCTConnectionController *connectionController = [notification object];
 	
+	NSString *prefixString = [self stringFromURL:connectionController.URL];
+	
+	switch (connectionController.status) {
+		case DCTConnectionControllerStatusStarted:
+			[self writeToLog:[NSString stringWithFormat:@"%@ Started", prefixString]];
+			break;
+		case DCTConnectionControllerStatusQueued:
+			[self writeToLog:[NSString stringWithFormat:@"%@ Queued", prefixString]];
+			break;
+		case DCTConnectionControllerStatusFailed:
+			[self writeToLog:[NSString stringWithFormat:@"%@ Failed", prefixString]];
+			break;
+		case DCTConnectionControllerStatusNotStarted:
+			[self writeToLog:[NSString stringWithFormat:@"%@ Not Started", prefixString]];
+			break;
+		case DCTConnectionControllerStatusResponded:
+			[self writeToLog:[NSString stringWithFormat:@"%@ Responded", prefixString]];
+			break;
+		case DCTConnectionControllerStatusFinished:
+			[self writeToLog:[NSString stringWithFormat:@"%@ Finished", prefixString]];
+			break;
+		case DCTConnectionControllerStatusCancelled:
+			[self writeToLog:[NSString stringWithFormat:@"%@ Cancelled", prefixString]];
+			break;
+		default:
+			break;
+	}
+}
+
+- (void)writeToLog:(NSString *)string {
+	
 	NSDateFormatter *df = [[NSDateFormatter alloc] init];
 	[df setDateFormat:@"HH:mm:ss.SSS"];
 	NSString *dateString = [df stringFromDate:[NSDate date]]; 
-		
+	
 	NSString *newLine = @"";
 	if ([self.textView.text length] > 0) {
 		newLine = @"\n";
 	}
 	
-	NSString *prefixString = [NSString stringWithFormat:@"%@%@ %@: ", newLine, dateString, [self stringFromURL:connectionController.URL]];
-	
-	switch (connectionController.status) {
-		case DCTConnectionControllerStatusStarted:
-			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Started", prefixString];
-			break;
-		case DCTConnectionControllerStatusQueued:
-			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Queued", prefixString];
-			break;
-		case DCTConnectionControllerStatusFailed:
-			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Failed", prefixString];
-			break;
-		case DCTConnectionControllerStatusNotStarted:
-			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Not Started", prefixString];
-			break;
-		case DCTConnectionControllerStatusResponded:
-			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Responded", prefixString];
-			break;
-		case DCTConnectionControllerStatusFinished:
-			self.textView.text = [self.textView.text stringByAppendingFormat:@"%@Finished", prefixString];
-			break;
-		case DCTConnectionControllerStatusCancelled:
-			self.textView.text = [self.textView.text stringByAppendingFormat:@"%Cancelled", prefixString];
-			break;
-		default:
-			break;
-	}
-	
+	NSLog(@"%@", string);
+	self.textView.text = [self.textView.text stringByAppendingFormat:@"%@%@ %@", newLine, dateString, string];
 	[self.textView scrollRectToVisible:CGRectMake(0.0, self.textView.contentSize.height - self.textView.bounds.size.height, self.textView.bounds.size.width, self.textView.bounds.size.height) animated:NO];
 }
 

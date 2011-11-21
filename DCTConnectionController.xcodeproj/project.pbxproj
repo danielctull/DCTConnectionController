@@ -30,6 +30,7 @@
 		24992EEB1476BC5900AB4AF8 /* DCTConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 24992EE01476BC5900AB4AF8 /* DCTConnectionQueue.m */; };
 		24992EEC1476BC5900AB4AF8 /* DCTRESTConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24992EE21476BC5900AB4AF8 /* DCTRESTConnectionController.m */; };
 		24992EED1476BC5900AB4AF8 /* NSString+DCTURLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 24992EE41476BC5900AB4AF8 /* NSString+DCTURLEncoding.m */; };
+		24992EF11476BC9E00AB4AF8 /* DCTConnectionGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 24992EF01476BC9E00AB4AF8 /* DCTConnectionGroup.m */; };
 		24D482DA146AB6D0008AB3B6 /* DCTQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 24D482C7146AB6D0008AB3B6 /* DCTQueue.m */; };
 		24D482DB146AB6D0008AB3B6 /* DCTStack.m in Sources */ = {isa = PBXBuildFile; fileRef = 24D482C9146AB6D0008AB3B6 /* DCTStack.m */; };
 		24D482DC146AB6D0008AB3B6 /* NSArray+DCTExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 24D482CB146AB6D0008AB3B6 /* NSArray+DCTExtras.m */; };
@@ -94,6 +95,8 @@
 		24992EE31476BC5900AB4AF8 /* NSString+DCTURLEncoding.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+DCTURLEncoding.h"; sourceTree = "<group>"; };
 		24992EE41476BC5900AB4AF8 /* NSString+DCTURLEncoding.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+DCTURLEncoding.m"; sourceTree = "<group>"; };
 		24992EE51476BC5900AB4AF8 /* Readme.textile */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Readme.textile; sourceTree = "<group>"; };
+		24992EEF1476BC9E00AB4AF8 /* DCTConnectionGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionGroup.h; sourceTree = "<group>"; };
+		24992EF01476BC9E00AB4AF8 /* DCTConnectionGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionGroup.m; sourceTree = "<group>"; };
 		24D482C5146AB6D0008AB3B6 /* DCTFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTFoundation.h; sourceTree = "<group>"; };
 		24D482C6146AB6D0008AB3B6 /* DCTQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTQueue.h; sourceTree = "<group>"; };
 		24D482C7146AB6D0008AB3B6 /* DCTQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTQueue.m; sourceTree = "<group>"; };
@@ -235,6 +238,8 @@
 				24992EE31476BC5900AB4AF8 /* NSString+DCTURLEncoding.h */,
 				24992EE41476BC5900AB4AF8 /* NSString+DCTURLEncoding.m */,
 				24992EE51476BC5900AB4AF8 /* Readme.textile */,
+				24992EEF1476BC9E00AB4AF8 /* DCTConnectionGroup.h */,
+				24992EF01476BC9E00AB4AF8 /* DCTConnectionGroup.m */,
 			);
 			path = DCTConnectionController;
 			sourceTree = "<group>";
@@ -404,6 +409,7 @@
 				24992EEB1476BC5900AB4AF8 /* DCTConnectionQueue.m in Sources */,
 				24992EEC1476BC5900AB4AF8 /* DCTRESTConnectionController.m in Sources */,
 				24992EED1476BC5900AB4AF8 /* NSString+DCTURLEncoding.m in Sources */,
+				24992EF11476BC9E00AB4AF8 /* DCTConnectionGroup.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
