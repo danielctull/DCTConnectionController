@@ -43,6 +43,9 @@
 @property (nonatomic, readonly) NSMutableArray *dctInternal_completionBlocks;
 
 - (void)dctInternal_checkControllers;
+- (void)dctInternal_callCompletionBlocksWithFinishedConnectionControllers:(NSArray *)finishedCCs
+											  failedConnectionControllers:(NSArray *)failedCCs
+										   cancelledConnectionControllers:(NSArray *)cancelledCCs;
 @end
 
 @implementation DCTConnectionGroup {
@@ -69,12 +72,26 @@
 	}];
 }
 
+- (void)connectOnQueue:(DCTConnectionQueue *)queue {
+	
+	if ([self.connectionControllers count] == 0) {
+		[self dctInternal_callCompletionBlocksWithFinishedConnectionControllers:[NSArray new]
+													failedConnectionControllers:[NSArray new]
+												 cancelledConnectionControllers:[NSArray new]];
+		return;
+	}
+	
+	[queue addConnectionGroup:self];
+}
+
+#pragma mark - Internal
+
 - (void)dctInternal_checkControllers {
 	
 	for (DCTConnectionController *cc in self.dctInternal_connectionControllers)
 		if (!cc.ended)
 			return;
-		
+	
 	NSMutableArray *failedCCs = [[NSMutableArray alloc] initWithCapacity:[self.dctInternal_connectionControllers count]];
 	NSMutableArray *finishedCCs = [[NSMutableArray alloc] initWithCapacity:[self.dctInternal_connectionControllers count]];
 	NSMutableArray *cancelledCCs = [[NSMutableArray alloc] initWithCapacity:[self.dctInternal_connectionControllers count]];
@@ -92,18 +109,21 @@
 		
 	}
 	
+	[self dctInternal_callCompletionBlocksWithFinishedConnectionControllers:[finishedCCs copy]
+												failedConnectionControllers:[failedCCs copy]
+											 cancelledConnectionControllers:[cancelledCCs copy]];
+}
+
+- (void)dctInternal_callCompletionBlocksWithFinishedConnectionControllers:(NSArray *)finishedCCs
+											  failedConnectionControllers:(NSArray *)failedCCs
+										   cancelledConnectionControllers:(NSArray *)cancelledCCs {
+	
 	//typedef void (^DCTConnectionGroupEndedBlock) (NSArray *finishedConnectionControllers, NSArray *failedConnectionControllers, NSArray *cancelledConnectionControllers);
 	[self.dctInternal_completionBlocks enumerateObjectsUsingBlock:^(id object, NSUInteger idx, BOOL *stop) {
 		DCTConnectionGroupCompletionBlock block = object;
 		block(finishedCCs, failedCCs, cancelledCCs);
 	}];
 }
-					 
-- (void)connectOnQueue:(DCTConnectionQueue *)queue {
-	[queue addConnectionGroup:self];
-}
-
-#pragma mark - Internal
 
 - (NSMutableArray *)dctInternal_connectionControllers {
 	
