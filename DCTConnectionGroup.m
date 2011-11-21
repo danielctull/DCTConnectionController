@@ -113,7 +113,7 @@
 	return dctInternal_connectionControllers;	
 }
 
-- (NSMutableArray *)dctInternal_endedBlocks {
+- (NSMutableArray *)dctInternal_completionBlocks {
 	
 	if (!dctInternal_completionBlocks) dctInternal_completionBlocks = [NSMutableArray new];
 	
