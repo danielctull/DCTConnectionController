@@ -15,9 +15,9 @@ h2. DCTConnectionController 2.1 Notes
 * Adds a notification that the connection controller needs display (through a webview) to allow a view layer to handle things like OAuth connections.
 * Adds a queue property to DCTConnectionController
 * The returnedObject property is now of type id.
-* Fixes a bug where the same connection controller would get queued up more than once if -connect, -connectOnQueue: or -addConnectionController was called more than once.
-* Fixes a bug where called -addConnectionController: on DCTConnectionQueue would not check for duplicates on the queue.
-* Deprecates the connectionController:didReceiveObject: delegate method, use connectionControllerDidFinish: instead.
+* Fixes a bug where the same connection controller would get queued up more than once if `-connect`, `-connectOnQueue:` or `-addConnectionController` was called more than once.
+* Fixes a bug where called `-addConnectionController:` on DCTConnectionQueue would not check for duplicates on the queue.
+* Deprecates the `connectionController:didReceiveObject:` delegate method, use connectionControllerDidFinish: instead.
 
 h2. DCTConnectionController 2.0 Notes
 
