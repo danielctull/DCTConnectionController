@@ -124,8 +124,6 @@ extern NSString *const DCTConnectionControllerStatusChangedNotification;
 
 extern NSString *const DCTConnectionControllerTypeString[];
 
-@protocol DCTConnectionControllerDelegate;
-
 
 
 /** A class to handle one connection.
@@ -243,12 +241,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 
 
-/** The delegate for the connection controller.
- 
- Setting this will cause the connection controller to call the methods defined in DCTConnectionControllerDelegate,
- when the appropriate events occur.
- */
-@property (nonatomic, strong) id<DCTConnectionControllerDelegate> delegate;
+
 
 /** The URL the connection controller is managing.
  */
@@ -514,50 +507,4 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 @end
 
-#pragma mark
-
-/** Protocol for delegates of DCTConnectionController to conform to.
- 
- The delegate of DCTConnectionController must adopt the DCTConnectionControllerDelegate protocol, although all the methods 
- are optional. They allow the delegate to handle only certain types of events, although connectionController:didSucceedWithObject: 
- and connectionController:didFailWithError: should both be handled to take advantage of the data and handle any occuring errors.
- */
-@protocol DCTConnectionControllerDelegate <NSObject>
-@optional
-
-/** Tells the delegate the connection has succeeded.
- 
- @param connectionController The connection controller informing the delegate of the event.
- */
-- (void)connectionControllerDidFinish:(DCTConnectionController *)connectionController;
-
-/** Tells the delegate the connection has succeeded.
- 
- @param connectionController The connection controller informing the delegate of the event.
- @param object The object returned by the connection.
- 
- @deprecated Use connectionControllerDidFinish: instead.
- 
- @see connectionControllerDidFinish: 
- */
-- (void)connectionController:(DCTConnectionController *)connectionController didReceiveObject:(NSObject *)object;
-/** Tells the delegate the connection has failed.
- 
- @param connectionController The connection controller informing the delegate of the event.
- @param error The error received from the server.
- */
-- (void)connectionController:(DCTConnectionController *)connectionController didReceiveError:(NSError *)error;
-
-/** Tells the delegate the connection was cancelled.
- 
- @param connectionController The connection controller informing the delegate of the event.
- */
-- (void)connectionControllerWasCancelled:(DCTConnectionController *)connectionController;
-
-/** Tells the delegate a response has been received from the server.
- 
- @param connectionController The connection controller informing the delegate of the event.
- @param response The received response.
- */
-- (void)connectionController:(DCTConnectionController *)connectionController didReceiveResponse:(NSURLResponse *)response;
-@end
+#import "DCTConnectionController+Delegate.h"

@@ -105,11 +105,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 - (void)dctInternal_cancelled;
 - (void)dctInternal_cleanup;
 
-- (void)dctInternal_sendResponseToDelegate:(NSURLResponse *)response;
-- (void)dctInternal_sendCancelationToDelegate:(id<DCTConnectionControllerDelegate>)delegate;
-- (void)dctInternal_sendObjectToDelegate:(id)object;
-- (void)dctInternal_sendErrorToDelegate:(NSError *)error;
-
 - (void)dctInternal_calculatePercentDownloaded;
 
 - (void)dctInternal_addDependent:(DCTConnectionController *)connectionController;
@@ -136,7 +131,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	float contentLength, downloadedLength;
 }
 
-@synthesize status, type, priority, multitaskEnabled, delegate, downloadPath, percentDownloaded;
+@synthesize status, type, priority, multitaskEnabled, downloadPath, percentDownloaded;
 @synthesize returnedObject, returnedError, returnedResponse;
 @synthesize URL, URLRequest, URLConnection;
 
@@ -553,8 +548,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	for (DCTConnectionControllerResponseBlock block in responseBlocks)
 		block(response);
 	
-	[self dctInternal_sendResponseToDelegate:response];
-	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerDidReceiveResponseNotification object:self];
 	
 	self.status = DCTConnectionControllerStatusResponded;
@@ -568,8 +561,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	for (DCTConnectionControllerFinishBlock block in completionBlocks)
 		block();
-	
-	[self dctInternal_sendObjectToDelegate:nil];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerDidFinishNotification object:self];
 	
@@ -589,8 +580,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	for (DCTConnectionControllerFailureBlock block in failureBlocks)
 		block(error);
 	
-	[self dctInternal_sendErrorToDelegate:error];
-	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerDidFailNotification object:self];
 
 	[self dctInternal_cleanup];
@@ -604,9 +593,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	for (DCTConnectionControllerCancelationBlock block in cancelationBlocks)
 		block();
-	
-	[self dctInternal_sendCancelationToDelegate:self.delegate];
-	
+		
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerWasCancelledNotification object:self];
 
 	[self dctInternal_cleanup];
@@ -615,7 +602,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 }
 
 - (void)dctInternal_cleanup {
-	 delegate = nil;
 	
 	for (DCTConnectionController *dependent in dependents)
 		[dependent removeDependency:self];
@@ -639,32 +625,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	[self dct_changeValueForKey:@"percentDownloaded" withChange:^{
 		percentDownloaded = [[NSNumber alloc] initWithFloat:(downloadedLength / contentLength)];
 	}];
-}
-
-#pragma mark - Delegate handling
-
-- (void)dctInternal_sendResponseToDelegate:(NSURLResponse *)response {
-	if ([self.delegate respondsToSelector:@selector(connectionController:didReceiveResponse:)])
-		[self.delegate connectionController:self didReceiveResponse:response];
-}
-
-- (void)dctInternal_sendCancelationToDelegate:(id<DCTConnectionControllerDelegate>)delegate {
-	if ([self.delegate respondsToSelector:@selector(connectionControllerWasCancelled:)])
-		[self.delegate connectionControllerWasCancelled:self];
-}
-
-- (void)dctInternal_sendObjectToDelegate:(id)object {
-	
-	if ([self.delegate respondsToSelector:@selector(connectionControllerDidFinish:)])
-		[self.delegate connectionControllerDidFinish:self];
-	
-	if ([self.delegate respondsToSelector:@selector(connectionController:didReceiveObject:)])
-		[self.delegate connectionController:self didReceiveObject:self.returnedObject];
-}
-
-- (void)dctInternal_sendErrorToDelegate:(NSError *)error {
-	if ([self.delegate respondsToSelector:@selector(connectionController:didReceiveError:)])
-		[self.delegate connectionController:self didReceiveError:error];
 }
 
 #pragma mark - Internal Getters
