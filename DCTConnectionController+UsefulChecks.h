@@ -10,6 +10,8 @@
 
 @interface DCTConnectionController (UsefulChecks)
 
+/// @name Useful Checks
+
 /** Returns yes if the receiver has received a response from the connection.
  */
 @property (nonatomic, readonly) BOOL didReceiveResponse;

@@ -40,6 +40,8 @@
 
 @interface DCTConnectionController (Delegate)
 
+/// @name Managing the Delegate
+
 /** The delegate for the connection controller.
  
  Setting this will cause the connection controller to call the methods defined in DCTConnectionControllerDelegate,
