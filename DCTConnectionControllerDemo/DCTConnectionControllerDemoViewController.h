@@ -14,7 +14,7 @@
 #warning "DCTLogViewController 1.0 is required with the demo of DCTConnectionController. Update at https://github.com/danielctull/DCTLogViewController" or pull in the submodules with `git submodule init; git submodule update`.
 #endif
 
-@interface DCTConnectionControllerDemoViewController : DCTLogViewController <DCTConnectionControllerDelegate> {
+@interface DCTConnectionControllerDemoViewController : DCTLogViewController {
 	UIToolbar *toolbar;
 	UILabel *connectionsLabel;
 }

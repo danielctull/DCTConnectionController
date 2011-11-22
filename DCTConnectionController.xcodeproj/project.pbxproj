@@ -20,7 +20,6 @@
 		246F8CCB146831F400F2FB74 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 246F8CAC146831F300F2FB74 /* Foundation.framework */; };
 		246F8CF31468337600F2FB74 /* DCTConnectionControllerDemoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 246F8CF01468337600F2FB74 /* DCTConnectionControllerDemoViewController.xib */; };
 		246F8CF41468337600F2FB74 /* DCTConnectionControllerDemoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 246F8CF21468337600F2FB74 /* DCTConnectionControllerDemoViewController.m */; };
-		246F8D58146834D800F2FB74 /* DCTConnectionControllerTests-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 246F8D4F146834D800F2FB74 /* DCTConnectionControllerTests-Info.plist */; };
 		246F8D59146834D800F2FB74 /* DCTConnectionControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 246F8D51146834D800F2FB74 /* DCTConnectionControllerTests.m */; };
 		246F8D5A146834D800F2FB74 /* DCTConnectionQueue+DCTInternalAccess.m in Sources */ = {isa = PBXBuildFile; fileRef = 246F8D53146834D800F2FB74 /* DCTConnectionQueue+DCTInternalAccess.m */; };
 		246F8D5B146834D800F2FB74 /* DCTConnectionQueueTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 246F8D55146834D800F2FB74 /* DCTConnectionQueueTests.m */; };
@@ -45,6 +44,7 @@
 		24D482E2146AB6D0008AB3B6 /* NSMutableSet+DCTExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 24D482D7146AB6D0008AB3B6 /* NSMutableSet+DCTExtras.m */; };
 		24D482E3146AB6D0008AB3B6 /* NSObject+DCTKVOExtras.m in Sources */ = {isa = PBXBuildFile; fileRef = 24D482D9146AB6D0008AB3B6 /* NSObject+DCTKVOExtras.m */; };
 		24D483BF146B005C008AB3B6 /* DCTNetworkActivityIndicatorController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24D483B6146B005C008AB3B6 /* DCTNetworkActivityIndicatorController.m */; };
+		24E19B8C147C505200AAAB38 /* DCTConnectionController+Delegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 24E19B8B147C505200AAAB38 /* DCTConnectionController+Delegate.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -129,6 +129,8 @@
 		24D482D9146AB6D0008AB3B6 /* NSObject+DCTKVOExtras.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+DCTKVOExtras.m"; sourceTree = "<group>"; };
 		24D483B5146B005C008AB3B6 /* DCTNetworkActivityIndicatorController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTNetworkActivityIndicatorController.h; sourceTree = "<group>"; };
 		24D483B6146B005C008AB3B6 /* DCTNetworkActivityIndicatorController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTNetworkActivityIndicatorController.m; sourceTree = "<group>"; };
+		24E19B8A147C505200AAAB38 /* DCTConnectionController+Delegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionController+Delegate.h"; sourceTree = "<group>"; };
+		24E19B8B147C505200AAAB38 /* DCTConnectionController+Delegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionController+Delegate.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -246,6 +248,8 @@
 			children = (
 				24992ED51476BC5900AB4AF8 /* DCTConnectionController+Equality.h */,
 				24992ED61476BC5900AB4AF8 /* DCTConnectionController+Equality.m */,
+				24E19B8A147C505200AAAB38 /* DCTConnectionController+Delegate.h */,
+				24E19B8B147C505200AAAB38 /* DCTConnectionController+Delegate.m */,
 				24992ED71476BC5900AB4AF8 /* DCTConnectionController+UsefulChecks.h */,
 				24992ED81476BC5900AB4AF8 /* DCTConnectionController+UsefulChecks.m */,
 				24992ED91476BC5900AB4AF8 /* DCTConnectionController.h */,
@@ -383,7 +387,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				246F8D58146834D800F2FB74 /* DCTConnectionControllerTests-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,6 +439,7 @@
 				2457CA0B147AA97400CEAE31 /* DCTLogViewController.m in Sources */,
 				2457CA0E147AB38400CEAE31 /* DCTConnectionController+StatusString.m in Sources */,
 				2457CA11147AB4B400CEAE31 /* NSURL+DomainString.m in Sources */,
+				24E19B8C147C505200AAAB38 /* DCTConnectionController+Delegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
