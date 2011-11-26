@@ -111,6 +111,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 - (void)dctInternal_removeDependent:(DCTConnectionController *)connectionController;
 - (void)dctInternal_setURL:(NSURL *)newURL;
 
+@property (nonatomic, readonly) NSString *dctInternal_downloadPath;
+
 @property (nonatomic, readonly) BOOL dctInternal_hasReturnedObject;
 
 @end
@@ -129,9 +131,11 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	__strong NSFileHandle *fileHandle; // Used if a path is given.
 	float contentLength, downloadedLength;
+	
+	__strong NSString *dctInternal_downloadPath;
 }
 
-@synthesize status, type, priority, multitaskEnabled, downloadPath, percentDownloaded;
+@synthesize status, type, priority, multitaskEnabled, percentDownloaded;
 @synthesize returnedObject, returnedError, returnedResponse;
 @synthesize URL, URLRequest, URLConnection;
 
@@ -143,7 +147,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	NSFileManager *fileManager = [NSFileManager defaultManager];
 	NSError *error = nil;
-	if ([fileManager fileExistsAtPath:self.downloadPath] && ![fileManager removeItemAtPath:self.downloadPath error:&error])
+	if ([fileManager fileExistsAtPath:self.dctInternal_downloadPath] && ![fileManager removeItemAtPath:self.dctInternal_downloadPath error:&error])
 		NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), error);
 	
 }
@@ -204,7 +208,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	__dct_weak DCTConnectionController *cc = existingConnectionController;
 	
 	[existingConnectionController addFinishHandler:^() {
-		downloadPath = cc.downloadPath;
+		dctInternal_downloadPath = cc.dctInternal_downloadPath;
 		
 		if (cc.dctInternal_hasReturnedObject)
 			self.returnedObject = cc.returnedObject;		
@@ -342,15 +346,15 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 - (id)returnedObject {
 	
 	if (!returnedObject) {
-		returnedObject = [[NSData alloc] initWithContentsOfFile:self.downloadPath];
+		returnedObject = [[NSData alloc] initWithContentsOfFile:self.dctInternal_downloadPath];
 	}
 	
 	return returnedObject;
 }
 
-- (NSString *)downloadPath {
+- (NSString *)dctInternal_downloadPath {
 	
-	if (!downloadPath) {
+	if (!dctInternal_downloadPath) {
 		NSString *temporaryDirectory = NSTemporaryDirectory();
 		temporaryDirectory = [temporaryDirectory stringByAppendingPathComponent:@"DCTConnectionController"];
 		
@@ -361,10 +365,10 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 															 error:&error])
 			NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), error);
 		
-		downloadPath = [temporaryDirectory stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+		dctInternal_downloadPath = [temporaryDirectory stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
 	}
 	
-	return downloadPath;
+	return dctInternal_downloadPath;
 }
 
 #pragma mark - DCTConnectionController: Block methods
@@ -435,14 +439,14 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		
 		NSFileManager *fileManager = [NSFileManager defaultManager];
 		
-		if ([fileManager fileExistsAtPath:self.downloadPath])
-			[fileManager removeItemAtPath:self.downloadPath error:nil];
+		if ([fileManager fileExistsAtPath:self.dctInternal_downloadPath])
+			[fileManager removeItemAtPath:self.dctInternal_downloadPath error:nil];
 		
-		[fileManager createFileAtPath:self.downloadPath
+		[fileManager createFileAtPath:self.dctInternal_downloadPath
 							 contents:nil
 						   attributes:nil];
 		
-		fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.downloadPath];	
+		fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.dctInternal_downloadPath];	
 	}
 	
 	[fileHandle seekToEndOfFile];

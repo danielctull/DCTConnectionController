@@ -480,10 +480,6 @@ extern NSString *const DCTConnectionControllerTypeString[];
  */
 @property (nonatomic, strong, readonly) NSURLConnection *URLConnection;
 
-/** The location where the connection controller is temporarily storing the downloaded data. 
- */
-@property (nonatomic, strong, readonly) NSString *downloadPath;
-
 /** The response returned from the connection.
  */
 @property (nonatomic, strong) NSURLResponse *returnedResponse;
