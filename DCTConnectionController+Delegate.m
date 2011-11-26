@@ -38,13 +38,13 @@
 #import <objc/runtime.h>
 
 @interface DCTConnectionController ()
-- (void)dctInternal_setupBlockCallbacks;
+- (void)dctDelegateInternal_setupBlockCallbacks;
 @end
 
 @implementation DCTConnectionController (Delegate)
 
 - (void)setDelegate:(id<DCTConnectionControllerDelegate>)delegate {
-	[self dctInternal_setupBlockCallbacks];
+	[self dctDelegateInternal_setupBlockCallbacks];
 	objc_setAssociatedObject(self, @selector(delegate), delegate, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
@@ -52,12 +52,12 @@
 	return objc_getAssociatedObject(self, _cmd);
 }
 
-- (void)dctInternal_setupBlockCallbacks {
+- (void)dctDelegateInternal_setupBlockCallbacks {
 	
 	if (objc_getAssociatedObject(self, _cmd))
 		return;
 	
-	objc_setAssociatedObject(self, _cmd, @"hasSetupDelegateBlocks", OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+	objc_setAssociatedObject(self, _cmd, NSStringFromSelector(_cmd), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 	
 	__dct_weak DCTConnectionController *weakself = self;
 	
