@@ -18,6 +18,7 @@ h2. DCTConnectionController 2.1 Notes
 * Adds @-[DCTConnectionController queue]@
 * @-[DCTConnectionController returnedObject]@ is now of type @id@.
 * Moves the @delegate@ property of @DCTConnectionController@ to a category, as well as the delegate handling.
+* Makes the @downloadPath@ property setable, moving it to a category. Setting this will copy the downloaded data to the path provided. *Warning:* You can no long override this in a subclass to achieve this, it must be set.
 * Fixes a bug where the same connection controller would get queued up more than once if @-[DCTConnectionController connect]@, @-[DCTConnectionController connectOnQueue:]@ or @-[DCTConnectionQueue addConnectionController:]@ was called more than once.
 * Fixes a bug where called @-[DCTConnectionQueue addConnectionController:]@ would not check for duplicates on the queue.
 * Deprecates @-[DCTConnectionControllerDelegate connectionController:didReceiveObject:]@, use @-[DCTConnectionControllerDelegate connectionControllerDidFinish:]@ instead. The original delegate method is still called in version 2.1 though.
