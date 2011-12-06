@@ -46,7 +46,7 @@
 
 - (void)setDownloadPath:(NSString *)downloadPath {
 	[self dctDownloadPathInternal_setupBlockCallback];
-	objc_setAssociatedObject(self, @selector(downloadPath), downloadPath, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+	objc_setAssociatedObject(self, @selector(downloadPath), downloadPath, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
 - (NSString *)downloadPath {

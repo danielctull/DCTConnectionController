@@ -37,5 +37,5 @@
 #import "DCTConnectionController.h"
 
 @interface DCTConnectionController (DownloadPath)
-@property (nonatomic, strong) NSString *downloadPath;
+@property (nonatomic, copy) NSString *downloadPath;
 @end
