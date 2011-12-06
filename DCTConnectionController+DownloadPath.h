@@ -37,5 +37,10 @@
 #import "DCTConnectionController.h"
 
 @interface DCTConnectionController (DownloadPath)
+
+/// @name Setting a download path
+
+/** If set the downloaded data will be moved to the given path on completion.
+ */
 @property (nonatomic, copy) NSString *downloadPath;
 @end
