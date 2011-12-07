@@ -35,8 +35,6 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "DCTConnectionController.h"
-#import "DCTConnectionGroup.h"
 
 extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotification;
