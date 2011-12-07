@@ -78,7 +78,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 
 @interface DCTConnectionQueue ()
-- (BOOL)dctInternal_willPerformSelectorOnMainThread:(SEL)selector withObject:(id)object;
 
 - (void)dctInternal_runNextConnection;
 - (BOOL)dctInternal_tryToRunConnection:(DCTConnectionController *)connection;
@@ -261,8 +260,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 - (void)dctInternal_addConnectionController:(DCTConnectionController *)connectionController {
 	
-	if ([self dctInternal_willPerformSelectorOnMainThread:_cmd withObject:connectionController]) return;
-	
 	__dct_weak DCTConnectionController *weakConnectionController = connectionController;
 	
 	[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
@@ -317,22 +314,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	
 	[connectionController dctConnectionQueue_start];
 }
-
-- (BOOL)dctInternal_willPerformSelectorOnMainThread:(SEL)selector withObject:(id)object {
-	
-	BOOL isMainThread = dispatch_get_current_queue() == dispatch_get_main_queue();
-	
-#if defined(DCTConnectionControllerMainQueueWarning)
-	NSAssert(isMainThread, @"%@ Queue should be main", NSStringFromSelector(selector));
-#endif
-	
-	if (!isMainThread)	
-		[self performSelectorOnMainThread:selector withObject:object waitUntilDone:NO];
-	
-	return !isMainThread;	
-}
-
-
 
 @end
 
