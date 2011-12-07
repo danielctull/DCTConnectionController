@@ -38,6 +38,10 @@
 #import "DCTConnectionController+UsefulChecks.h"
 #import "DCTConnectionQueue.h"
 
+@interface DCTConnectionQueue (DCTConnectionGroup)
+- (void)dctConnectionGroup_addConnectionGroup:(DCTConnectionGroup *)connectionGroup;
+@end
+
 @interface DCTConnectionGroup ()
 @property (nonatomic, readonly) NSMutableArray *dctInternal_connectionControllers;
 @property (nonatomic, readonly) NSMutableArray *dctInternal_completionBlocks;
@@ -81,7 +85,7 @@
 		return;
 	}
 	
-	[queue addConnectionGroup:self];
+	[queue dctConnectionGroup_addConnectionGroup:self];
 }
 
 #pragma mark - Internal

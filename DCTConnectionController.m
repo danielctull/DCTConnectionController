@@ -87,7 +87,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 @end
 
 @interface DCTConnectionController (DCTConnectionQueue)
-- (void)dctInternal_start;
+- (void)dctConnectionQueue_start;
 @end
 
 @interface DCTConnectionController () <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
@@ -533,18 +533,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 #pragma mark - Internal methods
 
-- (void)dctInternal_start {
-	
-	NSURLConnection *connection = self.URLConnection;
-	
-	self.status = DCTConnectionControllerStatusStarted;
-	
-	if (!connection) {
-		// TODO: GENERATE ERROR
-		[self connectionDidFail];
-	}
-}
-
 - (void)dctInternal_connectionDidRespond {
 	
 	NSURLResponse *response = self.returnedResponse;
@@ -695,6 +683,22 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 - (void)dctInternal_removeDependent:(DCTConnectionController *)connectionController {
 	[dependents removeObject:connectionController];
+}
+
+@end
+
+@implementation DCTConnectionController (DCTConnectionQueue)
+
+- (void)dctConnectionQueue_start {
+	
+	NSURLConnection *connection = self.URLConnection;
+	
+	self.status = DCTConnectionControllerStatusStarted;
+	
+	if (!connection) {
+		// TODO: GENERATE ERROR
+		[self connectionDidFail];
+	}
 }
 
 @end

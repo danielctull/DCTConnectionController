@@ -116,6 +116,6 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotificat
 
 /// @name Managing Connection Groups
 
-- (void)addConnectionGroup:(DCTConnectionGroup *)connectionGroup;
+//- (void)addConnectionGroup:(DCTConnectionGroup *)connectionGroup;
 
 @end

@@ -83,12 +83,16 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 @end
 
 @interface DCTConnectionController (DCTConnectionQueue)
-- (void)dctInternal_start;
+- (void)dctConnectionQueue_start;
 @end
 
 @interface DCTConnectionQueue (DCTConnectionController)
 - (void)dctConnectionController_addConnectionController:(DCTConnectionController *)connectionController;
 - (void)dctConnectionController_removeConnectionController:(DCTConnectionController *)connectionController;
+@end
+
+@interface DCTConnectionQueue (DCTConnectionGroup)
+- (void)dctConnectionGroup_addConnectionGroup:(DCTConnectionGroup *)connectionGroup;
 @end
 
 @implementation DCTConnectionQueue {
@@ -308,7 +312,7 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountIncreasedNotification object:self];
 	
-	[connectionController dctInternal_start];
+	[connectionController dctConnectionQueue_start];
 }
 
 - (BOOL)dctInternal_willPerformSelectorOnMainThread:(SEL)selector withObject:(id)object {
@@ -327,10 +331,12 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 
 
-
+@end
 
 
 #pragma mark - Internal access for DCTConnectionController
+
+@implementation DCTConnectionQueue (DCTConnectionController)
 
 - (void)dctConnectionController_addConnectionController:(DCTConnectionController *)connectionController {
 	[self dctInternal_addConnectionController:connectionController];
@@ -340,12 +346,14 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	[self dctInternal_removeConnectionController:connectionController];
 }
 
-
+@end
 
 
 #pragma mark - Internal access for DCTConnectionGroup
 
-- (void)addConnectionGroup:(DCTConnectionGroup *)connectionGroup {
+@implementation DCTConnectionQueue (DCTConnectionGroup)
+
+- (void)dctConnectionGroup_addConnectionGroup:(DCTConnectionGroup *)connectionGroup {
 	
 	if (!groups) groups = [[NSMutableArray alloc] initWithCapacity:1];
 	
