@@ -71,8 +71,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 - (void)dctInternal_runNextConnection;
 - (BOOL)dctInternal_tryToRunConnection:(DCTConnectionController *)connection;
 
-- (void)dctInternal_addConnectionControllerToActives:(DCTConnectionController *)connectionController;
-
 - (DCTConnectionController *)dctInternal_nextConnection;
 - (DCTConnectionController *)dctInternal_nextConnectionIterator:(DCTConnectionController *)connection;
 
@@ -298,12 +296,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 														object:self];
 	
 	[self dctInternal_runNextConnection];
-}
-
-- (void)dctInternal_addConnectionControllerToActives:(DCTConnectionController *)connectionController {
-	[self dct_changeValueForKeys:externalConnectionCountKeys withChange:^{
-		[activeConnections addObject:connectionController];
-	}];
 }
 
 - (void)dctInternal_dequeueAndStartConnection:(DCTConnectionController *)connectionController {
