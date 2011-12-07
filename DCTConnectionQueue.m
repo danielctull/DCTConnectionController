@@ -63,6 +63,9 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 @interface DCTConnectionQueue ()
 
+- (void)dctConnectionController_addConnectionController:(DCTConnectionController *)connectionController;
+- (void)dctConnectionController_removeConnectionController:(DCTConnectionController *)connectionController;
+
 - (BOOL)dctInternal_willPerformSelectorOnMainThread:(SEL)selector withObject:(id)object;
 
 - (void)dctInternal_runNextConnection;
@@ -135,12 +138,7 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 - (void)stop {
 	active = NO;
 	
-	while ([activeConnections count] > 0)
-		[self requeueConnectionController:[activeConnections lastObject]];
-}
-
-- (void)addConnectionController:(DCTConnectionController *)connectionController {
-	[connectionController connectOnQueue:self];
+	[self.activeConnectionControllers makeObjectsPerformSelector:@selector(requeue)];
 }
 
 - (void)dctConnectionController_addConnectionController:(DCTConnectionController *)connectionController {
@@ -151,13 +149,13 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	
 	[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
 		if (weakConnectionController.ended)
-			[self removeConnectionController:weakConnectionController];
+			[self dctConnectionController_removeConnectionController:weakConnectionController];
 	}];
 	
 	[self dctInternal_addConnectionControllerToQueue:connectionController];
 }
 
-- (void)removeConnectionController:(DCTConnectionController *)connectionController {
+- (void)dctConnectionController_removeConnectionController:(DCTConnectionController *)connectionController {
 	
 	if ([self dctInternal_willPerformSelectorOnMainThread:_cmd withObject:connectionController]) return;
 	
@@ -170,7 +168,7 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	[connectionController dctInternal_reset];
 }
 
-- (void)requeueConnectionController:(DCTConnectionController *)connectionController {
+- (void)dctConnectionController_requeueConnectionController:(DCTConnectionController *)connectionController {
 	
 	if ([self dctInternal_willPerformSelectorOnMainThread:_cmd withObject:connectionController]) return;
 	

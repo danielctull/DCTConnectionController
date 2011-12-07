@@ -96,14 +96,14 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotificat
  
  @param connectionController The connection controller to add to the queue.
  */
-- (void)addConnectionController:(DCTConnectionController *)connectionController;
+//- (void)addConnectionController:(DCTConnectionController *)connectionController;
 
 /**
  Remove the given connection controller from the queue.
  
  @param connectionController The connection controller to remove.
  */
-- (void)removeConnectionController:(DCTConnectionController *)connectionController;
+//- (void)removeConnectionController:(DCTConnectionController *)connectionController;
 
 /** Requeues a connection controller.
  
@@ -112,7 +112,7 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotificat
  
  @param connectionController The connection controller to requeue.
  */
-- (void)requeueConnectionController:(DCTConnectionController *)connectionController;
+//- (void)requeueConnectionController:(DCTConnectionController *)connectionController;
 
 /// @name Managing Connection Groups
 
