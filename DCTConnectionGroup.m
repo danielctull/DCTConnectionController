@@ -37,9 +37,11 @@
 #import "DCTConnectionGroup.h"
 #import "DCTConnectionController+UsefulChecks.h"
 #import "DCTConnectionQueue.h"
+#import <objc/runtime.h>
 
-@interface DCTConnectionQueue (DCTConnectionGroup)
+@interface DCTConnectionQueue ()
 - (void)dctConnectionGroup_addConnectionGroup:(DCTConnectionGroup *)connectionGroup;
+- (NSMutableArray *)dctInternal_groups;
 @end
 
 @interface DCTConnectionGroup ()
@@ -141,6 +143,43 @@
 	if (!dctInternal_completionBlocks) dctInternal_completionBlocks = [NSMutableArray new];
 	
 	return dctInternal_completionBlocks;	
+}
+
+@end
+
+@implementation DCTConnectionQueue (DCTConnectionGroup)
+
+- (NSMutableArray *)dctInternal_groups {
+	
+	NSMutableArray *array = objc_getAssociatedObject(self, _cmd);
+	
+	if (!array) {
+		array = [[NSMutableArray alloc] initWithCapacity:1];
+		objc_setAssociatedObject(self, _cmd, array, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+	}
+	
+	return objc_getAssociatedObject(self, _cmd);
+}
+
+- (NSArray *)connectionGroups {
+	return [self.dctInternal_groups copy];
+}
+
+- (void)dctConnectionGroup_addConnectionGroup:(DCTConnectionGroup *)connectionGroup {
+	
+	NSMutableArray *groups = [self dctInternal_groups];
+	
+	[groups addObject:connectionGroup];
+	
+	__dct_weak DCTConnectionGroup *group = connectionGroup;
+	
+	[connectionGroup addCompletionHandler:^(NSArray *finishedConnectionControllers, NSArray *failedConnectionControllers, NSArray *cancelledConnectionControllers) {
+		[groups removeObject:group];
+	}];
+	
+	[connectionGroup.connectionControllers enumerateObjectsUsingBlock:^(DCTConnectionController *cc, NSUInteger idx, BOOL *stop) {
+		[cc connectOnQueue:self];
+	}];
 }
 
 @end

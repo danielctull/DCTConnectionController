@@ -73,10 +73,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 - (void)dctConnectionController_removeConnectionController:(DCTConnectionController *)connectionController;
 @end
 
-@interface DCTConnectionQueue (DCTConnectionGroup)
-- (void)dctConnectionGroup_addConnectionGroup:(DCTConnectionGroup *)connectionGroup;
-@end
-
 
 @interface DCTConnectionQueue ()
 
@@ -330,31 +326,5 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 - (void)dctConnectionController_removeConnectionController:(DCTConnectionController *)connectionController {
 	[self dctInternal_removeConnectionController:connectionController];
 }
-
-@end
-
-
-#pragma mark - Internal access for DCTConnectionGroup
-
-@implementation DCTConnectionQueue (DCTConnectionGroup)
-
-- (void)dctConnectionGroup_addConnectionGroup:(DCTConnectionGroup *)connectionGroup {
-	
-	if (!groups) groups = [[NSMutableArray alloc] initWithCapacity:1];
-	
-	[groups addObject:connectionGroup];
-	
-	__dct_weak DCTConnectionGroup *group = connectionGroup;
-	
-	[connectionGroup addCompletionHandler:^(NSArray *finishedConnectionControllers, NSArray *failedConnectionControllers, NSArray *cancelledConnectionControllers) {
-		[groups removeObject:group];
-	}];
-	
-	[connectionGroup.connectionControllers enumerateObjectsUsingBlock:^(DCTConnectionController *cc, NSUInteger idx, BOOL *stop) {
-		[cc connectOnQueue:self];
-	}];
-}
-
-
 		 
 @end

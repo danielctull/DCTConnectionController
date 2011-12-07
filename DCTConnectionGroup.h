@@ -36,6 +36,7 @@
 
 #import <Foundation/Foundation.h>
 #import "DCTConnectionController.h"
+#import "DCTConnectionQueue.h"
 
 typedef void (^DCTConnectionGroupCompletionBlock) (NSArray *finishedConnectionControllers, NSArray *failedConnectionControllers, NSArray *cancelledConnectionControllers);
 
@@ -106,3 +107,12 @@ typedef void (^DCTConnectionGroupCompletionBlock) (NSArray *finishedConnectionCo
 - (void)connectOnQueue:(DCTConnectionQueue *)queue;
 
 @end
+
+
+
+
+
+@interface DCTConnectionQueue (DCTConnectionGroup)
+@property (nonatomic, readonly) NSArray *connectionGroups;
+@end
+
