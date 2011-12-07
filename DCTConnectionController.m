@@ -81,16 +81,17 @@ NSString *const DCTConnectionControllerDidReceiveResponseNotification = @"DCTCon
 NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectionControllerWasCancelledNotification";
 NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnectionControllerStatusChangedNotification";
 
-@interface DCTConnectionQueue ()
+@interface DCTConnectionQueue (DCTConnectionController)
 - (void)dctConnectionController_addConnectionController:(DCTConnectionController *)connectionController;
 - (void)dctConnectionController_removeConnectionController:(DCTConnectionController *)connectionController;
 @end
 
-@interface DCTConnectionController () <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
-
-- (void)dctInternal_reset;
+@interface DCTConnectionController (DCTConnectionQueue)
 - (void)dctInternal_start;
+@end
 
+@interface DCTConnectionController () <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
+- (void)dctInternal_reset;
 @property (nonatomic, readonly) NSMutableArray *dctInternal_responseBlocks;
 @property (nonatomic, readonly) NSMutableArray *dctInternal_completionBlocks;
 @property (nonatomic, readonly) NSMutableArray *dctInternal_failureBlocks;

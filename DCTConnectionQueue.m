@@ -62,10 +62,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountIncreasedNotification = @
 NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @"DCTConnectionQueueActiveConnectionCountDecreasedNotification";
 
 @interface DCTConnectionQueue ()
-
-- (void)dctConnectionController_addConnectionController:(DCTConnectionController *)connectionController;
-- (void)dctConnectionController_removeConnectionController:(DCTConnectionController *)connectionController;
-
 - (BOOL)dctInternal_willPerformSelectorOnMainThread:(SEL)selector withObject:(id)object;
 
 - (void)dctInternal_runNextConnection;
@@ -88,6 +84,11 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 @interface DCTConnectionController (DCTConnectionQueue)
 - (void)dctInternal_start;
+@end
+
+@interface DCTConnectionQueue (DCTConnectionController)
+- (void)dctConnectionController_addConnectionController:(DCTConnectionController *)connectionController;
+- (void)dctConnectionController_removeConnectionController:(DCTConnectionController *)connectionController;
 @end
 
 @implementation DCTConnectionQueue {
@@ -259,7 +260,7 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	
 	[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
 		if (weakConnectionController.ended)
-			[self dctConnectionController_removeConnectionController:weakConnectionController];
+			[self dctInternal_removeConnectionController:weakConnectionController];
 	}];
 	
 	[self dct_changeValueForKey:DCTConnectionQueueConnectionCountKey withChange:^{
@@ -327,7 +328,9 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 
 
-#pragma mark - Internals for other classes
+
+
+#pragma mark - Internal access for DCTConnectionController
 
 - (void)dctConnectionController_addConnectionController:(DCTConnectionController *)connectionController {
 	[self dctInternal_addConnectionController:connectionController];
@@ -336,6 +339,11 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 - (void)dctConnectionController_removeConnectionController:(DCTConnectionController *)connectionController {
 	[self dctInternal_removeConnectionController:connectionController];
 }
+
+
+
+
+#pragma mark - Internal access for DCTConnectionGroup
 
 - (void)addConnectionGroup:(DCTConnectionGroup *)connectionGroup {
 	
