@@ -188,6 +188,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	if (existingConnectionControllerIndex == NSNotFound) {
 		[queue dctConnectionController_addConnectionController:self];
+		self.status = DCTConnectionControllerStatusQueued;
 		return;	
 	}
 	
@@ -231,7 +232,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 - (void)requeue {
 	[queue dctConnectionController_removeConnectionController:self];
 	[self dctInternal_reset];
-	[queue dctConnectionController_addConnectionController:self];
+	[self connectOnQueue:queue];
 }
 
 - (void)cancel {

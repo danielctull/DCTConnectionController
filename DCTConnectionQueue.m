@@ -87,7 +87,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 @interface DCTConnectionController (DCTConnectionQueue)
 - (void)dctInternal_start;
-- (void)dctInternal_setQueued;
 @end
 
 @implementation DCTConnectionQueue {
@@ -296,7 +295,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 		[queuedConnections addObject:connectionController];
 	}];
 	
-	[connectionController dctInternal_setQueued];
 	[queuedConnections sortUsingComparator:compareConnections];
 	
 	if (active) [self dctInternal_runNextConnection];
