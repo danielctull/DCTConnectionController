@@ -248,6 +248,15 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 - (void)dctInternal_addConnectionControllerToQueue:(DCTConnectionController *)connectionController {
 	
+	if ([self dctInternal_willPerformSelectorOnMainThread:_cmd withObject:connectionController]) return;
+	
+	__dct_weak DCTConnectionController *weakConnectionController = connectionController;
+	
+	[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
+		if (weakConnectionController.ended)
+			[self dctConnectionController_removeConnectionController:weakConnectionController];
+	}];
+	
 	[self dct_changeValueForKey:DCTConnectionQueueConnectionCountKey withChange:^{
 		[queuedConnections addObject:connectionController];
 	}];
@@ -313,16 +322,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 #pragma mark - Internals for other classes
 
 - (void)dctConnectionController_addConnectionController:(DCTConnectionController *)connectionController {
-	
-	if ([self dctInternal_willPerformSelectorOnMainThread:_cmd withObject:connectionController]) return;
-	
-	__dct_weak DCTConnectionController *weakConnectionController = connectionController;
-	
-	[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
-		if (weakConnectionController.ended)
-			[self dctConnectionController_removeConnectionController:weakConnectionController];
-	}];
-	
 	[self dctInternal_addConnectionControllerToQueue:connectionController];
 }
 

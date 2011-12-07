@@ -90,7 +90,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 - (void)dctInternal_reset;
 - (void)dctInternal_start;
-- (void)dctInternal_setQueued;
 
 @property (nonatomic, readonly) NSMutableArray *dctInternal_responseBlocks;
 @property (nonatomic, readonly) NSMutableArray *dctInternal_completionBlocks;
@@ -543,10 +542,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		// TODO: GENERATE ERROR
 		[self connectionDidFail];
 	}
-}
-
-- (void)dctInternal_setQueued {
-	self.status = DCTConnectionControllerStatusQueued;
 }
 
 - (void)dctInternal_connectionDidRespond {
