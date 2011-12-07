@@ -382,13 +382,13 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	dispatch_queue_t callingQueue = dispatch_get_current_queue();
 	DCTConnectionControllerResponseBlock responseHandler = [handler copy];
 	
-	DCTConnectionControllerResponseBlock wrapped = ^ (NSURLResponse *response) {
+	DCTConnectionControllerResponseBlock wrapped = ^(NSURLResponse *response) {
 		dispatch_async(callingQueue, ^{
 			responseHandler(response);
 		});
 	};
 	
-	[self.dctInternal_responseBlocks addObject:wrapped];
+	[self.dctInternal_responseBlocks addObject:[wrapped copy]];
 }
 
 - (void)addFinishHandler:(DCTConnectionControllerFinishBlock)handler {
@@ -400,13 +400,13 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	dispatch_queue_t callingQueue = dispatch_get_current_queue();
 	DCTConnectionControllerFinishBlock finishHandler = [handler copy];
 	
-	DCTConnectionControllerFinishBlock wrapped = ^ {
+	DCTConnectionControllerFinishBlock wrapped = ^{
 		dispatch_async(callingQueue, ^{
 			finishHandler();
 		});
 	};
 	
-	[self.dctInternal_completionBlocks addObject:wrapped];
+	[self.dctInternal_completionBlocks addObject:[wrapped copy]];
 }
 
 - (void)addFailureHandler:(DCTConnectionControllerFailureBlock)handler {
@@ -424,7 +424,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		});
 	};
 	
-	[self.dctInternal_failureBlocks addObject:wrapped];
+	[self.dctInternal_failureBlocks addObject:[wrapped copy]];
 }
 
 - (void)addCancelationHandler:(DCTConnectionControllerCancelationBlock)handler {
@@ -436,13 +436,13 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	dispatch_queue_t callingQueue = dispatch_get_current_queue();
 	DCTConnectionControllerCancelationBlock cancelationHandler = [handler copy];
 	
-	DCTConnectionControllerCancelationBlock wrapped = ^() {
+	DCTConnectionControllerCancelationBlock wrapped = ^{
 		dispatch_async(callingQueue, ^{
 			cancelationHandler();
 		});
 	};
 	
-	[self.dctInternal_cancelationBlocks addObject:wrapped];
+	[self.dctInternal_cancelationBlocks addObject:[wrapped copy]];
 }
 
 - (void)addStatusChangeHandler:(DCTConnectionControllerStatusBlock)handler {
@@ -460,7 +460,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		});
 	};
 	
-	[self.dctInternal_statusChangeBlocks addObject:wrapped];
+	[self.dctInternal_statusChangeBlocks addObject:[wrapped copy]];
 }
 
 #pragma mark - NSURLConnectionDelegate
