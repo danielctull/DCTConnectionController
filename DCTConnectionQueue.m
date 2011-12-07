@@ -139,49 +139,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	[self.activeConnectionControllers makeObjectsPerformSelector:@selector(requeue)];
 }
 
-- (void)dctConnectionController_addConnectionController:(DCTConnectionController *)connectionController {
-	
-	if ([self dctInternal_willPerformSelectorOnMainThread:_cmd withObject:connectionController]) return;
-	
-	__dct_weak DCTConnectionController *weakConnectionController = connectionController;
-	
-	[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
-		if (weakConnectionController.ended)
-			[self dctConnectionController_removeConnectionController:weakConnectionController];
-	}];
-	
-	[self dctInternal_addConnectionControllerToQueue:connectionController];
-}
-
-- (void)dctConnectionController_removeConnectionController:(DCTConnectionController *)connectionController {
-	
-	if ([self dctInternal_willPerformSelectorOnMainThread:_cmd withObject:connectionController]) return;
-	
-	if ([activeConnections containsObject:connectionController])
-		[self dctInternal_removeActiveConnection:connectionController];
-		
-	else if ([queuedConnections containsObject:connectionController]) 
-		[self dctInternal_removeConnectionFromQueue:connectionController];
-	
-}
-
-- (void)addConnectionGroup:(DCTConnectionGroup *)connectionGroup {
-	
-	if (!groups) groups = [[NSMutableArray alloc] initWithCapacity:1];
-	
-	[groups addObject:connectionGroup];
-	
-	__dct_weak DCTConnectionGroup *group = connectionGroup;
-	
-	[connectionGroup addCompletionHandler:^(NSArray *finishedConnectionControllers, NSArray *failedConnectionControllers, NSArray *cancelledConnectionControllers) {
-		[groups removeObject:group];
-	}];
-	
-	[connectionGroup.connectionControllers enumerateObjectsUsingBlock:^(DCTConnectionController *cc, NSUInteger idx, BOOL *stop) {
-		[cc connectOnQueue:self];
-	}];
-}
-
 #pragma mark - DCTConnectionQueue Accessors
 
 - (NSArray *)activeConnectionControllers {
@@ -349,5 +306,55 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	
 	return !isMainThread;	
 }
+
+
+
+
+#pragma mark - Internals for other classes
+
+- (void)dctConnectionController_addConnectionController:(DCTConnectionController *)connectionController {
+	
+	if ([self dctInternal_willPerformSelectorOnMainThread:_cmd withObject:connectionController]) return;
+	
+	__dct_weak DCTConnectionController *weakConnectionController = connectionController;
+	
+	[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
+		if (weakConnectionController.ended)
+			[self dctConnectionController_removeConnectionController:weakConnectionController];
+	}];
+	
+	[self dctInternal_addConnectionControllerToQueue:connectionController];
+}
+
+- (void)dctConnectionController_removeConnectionController:(DCTConnectionController *)connectionController {
+	
+	if ([self dctInternal_willPerformSelectorOnMainThread:_cmd withObject:connectionController]) return;
+	
+	if ([activeConnections containsObject:connectionController])
+		[self dctInternal_removeActiveConnection:connectionController];
+	
+	else if ([queuedConnections containsObject:connectionController]) 
+		[self dctInternal_removeConnectionFromQueue:connectionController];
+	
+}
+
+- (void)addConnectionGroup:(DCTConnectionGroup *)connectionGroup {
+	
+	if (!groups) groups = [[NSMutableArray alloc] initWithCapacity:1];
+	
+	[groups addObject:connectionGroup];
+	
+	__dct_weak DCTConnectionGroup *group = connectionGroup;
+	
+	[connectionGroup addCompletionHandler:^(NSArray *finishedConnectionControllers, NSArray *failedConnectionControllers, NSArray *cancelledConnectionControllers) {
+		[groups removeObject:group];
+	}];
+	
+	[connectionGroup.connectionControllers enumerateObjectsUsingBlock:^(DCTConnectionController *cc, NSUInteger idx, BOOL *stop) {
+		[cc connectOnQueue:self];
+	}];
+}
+
+
 		 
 @end
