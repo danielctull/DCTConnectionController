@@ -61,6 +61,22 @@ NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
 NSString *const DCTConnectionQueueActiveConnectionCountIncreasedNotification = @"DCTConnectionQueueActiveConnectionCountIncreasedNotification";
 NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @"DCTConnectionQueueActiveConnectionCountDecreasedNotification";
 
+
+
+@interface DCTConnectionController (DCTConnectionQueue)
+- (void)dctConnectionQueue_start;
+@end
+
+@interface DCTConnectionQueue (DCTConnectionController)
+- (void)dctConnectionController_addConnectionController:(DCTConnectionController *)connectionController;
+- (void)dctConnectionController_removeConnectionController:(DCTConnectionController *)connectionController;
+@end
+
+@interface DCTConnectionQueue (DCTConnectionGroup)
+- (void)dctConnectionGroup_addConnectionGroup:(DCTConnectionGroup *)connectionGroup;
+@end
+
+
 @interface DCTConnectionQueue ()
 - (BOOL)dctInternal_willPerformSelectorOnMainThread:(SEL)selector withObject:(id)object;
 
@@ -80,19 +96,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 - (void)uikit_dealloc;
 - (void)uikit_init;
-@end
-
-@interface DCTConnectionController (DCTConnectionQueue)
-- (void)dctConnectionQueue_start;
-@end
-
-@interface DCTConnectionQueue (DCTConnectionController)
-- (void)dctConnectionController_addConnectionController:(DCTConnectionController *)connectionController;
-- (void)dctConnectionController_removeConnectionController:(DCTConnectionController *)connectionController;
-@end
-
-@interface DCTConnectionQueue (DCTConnectionGroup)
-- (void)dctConnectionGroup_addConnectionGroup:(DCTConnectionGroup *)connectionGroup;
 @end
 
 @implementation DCTConnectionQueue {
