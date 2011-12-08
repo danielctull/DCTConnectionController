@@ -35,6 +35,7 @@
  */
 
 #import <Foundation/Foundation.h>
+@class DCTConnectionController;
 
 extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotification;
@@ -69,7 +70,23 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotificat
 /** Returns all the connection controllers currently queued. */
 @property (nonatomic, readonly) NSArray *queuedConnectionControllers;
 
+/**
+ Remove the given connection controller from the queue.
+ 
+ @param connectionController The connection controller to remove.
+ */
+- (void)removeConnectionController:(DCTConnectionController *)connectionController;
+
+
+
+
+
+
+
+
+
 + (void)addInitBlock:(void(^)(DCTConnectionQueue *))block;
 + (void)addDeallocBlock:(void(^)(DCTConnectionQueue *))block;
++ (void)addRemovalBlock:(void(^)(DCTConnectionQueue *, DCTConnectionController *))block;
 
 @end

@@ -70,7 +70,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 @interface DCTConnectionQueue (DCTConnectionController)
 - (void)dctConnectionController_addConnectionController:(DCTConnectionController *)connectionController;
-- (void)dctConnectionController_removeConnectionController:(DCTConnectionController *)connectionController;
 @end
 
 
@@ -83,27 +82,27 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 - (DCTConnectionController *)dctInternal_nextConnectionIterator:(DCTConnectionController *)connection;
 
 - (void)dctInternal_addConnectionController:(DCTConnectionController *)connectionController;
-
-- (void)dctInternal_removeConnectionController:(DCTConnectionController *)connectionController;
-- (void)dctInternal_removeQueuedConnectionController:(DCTConnectionController *)connectionController;
-- (void)dctInternal_removeActiveConnectionController:(DCTConnectionController *)connectionController;
-
 - (void)dctInternal_dequeueAndStartConnection:(DCTConnectionController *)connectionController;
+
+
+@property (nonatomic, strong) NSMutableArray *dctInternal_activeConnectionControllers;
+@property (nonatomic, strong) NSMutableArray *dctInternal_queuedConnectionControllers;
 
 @end
 
 @implementation DCTConnectionQueue {
-    __strong NSMutableArray *activeConnections;
-	__strong NSMutableArray *queuedConnections;
 	BOOL active;
 	
 	dispatch_queue_t queue;
 }
 
 @synthesize maxConnections;
+@synthesize dctInternal_activeConnectionControllers;
+@synthesize dctInternal_queuedConnectionControllers;
 
 static NSMutableArray *initBlocks = nil;
 static NSMutableArray *deallocBlocks = nil;
+static NSMutableArray *removalBlocks = nil;
 
 + (void)addInitBlock:(void(^)(DCTConnectionQueue *))block {
 	static dispatch_once_t sharedToken;
@@ -121,14 +120,54 @@ static NSMutableArray *deallocBlocks = nil;
 	[deallocBlocks addObject:[block copy]];
 }
 
++ (void)addRemovalBlock:(void(^)(DCTConnectionQueue *, DCTConnectionController *))block {
+	static dispatch_once_t sharedToken;
+	dispatch_once(&sharedToken, ^{
+		removalBlocks = [[NSMutableArray alloc] initWithCapacity:1];
+	});
+	[removalBlocks addObject:[block copy]];
+}
+
++ (void)load {
+	
+	[self addRemovalBlock:^(DCTConnectionQueue *queue, DCTConnectionController *connectionController) {
+		
+		if (![queue.dctInternal_queuedConnectionControllers containsObject:connectionController]) return;
+		
+		[queue dct_changeValueForKey:DCTConnectionQueueConnectionCountKey withChange:^{
+			[queue.dctInternal_queuedConnectionControllers removeObject:connectionController];
+		}];
+		
+	}];
+	
+	[self addRemovalBlock:^(DCTConnectionQueue *queue, DCTConnectionController *connectionController) {
+		
+		if (![queue.dctInternal_activeConnectionControllers containsObject:connectionController]) return;
+		
+		NSArray *changedKeys = [NSArray arrayWithObjects:DCTConnectionQueueActiveConnectionCountKey, DCTConnectionQueueConnectionCountKey, nil];
+		[queue dct_changeValueForKeys:changedKeys withChange:^{
+			[queue.dctInternal_activeConnectionControllers removeObject:connectionController];
+		}];
+		
+		[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountDecreasedNotification 
+															object:queue];
+		
+		[queue dctInternal_runNextConnection];
+	}];
+	
+	
+	
+	
+}
+
 #pragma mark - NSObject
 
 - (id)init {
 	
 	if (!(self = [super init])) return nil;
 	
-	activeConnections = [[NSMutableArray alloc] init];
-	queuedConnections = [[NSMutableArray alloc] init];
+	self.dctInternal_activeConnectionControllers = [[NSMutableArray alloc] init];
+	self.dctInternal_queuedConnectionControllers = [[NSMutableArray alloc] init];
 	active = YES;
 	self.maxConnections = 5;
 	
@@ -161,27 +200,27 @@ static NSMutableArray *deallocBlocks = nil;
 #pragma mark - DCTConnectionQueue Accessors
 
 - (NSArray *)activeConnectionControllers {
-	return [NSArray arrayWithArray:activeConnections];
+	return [self.dctInternal_activeConnectionControllers copy];
 }
 
 
 - (NSArray *)queuedConnectionControllers {
-	return [NSArray arrayWithArray:queuedConnections];
+	return [self.dctInternal_queuedConnectionControllers copy];
 }
 
 - (NSArray *)connectionControllers {
-	return [activeConnections arrayByAddingObjectsFromArray:queuedConnections];
+	return [self.dctInternal_activeConnectionControllers arrayByAddingObjectsFromArray:self.dctInternal_queuedConnectionControllers];
 }
 
 #pragma mark - Internals
 
 - (void)dctInternal_runNextConnection {
 	
-	if ([activeConnections count] >= self.maxConnections) return;
+	if ([self.dctInternal_activeConnectionControllers count] >= self.maxConnections) return;
 	
 	if (!active) return;
 	
-	if ([queuedConnections count] == 0) return;
+	if ([self.dctInternal_queuedConnectionControllers count] == 0) return;
 	
 	// Loop through the queue and try to run the top-most connection.
 	// If it can't be run (eg waiting for dependencies), run the next one down.
@@ -201,7 +240,7 @@ static NSMutableArray *deallocBlocks = nil;
 
 - (DCTConnectionController *)dctInternal_nextConnection {
 	
-	for (DCTConnectionController *connection in queuedConnections) {
+	for (DCTConnectionController *connection in self.dctInternal_queuedConnectionControllers) {
 		DCTConnectionController *c = [self dctInternal_nextConnectionIterator:connection];
 		if (c)
 			return c;
@@ -258,52 +297,32 @@ static NSMutableArray *deallocBlocks = nil;
 	__dct_weak DCTConnectionController *weakConnectionController = connectionController;
 	
 	[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
-		if (weakConnectionController.ended)
-			[self dctInternal_removeConnectionController:weakConnectionController];
+		if (weakConnectionController.ended) {
+			[self removeConnectionController:weakConnectionController];
+			[self dctInternal_runNextConnection];
+		}
 	}];
 	
 	[self dct_changeValueForKey:DCTConnectionQueueConnectionCountKey withChange:^{
-		[queuedConnections addObject:connectionController];
+		[self.dctInternal_queuedConnectionControllers addObject:connectionController];
 	}];
 	
-	[queuedConnections sortUsingComparator:compareConnections];
+	[self.dctInternal_queuedConnectionControllers sortUsingComparator:compareConnections];
 	
 	if (active) [self dctInternal_runNextConnection];
 }
 
-- (void)dctInternal_removeConnectionController:(DCTConnectionController *)connectionController {
+- (void)removeConnectionController:(DCTConnectionController *)connectionController {
 	
-	if ([activeConnections containsObject:connectionController])
-		[self dctInternal_removeActiveConnectionController:connectionController];
-	
-	else if ([queuedConnections containsObject:connectionController]) 
-		[self dctInternal_removeQueuedConnectionController:connectionController];
-}
-
-- (void)dctInternal_removeQueuedConnectionController:(DCTConnectionController *)connectionController {
-	[self dct_changeValueForKey:DCTConnectionQueueConnectionCountKey withChange:^{
-		[queuedConnections removeObject:connectionController];
-	}];
-}
-	
-- (void)dctInternal_removeActiveConnectionController:(DCTConnectionController *)connection {
-	
-	NSArray *changedKeys = [NSArray arrayWithObjects:DCTConnectionQueueActiveConnectionCountKey, DCTConnectionQueueConnectionCountKey, nil];
-	[self dct_changeValueForKeys:changedKeys withChange:^{
-		[activeConnections removeObject:connection];
-	}];
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountDecreasedNotification 
-														object:self];
-	
-	[self dctInternal_runNextConnection];
+	for (void(^block)(DCTConnectionQueue *, DCTConnectionController *) in removalBlocks)
+		block(self, connectionController);
 }
 
 - (void)dctInternal_dequeueAndStartConnection:(DCTConnectionController *)connectionController {
 	
 	[self dct_changeValueForKey:DCTConnectionQueueActiveConnectionCountKey withChange:^{
-		[activeConnections addObject:connectionController];
-		[queuedConnections removeObject:connectionController];
+		[self.dctInternal_activeConnectionControllers addObject:connectionController];
+		[self.dctInternal_queuedConnectionControllers removeObject:connectionController];
 	}];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountIncreasedNotification object:self];
@@ -320,10 +339,6 @@ static NSMutableArray *deallocBlocks = nil;
 
 - (void)dctConnectionController_addConnectionController:(DCTConnectionController *)connectionController {
 	[self dctInternal_addConnectionController:connectionController];
-}
-
-- (void)dctConnectionController_removeConnectionController:(DCTConnectionController *)connectionController {
-	[self dctInternal_removeConnectionController:connectionController];
 }
 		 
 @end

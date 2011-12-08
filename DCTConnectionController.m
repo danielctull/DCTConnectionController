@@ -83,7 +83,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 @interface DCTConnectionQueue (DCTConnectionController)
 - (void)dctConnectionController_addConnectionController:(DCTConnectionController *)connectionController;
-- (void)dctConnectionController_removeConnectionController:(DCTConnectionController *)connectionController;
 @end
 
 @interface DCTConnectionController (DCTConnectionQueue)
@@ -120,8 +119,10 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 
 @implementation DCTConnectionController {
+	
 	__strong NSMutableSet *dependencies;
 	__strong NSMutableSet *dependents;
+	
 	__strong NSMutableArray *responseBlocks;
 	__strong NSMutableArray *completionBlocks;
 	__strong NSMutableArray *failureBlocks;
@@ -230,7 +231,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 }
 
 - (void)requeue {
-	[queue dctConnectionController_removeConnectionController:self];
+	[queue removeConnectionController:self];
 	[self dctInternal_reset];
 	[self connectOnQueue:queue];
 }

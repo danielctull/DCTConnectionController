@@ -377,8 +377,6 @@ extern NSString *const DCTConnectionControllerTypeString[];
  */
 - (void)requeue;
 
-
-
 #pragma mark - Methods to use in Subclasses
 
 /// @name Methods to use in Subclasses
