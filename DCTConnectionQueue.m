@@ -167,7 +167,7 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 }
 
 - (NSInteger)connectionCount {
-	return self.activeConnectionCount + [queuedConnections count] + [nonMultitaskingConnectionControllers count];
+	return self.activeConnectionCount + self.queuedConnectionCount;
 }
 
 #pragma mark - Internals
