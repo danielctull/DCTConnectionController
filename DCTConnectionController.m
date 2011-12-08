@@ -136,7 +136,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	__strong NSString *dctInternal_downloadPath;
 }
 
-@synthesize status, type, priority, multitaskEnabled, percentDownloaded;
+@synthesize status, type, priority, percentDownloaded;
 @synthesize returnedObject, returnedError, returnedResponse;
 @synthesize URL, URLRequest, URLConnection;
 

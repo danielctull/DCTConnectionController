@@ -57,7 +57,8 @@
 #define dctconnectioncontroller_2_0     20000
 #define dctconnectioncontroller_2_0_1   20001
 #define dctconnectioncontroller_2_1     20100
-#define dctconnectioncontroller         dctconnectioncontroller_2_1
+#define dctconnectioncontroller_2_2     20200
+#define dctconnectioncontroller         dctconnectioncontroller_2_2
 #endif
 
 @class DCTConnectionQueue;
@@ -199,10 +200,6 @@ extern NSString *const DCTConnectionControllerTypeString[];
 #pragma mark - Setting up the connection details
 
 /// @name Setting up the connection details
-
-/** Sets the connection as multitask enabled for the iOS platform.
- */
-@property (nonatomic, assign) BOOL multitaskEnabled;
 
 /** The type of connection to use.
  
