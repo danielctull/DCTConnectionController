@@ -90,8 +90,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 - (void)dctInternal_dequeueAndStartConnection:(DCTConnectionController *)connectionController;
 
-- (void)uikit_dealloc;
-- (void)uikit_init;
 @end
 
 @implementation DCTConnectionQueue {
@@ -103,6 +101,25 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 }
 
 @synthesize maxConnections;
+
+static NSMutableArray *initBlocks = nil;
+static NSMutableArray *deallocBlocks = nil;
+
++ (void)addInitBlock:(void(^)(void))block {
+	static dispatch_once_t sharedToken;
+	dispatch_once(&sharedToken, ^{
+		initBlocks = [[NSMutableArray alloc] initWithCapacity:1];
+	});
+	[initBlocks addObject:[block copy]];
+}
+
++ (void)addDeallocBlock:(void(^)(void))block {
+	static dispatch_once_t sharedToken;
+	dispatch_once(&sharedToken, ^{
+		deallocBlocks = [[NSMutableArray alloc] initWithCapacity:1];
+	});
+	[deallocBlocks addObject:[block copy]];
+}
 
 #pragma mark - NSObject
 
@@ -117,18 +134,16 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	
 	queue = dispatch_get_current_queue();
 	
-	[self uikit_init];
+	for (void(^block)() in initBlocks)
+		block();
 	
 	return self;	
 }
 
-- (void)uikit_init {}
-
 - (void)dealloc {
-	[self uikit_dealloc];
+	for (void(^block)() in deallocBlocks)
+		block();
 }
-
-- (void)uikit_dealloc {}
 
 #pragma mark - DCTConnectionQueue
 

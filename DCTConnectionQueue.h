@@ -69,4 +69,7 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotificat
 /** Returns all the connection controllers currently queued. */
 @property (nonatomic, readonly) NSArray *queuedConnectionControllers;
 
++ (void)addInitBlock:(void(^)(void))block;
++ (void)addDeallocBlock:(void(^)(void))block;
+
 @end
