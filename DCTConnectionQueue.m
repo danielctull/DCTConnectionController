@@ -97,11 +97,7 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 @implementation DCTConnectionQueue {
     __strong NSMutableArray *activeConnections;
 	__strong NSMutableArray *queuedConnections;
-	__strong NSMutableArray *groups;
 	BOOL active;
-	NSInteger connectionCount;
-	
-	__strong NSArray *externalConnectionCountKeys;
 	
 	dispatch_queue_t queue;
 }
@@ -118,7 +114,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	queuedConnections = [[NSMutableArray alloc] init];
 	active = YES;
 	self.maxConnections = 5;
-	externalConnectionCountKeys = [NSArray arrayWithObjects:DCTConnectionQueueActiveConnectionCountKey, DCTConnectionQueueConnectionCountKey, nil];
 	
 	queue = dispatch_get_current_queue();
 	
@@ -290,7 +285,8 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	
 - (void)dctInternal_removeActiveConnectionController:(DCTConnectionController *)connection {
 	
-	[self dct_changeValueForKeys:externalConnectionCountKeys withChange:^{
+	NSArray *changedKeys = [NSArray arrayWithObjects:DCTConnectionQueueActiveConnectionCountKey, DCTConnectionQueueConnectionCountKey, nil];
+	[self dct_changeValueForKeys:changedKeys withChange:^{
 		[activeConnections removeObject:connection];
 	}];
 	
