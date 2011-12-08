@@ -105,7 +105,7 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 static NSMutableArray *initBlocks = nil;
 static NSMutableArray *deallocBlocks = nil;
 
-+ (void)addInitBlock:(void(^)(DCTConnectionQueue *queue))block {
++ (void)addInitBlock:(void(^)(DCTConnectionQueue *))block {
 	static dispatch_once_t sharedToken;
 	dispatch_once(&sharedToken, ^{
 		initBlocks = [[NSMutableArray alloc] initWithCapacity:1];
@@ -113,7 +113,7 @@ static NSMutableArray *deallocBlocks = nil;
 	[initBlocks addObject:[block copy]];
 }
 
-+ (void)addDeallocBlock:(void(^)(DCTConnectionQueue *queue))block {
++ (void)addDeallocBlock:(void(^)(DCTConnectionQueue *))block {
 	static dispatch_once_t sharedToken;
 	dispatch_once(&sharedToken, ^{
 		deallocBlocks = [[NSMutableArray alloc] initWithCapacity:1];
@@ -134,14 +134,14 @@ static NSMutableArray *deallocBlocks = nil;
 	
 	queue = dispatch_get_current_queue();
 	
-	for (void(^block)(DCTConnectionQueue *queue) in initBlocks)
+	for (void(^block)(DCTConnectionQueue *) in initBlocks)
 		block(self);
 	
 	return self;	
 }
 
 - (void)dealloc {
-	for (void(^block)(DCTConnectionQueue *queue) in deallocBlocks)
+	for (void(^block)(DCTConnectionQueue *) in deallocBlocks)
 		block(self);
 }
 
