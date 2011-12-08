@@ -14,21 +14,6 @@
 
 /// @name Deprecated
 
-/**
- Add a connection controller to the queue. This method causes the connection queue to
- find the next connection and run it.
- 
- @param connectionController The connection controller to add to the queue.
- */
-- (void)addConnectionController:(DCTConnectionController *)connectionController;
-
-/**
- Remove the given connection controller from the queue.
- 
- @param connectionController The connection controller to remove.
- */
-- (void)removeConnectionController:(DCTConnectionController *)connectionController;
-
 /** Requeues a connection controller.
  
  This will stop the url connection in progress for the given connection controller and 

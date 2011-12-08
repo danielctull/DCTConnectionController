@@ -70,6 +70,15 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotificat
 /** Returns all the connection controllers currently queued. */
 @property (nonatomic, readonly) NSArray *queuedConnectionControllers;
 
+
+/**
+ Add a connection controller to the queue. This method causes the connection queue to
+ find the next connection and run it.
+ 
+ @param connectionController The connection controller to add to the queue.
+ */
+- (void)addConnectionController:(DCTConnectionController *)connectionController;
+
 /**
  Remove the given connection controller from the queue.
  

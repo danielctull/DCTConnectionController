@@ -68,10 +68,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 - (void)dctConnectionQueue_start;
 @end
 
-@interface DCTConnectionQueue (DCTConnectionController)
-- (void)dctConnectionController_addConnectionController:(DCTConnectionController *)connectionController;
-@end
-
 
 @interface DCTConnectionQueue ()
 
@@ -81,7 +77,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 - (DCTConnectionController *)dctInternal_nextConnection;
 - (DCTConnectionController *)dctInternal_nextConnectionIterator:(DCTConnectionController *)connection;
 
-- (void)dctInternal_addConnectionController:(DCTConnectionController *)connectionController;
 - (void)dctInternal_dequeueAndStartConnection:(DCTConnectionController *)connectionController;
 
 
@@ -292,7 +287,7 @@ static NSMutableArray *removalBlocks = nil;
 	return YES;
 }
 
-- (void)dctInternal_addConnectionController:(DCTConnectionController *)connectionController {
+- (void)addConnectionController:(DCTConnectionController *)connectionController {
 	
 	__dct_weak DCTConnectionController *weakConnectionController = connectionController;
 	
@@ -330,15 +325,4 @@ static NSMutableArray *removalBlocks = nil;
 	[connectionController dctConnectionQueue_start];
 }
 
-@end
-
-
-#pragma mark - Internal access for DCTConnectionController
-
-@implementation DCTConnectionQueue (DCTConnectionController)
-
-- (void)dctConnectionController_addConnectionController:(DCTConnectionController *)connectionController {
-	[self dctInternal_addConnectionController:connectionController];
-}
-		 
 @end
