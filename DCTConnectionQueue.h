@@ -58,17 +58,6 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotificat
 - (void)start;
 
 
-
-/// @name Connection Counts
-
-/** The total amount of connection controllers queued and active. */
-@property (nonatomic, readonly) NSInteger connectionCount;
-
-/** The amount of connection controllers currently in progress. */
-@property (nonatomic, readonly) NSInteger activeConnectionCount;
-
-@property (nonatomic, readonly) NSInteger queuedConnectionCount;
-
 /// @name Accessing Connection Controllers
 
 /** Returns all the connection controllers currently in progress and queued. */

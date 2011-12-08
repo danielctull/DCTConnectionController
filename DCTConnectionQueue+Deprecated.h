@@ -42,4 +42,15 @@
 
 - (void)addConnectionGroup:(DCTConnectionGroup *)connectionGroup;
 
+
+/// @name Connection Counts
+
+/** The total amount of connection controllers queued and active. */
+@property (nonatomic, readonly) NSInteger connectionCount;
+
+/** The amount of connection controllers currently in progress. */
+@property (nonatomic, readonly) NSInteger activeConnectionCount;
+
+@property (nonatomic, readonly) NSInteger queuedConnectionCount;
+
 @end

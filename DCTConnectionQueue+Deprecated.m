@@ -28,4 +28,16 @@
 	[connectionGroup connectOnQueue:self];
 }
 
+- (NSInteger)connectionCount {
+	return [self.connectionControllers count];
+}
+
+- (NSInteger)activeConnectionCount {
+	return [self.activeConnectionControllers count];
+}
+
+- (NSInteger)queuedConnectionCount {
+	return [self.queuedConnectionControllers count];
+}
+
 @end

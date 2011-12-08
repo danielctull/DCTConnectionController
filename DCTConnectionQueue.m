@@ -158,18 +158,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	return [activeConnections arrayByAddingObjectsFromArray:queuedConnections];
 }
 
-- (NSInteger)activeConnectionCount {
-	return [activeConnections count];
-}
-
-- (NSInteger)queuedConnectionCount {
-	return [queuedConnections count];
-}
-
-- (NSInteger)connectionCount {
-	return self.activeConnectionCount + self.queuedConnectionCount;
-}
-
 #pragma mark - Internals
 
 - (void)dctInternal_runNextConnection {
