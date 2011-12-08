@@ -12,7 +12,7 @@
 
 @interface DCTConnectionQueue (Deprecated)
 
-/// @name Managing Connection Controllers
+/// @name Deprecated
 
 /**
  Add a connection controller to the queue. This method causes the connection queue to
@@ -42,15 +42,13 @@
 
 - (void)addConnectionGroup:(DCTConnectionGroup *)connectionGroup;
 
-
-/// @name Connection Counts
-
 /** The total amount of connection controllers queued and active. */
 @property (nonatomic, readonly) NSInteger connectionCount;
 
 /** The amount of connection controllers currently in progress. */
 @property (nonatomic, readonly) NSInteger activeConnectionCount;
 
+/** The amount of connection controllers currently queued. */
 @property (nonatomic, readonly) NSInteger queuedConnectionCount;
 
 @end
