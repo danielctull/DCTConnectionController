@@ -210,29 +210,30 @@ static NSMutableArray *deallocBlocks = nil;
 	
 	self.status = existingConnectionController.status;
 	
-	[existingConnectionController addResponseHandler:^(NSURLResponse *response) {
-		self.returnedResponse = response;
-		self.status = DCTConnectionControllerStatusResponded;
-	}];
-	
-	__dct_weak DCTConnectionController *cc = existingConnectionController;
-	
-	[existingConnectionController addFinishHandler:^() {
-		dctInternal_downloadPath = cc.dctInternal_downloadPath;
+	__dct_weak DCTConnectionController *weakCC = existingConnectionController;
+	[existingConnectionController addStatusChangeHandler:^(DCTConnectionControllerStatus existingConnectionControllerStatus) {
+			
+		switch (existingConnectionControllerStatus) {
+				
+			case DCTConnectionControllerStatusResponded:
+				self.returnedResponse = weakCC.returnedResponse;
+				break;
+			
+			case DCTConnectionControllerStatusFinished:
+				dctInternal_downloadPath = weakCC.dctInternal_downloadPath;
+				if ([weakCC isReturnedObjectLoaded]) 
+					self.returnedObject = weakCC.returnedObject;
+				break;
+				
+			case DCTConnectionControllerStatusFailed:
+				self.returnedError = weakCC.returnedError;
+				break;
+				
+			default:
+				break;
+		}
 		
-		if ([cc isReturnedObjectLoaded])
-			self.returnedObject = cc.returnedObject;
-		
-		self.status = DCTConnectionControllerStatusFinished;
-	}];
-	
-	[existingConnectionController addFailureHandler:^(NSError *error) {
-		self.returnedError = error;
-		self.status = DCTConnectionControllerStatusFailed;
-	}];
-	
-	[existingConnectionController addCancelationHandler:^(void) {
-		self.status = DCTConnectionControllerStatusCancelled;
+		self.status = existingConnectionControllerStatus;
 	}];
 	
 	return NO;
