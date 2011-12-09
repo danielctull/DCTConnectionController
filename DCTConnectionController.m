@@ -83,7 +83,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 @interface DCTConnectionController (DCTConnectionQueue)
 - (void)dctConnectionQueue_setQueued;
-- (void)dctConnectionQueue_attachToExistingConnectionController:(DCTConnectionController *)existingConnectionController;
 @end
 
 @interface DCTConnectionController () <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
@@ -192,6 +191,41 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		// TODO: GENERATE ERROR
 		[self connectionDidFail];
 	}
+}
+
+- (BOOL)shouldStartWithExistingConnectionControllerInQueue:(DCTConnectionController *)existingConnectionController {
+	
+	if (existingConnectionController.priority > self.priority)
+		existingConnectionController.priority = self.priority;
+	
+	self.status = existingConnectionController.status;
+	
+	[existingConnectionController addResponseHandler:^(NSURLResponse *response) {
+		self.returnedResponse = response;
+		[self dctInternal_connectionDidRespond];
+	}];
+	
+	__dct_weak DCTConnectionController *cc = existingConnectionController;
+	
+	[existingConnectionController addFinishHandler:^() {
+		dctInternal_downloadPath = cc.dctInternal_downloadPath;
+		
+		if ([cc isReturnedObjectLoaded])
+			self.returnedObject = cc.returnedObject;
+		
+		[self dctInternal_connectionDidFinishLoading];
+	}];
+	
+	[existingConnectionController addFailureHandler:^(NSError *error) {
+		self.returnedError = error;
+		[self dctInternal_connectionDidFail];
+	}];
+	
+	[existingConnectionController addCancelationHandler:^(void) {
+		[self dctInternal_connectionDidGetCancelled];
+	}];
+	
+	return NO;
 }
 
 #pragma mark - DCTConnectionController: Dependency
@@ -528,39 +562,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 - (void)dctConnectionQueue_setQueued {
 	self.status = DCTConnectionControllerStatusQueued;
-}
-
-- (void)dctConnectionQueue_attachToExistingConnectionController:(DCTConnectionController *)existingConnectionController {
-	
-	if (existingConnectionController.priority > self.priority)
-		existingConnectionController.priority = self.priority;
-	
-	self.status = existingConnectionController.status;
-	
-	[existingConnectionController addResponseHandler:^(NSURLResponse *response) {
-		self.returnedResponse = response;
-		[self dctInternal_connectionDidRespond];
-	}];
-	
-	__dct_weak DCTConnectionController *cc = existingConnectionController;
-	
-	[existingConnectionController addFinishHandler:^() {
-		dctInternal_downloadPath = cc.dctInternal_downloadPath;
-		
-		if ([cc isReturnedObjectLoaded])
-			self.returnedObject = cc.returnedObject;
-		
-		[self dctInternal_connectionDidFinishLoading];
-	}];
-	
-	[existingConnectionController addFailureHandler:^(NSError *error) {
-		self.returnedError = error;
-		[self dctInternal_connectionDidFail];
-	}];
-	
-	[existingConnectionController addCancelationHandler:^(void) {
-		[self dctInternal_connectionDidGetCancelled];
-	}];
 }
 
 @end

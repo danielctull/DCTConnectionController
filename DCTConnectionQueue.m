@@ -66,7 +66,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 @interface DCTConnectionController (DCTConnectionQueue)
 - (void)dctConnectionQueue_setQueued;
-- (void)dctConnectionQueue_attachToExistingConnectionController:(DCTConnectionController *)existingConnectionController;
 @end
 
 
@@ -220,8 +219,8 @@ static NSMutableArray *removalBlocks = nil;
 		// If it's the exact same object, lets not add it again. This could happen if -connectOnQueue: is called more than once.
 		if (existingConnectionController == connectionController) return;
 		
-		[connectionController dctConnectionQueue_attachToExistingConnectionController:existingConnectionController];		
-		return;	
+		if (![connectionController shouldStartWithExistingConnectionControllerInQueue:existingConnectionController])
+			return;
 	}
 	
 	[connectionController dctConnectionQueue_setQueued];
