@@ -54,35 +54,36 @@
 
 - (void)dctDelegateInternal_setupBlockCallbacks {
 	
-	static dispatch_once_t sharedToken;
-	dispatch_once(&sharedToken, ^{
+	if (objc_getAssociatedObject(self, _cmd))
+		return;
+	
+	objc_setAssociatedObject(self, _cmd, NSStringFromSelector(_cmd), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 		
-		__dct_weak DCTConnectionController *weakself = self;
+	__dct_weak DCTConnectionController *weakself = self;
+	
+	[self addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
 		
-		[self addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
+		if (status == DCTConnectionControllerStatusResponded
+			&& [weakself.delegate respondsToSelector:@selector(connectionController:didReceiveResponse:)])
+			[weakself.delegate connectionController:weakself didReceiveResponse:weakself.returnedResponse];
+		
+		if (status == DCTConnectionControllerStatusCancelled
+			&& [weakself.delegate respondsToSelector:@selector(connectionControllerWasCancelled:)])
+			[weakself.delegate connectionControllerWasCancelled:weakself];
+		
+		if (status == DCTConnectionControllerStatusFinished) {
 			
-			if (status == DCTConnectionControllerStatusResponded
-				&& [weakself.delegate respondsToSelector:@selector(connectionController:didReceiveResponse:)])
-				[weakself.delegate connectionController:weakself didReceiveResponse:weakself.returnedResponse];
+			if ([weakself.delegate respondsToSelector:@selector(connectionControllerDidFinish:)])
+				[weakself.delegate connectionControllerDidFinish:weakself];
 			
-			if (status == DCTConnectionControllerStatusCancelled
-				&& [weakself.delegate respondsToSelector:@selector(connectionControllerWasCancelled:)])
-				[weakself.delegate connectionControllerWasCancelled:weakself];
-			
-			if (status == DCTConnectionControllerStatusFinished) {
-				
-				if ([weakself.delegate respondsToSelector:@selector(connectionControllerDidFinish:)])
-					[weakself.delegate connectionControllerDidFinish:weakself];
-				
-				if ([weakself.delegate respondsToSelector:@selector(connectionController:didReceiveObject:)])
-					[weakself.delegate connectionController:weakself didReceiveObject:weakself.returnedObject];
-			}
-			
-			if (status == DCTConnectionControllerStatusFailed
-				&& [weakself.delegate respondsToSelector:@selector(connectionController:didReceiveError:)])
-				[weakself.delegate connectionController:weakself didReceiveError:weakself.returnedError];
-		}];
-	});
+			if ([weakself.delegate respondsToSelector:@selector(connectionController:didReceiveObject:)])
+				[weakself.delegate connectionController:weakself didReceiveObject:weakself.returnedObject];
+		}
+		
+		if (status == DCTConnectionControllerStatusFailed
+			&& [weakself.delegate respondsToSelector:@selector(connectionController:didReceiveError:)])
+			[weakself.delegate connectionController:weakself didReceiveError:weakself.returnedError];
+	}];
 }
 
 @end
