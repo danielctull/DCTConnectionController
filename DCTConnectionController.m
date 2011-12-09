@@ -94,7 +94,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 - (void)dctInternal_connectionDidRespond;
 - (void)dctInternal_connectionDidFail;
 - (void)dctInternal_connectionDidFinishLoading;
-- (void)dctInternal_cancelled;
+- (void)dctInternal_connectionDidGetCancelled;
+- (void)dctInternal_connectionDidEnd; //clean up
 
 - (void)dctInternal_calculatePercentDownloaded;
 
@@ -144,12 +145,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	priority = DCTConnectionControllerPriorityMedium;
 	percentDownloaded = [[NSNumber alloc] initWithInteger:0];
 	
-	responseBlocks = [NSMutableArray new];
-	completionBlocks = [NSMutableArray new];
-	failureBlocks = [NSMutableArray new];
-	cancelationBlocks = [NSMutableArray new];
-	statusChangeBlocks = [NSMutableArray new];	
-	
 	return self;
 }
 
@@ -183,9 +178,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 }
 
 - (void)cancel {
-	[self.URLConnection cancel];
-	[self dctInternal_cancelled];
-	URLConnection = nil;
+	[self dctInternal_connectionDidGetCancelled];
 }
 
 - (void)start {
@@ -340,6 +333,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	if (self.didReceiveResponse) handler(self.returnedResponse);
 	
+	if (!responseBlocks) responseBlocks = [[NSMutableArray alloc] initWithCapacity:1];
+	
 	[responseBlocks addObject:[handler copy]];
 }
 
@@ -348,6 +343,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	NSAssert(handler != nil, @"Handler should not be nil.");
 	
 	if (self.finished) handler();
+	
+	if (!completionBlocks) completionBlocks = [[NSMutableArray alloc] initWithCapacity:1];
 	
 	[completionBlocks addObject:[handler copy]];
 }
@@ -358,6 +355,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	if (self.failed) handler(self.returnedError);
 	
+	if (!failureBlocks) failureBlocks = [[NSMutableArray alloc] initWithCapacity:1];
+	
 	[failureBlocks addObject:[handler copy]];
 }
 
@@ -367,6 +366,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	if (self.cancelled) handler();
 	
+	if (!cancelationBlocks) cancelationBlocks = [[NSMutableArray alloc] initWithCapacity:1];
+	
 	[cancelationBlocks addObject:[handler copy]];
 }
 
@@ -375,6 +376,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	NSAssert(handler != nil, @"Handler should not be nil.");
 	
 	if (self.cancelled) handler(self.status);
+	
+	if (!statusChangeBlocks) statusChangeBlocks = [[NSMutableArray alloc] initWithCapacity:1];
 	
 	[statusChangeBlocks addObject:[handler copy]];
 }
@@ -458,7 +461,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	if (self.ended) return;
 	
-	[self.URLConnection cancel];
+	[self dctInternal_connectionDidEnd];
 	
 	for (DCTConnectionControllerFinishBlock block in completionBlocks)
 		block();
@@ -472,7 +475,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	if (self.ended) return;
 	
-	[self.URLConnection cancel];
+	[self dctInternal_connectionDidEnd];
 	
 	NSError *error = self.returnedError;
 	
@@ -484,9 +487,11 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	self.status = DCTConnectionControllerStatusFailed;
 }
 
-- (void)dctInternal_cancelled {
+- (void)dctInternal_connectionDidGetCancelled {
 	
 	if (self.ended) return;
+	
+	[self dctInternal_connectionDidEnd];
 	
 	for (DCTConnectionControllerCancelationBlock block in cancelationBlocks)
 		block();
@@ -494,6 +499,11 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerWasCancelledNotification object:self];
 	
 	self.status = DCTConnectionControllerStatusCancelled;
+}
+
+- (void)dctInternal_connectionDidEnd {
+	[self.URLConnection cancel];
+	URLConnection = nil;
 }
 
 - (void)dctInternal_reset {
@@ -551,7 +561,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	}];
 	
 	[existingConnectionController addCancelationHandler:^(void) {
-		[self dctInternal_cancelled];
+		[self dctInternal_connectionDidGetCancelled];
 	}];
 }
 
