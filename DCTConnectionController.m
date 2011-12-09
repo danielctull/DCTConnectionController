@@ -99,8 +99,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 - (void)dctInternal_calculatePercentDownloaded;
 
-- (void)dctInternal_setURL:(NSURL *)newURL;
-
 @property (nonatomic, readonly) NSString *dctInternal_downloadPath;
 
 @property (nonatomic, readonly) BOOL dctInternal_hasReturnedObject;
@@ -269,14 +267,14 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	if ([newURLRequest isEqual:URLRequest]) return;
 	
 	URLRequest = [newURLRequest copy];
-	[self dctInternal_setURL:URLRequest.URL];
+	self.URL = URLRequest.URL;
 }
 
 - (void)setURL:(NSURL *)newURL {
 	
 	if (self.started) return;
 	
-	[self dctInternal_setURL:newURL];
+	URL = newURL;
 }
 
 #pragma mark - DCTConnectionController: Getters
@@ -297,8 +295,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 - (NSURLRequest *)URLRequest {
 	
 	if (!URLRequest) [self loadURLRequest];
-	
-	[self dctInternal_setURL:[URLRequest URL]];
 	
 	return URLRequest;
 }
@@ -519,17 +515,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	if (returnedObject == nil) return NO;
 	
 	return YES;
-}
-
-#pragma mark - Internal Setters
-
-- (void)dctInternal_setURL:(NSURL *)newURL {
-	
-	if ([newURL isEqual:self.URL]) return;
-	
-	[self dct_changeValueForKey:@"URL" withChange:^{
-		URL = newURL;
-	}];
 }
 
 @end
