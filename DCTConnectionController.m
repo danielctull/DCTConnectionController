@@ -89,11 +89,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 @interface DCTConnectionController () <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 - (void)dctInternal_reset;
-@property (nonatomic, readonly) NSMutableArray *dctInternal_responseBlocks;
-@property (nonatomic, readonly) NSMutableArray *dctInternal_completionBlocks;
-@property (nonatomic, readonly) NSMutableArray *dctInternal_failureBlocks;
-@property (nonatomic, readonly) NSMutableArray *dctInternal_cancelationBlocks;
-@property (nonatomic, readonly) NSMutableArray *dctInternal_statusChangeBlocks;
 
 @property (nonatomic, readwrite) DCTConnectionControllerStatus status;
 
@@ -157,6 +152,12 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	priority = DCTConnectionControllerPriorityMedium;
 	percentDownloaded = [[NSNumber alloc] initWithInteger:0];
+	
+	responseBlocks = [NSMutableArray new];
+	completionBlocks = [NSMutableArray new];
+	failureBlocks = [NSMutableArray new];
+	cancelationBlocks = [NSMutableArray new];
+	statusChangeBlocks = [NSMutableArray new];	
 	
 	return self;
 }
@@ -253,7 +254,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		status = newStatus;
 	}];
 	
-	[self.dctInternal_statusChangeBlocks enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
+	[statusChangeBlocks enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
 		DCTConnectionControllerStatusBlock block = obj;
 		block(newStatus);
 	}];
@@ -338,7 +339,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	if (self.didReceiveResponse) handler(self.returnedResponse);
 	
-	[self.dctInternal_responseBlocks addObject:[handler copy]];
+	[responseBlocks addObject:[handler copy]];
 }
 
 - (void)addFinishHandler:(DCTConnectionControllerFinishBlock)handler {
@@ -347,7 +348,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	if (self.finished) handler();
 	
-	[self.dctInternal_completionBlocks addObject:[handler copy]];
+	[completionBlocks addObject:[handler copy]];
 }
 
 - (void)addFailureHandler:(DCTConnectionControllerFailureBlock)handler {
@@ -356,7 +357,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	if (self.failed) handler(self.returnedError);
 	
-	[self.dctInternal_failureBlocks addObject:[handler copy]];
+	[failureBlocks addObject:[handler copy]];
 }
 
 - (void)addCancelationHandler:(DCTConnectionControllerCancelationBlock)handler {
@@ -365,7 +366,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	if (self.cancelled) handler();
 	
-	[self.dctInternal_cancelationBlocks addObject:[handler copy]];
+	[cancelationBlocks addObject:[handler copy]];
 }
 
 - (void)addStatusChangeHandler:(DCTConnectionControllerStatusBlock)handler {
@@ -374,7 +375,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	if (self.cancelled) handler(self.status);
 	
-	[self.dctInternal_statusChangeBlocks addObject:[handler copy]];
+	[statusChangeBlocks addObject:[handler copy]];
 }
 
 #pragma mark - NSURLConnectionDelegate
