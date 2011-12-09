@@ -290,7 +290,10 @@ static NSMutableArray *deallocBlocks = nil;
 
 - (void)setStatus:(DCTConnectionControllerStatus)newStatus {
 	
-	if (newStatus == status) return;
+	if (newStatus <= status
+		&& newStatus != DCTConnectionControllerStatusNotStarted
+		&& newStatus != DCTConnectionControllerStatusQueued)
+		return;
 	
 	if (self.ended) return;
 	
