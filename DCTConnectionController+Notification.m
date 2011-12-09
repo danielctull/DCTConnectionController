@@ -23,28 +23,32 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		__dct_weak DCTConnectionController *weakConnectionController = connectionController;
 		NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 		
-		[connectionController addCancelationHandler:^{
-			[notificationCenter postNotificationName:DCTConnectionControllerWasCancelledNotification object:weakConnectionController];
-		}];
-		
-		[connectionController addFailureHandler:^(NSError *error) {
-			[notificationCenter postNotificationName:DCTConnectionControllerDidFailNotification object:weakConnectionController];
-		}];
-		
-		[connectionController addFinishHandler:^{
-			[notificationCenter postNotificationName:DCTConnectionControllerDidFinishNotification object:weakConnectionController];
-		}];
-		
 		[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
+			
 			[notificationCenter postNotificationName:DCTConnectionControllerStatusChangedNotification object:weakConnectionController];
+			
+			switch (status) {
+				case DCTConnectionControllerStatusResponded:
+					[notificationCenter postNotificationName:DCTConnectionControllerDidReceiveResponseNotification object:weakConnectionController];
+					break;
+									
+				case DCTConnectionControllerStatusCancelled:
+					[notificationCenter postNotificationName:DCTConnectionControllerWasCancelledNotification object:weakConnectionController];
+					break;
+					
+				case DCTConnectionControllerStatusFinished:
+					[notificationCenter postNotificationName:DCTConnectionControllerDidFinishNotification object:weakConnectionController];
+					break;
+					
+				case DCTConnectionControllerStatusFailed:
+					[notificationCenter postNotificationName:DCTConnectionControllerDidFailNotification object:weakConnectionController];
+					break;
+					
+				default:
+					break;
+			}
 		}];
-		
-		[connectionController addResponseHandler:^(NSURLResponse *response) {
-			[notificationCenter postNotificationName:DCTConnectionControllerDidReceiveResponseNotification object:weakConnectionController];
-		}];	
-		
 	}];
-	
 }
 
 @end
