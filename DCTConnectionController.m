@@ -297,14 +297,12 @@ static NSMutableArray *deallocBlocks = nil;
 	
 	if (self.ended) return;
 	
-	[self dct_changeValueForKey:@"status" withChange:^{
-		status = newStatus;
-	}];
+	[self willChangeValueForKey:@"status"];
+	status = newStatus;
+	[self didChangeValueForKey:@"status"];
 	
-	[statusChangeBlocks enumerateObjectsUsingBlock:^(id obj, NSUInteger index, BOOL *stop) {
-		DCTConnectionControllerStatusBlock block = obj;
+	for (DCTConnectionControllerStatusBlock block in statusChangeBlocks)
 		block(newStatus);
-	}];
 }
 
 - (void)setURLRequest:(NSURLRequest *)newURLRequest {
