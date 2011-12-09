@@ -88,7 +88,7 @@ NSString * const DCTInternalConnectionControllerTypeString[] = {
 - (void)dctInternal_connectionDidFail;
 - (void)dctInternal_connectionDidFinishLoading;
 - (void)dctInternal_connectionDidGetCancelled;
-- (void)dctInternal_connectionDidEnd; //clean up
+- (void)dctInternal_nilURLConnection; //clean up
 
 - (void)dctInternal_calculatePercentDownloaded;
 
@@ -195,6 +195,7 @@ static NSMutableArray *deallocBlocks = nil;
 }
 
 - (void)cancel {
+	[self dctInternal_nilURLConnection];
 	[self dctInternal_connectionDidGetCancelled];
 }
 
@@ -472,20 +473,14 @@ static NSMutableArray *deallocBlocks = nil;
 		[self dctInternal_calculatePercentDownloaded];
 	}
 	
-	if (fileHandle) {
-		[fileHandle closeFile];
-	}
-	
-	[connection cancel];
-	connection = nil;
-	
+	[fileHandle closeFile];
+	[self dctInternal_nilURLConnection];
 	[self connectionDidFinishLoading];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
 	self.returnedError = error;
-	[connection cancel];
-	connection = nil;
+	[self dctInternal_nilURLConnection];
     [self connectionDidFail];
 }
 
@@ -503,8 +498,6 @@ static NSMutableArray *deallocBlocks = nil;
 	
 	if (self.ended) return;
 	
-	[self dctInternal_connectionDidEnd];
-	
 	for (DCTConnectionControllerFinishBlock block in completionBlocks)
 		block();
 	
@@ -514,8 +507,6 @@ static NSMutableArray *deallocBlocks = nil;
 - (void)dctInternal_connectionDidFail {
 	
 	if (self.ended) return;
-	
-	[self dctInternal_connectionDidEnd];
 	
 	for (DCTConnectionControllerFailureBlock block in failureBlocks)
 		block(self.returnedError);
@@ -527,15 +518,13 @@ static NSMutableArray *deallocBlocks = nil;
 	
 	if (self.ended) return;
 	
-	[self dctInternal_connectionDidEnd];
-	
 	for (DCTConnectionControllerCancelationBlock block in cancelationBlocks)
 		block();
 	
 	self.status = DCTConnectionControllerStatusCancelled;
 }
 
-- (void)dctInternal_connectionDidEnd {
+- (void)dctInternal_nilURLConnection {
 	[self.URLConnection cancel];
 	URLConnection = nil;
 }
