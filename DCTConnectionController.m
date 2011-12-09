@@ -84,7 +84,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 @interface DCTConnectionController (DCTConnectionQueue)
 - (void)dctConnectionQueue_setQueued;
 - (void)dctConnectionQueue_attachToExistingConnectionController:(DCTConnectionController *)existingConnectionController;
-- (void)dctConnectionQueue_start;
 @end
 
 @interface DCTConnectionController () <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
@@ -189,6 +188,19 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	URLConnection = nil;
 }
 
+- (void)start {
+	if (self.started || URLConnection) return;
+	
+	URLConnection = [[NSURLConnection alloc] initWithRequest:self.URLRequest delegate:self];
+	
+	self.status = DCTConnectionControllerStatusStarted;
+	
+	if (!URLConnection) {
+		// TODO: GENERATE ERROR
+		[self connectionDidFail];
+	}
+}
+
 #pragma mark - DCTConnectionController: Dependency
 
 - (NSArray *)dependencies {
@@ -283,15 +295,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 - (DCTConnectionQueue *)queue {
 	return queue;
-}
-
-- (NSURLConnection *)URLConnection {
-	
-	if (!URLConnection) {
-		URLConnection = [[NSURLConnection alloc] initWithRequest:self.URLRequest delegate:self];
-	}
-	
-	return URLConnection;
 }
 
 - (NSURLRequest *)URLRequest {
@@ -517,18 +520,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 - (void)dctConnectionQueue_setQueued {
 	self.status = DCTConnectionControllerStatusQueued;
-}
-
-- (void)dctConnectionQueue_start {
-	
-	NSURLConnection *connection = self.URLConnection;
-	
-	self.status = DCTConnectionControllerStatusStarted;
-	
-	if (!connection) {
-		// TODO: GENERATE ERROR
-		[self connectionDidFail];
-	}
 }
 
 - (void)dctConnectionQueue_attachToExistingConnectionController:(DCTConnectionController *)existingConnectionController {

@@ -67,7 +67,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 @interface DCTConnectionController (DCTConnectionQueue)
 - (void)dctConnectionQueue_setQueued;
 - (void)dctConnectionQueue_attachToExistingConnectionController:(DCTConnectionController *)existingConnectionController;
-- (void)dctConnectionQueue_start;
 @end
 
 
@@ -340,7 +339,7 @@ static NSMutableArray *removalBlocks = nil;
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountIncreasedNotification object:self];
 	
-	[connectionController dctConnectionQueue_start];
+	[connectionController start];
 }
 
 @end

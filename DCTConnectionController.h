@@ -492,6 +492,14 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 - (BOOL)isReturnedObjectLoaded;
 
+
+
+
+/// @name For the queue's use only
+
+- (void)start;
+
+
 @end
 
 #import "DCTConnectionController+Delegate.h"
