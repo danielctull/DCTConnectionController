@@ -375,8 +375,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	NSAssert(handler != nil, @"Handler should not be nil.");
 	
-	if (self.cancelled) handler(self.status);
-	
 	if (!statusChangeBlocks) statusChangeBlocks = [[NSMutableArray alloc] initWithCapacity:1];
 	
 	[statusChangeBlocks addObject:[handler copy]];
