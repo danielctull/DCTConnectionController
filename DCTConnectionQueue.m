@@ -55,10 +55,6 @@ NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2)
 
 NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConnectionQueueConnectionCountChangedNotification";
 NSString *const DCTConnectionQueueActiveConnectionCountChangedNotification = @"DCTConnectionQueueActiveConnectionCountChangedNotification";
-
-NSString *const DCTConnectionQueueActiveConnectionCountKey = @"activeConnectionCount";
-NSString *const DCTConnectionQueueConnectionCountKey = @"connectionCount";
-
 NSString *const DCTConnectionQueueActiveConnectionCountIncreasedNotification = @"DCTConnectionQueueActiveConnectionCountIncreasedNotification";
 NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @"DCTConnectionQueueActiveConnectionCountDecreasedNotification";
 
@@ -129,22 +125,14 @@ static NSMutableArray *removalBlocks = nil;
 		
 		if (![queue.dctInternal_queuedConnectionControllers containsObject:connectionController]) return;
 		
-		[queue willChangeValueForKey:DCTConnectionQueueConnectionCountKey];
-		[queue willChangeValueForKey:DCTConnectionQueueConnectionCountKey];
 		[queue.dctInternal_queuedConnectionControllers removeObject:connectionController];
-		[queue didChangeValueForKey:DCTConnectionQueueConnectionCountKey];
-		[queue didChangeValueForKey:DCTConnectionQueueConnectionCountKey];
 	}];
 	
 	[self addRemovalBlock:^(DCTConnectionQueue *queue, DCTConnectionController *connectionController) {
 		
 		if (![queue.dctInternal_activeConnectionControllers containsObject:connectionController]) return;
 		
-		[queue willChangeValueForKey:DCTConnectionQueueActiveConnectionCountKey];
-		[queue willChangeValueForKey:DCTConnectionQueueConnectionCountKey];
 		[queue.dctInternal_activeConnectionControllers removeObject:connectionController];
-		[queue didChangeValueForKey:DCTConnectionQueueActiveConnectionCountKey];
-		[queue didChangeValueForKey:DCTConnectionQueueConnectionCountKey];
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountDecreasedNotification 
 															object:queue];
@@ -236,10 +224,7 @@ static NSMutableArray *removalBlocks = nil;
 		}
 	}];
 	
-	[self dct_changeValueForKey:DCTConnectionQueueConnectionCountKey withChange:^{
-		[self.dctInternal_queuedConnectionControllers addObject:connectionController];
-	}];
-	
+	[self.dctInternal_queuedConnectionControllers addObject:connectionController];
 	[self.dctInternal_queuedConnectionControllers sortUsingComparator:compareConnections];
 	
 	if (active) [self dctInternal_runNextConnection];
@@ -333,10 +318,8 @@ static NSMutableArray *removalBlocks = nil;
 
 - (void)dctInternal_dequeueAndStartConnection:(DCTConnectionController *)connectionController {
 	
-	[self dct_changeValueForKey:DCTConnectionQueueActiveConnectionCountKey withChange:^{
-		[self removeConnectionController:connectionController];
-		[self.dctInternal_activeConnectionControllers addObject:connectionController];
-	}];
+	[self removeConnectionController:connectionController];
+	[self.dctInternal_activeConnectionControllers addObject:connectionController];
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountIncreasedNotification object:self];
 	
