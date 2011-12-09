@@ -84,12 +84,7 @@ NSString * const DCTInternalConnectionControllerTypeString[] = {
 
 @property (nonatomic, readwrite) DCTConnectionControllerStatus status;
 
-- (void)dctInternal_connectionDidRespond;
-- (void)dctInternal_connectionDidFail;
-- (void)dctInternal_connectionDidFinishLoading;
-- (void)dctInternal_connectionDidGetCancelled;
-- (void)dctInternal_nilURLConnection; //clean up
-
+- (void)dctInternal_nilURLConnection;
 - (void)dctInternal_calculatePercentDownloaded;
 
 @property (nonatomic, readonly) NSString *dctInternal_downloadPath;
@@ -191,7 +186,7 @@ static NSMutableArray *deallocBlocks = nil;
 
 - (void)cancel {
 	[self dctInternal_nilURLConnection];
-	[self dctInternal_connectionDidGetCancelled];
+	self.status = DCTConnectionControllerStatusCancelled;
 }
 
 - (void)start {
@@ -216,7 +211,7 @@ static NSMutableArray *deallocBlocks = nil;
 	
 	[existingConnectionController addResponseHandler:^(NSURLResponse *response) {
 		self.returnedResponse = response;
-		[self dctInternal_connectionDidRespond];
+		self.status = DCTConnectionControllerStatusResponded;
 	}];
 	
 	__dct_weak DCTConnectionController *cc = existingConnectionController;
@@ -227,16 +222,16 @@ static NSMutableArray *deallocBlocks = nil;
 		if ([cc isReturnedObjectLoaded])
 			self.returnedObject = cc.returnedObject;
 		
-		[self dctInternal_connectionDidFinishLoading];
+		self.status = DCTConnectionControllerStatusFinished;
 	}];
 	
 	[existingConnectionController addFailureHandler:^(NSError *error) {
 		self.returnedError = error;
-		[self dctInternal_connectionDidFail];
+		self.status = DCTConnectionControllerStatusFailed;
 	}];
 	
 	[existingConnectionController addCancelationHandler:^(void) {
-		[self dctInternal_connectionDidGetCancelled];
+		self.status = DCTConnectionControllerStatusCancelled;
 	}];
 	
 	return NO;
@@ -280,15 +275,15 @@ static NSMutableArray *deallocBlocks = nil;
 }
 
 - (void)connectionDidFinishLoading {
-	[self dctInternal_connectionDidFinishLoading];
+	self.status = DCTConnectionControllerStatusFinished;
 }
 
 - (void)connectionDidReceiveResponse {
-	[self dctInternal_connectionDidRespond];
+	self.status = DCTConnectionControllerStatusResponded;
 }
 
 - (void)connectionDidFail {
-	[self dctInternal_connectionDidFail];
+	self.status = DCTConnectionControllerStatusFailed;
 }
 
 #pragma mark - DCTConnectionController: Setters
@@ -297,7 +292,7 @@ static NSMutableArray *deallocBlocks = nil;
 	
 	if (newStatus == status) return;
 	
-	if (self.ended) return; 
+	if (self.ended) return;
 	
 	[self dct_changeValueForKey:@"status" withChange:^{
 		status = newStatus;
@@ -436,31 +431,6 @@ static NSMutableArray *deallocBlocks = nil;
 }
 
 #pragma mark - Internal methods
-
-- (void)dctInternal_connectionDidRespond {
-	self.status = DCTConnectionControllerStatusResponded;
-}
-
-- (void)dctInternal_connectionDidFinishLoading {
-	
-	if (self.ended) return;
-	
-	self.status = DCTConnectionControllerStatusFinished;
-}
-
-- (void)dctInternal_connectionDidFail {
-	
-	if (self.ended) return;
-	
-	self.status = DCTConnectionControllerStatusFailed;
-}
-
-- (void)dctInternal_connectionDidGetCancelled {
-	
-	if (self.ended) return;
-	
-	self.status = DCTConnectionControllerStatusCancelled;
-}
 
 - (void)dctInternal_nilURLConnection {
 	[self.URLConnection cancel];
