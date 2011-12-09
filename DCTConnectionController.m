@@ -96,12 +96,9 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 - (void)dctInternal_connectionDidFail;
 - (void)dctInternal_connectionDidFinishLoading;
 - (void)dctInternal_cancelled;
-- (void)dctInternal_cleanup;
 
 - (void)dctInternal_calculatePercentDownloaded;
 
-- (void)dctInternal_addDependent:(DCTConnectionController *)connectionController;
-- (void)dctInternal_removeDependent:(DCTConnectionController *)connectionController;
 - (void)dctInternal_setURL:(NSURL *)newURL;
 
 @property (nonatomic, readonly) NSString *dctInternal_downloadPath;
@@ -114,7 +111,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 @implementation DCTConnectionController {
 	
 	__strong NSMutableSet *dependencies;
-	__strong NSMutableSet *dependents;
 	
 	__strong NSMutableArray *responseBlocks;
 	__strong NSMutableArray *completionBlocks;
@@ -207,18 +203,22 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	NSAssert(connectionController != nil, @"connectionController is nil");
 	
-	if (!dependencies) dependencies = [[NSMutableSet alloc] initWithCapacity:1];
-	
 	[dependencies addObject:connectionController];
-	[connectionController dctInternal_addDependent:self];
+	
+	__weak DCTConnectionController *weakCC = connectionController;
+	[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
+		if (weakCC.ended)
+			[self removeDependency:weakCC];
+	}];
 }
 
 - (void)removeDependency:(DCTConnectionController *)connectionController {
 	
+	NSAssert(connectionController != nil, @"connectionController is nil");
+	
 	if (![dependencies containsObject:connectionController]) return;
 	
 	[dependencies removeObject:connectionController];
-	[connectionController dctInternal_removeDependent:self];
 }
 
 #pragma mark - DCTConnectionController: Subclass methods
@@ -464,8 +464,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerDidFinishNotification object:self];
 	
-	[self dctInternal_cleanup];
-	
 	self.status = DCTConnectionControllerStatusFinished;
 }
 
@@ -481,8 +479,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		block(error);
 	
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerDidFailNotification object:self];
-
-	[self dctInternal_cleanup];
 	
 	self.status = DCTConnectionControllerStatusFailed;
 }
@@ -495,18 +491,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		block();
 		
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerWasCancelledNotification object:self];
-
-	[self dctInternal_cleanup];
 	
 	self.status = DCTConnectionControllerStatusCancelled;
-}
-
-- (void)dctInternal_cleanup {
-	
-	for (DCTConnectionController *dependent in dependents)
-		[dependent removeDependency:self];
-	
-	dependents = nil;
 }
 
 - (void)dctInternal_reset {
@@ -529,42 +515,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 #pragma mark - Internal Getters
 
-- (NSMutableArray *)dctInternal_responseBlocks {
-	
-	if (!responseBlocks) responseBlocks = [[NSMutableArray alloc] initWithCapacity:1];
-	
-	return responseBlocks;
-}
-
-- (NSMutableArray *)dctInternal_completionBlocks {
-	
-	if (!completionBlocks) completionBlocks = [[NSMutableArray alloc] initWithCapacity:1];
-	
-	return completionBlocks;
-}
-
-- (NSMutableArray *)dctInternal_failureBlocks {
-	
-	if (!failureBlocks) failureBlocks = [[NSMutableArray alloc] initWithCapacity:1];
-	
-	return failureBlocks;
-}
-
-- (NSMutableArray *)dctInternal_cancelationBlocks {
-	
-	if (!cancelationBlocks) cancelationBlocks = [[NSMutableArray alloc] initWithCapacity:1];
-	
-	return cancelationBlocks;
-}
-
-- (NSMutableArray *)dctInternal_statusChangeBlocks {
-	
-	if (!statusChangeBlocks) statusChangeBlocks = [[NSMutableArray alloc] initWithCapacity:1];
-	
-	return statusChangeBlocks;
-	
-}
-
 - (BOOL)dctInternal_hasReturnedObject {
 	if (returnedObject == nil) return NO;
 	
@@ -580,17 +530,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	[self dct_changeValueForKey:@"URL" withChange:^{
 		URL = newURL;
 	}];
-}
-
-- (void)dctInternal_addDependent:(DCTConnectionController *)connectionController {
-	
-	if (!dependents) dependents = [[NSMutableSet alloc] initWithCapacity:1];
-	
-	[dependents addObject:connectionController];
-}
-
-- (void)dctInternal_removeDependent:(DCTConnectionController *)connectionController {
-	[dependents removeObject:connectionController];
 }
 
 @end
