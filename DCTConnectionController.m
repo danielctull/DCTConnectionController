@@ -83,31 +83,32 @@ NSString * const DCTInternalConnectionControllerTypeString[] = {
 - (void)dctInternal_reset;
 
 @property (nonatomic, readwrite) DCTConnectionControllerStatus status;
+@property (nonatomic, readonly) NSString *dctInternal_downloadPath;
 
 - (void)dctInternal_nilURLConnection;
 - (void)dctInternal_calculatePercentDownloaded;
-
-@property (nonatomic, readonly) NSString *dctInternal_downloadPath;
-
 @end
 
-
 @implementation DCTConnectionController {
-	
+	__strong NSString *dctInternal_downloadPath;
 	__strong NSMutableSet *dependencies;
 	__strong NSMutableArray *statusChangeBlocks;
-	
-	__dct_weak DCTConnectionQueue *queue;
-	
-	__strong NSFileHandle *fileHandle; // Used if a path is given.
-	float contentLength, downloadedLength;
-	
-	__strong NSString *dctInternal_downloadPath;
+	__strong NSFileHandle *fileHandle;
+	float contentLength;
+	float downloadedLength;
 }
 
-@synthesize status, type, priority, percentDownloaded;
-@synthesize returnedObject, returnedError, returnedResponse;
-@synthesize URL, URLRequest, URLConnection;
+@synthesize queue;
+@synthesize status;
+@synthesize type;
+@synthesize priority;
+@synthesize percentDownloaded;
+@synthesize returnedObject;
+@synthesize returnedError;
+@synthesize returnedResponse;
+@synthesize URL;
+@synthesize URLRequest;
+@synthesize URLConnection;
 
 static NSMutableArray *initBlocks = nil;
 static NSMutableArray *deallocBlocks = nil;
@@ -288,23 +289,6 @@ static NSMutableArray *deallocBlocks = nil;
 
 #pragma mark - DCTConnectionController: Setters
 
-- (void)setStatus:(DCTConnectionControllerStatus)newStatus {
-	
-	if (newStatus <= status
-		&& newStatus != DCTConnectionControllerStatusNotStarted
-		&& newStatus != DCTConnectionControllerStatusQueued)
-		return;
-	
-	if (self.ended) return;
-	
-	[self willChangeValueForKey:@"status"];
-	status = newStatus;
-	[self didChangeValueForKey:@"status"];
-	
-	for (DCTConnectionControllerStatusBlock block in statusChangeBlocks)
-		block(newStatus);
-}
-
 - (void)setURLRequest:(NSURLRequest *)newURLRequest {
 	
 	if (self.started) return;
@@ -328,10 +312,6 @@ static NSMutableArray *deallocBlocks = nil;
 	return (returnedObject != nil);
 }
 
-- (DCTConnectionQueue *)queue {
-	return queue;
-}
-
 - (NSURLRequest *)URLRequest {
 	
 	if (!URLRequest) [self loadURLRequest];
@@ -341,9 +321,8 @@ static NSMutableArray *deallocBlocks = nil;
 
 - (id)returnedObject {
 	
-	if (!returnedObject) {
+	if (!returnedObject)
 		returnedObject = [[NSData alloc] initWithContentsOfFile:self.dctInternal_downloadPath];
-	}
 	
 	return returnedObject;
 }
@@ -367,7 +346,24 @@ static NSMutableArray *deallocBlocks = nil;
 	return dctInternal_downloadPath;
 }
 
-#pragma mark - DCTConnectionController: Block methods
+#pragma mark - DCTConnectionController: Status
+
+- (void)setStatus:(DCTConnectionControllerStatus)newStatus {
+	
+	if (newStatus <= status
+		&& newStatus != DCTConnectionControllerStatusNotStarted
+		&& newStatus != DCTConnectionControllerStatusQueued)
+		return;
+	
+	if (self.ended) return;
+	
+	[self willChangeValueForKey:@"status"];
+	status = newStatus;
+	[self didChangeValueForKey:@"status"];
+	
+	for (DCTConnectionControllerStatusBlock block in statusChangeBlocks)
+		block(newStatus);
+}
 
 - (void)addStatusChangeHandler:(DCTConnectionControllerStatusBlock)handler {
 	

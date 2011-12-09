@@ -262,27 +262,6 @@ extern NSString *const DCTConnectionControllerTypeString[];
 - (void)removeDependency:(DCTConnectionController *)connectionController;
 
 
-
-#pragma mark - Event Blocks
-
-/** Adds a status change handler.
- 
- DCTConnectionControllerStatusBlock is defined as such:
- 
- `typedef void (^DCTConnectionControllerStatusBlock) ();`
- 
- @param statusChangeHandler The cancelation block to add.
- */
-- (void)addStatusChangeHandler:(DCTConnectionControllerStatusBlock)statusChangeHandler;
-
-
-
-
-
-
-
-
-
 #pragma mark - Managing the Connection
 
 /// @name Managing the Connection
@@ -408,6 +387,16 @@ extern NSString *const DCTConnectionControllerTypeString[];
  */
 @property (nonatomic, readonly) DCTConnectionControllerStatus status;
 
+/** Adds a status change handler.
+ 
+ DCTConnectionControllerStatusBlock is defined as such:
+ 
+ `typedef void (^DCTConnectionControllerStatusBlock) ();`
+ 
+ @param statusChangeHandler The cancelation block to add.
+ */
+- (void)addStatusChangeHandler:(DCTConnectionControllerStatusBlock)statusChangeHandler;
+
 @property (nonatomic, strong, readonly) NSNumber *percentDownloaded;
 
 /** The URL connection that is being run by the connection controller;
@@ -427,7 +416,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 @property (nonatomic, strong) NSError *returnedError;
 
 
-@property (nonatomic, readonly) DCTConnectionQueue *queue;
+@property (nonatomic, dct_weak, readonly) DCTConnectionQueue *queue;
 
 - (BOOL)isReturnedObjectLoaded;
 

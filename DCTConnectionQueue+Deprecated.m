@@ -12,14 +12,6 @@
 
 @implementation DCTConnectionQueue (Deprecated)
 
-- (void)addConnectionController:(DCTConnectionController *)connectionController {
-	[connectionController connectOnQueue:self];
-}
-
-- (void)removeConnectionController:(DCTConnectionController *)connectionController {
-	[connectionController cancel];
-}
-
 - (void)requeueConnectionController:(DCTConnectionController *)connectionController {
 	[connectionController requeue];
 }
