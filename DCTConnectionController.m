@@ -101,8 +101,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 @property (nonatomic, readonly) NSString *dctInternal_downloadPath;
 
-@property (nonatomic, readonly) BOOL dctInternal_hasReturnedObject;
-
 @end
 
 
@@ -278,6 +276,10 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 }
 
 #pragma mark - DCTConnectionController: Getters
+
+- (BOOL)isReturnedObjectLoaded {
+	return (returnedObject != nil);
+}
 
 - (DCTConnectionQueue *)queue {
 	return queue;
@@ -509,14 +511,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	}];
 }
 
-#pragma mark - Internal Getters
-
-- (BOOL)dctInternal_hasReturnedObject {
-	if (returnedObject == nil) return NO;
-	
-	return YES;
-}
-
 @end
 
 @implementation DCTConnectionController (DCTConnectionQueue)
@@ -554,8 +548,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	[existingConnectionController addFinishHandler:^() {
 		dctInternal_downloadPath = cc.dctInternal_downloadPath;
 		
-		if (cc.dctInternal_hasReturnedObject)
-			self.returnedObject = cc.returnedObject;		
+		if ([cc isReturnedObjectLoaded])
+			self.returnedObject = cc.returnedObject;
 		
 		[self dctInternal_connectionDidFinishLoading];
 	}];

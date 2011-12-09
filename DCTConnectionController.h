@@ -490,6 +490,8 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 @property (nonatomic, readonly) DCTConnectionQueue *queue;
 
+- (BOOL)isReturnedObjectLoaded;
+
 @end
 
 #import "DCTConnectionController+Delegate.h"
