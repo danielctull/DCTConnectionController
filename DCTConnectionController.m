@@ -100,11 +100,6 @@ NSString * const DCTInternalConnectionControllerTypeString[] = {
 @implementation DCTConnectionController {
 	
 	__strong NSMutableSet *dependencies;
-	
-	__strong NSMutableArray *responseBlocks;
-	__strong NSMutableArray *completionBlocks;
-	__strong NSMutableArray *failureBlocks;
-	__strong NSMutableArray *cancelationBlocks;
 	__strong NSMutableArray *statusChangeBlocks;
 	
 	__dct_weak DCTConnectionQueue *queue;
@@ -378,50 +373,6 @@ static NSMutableArray *deallocBlocks = nil;
 
 #pragma mark - DCTConnectionController: Block methods
 
-- (void)addResponseHandler:(DCTConnectionControllerResponseBlock)handler {
-	
-	NSAssert(handler != nil, @"Handler should not be nil.");
-	
-	if (self.didReceiveResponse) handler(self.returnedResponse);
-	
-	if (!responseBlocks) responseBlocks = [[NSMutableArray alloc] initWithCapacity:1];
-	
-	[responseBlocks addObject:[handler copy]];
-}
-
-- (void)addFinishHandler:(DCTConnectionControllerFinishBlock)handler {
-	
-	NSAssert(handler != nil, @"Handler should not be nil.");
-	
-	if (self.finished) handler();
-	
-	if (!completionBlocks) completionBlocks = [[NSMutableArray alloc] initWithCapacity:1];
-	
-	[completionBlocks addObject:[handler copy]];
-}
-
-- (void)addFailureHandler:(DCTConnectionControllerFailureBlock)handler {
-	
-	NSAssert(handler != nil, @"Handler should not be nil.");
-	
-	if (self.failed) handler(self.returnedError);
-	
-	if (!failureBlocks) failureBlocks = [[NSMutableArray alloc] initWithCapacity:1];
-	
-	[failureBlocks addObject:[handler copy]];
-}
-
-- (void)addCancelationHandler:(DCTConnectionControllerCancelationBlock)handler {
-	
-	NSAssert(handler != nil, @"Handler should not be nil.");
-	
-	if (self.cancelled) handler();
-	
-	if (!cancelationBlocks) cancelationBlocks = [[NSMutableArray alloc] initWithCapacity:1];
-	
-	[cancelationBlocks addObject:[handler copy]];
-}
-
 - (void)addStatusChangeHandler:(DCTConnectionControllerStatusBlock)handler {
 	
 	NSAssert(handler != nil, @"Handler should not be nil.");
@@ -487,19 +438,12 @@ static NSMutableArray *deallocBlocks = nil;
 #pragma mark - Internal methods
 
 - (void)dctInternal_connectionDidRespond {
-	
-	for (DCTConnectionControllerResponseBlock block in responseBlocks)
-		block(self.returnedResponse);
-	
 	self.status = DCTConnectionControllerStatusResponded;
 }
 
 - (void)dctInternal_connectionDidFinishLoading {
 	
 	if (self.ended) return;
-	
-	for (DCTConnectionControllerFinishBlock block in completionBlocks)
-		block();
 	
 	self.status = DCTConnectionControllerStatusFinished;
 }
@@ -508,18 +452,12 @@ static NSMutableArray *deallocBlocks = nil;
 	
 	if (self.ended) return;
 	
-	for (DCTConnectionControllerFailureBlock block in failureBlocks)
-		block(self.returnedError);
-	
 	self.status = DCTConnectionControllerStatusFailed;
 }
 
 - (void)dctInternal_connectionDidGetCancelled {
 	
 	if (self.ended) return;
-	
-	for (DCTConnectionControllerCancelationBlock block in cancelationBlocks)
-		block();
 	
 	self.status = DCTConnectionControllerStatusCancelled;
 }
