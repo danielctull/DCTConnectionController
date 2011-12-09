@@ -107,22 +107,6 @@ typedef void (^DCTConnectionControllerCancelationBlock) ();
 typedef void (^DCTConnectionControllerFinishBlock) ();
 typedef void (^DCTConnectionControllerStatusBlock) (DCTConnectionControllerStatus status);
 
-/** Name of the notification sent out when the connection has successfully completed.
- */
-extern NSString *const DCTConnectionControllerDidFinishNotification;
-
-/** Name of the notification sent out when the connection has failed.
- */
-extern NSString *const DCTConnectionControllerDidFailNotification;
-
-/** Name of the notification sent out when the connection has recieved a response.
- */
-extern NSString *const DCTConnectionControllerDidReceiveResponseNotification;
-
-extern NSString *const DCTConnectionControllerWasCancelledNotification;
-
-extern NSString *const DCTConnectionControllerStatusChangedNotification;
-
 extern NSString *const DCTConnectionControllerTypeString[];
 
 
@@ -500,7 +484,12 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 - (void)start;
 
+/// @name Extension methods
+
++ (void)addInitBlock:(void(^)(DCTConnectionController *connectionController))block;
++ (void)addDeallocBlock:(void(^)(DCTConnectionController *connectionController))block;
 
 @end
 
 #import "DCTConnectionController+Delegate.h"
+#import "DCTConnectionController+Notification.h"

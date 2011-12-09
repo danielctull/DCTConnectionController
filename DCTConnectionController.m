@@ -75,12 +75,6 @@ NSString * const DCTInternalConnectionControllerTypeString[] = {
 	@"PATCH"
 };
 
-NSString *const DCTConnectionControllerDidFinishNotification = @"DCTConnectionControllerDidFinishNotification";
-NSString *const DCTConnectionControllerDidFailNotification = @"DCTConnectionControllerDidFailNotification";
-NSString *const DCTConnectionControllerDidReceiveResponseNotification = @"DCTConnectionControllerDidReceiveResponseNotification";
-NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectionControllerWasCancelledNotification";
-NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnectionControllerStatusChangedNotification";
-
 @interface DCTConnectionController (DCTConnectionQueue)
 - (void)dctConnectionQueue_setQueued;
 @end
@@ -125,6 +119,25 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 @synthesize returnedObject, returnedError, returnedResponse;
 @synthesize URL, URLRequest, URLConnection;
 
+static NSMutableArray *initBlocks = nil;
+static NSMutableArray *deallocBlocks = nil;
+
++ (void)addInitBlock:(void(^)(DCTConnectionController *))block {
+	static dispatch_once_t sharedToken;
+	dispatch_once(&sharedToken, ^{
+		initBlocks = [[NSMutableArray alloc] initWithCapacity:1];
+	});
+	[initBlocks addObject:[block copy]];
+}
+
++ (void)addDeallocBlock:(void(^)(DCTConnectionController *))block {
+	static dispatch_once_t sharedToken;
+	dispatch_once(&sharedToken, ^{
+		deallocBlocks = [[NSMutableArray alloc] initWithCapacity:1];
+	});
+	[deallocBlocks addObject:[block copy]];
+}
+
 #pragma mark - NSObject
 
 - (void)dealloc {
@@ -136,6 +149,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	if ([fileManager fileExistsAtPath:self.dctInternal_downloadPath] && ![fileManager removeItemAtPath:self.dctInternal_downloadPath error:&error])
 		NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), error);
 	
+	for (void(^block)(DCTConnectionController *) in deallocBlocks)
+		block(self);
 }
 
 - (id)init {
@@ -143,6 +158,9 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	priority = DCTConnectionControllerPriorityMedium;
 	percentDownloaded = [[NSNumber alloc] initWithInteger:0];
+	
+	for (void(^block)(DCTConnectionController *) in initBlocks)
+		block(self);
 	
 	return self;
 }
@@ -293,8 +311,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		DCTConnectionControllerStatusBlock block = obj;
 		block(newStatus);
 	}];
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerStatusChangedNotification object:self];
 }
 
 - (void)setURLRequest:(NSURLRequest *)newURLRequest {
@@ -468,10 +484,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
 	self.returnedError = error;
-	
 	[connection cancel];
 	connection = nil;
-	
     [self connectionDidFail];
 }
 
@@ -479,12 +493,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 - (void)dctInternal_connectionDidRespond {
 	
-	NSURLResponse *response = self.returnedResponse;
-	
 	for (DCTConnectionControllerResponseBlock block in responseBlocks)
-		block(response);
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerDidReceiveResponseNotification object:self];
+		block(self.returnedResponse);
 	
 	self.status = DCTConnectionControllerStatusResponded;
 }
@@ -498,8 +508,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	for (DCTConnectionControllerFinishBlock block in completionBlocks)
 		block();
 	
-	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerDidFinishNotification object:self];
-	
 	self.status = DCTConnectionControllerStatusFinished;
 }
 
@@ -509,12 +517,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	[self dctInternal_connectionDidEnd];
 	
-	NSError *error = self.returnedError;
-	
 	for (DCTConnectionControllerFailureBlock block in failureBlocks)
-		block(error);
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerDidFailNotification object:self];
+		block(self.returnedError);
 	
 	self.status = DCTConnectionControllerStatusFailed;
 }
@@ -527,8 +531,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	
 	for (DCTConnectionControllerCancelationBlock block in cancelationBlocks)
 		block();
-		
-	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionControllerWasCancelledNotification object:self];
 	
 	self.status = DCTConnectionControllerStatusCancelled;
 }
