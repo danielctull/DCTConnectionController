@@ -75,7 +75,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 @implementation DCTConnectionQueue {
 	BOOL active;
-	BOOL addSwitch;
 	dispatch_queue_t queue;
 }
 
@@ -170,8 +169,6 @@ static NSMutableArray *removalBlocks = nil;
 	[self.activeConnectionControllers makeObjectsPerformSelector:@selector(requeue)];
 }
 
-#pragma mark - DCTConnectionQueue Accessors
-
 - (NSArray *)activeConnectionControllers {
 	return [self.dctInternal_activeConnectionControllers copy];
 }
@@ -184,8 +181,6 @@ static NSMutableArray *removalBlocks = nil;
 - (NSArray *)connectionControllers {
 	return [self.dctInternal_activeConnectionControllers arrayByAddingObjectsFromArray:self.dctInternal_queuedConnectionControllers];
 }
-
-#pragma mark - Managing the Queue
 
 - (void)addConnectionController:(DCTConnectionController *)connectionController {
 	
