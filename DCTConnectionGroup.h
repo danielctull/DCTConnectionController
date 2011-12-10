@@ -113,6 +113,11 @@ typedef void (^DCTConnectionGroupCompletionBlock) (NSArray *finishedConnectionCo
 
 
 @interface DCTConnectionQueue (DCTConnectionGroup)
+
+/// @name Connection Groups
+
 @property (nonatomic, readonly) NSArray *connectionGroups;
+- (void)addConnectionGroup:(DCTConnectionGroup *)connectionGroup;
+
 @end
 

@@ -40,7 +40,7 @@
 #import <objc/runtime.h>
 
 @interface DCTConnectionQueue ()
-- (void)dctConnectionGroup_addConnectionGroup:(DCTConnectionGroup *)connectionGroup;
+- (void)dctInternal_addConnectionGroup:(DCTConnectionGroup *)connectionGroup;
 - (NSMutableArray *)dctInternal_groups;
 @end
 
@@ -87,7 +87,7 @@
 		return;
 	}
 	
-	[queue dctConnectionGroup_addConnectionGroup:self];
+	[queue dctInternal_addConnectionGroup:self];
 }
 
 #pragma mark - Internal
@@ -163,6 +163,10 @@
 
 - (NSArray *)connectionGroups {
 	return [self.dctInternal_groups copy];
+}
+
+- (void)addConnectionGroup:(DCTConnectionGroup *)connectionGroup {
+	[connectionGroup connectOnQueue:self];
 }
 
 - (void)dctConnectionGroup_addConnectionGroup:(DCTConnectionGroup *)connectionGroup {
