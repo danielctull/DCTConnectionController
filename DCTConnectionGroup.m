@@ -169,7 +169,7 @@
 	[connectionGroup connectOnQueue:self];
 }
 
-- (void)dctConnectionGroup_addConnectionGroup:(DCTConnectionGroup *)connectionGroup {
+- (void)dctInternal_addConnectionGroup:(DCTConnectionGroup *)connectionGroup {
 	
 	NSMutableArray *groups = [self dctInternal_groups];
 	
