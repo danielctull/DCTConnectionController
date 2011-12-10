@@ -38,12 +38,7 @@
 #import "DCTConnectionQueue+Singleton.h"
 #import "DCTConnectionController+Equality.h"
 #import "DCTConnectionController+UsefulChecks.h"
-#import "NSObject+DCTKVOExtras.h"
 #import "DCTRESTConnectionController.h"
-
-#if !defined(dctfoundation) || !defined(dctfoundation_2_0_1) || dctfoundation < dctfoundation_2_0_1
-#warning "DCTFoundation 2.0.1 is required with this version of DCTConnectionController. Update at https://github.com/danielctull/DCTFoundation"
-#endif
 
 NSString * const DCTInternalConnectionControllerStatusString[] = {
 	@"NotStarted",
@@ -453,9 +448,9 @@ static NSMutableArray *deallocBlocks = nil;
 	
 	if (downloadedLength > contentLength) downloadedLength = contentLength;
 	
-	[self dct_changeValueForKey:@"percentDownloaded" withChange:^{
-		percentDownloaded = [[NSNumber alloc] initWithFloat:(downloadedLength / contentLength)];
-	}];
+	[self willChangeValueForKey:@"percentDownloaded"];
+	percentDownloaded = [[NSNumber alloc] initWithFloat:(downloadedLength / contentLength)];
+	[self didChangeValueForKey:@"percentDownloaded"];
 }
 
 @end
