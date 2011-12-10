@@ -35,7 +35,6 @@
  */
 
 #import "DCTConnectionQueue.h"
-#import "NSObject+DCTKVOExtras.h"
 #import "DCTConnectionController+UsefulChecks.h"
 #import "DCTConnectionGroup.h"
 
