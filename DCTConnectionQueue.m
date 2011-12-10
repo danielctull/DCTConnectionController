@@ -131,10 +131,6 @@ static NSMutableArray *removalBlocks = nil;
 		
 		[queue dctInternal_runNextConnection];
 	}];
-	
-	
-	
-	
 }
 
 #pragma mark - NSObject
