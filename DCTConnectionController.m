@@ -244,13 +244,6 @@ static NSMutableArray *deallocBlocks = nil;
 	}
 }
 
-- (BOOL)shouldStartWithExistingConnectionControllerInQueue:(DCTConnectionController *)existingConnectionController {
-	
-	
-	
-	return NO;
-}
-
 #pragma mark - DCTConnectionController: Dependency
 
 - (NSArray *)dependencies {

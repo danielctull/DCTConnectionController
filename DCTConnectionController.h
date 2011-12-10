@@ -421,9 +421,6 @@ extern NSString *const DCTConnectionControllerTypeString[];
 - (BOOL)isReturnedObjectLoaded;
 
 
-- (BOOL)shouldStartWithExistingConnectionControllerInQueue:(DCTConnectionController *)existingConnectionController;
-
-
 /// @name For the queue's use only
 
 - (void)start;
