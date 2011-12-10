@@ -158,7 +158,7 @@
 		objc_setAssociatedObject(self, _cmd, array, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 	}
 	
-	return objc_getAssociatedObject(self, _cmd);
+	return array;
 }
 
 - (NSArray *)connectionGroups {
