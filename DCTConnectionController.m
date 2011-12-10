@@ -75,10 +75,6 @@ NSString * const DCTInternalConnectionControllerTypeString[] = {
 	@"PATCH"
 };
 
-@interface DCTConnectionController (DCTConnectionQueue)
-- (void)dctConnectionQueue_setQueued;
-@end
-
 @interface DCTConnectionController () <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 - (void)dctInternal_reset;
 
@@ -175,8 +171,53 @@ static NSMutableArray *deallocBlocks = nil;
 #pragma mark - DCTConnectionController: Managing the connection
 
 - (void)connectOnQueue:(DCTConnectionQueue *)theQueue {
+	
 	queue = theQueue;
-	[queue addConnectionController:self];
+	
+	NSUInteger existingConnectionControllerIndex = [queue.connectionControllers indexOfObject:self];
+	
+	if (existingConnectionControllerIndex == NSNotFound) {
+		[queue addConnectionController:self];
+		self.status = DCTConnectionControllerStatusQueued;
+		return;	
+	}
+	
+	DCTConnectionController *existingConnectionController = [queue.connectionControllers objectAtIndex:existingConnectionControllerIndex];
+		
+	// If it's the exact same object, lets not add it again. This could happen if -connectOnQueue: is called more than once.
+	if (existingConnectionController == self) return;
+	
+	// Not sure why it's this way around.
+	if (existingConnectionController.priority > self.priority)
+		existingConnectionController.priority = self.priority;
+	
+	self.status = existingConnectionController.status;
+	
+	__dct_weak DCTConnectionController *weakCC = existingConnectionController;
+	[existingConnectionController addStatusChangeHandler:^(DCTConnectionControllerStatus existingConnectionControllerStatus) {
+		
+		switch (existingConnectionControllerStatus) {
+				
+			case DCTConnectionControllerStatusResponded:
+				self.returnedResponse = weakCC.returnedResponse;
+				break;
+				
+			case DCTConnectionControllerStatusFinished:
+				dctInternal_downloadPath = weakCC.dctInternal_downloadPath;
+				if ([weakCC isReturnedObjectLoaded]) 
+					self.returnedObject = weakCC.returnedObject;
+				break;
+				
+			case DCTConnectionControllerStatusFailed:
+				self.returnedError = weakCC.returnedError;
+				break;
+				
+			default:
+				break;
+		}
+		
+		self.status = existingConnectionControllerStatus;
+	}];
 }
 
 - (void)requeue {
@@ -205,36 +246,7 @@ static NSMutableArray *deallocBlocks = nil;
 
 - (BOOL)shouldStartWithExistingConnectionControllerInQueue:(DCTConnectionController *)existingConnectionController {
 	
-	if (existingConnectionController.priority > self.priority)
-		existingConnectionController.priority = self.priority;
 	
-	self.status = existingConnectionController.status;
-	
-	__dct_weak DCTConnectionController *weakCC = existingConnectionController;
-	[existingConnectionController addStatusChangeHandler:^(DCTConnectionControllerStatus existingConnectionControllerStatus) {
-			
-		switch (existingConnectionControllerStatus) {
-				
-			case DCTConnectionControllerStatusResponded:
-				self.returnedResponse = weakCC.returnedResponse;
-				break;
-			
-			case DCTConnectionControllerStatusFinished:
-				dctInternal_downloadPath = weakCC.dctInternal_downloadPath;
-				if ([weakCC isReturnedObjectLoaded]) 
-					self.returnedObject = weakCC.returnedObject;
-				break;
-				
-			case DCTConnectionControllerStatusFailed:
-				self.returnedError = weakCC.returnedError;
-				break;
-				
-			default:
-				break;
-		}
-		
-		self.status = existingConnectionControllerStatus;
-	}];
 	
 	return NO;
 }
@@ -451,14 +463,6 @@ static NSMutableArray *deallocBlocks = nil;
 	[self dct_changeValueForKey:@"percentDownloaded" withChange:^{
 		percentDownloaded = [[NSNumber alloc] initWithFloat:(downloadedLength / contentLength)];
 	}];
-}
-
-@end
-
-@implementation DCTConnectionController (DCTConnectionQueue)
-
-- (void)dctConnectionQueue_setQueued {
-	self.status = DCTConnectionControllerStatusQueued;
 }
 
 @end

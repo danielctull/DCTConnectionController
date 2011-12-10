@@ -58,13 +58,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountChangedNotification = @"D
 NSString *const DCTConnectionQueueActiveConnectionCountIncreasedNotification = @"DCTConnectionQueueActiveConnectionCountIncreasedNotification";
 NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @"DCTConnectionQueueActiveConnectionCountDecreasedNotification";
 
-
-
-@interface DCTConnectionController (DCTConnectionQueue)
-- (void)dctConnectionQueue_setQueued;
-@end
-
-
 @interface DCTConnectionQueue ()
 
 - (void)dctInternal_runNextConnection;
@@ -83,7 +76,7 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 @implementation DCTConnectionQueue {
 	BOOL active;
-	
+	BOOL addSwitch;
 	dispatch_queue_t queue;
 }
 
@@ -201,20 +194,13 @@ static NSMutableArray *removalBlocks = nil;
 
 - (void)addConnectionController:(DCTConnectionController *)connectionController {
 	
-	NSUInteger existingConnectionControllerIndex = [self.connectionControllers indexOfObject:self];
-	
-	if (existingConnectionControllerIndex != NSNotFound) {
-		DCTConnectionController *existingConnectionController = [self.connectionControllers objectAtIndex:existingConnectionControllerIndex];
-		
-		// If it's the exact same object, lets not add it again. This could happen if -connectOnQueue: is called more than once.
-		if (existingConnectionController == connectionController) return;
-		
-		if (![connectionController shouldStartWithExistingConnectionControllerInQueue:existingConnectionController])
-			return;
+	NSString *previousSymbol = [[NSThread callStackSymbols] objectAtIndex:1];
+	SEL connectOnQueue = @selector(connectOnQueue:);
+	if ([previousSymbol rangeOfString:NSStringFromSelector(connectOnQueue)].location == NSNotFound) {
+		[connectionController connectOnQueue:self];
+		return;
 	}
-	
-	[connectionController dctConnectionQueue_setQueued];
-	
+		
 	__dct_weak DCTConnectionController *weakConnectionController = connectionController;
 	
 	[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
