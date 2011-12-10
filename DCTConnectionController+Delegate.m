@@ -58,30 +58,31 @@
 		return;
 	
 	objc_setAssociatedObject(self, _cmd, NSStringFromSelector(_cmd), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-	
+		
 	__dct_weak DCTConnectionController *weakself = self;
 	
-	[self addResponseHandler:^(NSURLResponse *response) {
-		if ([weakself.delegate respondsToSelector:@selector(connectionController:didReceiveResponse:)])
-			[weakself.delegate connectionController:weakself didReceiveResponse:response];
-	}];
-	
-	[self addCancelationHandler:^{
-		if ([weakself.delegate respondsToSelector:@selector(connectionControllerWasCancelled:)])
-			[weakself.delegate connectionControllerWasCancelled:weakself];
-	}];
-	
-	[self addFinishHandler:^{
-		if ([weakself.delegate respondsToSelector:@selector(connectionControllerDidFinish:)])
-			[weakself.delegate connectionControllerDidFinish:weakself];
+	[self addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
 		
-		if ([weakself.delegate respondsToSelector:@selector(connectionController:didReceiveObject:)])
-			[weakself.delegate connectionController:weakself didReceiveObject:weakself.returnedObject];
-	}];
-	
-	[self addFailureHandler:^(NSError *error) {
-		if ([weakself.delegate respondsToSelector:@selector(connectionController:didReceiveError:)])
-			[weakself.delegate connectionController:weakself didReceiveError:error];
+		if (status == DCTConnectionControllerStatusResponded
+			&& [weakself.delegate respondsToSelector:@selector(connectionController:didReceiveResponse:)])
+			[weakself.delegate connectionController:weakself didReceiveResponse:weakself.returnedResponse];
+		
+		if (status == DCTConnectionControllerStatusCancelled
+			&& [weakself.delegate respondsToSelector:@selector(connectionControllerWasCancelled:)])
+			[weakself.delegate connectionControllerWasCancelled:weakself];
+		
+		if (status == DCTConnectionControllerStatusFinished) {
+			
+			if ([weakself.delegate respondsToSelector:@selector(connectionControllerDidFinish:)])
+				[weakself.delegate connectionControllerDidFinish:weakself];
+			
+			if ([weakself.delegate respondsToSelector:@selector(connectionController:didReceiveObject:)])
+				[weakself.delegate connectionController:weakself didReceiveObject:weakself.returnedObject];
+		}
+		
+		if (status == DCTConnectionControllerStatusFailed
+			&& [weakself.delegate respondsToSelector:@selector(connectionController:didReceiveError:)])
+			[weakself.delegate connectionController:weakself didReceiveError:weakself.returnedError];
 	}];
 }
 

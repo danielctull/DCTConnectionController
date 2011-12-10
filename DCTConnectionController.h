@@ -57,7 +57,8 @@
 #define dctconnectioncontroller_2_0     20000
 #define dctconnectioncontroller_2_0_1   20001
 #define dctconnectioncontroller_2_1     20100
-#define dctconnectioncontroller         dctconnectioncontroller_2_1
+#define dctconnectioncontroller_2_2     20200
+#define dctconnectioncontroller         dctconnectioncontroller_2_2
 #endif
 
 @class DCTConnectionQueue;
@@ -105,22 +106,6 @@ typedef void (^DCTConnectionControllerFailureBlock) (NSError *error);
 typedef void (^DCTConnectionControllerCancelationBlock) ();
 typedef void (^DCTConnectionControllerFinishBlock) ();
 typedef void (^DCTConnectionControllerStatusBlock) (DCTConnectionControllerStatus status);
-
-/** Name of the notification sent out when the connection has successfully completed.
- */
-extern NSString *const DCTConnectionControllerDidFinishNotification;
-
-/** Name of the notification sent out when the connection has failed.
- */
-extern NSString *const DCTConnectionControllerDidFailNotification;
-
-/** Name of the notification sent out when the connection has recieved a response.
- */
-extern NSString *const DCTConnectionControllerDidReceiveResponseNotification;
-
-extern NSString *const DCTConnectionControllerWasCancelledNotification;
-
-extern NSString *const DCTConnectionControllerStatusChangedNotification;
 
 extern NSString *const DCTConnectionControllerTypeString[];
 
@@ -200,10 +185,6 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 /// @name Setting up the connection details
 
-/** Sets the connection as multitask enabled for the iOS platform.
- */
-@property (nonatomic, assign) BOOL multitaskEnabled;
-
 /** The type of connection to use.
  
  Specifies the type of connection to use. Types include:
@@ -281,72 +262,6 @@ extern NSString *const DCTConnectionControllerTypeString[];
 - (void)removeDependency:(DCTConnectionController *)connectionController;
 
 
-
-#pragma mark - Event Blocks
-
-/// @name Event Blocks
-
-/** Adds a response block.
- 
- DCTConnectionControllerResponseBlock is defined as such:
- 
- `typedef void (^DCTConnectionControllerResponseBlock) (NSURLResponse *response);`
- 
- @param responseHandler The response block to add.
- */
-- (void)addResponseHandler:(DCTConnectionControllerResponseBlock)responseHandler;
-
-/** Adds a finish block.
- 
- DCTConnectionControllerFinishBlock is defined as such:
- 
- `typedef void (^DCTConnectionControllerFinishBlock) ();`
- 
- @param finishHandler The completion block to add.
- */
-- (void)addFinishHandler:(DCTConnectionControllerFinishBlock)finishHandler;
-
-
-
-/** Adds a failure block.
- 
- DCTConnectionControllerFailureBlock is defined as such:
- 
- `typedef void (^DCTConnectionControllerFailureBlock) (NSError *error);`
- 
- @param failureHandler The failure block to add.
- */
-- (void)addFailureHandler:(DCTConnectionControllerFailureBlock)failureHandler;
-
-/** Adds a completion block.
- 
- DCTConnectionControllerCancelationBlock is defined as such:
- 
- `typedef void (^DCTConnectionControllerCancelationBlock) ();`
- 
- @param cancelationHandler The cancelation block to add.
- */
-- (void)addCancelationHandler:(DCTConnectionControllerCancelationBlock)cancelationHandler;
-
-
-/** Adds a status change handler.
- 
- DCTConnectionControllerStatusBlock is defined as such:
- 
- `typedef void (^DCTConnectionControllerStatusBlock) ();`
- 
- @param statusChangeHandler The cancelation block to add.
- */
-- (void)addStatusChangeHandler:(DCTConnectionControllerStatusBlock)statusChangeHandler;
-
-
-
-
-
-
-
-
-
 #pragma mark - Managing the Connection
 
 /// @name Managing the Connection
@@ -379,8 +294,6 @@ extern NSString *const DCTConnectionControllerTypeString[];
 /** Requeues the connection.
  */
 - (void)requeue;
-
-
 
 #pragma mark - Methods to use in Subclasses
 
@@ -474,6 +387,16 @@ extern NSString *const DCTConnectionControllerTypeString[];
  */
 @property (nonatomic, readonly) DCTConnectionControllerStatus status;
 
+/** Adds a status change handler.
+ 
+ DCTConnectionControllerStatusBlock is defined as such:
+ 
+ `typedef void (^DCTConnectionControllerStatusBlock) ();`
+ 
+ @param statusChangeHandler The cancelation block to add.
+ */
+- (void)addStatusChangeHandler:(DCTConnectionControllerStatusBlock)statusChangeHandler;
+
 @property (nonatomic, strong, readonly) NSNumber *percentDownloaded;
 
 /** The URL connection that is being run by the connection controller;
@@ -493,8 +416,22 @@ extern NSString *const DCTConnectionControllerTypeString[];
 @property (nonatomic, strong) NSError *returnedError;
 
 
-@property (nonatomic, readonly) DCTConnectionQueue *queue;
+@property (nonatomic, dct_weak, readonly) DCTConnectionQueue *queue;
+
+- (BOOL)isReturnedObjectLoaded;
+
+
+/// @name For the queue's use only
+
+- (void)start;
+
+/// @name Extension methods
+
++ (void)addInitBlock:(void(^)(DCTConnectionController *connectionController))block;
++ (void)addDeallocBlock:(void(^)(DCTConnectionController *connectionController))block;
 
 @end
 
+#import "DCTConnectionController+BlockHandlers.h"
 #import "DCTConnectionController+Delegate.h"
+#import "DCTConnectionController+Notification.h"

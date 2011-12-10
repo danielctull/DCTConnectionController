@@ -54,7 +54,7 @@
 }
 
 - (void)dctDownloadPathInternal_setupBlockCallback {
-
+	
 	if (objc_getAssociatedObject(self, _cmd))
 		return;
 		

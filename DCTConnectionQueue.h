@@ -35,8 +35,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "DCTConnectionController.h"
-#import "DCTConnectionGroup.h"
+@class DCTConnectionController;
 
 extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotification;
@@ -44,13 +43,7 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
 extern NSString *const DCTConnectionQueueActiveConnectionCountIncreasedNotification;
 extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification;
 
-@interface DCTConnectionQueue : NSObject {
-	// Needed for multitasking on the iPhone, which is added as a category.	
-	__strong NSMutableArray *nonMultitaskingConnectionControllers;
-	NSUInteger backgroundTaskIdentifier;
-	BOOL inBackground;
-	BOOL multitaskEnabled;
-}
+@interface DCTConnectionQueue : NSObject
 
 /// @name Queue Settings
 
@@ -66,17 +59,6 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotificat
 - (void)start;
 
 
-
-/// @name Connection Counts
-
-/** The total amount of connection controllers queued and active. */
-@property (nonatomic, readonly) NSInteger connectionCount;
-
-/** The amount of connection controllers currently in progress. */
-@property (nonatomic, readonly) NSInteger activeConnectionCount;
-
-@property (nonatomic, readonly) NSInteger queuedConnectionCount;
-
 /// @name Accessing Connection Controllers
 
 /** Returns all the connection controllers currently in progress and queued. */
@@ -88,7 +70,6 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotificat
 /** Returns all the connection controllers currently queued. */
 @property (nonatomic, readonly) NSArray *queuedConnectionControllers;
 
-/// @name Managing Connection Controllers
 
 /**
  Add a connection controller to the queue. This method causes the connection queue to
@@ -105,17 +86,16 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotificat
  */
 - (void)removeConnectionController:(DCTConnectionController *)connectionController;
 
-/** Requeues a connection controller.
- 
- This will stop the url connection in progress for the given connection controller and 
- reset its internals back to before it started connecting.
- 
- @param connectionController The connection controller to requeue.
- */
-- (void)requeueConnectionController:(DCTConnectionController *)connectionController;
 
-/// @name Managing Connection Groups
 
-- (void)addConnectionGroup:(DCTConnectionGroup *)connectionGroup;
+
+
+
+
+
+
++ (void)addInitBlock:(void(^)(DCTConnectionQueue *))block;
++ (void)addDeallocBlock:(void(^)(DCTConnectionQueue *))block;
++ (void)addRemovalBlock:(void(^)(DCTConnectionQueue *, DCTConnectionController *))block;
 
 @end
