@@ -116,7 +116,14 @@ typedef void (^DCTConnectionGroupCompletionBlock) (NSArray *finishedConnectionCo
 
 /// @name Connection Groups
 
+/** The connection groups associated with the queue.
+ */
 @property (nonatomic, readonly) NSArray *connectionGroups;
+
+/** Add a group of connection controllers to the queue.
+ 
+ @param connectionGroup The connection group to add.
+ */
 - (void)addConnectionGroup:(DCTConnectionGroup *)connectionGroup;
 
 @end
