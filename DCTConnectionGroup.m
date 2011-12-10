@@ -81,9 +81,9 @@
 - (void)connectOnQueue:(DCTConnectionQueue *)queue {
 	
 	if ([self.connectionControllers count] == 0) {
-		[self dctInternal_callCompletionBlocksWithFinishedConnectionControllers:[NSArray new]
-													failedConnectionControllers:[NSArray new]
-												 cancelledConnectionControllers:[NSArray new]];
+		[self dctInternal_callCompletionBlocksWithFinishedConnectionControllers:nil
+													failedConnectionControllers:nil
+												 cancelledConnectionControllers:nil];
 		return;
 	}
 	
