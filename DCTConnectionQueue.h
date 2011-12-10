@@ -99,3 +99,5 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotificat
 + (void)addRemovalBlock:(void(^)(DCTConnectionQueue *, DCTConnectionController *))block;
 
 @end
+
+#import "DCTConnectionQueue+Deprecated.h"
