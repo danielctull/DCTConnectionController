@@ -184,12 +184,12 @@ static NSMutableArray *removalBlocks = nil;
 
 - (void)addConnectionController:(DCTConnectionController *)connectionController {
 	
-	NSString *previousSymbol = [[NSThread callStackSymbols] objectAtIndex:1];
+	/*NSString *previousSymbol = [[NSThread callStackSymbols] objectAtIndex:1];
 	SEL connectOnQueue = @selector(connectOnQueue:);
 	if ([previousSymbol rangeOfString:NSStringFromSelector(connectOnQueue)].location == NSNotFound) {
 		[connectionController connectOnQueue:self];
 		return;
-	}
+	}*/
 		
 	__dct_weak DCTConnectionController *weakConnectionController = connectionController;
 	__dct_weak DCTConnectionQueue *weakSelf = self;
