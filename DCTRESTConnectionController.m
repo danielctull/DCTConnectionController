@@ -121,8 +121,11 @@ typedef id (^DCTInternalRESTControllerKeyValueStringConvertor) (id, id);
 	for (NSString *key in keys) {
 		
 		id value = [self valueForConnectionKey:key];
-				
-		if (value && [value isKindOfClass:[NSString class]] && [value length] > 0)
+		
+		if (value && ![value isKindOfClass:[NSString class]])
+			value = [value description];
+		
+		if ([value length] > 0)
 			[strings addObject:convertor(key, value)];
 	}
 	return [NSArray arrayWithArray:strings];
