@@ -57,6 +57,9 @@
 @implementation DCTConnectionGroup {
 	__strong NSMutableArray *dctInternal_connectionControllers;
 	__strong NSMutableArray *dctInternal_completionBlocks;
+	BOOL hasStarted;
+	BOOL hasFinished;
+	__weak DCTConnectionQueue *queue;
 }
 
 - (NSArray *)connectionControllers {
@@ -76,9 +79,13 @@
 	[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
 		[weakself dctInternal_checkControllers];
 	}];
+	
+	if (hasStarted) [connectionController connectOnQueue:queue];
 }
 
-- (void)connectOnQueue:(DCTConnectionQueue *)queue {
+- (void)connectOnQueue:(DCTConnectionQueue *)q {
+	
+	queue = q;
 	
 	if ([self.connectionControllers count] == 0) {
 		[self dctInternal_callCompletionBlocksWithFinishedConnectionControllers:nil
@@ -97,6 +104,8 @@
 	for (DCTConnectionController *cc in self.dctInternal_connectionControllers)
 		if (!cc.ended)
 			return;
+	
+	hasFinished = YES;
 	
 	NSMutableArray *failedCCs = [[NSMutableArray alloc] initWithCapacity:[self.dctInternal_connectionControllers count]];
 	NSMutableArray *finishedCCs = [[NSMutableArray alloc] initWithCapacity:[self.dctInternal_connectionControllers count]];
