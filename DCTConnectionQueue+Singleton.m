@@ -52,7 +52,7 @@ static DCTConnectionQueue *sharedInstance = nil;
 
 @end
 
-@implementation DCTConnectionController (QueueSingleton)
+@implementation DCTConnectionController (DCTConnectionQueueSingleton)
 
 - (void)connect {
 	DCTConnectionQueue *queue = [DCTConnectionQueue sharedConnectionQueue];
@@ -65,7 +65,7 @@ static DCTConnectionQueue *sharedInstance = nil;
 
 
 
-@implementation DCTConnectionGroup (QueueSingleton)
+@implementation DCTConnectionGroup (DCTConnectionQueueSingleton)
 
 - (void)connect {
 	[self connectOnQueue:[DCTConnectionQueue sharedConnectionQueue]];

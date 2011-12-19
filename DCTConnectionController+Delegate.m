@@ -37,7 +37,7 @@
 #import "DCTConnectionController+Delegate.h"
 #import <objc/runtime.h>
 
-@interface DCTConnectionController ()
+@interface DCTConnectionController (DelegateInternal)
 - (void)dctDelegateInternal_setupBlockCallbacks;
 @end
 
@@ -51,6 +51,10 @@
 - (id<DCTConnectionControllerDelegate>)delegate {
 	return objc_getAssociatedObject(self, _cmd);
 }
+
+@end
+
+@implementation DCTConnectionController (DelegateInternal)
 
 - (void)dctDelegateInternal_setupBlockCallbacks {
 	

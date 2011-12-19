@@ -38,8 +38,11 @@
 #import <objc/runtime.h>
 
 @interface DCTConnectionController ()
-- (void)dctDownloadPathInternal_setupBlockCallback;
 @property (nonatomic, readonly) NSString *dctInternal_downloadPath;
+@end
+
+@interface DCTConnectionController (DownloadPathInternal)
+- (void)dctDownloadPathInternal_setupBlockCallback;
 @end
 
 @implementation DCTConnectionController (DownloadPath)
@@ -52,6 +55,10 @@
 - (NSString *)downloadPath {
 	return objc_getAssociatedObject(self, _cmd);
 }
+
+@end 
+
+@implementation DCTConnectionController (DownloadPathInternal)
 
 - (void)dctDownloadPathInternal_setupBlockCallback {
 	

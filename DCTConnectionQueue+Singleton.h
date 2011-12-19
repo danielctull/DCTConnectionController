@@ -47,7 +47,7 @@
 + (DCTConnectionQueue *)sharedConnectionQueue;
 @end
 
-@interface DCTConnectionController (QueueSingleton)
+@interface DCTConnectionController (DCTConnectionQueueSingleton)
 
 /// @name Dealing with the Global Queue
 
@@ -58,7 +58,7 @@
 @end
 
 
-@interface DCTConnectionGroup (QueueSingleton)
+@interface DCTConnectionGroup (DCTConnectionQueueSingleton)
 
 /// @name Dealing with the Global Queue
 

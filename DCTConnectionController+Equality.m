@@ -37,9 +37,9 @@
 #import "DCTConnectionController+Equality.h"
 #import <objc/runtime.h>
 
-@interface DCTConnectionController ()
-- (NSArray *)dctInternal_propertiesOfClass:(Class)class;
-- (NSArray *)dctInternal_properties;
+@interface DCTConnectionController (EqualityInternal)
+- (NSArray *)dctEqualityInternal_propertiesOfClass:(Class)class;
+- (NSArray *)dctEqualityInternal_properties;
 @end
 
 @implementation DCTConnectionController (Equality)
@@ -52,7 +52,7 @@
 	
 	if (![connectionController.URL isEqual:self.URL]) return NO;
 	
-	NSArray *properties = [self dctInternal_properties];
+	NSArray *properties = [self dctEqualityInternal_properties];
 	
 	for (NSString *key in properties) {
 		
@@ -65,7 +65,11 @@
 	return YES;
 }
 
-- (NSArray *)dctInternal_properties {
+@end
+
+@implementation DCTConnectionController (EqualityInternal)
+
+- (NSArray *)dctEqualityInternal_properties {
 	
 	Class aClass = [self class];
 	
@@ -74,14 +78,14 @@
 	while ([aClass isSubclassOfClass:[DCTConnectionController class]]
 		   && ![DCTConnectionController isSubclassOfClass:aClass]) {
 		
-		[array addObjectsFromArray:[self dctInternal_propertiesOfClass:aClass]];
+		[array addObjectsFromArray:[self dctEqualityInternal_propertiesOfClass:aClass]];
 		aClass = [aClass superclass];
 	}
 	
 	return array;
 }
 
-- (NSArray *)dctInternal_propertiesOfClass:(Class)class {
+- (NSArray *)dctEqualityInternal_propertiesOfClass:(Class)class {
 	
 	NSMutableArray *array = [[NSMutableArray alloc] init];
 	

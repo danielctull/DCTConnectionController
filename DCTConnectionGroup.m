@@ -39,9 +39,9 @@
 #import "DCTConnectionQueue.h"
 #import <objc/runtime.h>
 
-@interface DCTConnectionQueue ()
-- (void)dctInternal_addConnectionGroup:(DCTConnectionGroup *)connectionGroup;
-- (NSMutableArray *)dctInternal_groups;
+@interface DCTConnectionQueue (DCTConnectionGroupInternal)
+- (void)dctConnectionGroupInternal_addConnectionGroup:(DCTConnectionGroup *)connectionGroup;
+- (NSMutableArray *)dctConnectionGroupInternal_groups;
 @end
 
 @interface DCTConnectionGroup ()
@@ -94,7 +94,7 @@
 		return;
 	}
 	
-	[queue dctInternal_addConnectionGroup:self];
+	[queue dctConnectionGroupInternal_addConnectionGroup:self];
 }
 
 #pragma mark - Internal
@@ -158,7 +158,19 @@
 
 @implementation DCTConnectionQueue (DCTConnectionGroup)
 
-- (NSMutableArray *)dctInternal_groups {
+- (NSArray *)connectionGroups {
+	return [self.dctConnectionGroupInternal_groups copy];
+}
+
+- (void)addConnectionGroup:(DCTConnectionGroup *)connectionGroup {
+	[connectionGroup connectOnQueue:self];
+}
+
+@end
+
+@implementation DCTConnectionQueue (DCTConnectionGroupInternal)
+
+- (NSMutableArray *)dctConnectionGroupInternal_groups {
 	
 	NSMutableArray *array = objc_getAssociatedObject(self, _cmd);
 	
@@ -170,17 +182,9 @@
 	return array;
 }
 
-- (NSArray *)connectionGroups {
-	return [self.dctInternal_groups copy];
-}
-
-- (void)addConnectionGroup:(DCTConnectionGroup *)connectionGroup {
-	[connectionGroup connectOnQueue:self];
-}
-
-- (void)dctInternal_addConnectionGroup:(DCTConnectionGroup *)connectionGroup {
+- (void)dctConnectionGroupInternal_addConnectionGroup:(DCTConnectionGroup *)connectionGroup {
 	
-	NSMutableArray *groups = [self dctInternal_groups];
+	NSMutableArray *groups = [self dctConnectionGroupInternal_groups];
 	
 	[groups addObject:connectionGroup];
 	
