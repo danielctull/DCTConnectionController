@@ -70,6 +70,9 @@ NSString * const DCTInternalConnectionControllerTypeString[] = {
 	@"PATCH"
 };
 
+typedef void (^DCTConnectionControllerStatusBlock) (DCTConnectionControllerStatus status);
+typedef void (^DCTConnectionControllerPercentBlock) (NSNumber *percentDownloaded);
+
 @interface DCTConnectionController () <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 - (void)dctInternal_reset;
 
@@ -84,6 +87,7 @@ NSString * const DCTInternalConnectionControllerTypeString[] = {
 	__strong NSString *dctInternal_downloadPath;
 	__strong NSMutableSet *dependencies;
 	__strong NSMutableArray *statusChangeBlocks;
+	__strong NSMutableArray *percentChangeBlocks;
 	__strong NSFileHandle *fileHandle;
 	float contentLength;
 	float downloadedLength;
@@ -451,6 +455,17 @@ static NSMutableArray *deallocBlocks = nil;
 	[self willChangeValueForKey:@"percentDownloaded"];
 	percentDownloaded = [[NSNumber alloc] initWithFloat:(downloadedLength / contentLength)];
 	[self didChangeValueForKey:@"percentDownloaded"];
+	
+	for (DCTConnectionControllerPercentBlock block in percentChangeBlocks)
+		block(percentDownloaded);
+}
+
+- (void)addPercentDownloadedChangeHandler:(DCTConnectionControllerPercentBlock)handler {
+	NSAssert(handler != nil, @"Handler should not be nil.");
+	
+	if (!percentChangeBlocks) percentChangeBlocks = [[NSMutableArray alloc] initWithCapacity:1];
+	
+	[percentChangeBlocks addObject:[handler copy]];
 }
 
 @end

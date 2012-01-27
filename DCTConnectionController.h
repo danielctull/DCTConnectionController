@@ -91,7 +91,6 @@ typedef void (^DCTConnectionControllerResponseBlock) (NSURLResponse *response);
 typedef void (^DCTConnectionControllerFailureBlock) (NSError *error);
 typedef void (^DCTConnectionControllerCancelationBlock) ();
 typedef void (^DCTConnectionControllerFinishBlock) ();
-typedef void (^DCTConnectionControllerStatusBlock) (DCTConnectionControllerStatus status);
 
 extern NSString *const DCTConnectionControllerTypeString[];
 
@@ -381,9 +380,11 @@ extern NSString *const DCTConnectionControllerTypeString[];
  
  @param statusChangeHandler The cancelation block to add.
  */
-- (void)addStatusChangeHandler:(DCTConnectionControllerStatusBlock)statusChangeHandler;
+- (void)addStatusChangeHandler:(void(^)(DCTConnectionControllerStatus status))handler;
 
 @property (nonatomic, strong, readonly) NSNumber *percentDownloaded;
+
+- (void)addPercentDownloadedChangeHandler:(void(^)(NSNumber *percentDownloaded))handler;
 
 /** The URL connection that is being run by the connection controller;
  */
