@@ -25,8 +25,6 @@
 
 /// @name Managing Connection Groups
 
-- (void)addConnectionGroup:(DCTConnectionGroup *)connectionGroup;
-
 /** The total amount of connection controllers queued and active. */
 @property (nonatomic, readonly) NSInteger connectionCount;
 

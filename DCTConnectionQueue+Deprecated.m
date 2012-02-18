@@ -16,10 +16,6 @@
 	[connectionController requeue];
 }
 
-- (void)addConnectionGroup:(DCTConnectionGroup *)connectionGroup {
-	[connectionGroup connectOnQueue:self];
-}
-
 - (NSInteger)connectionCount {
 	return [self.connectionControllers count];
 }
