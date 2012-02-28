@@ -372,6 +372,8 @@ extern NSString *const DCTConnectionControllerTypeString[];
  */
 @property (nonatomic, readonly) DCTConnectionControllerStatus status;
 
+- (NSString *)fullDescription;
+
 /** Adds a status change handler.
  
  DCTConnectionControllerStatusBlock is defined as such:
