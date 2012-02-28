@@ -330,7 +330,7 @@ static NSMutableArray *deallocBlocks = nil;
 	
 	if (self.started) return;
 	
-	if ([newURLRequest isEqual:URLRequest]) return;
+	if (newURLRequest == URLRequest) return; // If you use isEqual: it will match for a similar set of parameters
 	
 	URLRequest = [newURLRequest copy];
 	self.URL = URLRequest.URL;
