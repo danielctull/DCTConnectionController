@@ -180,11 +180,43 @@ static NSMutableArray *deallocBlocks = nil;
 	return [self isEqualToConnectionController:object];
 }
 
-- (NSString *)description {
-	return [NSString stringWithFormat:@"<%@: %p; url = \"%@\"; status = %@; priority = %@>", 
+
+- (NSString *)fullDescription {
+	
+	NSDictionary *headers = self.URLRequest.allHTTPHeaderFields;
+	__block NSString *headersString = @"";
+	if ([headers count] > 0) {
+		headersString = @"\n    headers = ";
+		
+		[headers enumerateKeysAndObjectsUsingBlock:^(id key, id obj, BOOL *stop) {
+			headersString = [headersString stringByAppendingFormat:@"\n        %@ = %@", key, obj];
+		}];
+	}
+	
+	NSString *bodyString = @"";
+	if (self.type == DCTConnectionControllerTypePost) {
+		NSString *body = [[NSString alloc] initWithData:self.URLRequest.HTTPBody encoding:NSUTF8StringEncoding];
+		if ([body length] > 0)
+			bodyString = [NSString stringWithFormat:@"\n    body = \n        %@", body];
+	}
+	
+	return [NSString stringWithFormat:@"\n<%@: %p;\n    url = \"%@\";\n    type = %@;%@%@\n    status = %@;\n    priority = %@\n>", 
 			NSStringFromClass([self class]),
 			self,
 			self.URL,
+			DCTInternalConnectionControllerTypeString[self.type],
+			headersString,
+			bodyString,
+			DCTInternalConnectionControllerStatusString[self.status],
+			DCTInternalConnectionControllerPriorityString[self.priority]];
+}
+
+- (NSString *)description {
+	return [NSString stringWithFormat:@"<%@: %p; url = \"%@\"; type = %@; status = %@; priority = %@>", 
+			NSStringFromClass([self class]),
+			self,
+			self.URL,
+			DCTInternalConnectionControllerTypeString[self.type],
 			DCTInternalConnectionControllerStatusString[self.status],
 			DCTInternalConnectionControllerPriorityString[self.priority]];
 }
@@ -320,7 +352,7 @@ static NSMutableArray *deallocBlocks = nil;
 	
 	if (self.started) return;
 	
-	if ([newURLRequest isEqual:URLRequest]) return;
+	if (newURLRequest == URLRequest) return; // If you use isEqual: it will match for a similar set of parameters
 	
 	URLRequest = [newURLRequest copy];
 	self.URL = URLRequest.URL;
