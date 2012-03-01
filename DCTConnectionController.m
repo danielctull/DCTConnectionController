@@ -139,11 +139,33 @@ static NSMutableArray *deallocBlocks = nil;
 		block(self);
 }
 
+- (id)initWithCoder:(NSCoder *)coder {
+	
+	if (!(self = [self init])) return nil;
+	
+	self.URL = [coder decodeObjectForKey:NSStringFromSelector(@selector(URL))];
+	self.type = [coder decodeIntegerForKey:NSStringFromSelector(@selector(type))];
+	self.priority = [coder decodeIntegerForKey:NSStringFromSelector(@selector(priority))];
+	
+	NSSet *codedDependencies = [coder decodeObjectForKey:NSStringFromSelector(@selector(dependencies))];
+	[dependencies addObjectsFromArray:[codedDependencies allObjects]];
+	
+	return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)coder {
+	[coder encodeObject:self.URL forKey:NSStringFromSelector(@selector(URL))];
+	[coder encodeInteger:self.type forKey:NSStringFromSelector(@selector(type))];
+	[coder encodeInteger:self.priority forKey:NSStringFromSelector(@selector(priority))];
+	[coder encodeObject:self.dependencies forKey:NSStringFromSelector(@selector(dependencies))];
+}
+
 - (id)init {
 	if (!(self = [super init])) return nil;
 	
 	priority = DCTConnectionControllerPriorityMedium;
 	percentDownloaded = [[NSNumber alloc] initWithInteger:0];
+	dependencies = [NSMutableSet new];
 	
 	for (void(^block)(DCTConnectionController *) in initBlocks)
 		block(self);
