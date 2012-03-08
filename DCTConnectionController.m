@@ -70,6 +70,12 @@ NSString * const DCTInternalConnectionControllerTypeString[] = {
 	@"PATCH"
 };
 
+NSString *const DCTConnectionControllerDidFinishNotification = @"DCTConnectionControllerDidFinishNotification";
+NSString *const DCTConnectionControllerDidFailNotification = @"DCTConnectionControllerDidFailNotification";
+NSString *const DCTConnectionControllerDidReceiveResponseNotification = @"DCTConnectionControllerDidReceiveResponseNotification";
+NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectionControllerWasCancelledNotification";
+NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnectionControllerStatusChangedNotification";
+
 typedef void (^DCTConnectionControllerStatusBlock) (DCTConnectionControllerStatus status);
 typedef void (^DCTConnectionControllerPercentBlock) (NSNumber *percentDownloaded);
 
@@ -94,7 +100,7 @@ typedef void (^DCTConnectionControllerPercentBlock) (NSNumber *percentDownloaded
 }
 
 @synthesize queue;
-@synthesize status;
+@synthesize status = _status;
 @synthesize type;
 @synthesize priority;
 @synthesize percentDownloaded;
@@ -150,6 +156,35 @@ static NSMutableArray *initBlocks = nil;
 
 - (id)init {
 	if (!(self = [super init])) return nil;
+	
+	// Send notifications on status change
+	__dct_weak DCTConnectionController *weakSelf = self;
+	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+	[self addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
+		
+		[notificationCenter postNotificationName:DCTConnectionControllerStatusChangedNotification object:weakSelf];
+		
+		switch (status) {
+			case DCTConnectionControllerStatusResponded:
+				[notificationCenter postNotificationName:DCTConnectionControllerDidReceiveResponseNotification object:weakSelf];
+				break;
+				
+			case DCTConnectionControllerStatusCancelled:
+				[notificationCenter postNotificationName:DCTConnectionControllerWasCancelledNotification object:weakSelf];
+				break;
+				
+			case DCTConnectionControllerStatusFinished:
+				[notificationCenter postNotificationName:DCTConnectionControllerDidFinishNotification object:weakSelf];
+				break;
+				
+			case DCTConnectionControllerStatusFailed:
+				[notificationCenter postNotificationName:DCTConnectionControllerDidFailNotification object:weakSelf];
+				break;
+				
+			default:
+				break;
+		}
+	}];
 	
 	priority = DCTConnectionControllerPriorityMedium;
 	percentDownloaded = [[NSNumber alloc] initWithInteger:0];
@@ -395,21 +430,21 @@ static NSMutableArray *initBlocks = nil;
 
 #pragma mark - DCTConnectionController: Status
 
-- (void)setStatus:(DCTConnectionControllerStatus)newStatus {
+- (void)setStatus:(DCTConnectionControllerStatus)status {
 	
-	if (newStatus <= status
-		&& newStatus != DCTConnectionControllerStatusNotStarted
-		&& newStatus != DCTConnectionControllerStatusQueued)
+	if (status <= _status
+		&& status != DCTConnectionControllerStatusNotStarted
+		&& status != DCTConnectionControllerStatusQueued)
 		return;
 	
 	if (self.ended) return;
 	
 	[self willChangeValueForKey:@"status"];
-	status = newStatus;
+	_status = status;
 	[self didChangeValueForKey:@"status"];
 	
 	for (DCTConnectionControllerStatusBlock block in statusChangeBlocks)
-		block(newStatus);
+		block(status);
 }
 
 - (void)addStatusChangeHandler:(DCTConnectionControllerStatusBlock)handler {

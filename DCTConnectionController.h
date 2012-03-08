@@ -85,7 +85,21 @@ typedef enum {
 	DCTConnectionControllerPriorityVeryLow
 } DCTConnectionControllerPriority;
 
-@class DCTConnectionController;
+/** Name of the notification sent out when the connection has successfully completed.
+ */
+extern NSString *const DCTConnectionControllerDidFinishNotification;
+
+/** Name of the notification sent out when the connection has failed.
+ */
+extern NSString *const DCTConnectionControllerDidFailNotification;
+
+/** Name of the notification sent out when the connection has recieved a response.
+ */
+extern NSString *const DCTConnectionControllerDidReceiveResponseNotification;
+
+extern NSString *const DCTConnectionControllerWasCancelledNotification;
+
+extern NSString *const DCTConnectionControllerStatusChangedNotification;
 
 typedef void (^DCTConnectionControllerResponseBlock) (NSURLResponse *response);
 typedef void (^DCTConnectionControllerFailureBlock) (NSError *error);
@@ -422,4 +436,3 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 #import "DCTConnectionController+BlockHandlers.h"
 #import "DCTConnectionController+Delegate.h"
-#import "DCTConnectionController+Notification.h"
