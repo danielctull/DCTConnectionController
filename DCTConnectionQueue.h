@@ -35,7 +35,7 @@
  */
 
 #import <Foundation/Foundation.h>
-@class DCTConnectionController;
+#import "DCTConnectionController.h"
 
 extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotification;
@@ -70,6 +70,12 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotificat
 /** Returns all the connection controllers currently queued. */
 @property (nonatomic, readonly) NSArray *queuedConnectionControllers;
 
+/** The priority threshold to archive connections at. This will archive connections on 
+ this queue with a priority of this value or higher and resume them on relaunch.
+ 
+ Default value is DCTConnectionControllerPriorityVeryHigh.
+ */
+@property (nonatomic, assign) DCTConnectionControllerPriority archivePriorityThreshold;
 
 /**
  Add a connection controller to the queue. This method causes the connection queue to
@@ -85,18 +91,6 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotificat
  @param connectionController The connection controller to remove.
  */
 - (void)removeConnectionController:(DCTConnectionController *)connectionController;
-
-
-
-
-
-
-
-
-
-+ (void)addInitBlock:(void(^)(DCTConnectionQueue *))block;
-+ (void)addDeallocBlock:(void(^)(DCTConnectionQueue *))block;
-+ (void)addRemovalBlock:(void(^)(DCTConnectionQueue *, DCTConnectionController *))block;
 
 @end
 
