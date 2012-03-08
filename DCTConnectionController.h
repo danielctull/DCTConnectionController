@@ -428,10 +428,6 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 - (void)start;
 
-/// @name Extension methods
-
-+ (void)addInitBlock:(void(^)(DCTConnectionController *connectionController))block;
-
 @end
 
 #import "DCTConnectionController+BlockHandlers.h"

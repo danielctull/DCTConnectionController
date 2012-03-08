@@ -111,16 +111,6 @@ typedef void (^DCTConnectionControllerPercentBlock) (NSNumber *percentDownloaded
 @synthesize URLRequest;
 @synthesize URLConnection;
 
-static NSMutableArray *initBlocks = nil;
-
-+ (void)addInitBlock:(void(^)(DCTConnectionController *))block {
-	static dispatch_once_t sharedToken;
-	dispatch_once(&sharedToken, ^{
-		initBlocks = [[NSMutableArray alloc] initWithCapacity:1];
-	});
-	[initBlocks addObject:[block copy]];
-}
-
 #pragma mark - NSObject
 
 - (void)dealloc {
@@ -189,9 +179,6 @@ static NSMutableArray *initBlocks = nil;
 	priority = DCTConnectionControllerPriorityMedium;
 	percentDownloaded = [[NSNumber alloc] initWithInteger:0];
 	dependencies = [NSMutableSet new];
-	
-	for (void(^block)(DCTConnectionController *) in initBlocks)
-		block(self);
 	
 	return self;
 }
