@@ -106,7 +106,6 @@ typedef void (^DCTConnectionControllerPercentBlock) (NSNumber *percentDownloaded
 @synthesize URLConnection;
 
 static NSMutableArray *initBlocks = nil;
-static NSMutableArray *deallocBlocks = nil;
 
 + (void)addInitBlock:(void(^)(DCTConnectionController *))block {
 	static dispatch_once_t sharedToken;
@@ -114,14 +113,6 @@ static NSMutableArray *deallocBlocks = nil;
 		initBlocks = [[NSMutableArray alloc] initWithCapacity:1];
 	});
 	[initBlocks addObject:[block copy]];
-}
-
-+ (void)addDeallocBlock:(void(^)(DCTConnectionController *))block {
-	static dispatch_once_t sharedToken;
-	dispatch_once(&sharedToken, ^{
-		deallocBlocks = [[NSMutableArray alloc] initWithCapacity:1];
-	});
-	[deallocBlocks addObject:[block copy]];
 }
 
 #pragma mark - NSObject
@@ -134,9 +125,6 @@ static NSMutableArray *deallocBlocks = nil;
 	NSError *error = nil;
 	if ([fileManager fileExistsAtPath:self.dctInternal_downloadPath] && ![fileManager removeItemAtPath:self.dctInternal_downloadPath error:&error])
 		NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), error);
-	
-	for (void(^block)(DCTConnectionController *) in deallocBlocks)
-		block(self);
 }
 
 - (id)initWithCoder:(NSCoder *)coder {

@@ -417,7 +417,6 @@ extern NSString *const DCTConnectionControllerTypeString[];
 /// @name Extension methods
 
 + (void)addInitBlock:(void(^)(DCTConnectionController *connectionController))block;
-+ (void)addDeallocBlock:(void(^)(DCTConnectionController *connectionController))block;
 
 @end
 
