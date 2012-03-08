@@ -77,6 +77,19 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotificat
  */
 @property (nonatomic, assign) DCTConnectionControllerPriority archivePriorityThreshold;
 
+#ifdef TARGET_OS_IPHONE
+/** The priority threshold to run a connection in the background. This will run connections
+ on this queue with a priority of this value or higher when the app moves to the background.
+ 
+ For instance, setting this to DCTConnectionControllerPriorityVeryLow will cause every 
+ connection controller to continue to run when the app is put in the background.
+ 
+ Default value is DCTConnectionControllerPriorityHigh.
+ 
+ */
+@property (nonatomic, assign) DCTConnectionControllerPriority backgroundPriorityThreshold;
+#endif
+
 /**
  Add a connection controller to the queue. This method causes the connection queue to
  find the next connection and run it.

@@ -37,6 +37,7 @@
 #import "DCTConnectionQueue.h"
 #import "DCTConnectionController+UsefulChecks.h"
 #import "DCTConnectionGroup.h"
+#import "DCTConnectionQueue+Singleton.h"
 
 NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2) {
 	
@@ -67,6 +68,11 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 - (void)dctInternal_dequeueAndStartConnection:(DCTConnectionController *)connectionController;
 
+#ifdef TARGET_OS_IPHONE
+- (void)dctInternal_applicationDidEnterBackgroundNotification:(NSNotification *)notification;
+- (void)dctInternal_applicationWillTerminateNotification:(NSNotification *)notification;
+- (void)dctInternal_archiveConnectionController:(DCTConnectionController *)cc;
+#endif
 
 @property (nonatomic, strong) NSMutableArray *dctInternal_activeConnectionControllers;
 @property (nonatomic, strong) NSMutableArray *dctInternal_queuedConnectionControllers;
@@ -79,23 +85,70 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 }
 
 @synthesize maxConnections;
-@synthesize archivePriorityThreshold;
+@synthesize archivePriorityThreshold = _archivePriorityThreshold;
+@synthesize backgroundPriorityThreshold = _backgroundPriorityThreshold;
 @synthesize dctInternal_activeConnectionControllers;
 @synthesize dctInternal_queuedConnectionControllers;
 
 #pragma mark - NSObject
 
+#ifdef TARGET_OS_IPHONE
+
++ (void)load {
+	// Load the archives and add connections to shared queue:
+	[[DCTConnectionQueue sharedConnectionQueue] dctInternal_applicationWillEnterForegroundNotification:nil];
+}
+
+- (void)dealloc {
+	UIApplication *app = [UIApplication sharedApplication];
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:UIApplicationDidEnterBackgroundNotification
+												  object:app];
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:UIApplicationWillTerminateNotification
+												  object:app];
+	
+	[[NSNotificationCenter defaultCenter] removeObserver:self 
+													name:UIApplicationWillEnterForegroundNotification
+												  object:app];
+}
+#endif
+
 - (id)init {
 	
 	if (!(self = [super init])) return nil;
 	
+	_backgroundPriorityThreshold = DCTConnectionControllerPriorityHigh;
+	_archivePriorityThreshold = DCTConnectionControllerPriorityVeryHigh;
 	self.dctInternal_activeConnectionControllers = [[NSMutableArray alloc] init];
 	self.dctInternal_queuedConnectionControllers = [[NSMutableArray alloc] init];
 	active = YES;
 	self.maxConnections = 5;
 	
 	queue = dispatch_get_current_queue();
-		
+	
+#ifdef TARGET_OS_IPHONE
+	
+	UIApplication *app = [UIApplication sharedApplication];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(dctInternal_applicationDidEnterBackgroundNotification:) 
+												 name:UIApplicationDidEnterBackgroundNotification 
+											   object:app];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(dctInternal_applicationWillTerminateNotification:) 
+												 name:UIApplicationWillTerminateNotification
+											   object:app];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self
+											 selector:@selector(dctInternal_applicationWillEnterForegroundNotification:) 
+												 name:UIApplicationWillEnterForegroundNotification
+											   object:app];
+#endif
+	
 	return self;	
 }
 
@@ -251,5 +304,98 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	
 	[connectionController start];
 }
+
+#ifdef TARGET_OS_IPHONE
+
+- (void)dctInternal_archiveConnectionController:(DCTConnectionController *)cc {
+	NSURL *archiveURL = [[[self class] dctInternal_archiveDirectory] URLByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+	[NSKeyedArchiver archiveRootObject:cc toFile:[archiveURL path]];
+	
+	NSLog(@"%@ ARCHIVING to: %@\n\n%@", self, archiveURL, [cc fullDescription]);
+}
+
+- (void)dctInternal_handleTerminationWithConnectionController:(DCTConnectionController *)cc {
+	
+	[cc cancel];
+	
+	if (cc.priority <= self.archivePriorityThreshold)
+		[self dctInternal_archiveConnectionController:cc];
+}
+
+- (void)dctInternal_handleBackgroundingWithConnectionController:(DCTConnectionController *)cc {
+	
+	NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), cc);
+	
+	if (cc.priority > self.backgroundPriorityThreshold) { // Bigger value is lower priority for some bloody reason.
+		
+		[self dctInternal_handleTerminationWithConnectionController:cc];
+		
+	} else {
+		
+		UIBackgroundTaskIdentifier backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
+			[self stop];
+			[self dctInternal_handleTerminationWithConnectionController:cc];
+		}];
+		
+		[cc addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
+			if (status > DCTConnectionControllerStatusResponded)
+				[[UIApplication sharedApplication] endBackgroundTask:backgroundTaskIdentifier];
+		}];
+	}
+}
+
+- (void)dctInternal_applicationDidEnterBackgroundNotification:(NSNotification *)notification {
+	
+	[self.activeConnectionControllers enumerateObjectsUsingBlock:^(DCTConnectionController *cc, NSUInteger idx, BOOL *stop) {
+		[self dctInternal_handleBackgroundingWithConnectionController:cc];		
+	}];
+	
+	[self.queuedConnectionControllers enumerateObjectsUsingBlock:^(DCTConnectionController *cc, NSUInteger idx, BOOL *stop) {
+		[self dctInternal_handleBackgroundingWithConnectionController:cc];		
+	}];
+}
+
+- (void)dctInternal_applicationWillTerminateNotification:(NSNotification *)notification {
+	
+	[self stop];
+	
+	[self.activeConnectionControllers enumerateObjectsUsingBlock:^(DCTConnectionController *cc, NSUInteger idx, BOOL *stop) {
+		[self dctInternal_handleTerminationWithConnectionController:cc];		
+	}];
+	
+	[self.queuedConnectionControllers enumerateObjectsUsingBlock:^(DCTConnectionController *cc, NSUInteger idx, BOOL *stop) {
+		[self dctInternal_handleTerminationWithConnectionController:cc];		
+	}];
+}
+
+- (void)dctInternal_applicationWillEnterForegroundNotification:(NSNotification *)notification {
+	
+	[self start];
+	
+	NSURL *archiveDirectoryURL = [[self class] dctInternal_archiveDirectory];
+	
+	NSFileManager *fileManager = [NSFileManager defaultManager];
+	
+	NSArray *archiveURLs = [fileManager contentsOfDirectoryAtURL:archiveDirectoryURL 
+									  includingPropertiesForKeys:nil
+														 options:(NSDirectoryEnumerationSkipsSubdirectoryDescendants | NSDirectoryEnumerationSkipsHiddenFiles | NSDirectoryEnumerationSkipsPackageDescendants) 
+														   error:nil];
+	
+	[archiveURLs enumerateObjectsUsingBlock:^(NSURL *archiveURL, NSUInteger idx, BOOL *stop) {
+		DCTConnectionController *cc = [NSKeyedUnarchiver unarchiveObjectWithFile:[archiveURL path]];
+		[fileManager removeItemAtURL:archiveURL error:nil];
+		[cc connectOnQueue:self];
+		NSLog(@"%@ UNARCHIVING from: %@\n\n%@", self, archiveURL, [cc fullDescription]);
+	}];
+}
+
++ (NSURL *)dctInternal_archiveDirectory {
+	NSURL *docs = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
+	NSURL *archive = [docs URLByAppendingPathComponent:@".DCTConnectionControllerArchive"];
+	[[NSFileManager defaultManager] createDirectoryAtURL:archive withIntermediateDirectories:YES attributes:nil error:nil];
+	return archive;
+}
+
+#endif
 
 @end
