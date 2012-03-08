@@ -61,7 +61,9 @@ typedef enum {
 	DCTConnectionControllerTypeTrace,		/**< Uses a TRACE connection. */
 	DCTConnectionControllerTypeConnect,
 	DCTConnectionControllerTypePatch
-} DCTConnectionType;
+} DCTConnectionControllerType;
+
+#import "DCTConnectionController+Deprecated.h"
 
 /** Specifies the different stages of a connection.
  */
@@ -198,7 +200,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
  * `DCTConnectionControllerTypeConnect` for CONNECT requests
  
  */
-@property (nonatomic, assign) DCTConnectionType type;
+@property (nonatomic, assign) DCTConnectionControllerType type;
 
 
 /** The priority of the connection controller.
