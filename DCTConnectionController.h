@@ -430,6 +430,8 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 - (void)start;
 
+@property (nonatomic, assign) NSTimeInterval maximumCacheDuration;
+
 @end
 
 #import "DCTConnectionController+BlockHandlers.h"
