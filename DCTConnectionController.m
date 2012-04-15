@@ -214,7 +214,7 @@ typedef void (^DCTConnectionControllerPercentBlock) (NSNumber *percentDownloaded
 	return [NSString stringWithFormat:@"\n<%@: %p;\n    url = \"%@\";\n    type = %@;%@%@\n    status = %@;\n    priority = %@\n>", 
 			NSStringFromClass([self class]),
 			self,
-			self.URL,
+			[self.URLRequest URL],
 			DCTInternalConnectionControllerTypeString[self.type],
 			headersString,
 			bodyString,
