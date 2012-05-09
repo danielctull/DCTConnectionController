@@ -95,8 +95,10 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 #ifdef TARGET_OS_IPHONE
 
 + (void)load {
-	// Load the archives and add connections to shared queue:
-	[[DCTConnectionQueue sharedConnectionQueue] dctInternal_applicationWillEnterForegroundNotification:nil];
+	@autoreleasepool {
+		// Load the archives and add connections to shared queue:
+		[[DCTConnectionQueue sharedConnectionQueue] dctInternal_applicationWillEnterForegroundNotification:nil];
+	}
 }
 
 - (void)dealloc {
