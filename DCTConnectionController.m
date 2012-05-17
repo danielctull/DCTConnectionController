@@ -110,6 +110,7 @@ typedef void (^DCTConnectionControllerPercentBlock) (NSNumber *percentDownloaded
 @synthesize URL;
 @synthesize URLRequest;
 @synthesize URLConnection;
+@synthesize maximumCacheDuration;
 
 #pragma mark - NSObject
 
@@ -213,7 +214,7 @@ typedef void (^DCTConnectionControllerPercentBlock) (NSNumber *percentDownloaded
 	return [NSString stringWithFormat:@"\n<%@: %p;\n    url = \"%@\";\n    type = %@;%@%@\n    status = %@;\n    priority = %@\n>", 
 			NSStringFromClass([self class]),
 			self,
-			self.URL,
+			[self.URLRequest URL],
 			DCTInternalConnectionControllerTypeString[self.type],
 			headersString,
 			bodyString,
@@ -256,30 +257,30 @@ typedef void (^DCTConnectionControllerPercentBlock) (NSNumber *percentDownloaded
 	
 	self.status = existingConnectionController.status;
 	
-	__dct_weak DCTConnectionController *weakCC = existingConnectionController;
-	[existingConnectionController addStatusChangeHandler:^(DCTConnectionControllerStatus existingConnectionControllerStatus) {
+	__dct_weak DCTConnectionController *weakExistingConnectionController = existingConnectionController;
+	[existingConnectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
 		
-		switch (existingConnectionControllerStatus) {
+		switch (status) {
 				
 			case DCTConnectionControllerStatusResponded:
-				self.returnedResponse = weakCC.returnedResponse;
+				self.returnedResponse = weakExistingConnectionController.returnedResponse;
 				break;
 				
 			case DCTConnectionControllerStatusFinished:
-				dctInternal_downloadPath = weakCC.dctInternal_downloadPath;
-				if ([weakCC isReturnedObjectLoaded]) 
-					self.returnedObject = weakCC.returnedObject;
+				dctInternal_downloadPath = weakExistingConnectionController.dctInternal_downloadPath;
+				if ([weakExistingConnectionController isReturnedObjectLoaded]) 
+					self.returnedObject = weakExistingConnectionController.returnedObject;
 				break;
 				
 			case DCTConnectionControllerStatusFailed:
-				self.returnedError = weakCC.returnedError;
+				self.returnedError = weakExistingConnectionController.returnedError;
 				break;
 				
 			default:
 				break;
 		}
 		
-		self.status = existingConnectionControllerStatus;
+		self.status = status;
 	}];
 }
 
@@ -486,6 +487,10 @@ typedef void (^DCTConnectionControllerPercentBlock) (NSNumber *percentDownloaded
 	}
 	
 	[fileHandle closeFile];
+	
+	
+	
+	
 	[self dctInternal_nilURLConnection];
 	[self connectionDidFinishLoading];
 }
