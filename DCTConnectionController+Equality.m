@@ -50,7 +50,7 @@
 	
 	if (connectionController.type != self.type) return NO;
 	
-	if (![connectionController.URL isEqual:self.URL]) return NO;
+	if (![connectionController.URLRequest.URL isEqual:self.URLRequest.URL]) return NO;
 	
 	NSArray *properties = [self dctEqualityInternal_properties];
 	

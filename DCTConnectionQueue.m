@@ -35,9 +35,9 @@
  */
 
 #import "DCTConnectionQueue.h"
+#import "DCTConnectionController.h"
 #import "DCTConnectionController+UsefulChecks.h"
 #import "DCTConnectionGroup.h"
-#import "DCTConnectionQueue+Singleton.h"
 
 NSComparisonResult (^compareConnections)(id obj1, id obj2) = ^(id obj1, id obj2) {
 	
@@ -58,346 +58,98 @@ NSString *const DCTConnectionQueueActiveConnectionCountChangedNotification = @"D
 NSString *const DCTConnectionQueueActiveConnectionCountIncreasedNotification = @"DCTConnectionQueueActiveConnectionCountIncreasedNotification";
 NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @"DCTConnectionQueueActiveConnectionCountDecreasedNotification";
 
-@interface DCTConnectionQueue ()
-
-- (void)dctInternal_runNextConnection;
-- (BOOL)dctInternal_tryToRunConnection:(DCTConnectionController *)connection;
-
-- (DCTConnectionController *)dctInternal_nextConnection;
-- (DCTConnectionController *)dctInternal_nextConnectionIterator:(DCTConnectionController *)connection;
-
-- (void)dctInternal_dequeueAndStartConnection:(DCTConnectionController *)connectionController;
-
-#ifdef TARGET_OS_IPHONE
-- (void)dctInternal_applicationDidEnterBackgroundNotification:(NSNotification *)notification;
-- (void)dctInternal_applicationWillTerminateNotification:(NSNotification *)notification;
-- (void)dctInternal_archiveConnectionController:(DCTConnectionController *)cc;
-#endif
-
-@property (nonatomic, strong) NSMutableArray *dctInternal_activeConnectionControllers;
-@property (nonatomic, strong) NSMutableArray *dctInternal_queuedConnectionControllers;
-
-@end
-
 @implementation DCTConnectionQueue {
-	BOOL active;
-	dispatch_queue_t queue;
+	__strong NSMutableArray *_connectionControllers;
+}
+@synthesize dispatchQueue = _dispatchQueue;
+
++ (DCTConnectionQueue *)defaultConnectionQueue {
+	static DCTConnectionQueue *sharedInstance = nil;
+	static dispatch_once_t sharedToken;
+	dispatch_once(&sharedToken, ^{
+		sharedInstance = [self new];
+	});
+	return sharedInstance;
 }
 
-@synthesize maxConnections;
-@synthesize archivePriorityThreshold = _archivePriorityThreshold;
-@synthesize backgroundPriorityThreshold = _backgroundPriorityThreshold;
-@synthesize dctInternal_activeConnectionControllers;
-@synthesize dctInternal_queuedConnectionControllers;
-
-#pragma mark - NSObject
-
-#ifdef TARGET_OS_IPHONE
-
-+ (void)load {
-	@autoreleasepool {
-		// Load the archives and add connections to shared queue:
-		[[DCTConnectionQueue sharedConnectionQueue] dctInternal_applicationWillEnterForegroundNotification:nil];
-	}
+- (id)initWithName:(NSString *)name {
+	if (!(self = [super init])) return nil;
+	_connectionControllers = [NSMutableArray new];
+	_maxConnections = 5;
+	NSString *queueName = [NSString stringWithFormat:@"uk.co.danieltull.DCTConnectionQueue.%@", name];
+	_dispatchQueue = dispatch_queue_create([queueName cStringUsingEncoding:NSUTF8StringEncoding], DISPATCH_QUEUE_SERIAL);
+	return self;
 }
-
-- (void)dealloc {
-	UIApplication *app = [UIApplication sharedApplication];
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self 
-													name:UIApplicationDidEnterBackgroundNotification
-												  object:app];
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self 
-													name:UIApplicationWillTerminateNotification
-												  object:app];
-	
-	[[NSNotificationCenter defaultCenter] removeObserver:self 
-													name:UIApplicationWillEnterForegroundNotification
-												  object:app];
-}
-#endif
 
 - (id)init {
-	
-	if (!(self = [super init])) return nil;
-	
-	_backgroundPriorityThreshold = DCTConnectionControllerPriorityHigh;
-	_archivePriorityThreshold = DCTConnectionControllerPriorityVeryHigh;
-	self.dctInternal_activeConnectionControllers = [[NSMutableArray alloc] init];
-	self.dctInternal_queuedConnectionControllers = [[NSMutableArray alloc] init];
-	active = YES;
-	self.maxConnections = 5;
-	
-	queue = dispatch_get_current_queue();
-	
-#ifdef TARGET_OS_IPHONE
-	
-	UIApplication *app = [UIApplication sharedApplication];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(dctInternal_applicationDidEnterBackgroundNotification:) 
-												 name:UIApplicationDidEnterBackgroundNotification 
-											   object:app];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(dctInternal_applicationWillTerminateNotification:) 
-												 name:UIApplicationWillTerminateNotification
-											   object:app];
-	
-	[[NSNotificationCenter defaultCenter] addObserver:self
-											 selector:@selector(dctInternal_applicationWillEnterForegroundNotification:) 
-												 name:UIApplicationWillEnterForegroundNotification
-											   object:app];
-#endif
-	
-	return self;	
+	return [self initWithName:@"defaultConnectionQueue"];
 }
 
 #pragma mark - DCTConnectionQueue
 
-- (void)start {
-	active = YES;
-	[self dctInternal_runNextConnection];
-}
-
-- (void)stop {
-	active = NO;
-	
-	[self.activeConnectionControllers makeObjectsPerformSelector:@selector(requeue)];
-}
-
-- (NSArray *)activeConnectionControllers {
-	return [self.dctInternal_activeConnectionControllers copy];
-}
-
-
-- (NSArray *)queuedConnectionControllers {
-	return [self.dctInternal_queuedConnectionControllers copy];
-}
-
 - (NSArray *)connectionControllers {
-	return [self.dctInternal_activeConnectionControllers arrayByAddingObjectsFromArray:self.dctInternal_queuedConnectionControllers];
+	dispatch_queue_t callingQueue = dispatch_get_current_queue();
+	
+	if (callingQueue == _dispatchQueue)
+		return [_connectionControllers copy];
+	
+	__block NSArray *connectionControllers = nil;
+	dispatch_sync(_dispatchQueue, ^{
+		connectionControllers = [_connectionControllers copy];
+	});
+	return connectionControllers;
 }
 
 - (void)addConnectionController:(DCTConnectionController *)connectionController {
 	
-	/*NSString *previousSymbol = [[NSThread callStackSymbols] objectAtIndex:1];
-	SEL connectOnQueue = @selector(connectOnQueue:);
-	if ([previousSymbol rangeOfString:NSStringFromSelector(connectOnQueue)].location == NSNotFound) {
-		[connectionController connectOnQueue:self];
-		return;
-	}*/
+	dispatch_async(_dispatchQueue, ^{
 		
-	__dct_weak DCTConnectionController *weakConnectionController = connectionController;
-	__dct_weak DCTConnectionQueue *weakSelf = self;
-	
-	[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
-		if (weakConnectionController.ended) {
+		__dct_weak DCTConnectionController *weakConnectionController = connectionController;
+		__dct_weak DCTConnectionQueue *weakSelf = self;
+		
+		[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
+			if (status <= DCTConnectionControllerStatusResponded) return;
+			
 			[weakSelf removeConnectionController:weakConnectionController];
-			if (active) [weakSelf dctInternal_runNextConnection];
-		}
-	}];
-	
-	[self.dctInternal_queuedConnectionControllers addObject:connectionController];
-	[self.dctInternal_queuedConnectionControllers sortUsingComparator:compareConnections];
-	
-	if (active) [self dctInternal_runNextConnection];
+			[weakSelf _runNextConnection];
+			[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountDecreasedNotification object:self];
+		}];
+		
+		[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountIncreasedNotification object:self];
+		[_connectionControllers addObject:connectionController];
+		[self _runNextConnection];
+	});
 }
 
 - (void)removeConnectionController:(DCTConnectionController *)connectionController {
-	
-	if ([self.dctInternal_queuedConnectionControllers containsObject:connectionController])
-		[self.dctInternal_queuedConnectionControllers removeObject:connectionController];
-	
-	if ([self.dctInternal_activeConnectionControllers containsObject:connectionController]) {
-		[self.dctInternal_activeConnectionControllers removeObject:connectionController];
-		[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountDecreasedNotification object:self];
-		[self dctInternal_runNextConnection];
-	}
+	dispatch_async(_dispatchQueue, ^{
+		[_connectionControllers removeObject:connectionController];
+		[self _runNextConnection];
+	});
 }
 
 #pragma mark - Internals
 
-- (void)dctInternal_runNextConnection {
+- (void)_runNextConnection {
 	
-	if ([self.dctInternal_activeConnectionControllers count] >= self.maxConnections) return;
-	
-	if (!active) return;
-	
-	if ([self.dctInternal_queuedConnectionControllers count] == 0) return;
-	
-	// Loop through the queue and try to run the top-most connection.
-	// If it can't be run (eg waiting for dependencies), run the next one down.
+	[_connectionControllers enumerateObjectsUsingBlock:^(DCTConnectionController *connectionController, NSUInteger i, BOOL *stop) {
 		
-	DCTConnectionController *connection = [self dctInternal_nextConnection];
-	
-	if (!connection) return;
-	
-	[self dctInternal_dequeueAndStartConnection:connection];
-	
-	// In the case that connections are added but the queue is not active, such as
-	// returning from background in multitasking, we should repeatedly call this method.
-	// It will return out when the max connections has been hit or when there are 
-	// no more connections to run.
-	[self dctInternal_runNextConnection];
-}
-
-- (DCTConnectionController *)dctInternal_nextConnection {
-	
-	for (DCTConnectionController *connection in self.dctInternal_queuedConnectionControllers) {
-		DCTConnectionController *c = [self dctInternal_nextConnectionIterator:connection];
-		if (c)
-			return c;
-	}
-	return nil;
-}
-
-- (DCTConnectionController *)dctInternal_nextConnectionIterator:(DCTConnectionController *)connection {
-	if ([connection.dependencies count] > 0) {
+		if (i+1 >= _maxConnections) {
+			*stop = YES;
+			return;
+		}
 		
-		// Sort so the dependencies are in order from high to low.
-		NSArray *sortedDependencies = [connection.dependencies sortedArrayUsingComparator:compareConnections];		
+		if (connectionController.status > DCTConnectionControllerStatusQueued) return;
 		
-		// Look for connections that are queued at present, if there is one, we can process that one.
-		for (DCTConnectionController *c in sortedDependencies)
-			if (c.status == DCTConnectionControllerStatusQueued)
-				return [self dctInternal_nextConnectionIterator:c];
-		
-		// Look for connections that are "active" at present, if there is one, we can't proceed.		
-		for (DCTConnectionController *c in sortedDependencies)
-			if (c.status == DCTConnectionControllerStatusStarted || c.status == DCTConnectionControllerStatusResponded)
-				return nil;
-	}	
-	
-	return connection;
-}
-
-- (BOOL)dctInternal_tryToRunConnection:(DCTConnectionController *)connectionController {
-	
-	if ([connectionController.dependencies count] > 0) {
-		
-		// Sort so the dependencies are in order from high to low.
-		NSArray *sortedDependencies = [connectionController.dependencies sortedArrayUsingComparator:compareConnections];		
-	
-		// Look for connections that are queued at present, if there is one, we can process that one.
-		for (DCTConnectionController *c in sortedDependencies)
-			if (c.status == DCTConnectionControllerStatusQueued)
-				return [self dctInternal_tryToRunConnection:c];
-		
-		// Look for connections that are "active" at present, if there is one, we can't proceed.		
-		for (DCTConnectionController *c in sortedDependencies)
-			if (c.status == DCTConnectionControllerStatusStarted || c.status == DCTConnectionControllerStatusResponded)
-				return NO;
-	}	
-	
-	// There are no dependencies left to be run on this connection controller, so we can safely run it.
-	[self dctInternal_dequeueAndStartConnection:connectionController];
-	
-	return YES;
-}
-
-- (void)dctInternal_dequeueAndStartConnection:(DCTConnectionController *)connectionController {
-	
-	[self removeConnectionController:connectionController];
-	[self.dctInternal_activeConnectionControllers addObject:connectionController];
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountIncreasedNotification object:self];
-	
-	[connectionController start];
-}
-
-#ifdef TARGET_OS_IPHONE
-
-- (void)dctInternal_archiveConnectionController:(DCTConnectionController *)cc {
-	NSURL *archiveURL = [[[self class] dctInternal_archiveDirectory] URLByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
-	[NSKeyedArchiver archiveRootObject:cc toFile:[archiveURL path]];
-	
-	NSLog(@"%@ ARCHIVING to: %@\n\n%@", self, archiveURL, [cc fullDescription]);
-}
-
-- (void)dctInternal_handleTerminationWithConnectionController:(DCTConnectionController *)cc {
-	
-	[cc cancel];
-	
-	if (cc.priority <= self.archivePriorityThreshold)
-		[self dctInternal_archiveConnectionController:cc];
-}
-
-- (void)dctInternal_handleBackgroundingWithConnectionController:(DCTConnectionController *)cc {
-	
-	NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), cc);
-	
-	if (cc.priority > self.backgroundPriorityThreshold) { // Bigger value is lower priority for some bloody reason.
-		
-		[self dctInternal_handleTerminationWithConnectionController:cc];
-		
-	} else {
-		
-		UIBackgroundTaskIdentifier backgroundTaskIdentifier = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler:^{
-			[self stop];
-			[self dctInternal_handleTerminationWithConnectionController:cc];
-		}];
-		
-		[cc addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
-			if (status > DCTConnectionControllerStatusResponded)
-				[[UIApplication sharedApplication] endBackgroundTask:backgroundTaskIdentifier];
-		}];
-	}
-}
-
-- (void)dctInternal_applicationDidEnterBackgroundNotification:(NSNotification *)notification {
-	
-	[self.activeConnectionControllers enumerateObjectsUsingBlock:^(DCTConnectionController *cc, NSUInteger idx, BOOL *stop) {
-		[self dctInternal_handleBackgroundingWithConnectionController:cc];		
-	}];
-	
-	[self.queuedConnectionControllers enumerateObjectsUsingBlock:^(DCTConnectionController *cc, NSUInteger idx, BOOL *stop) {
-		[self dctInternal_handleBackgroundingWithConnectionController:cc];		
+		[connectionController start];		
 	}];
 }
 
-- (void)dctInternal_applicationWillTerminateNotification:(NSNotification *)notification {
-	
-	[self stop];
-	
-	[self.activeConnectionControllers enumerateObjectsUsingBlock:^(DCTConnectionController *cc, NSUInteger idx, BOOL *stop) {
-		[self dctInternal_handleTerminationWithConnectionController:cc];		
-	}];
-	
-	[self.queuedConnectionControllers enumerateObjectsUsingBlock:^(DCTConnectionController *cc, NSUInteger idx, BOOL *stop) {
-		[self dctInternal_handleTerminationWithConnectionController:cc];		
-	}];
+- (NSString *)description {
+	return [NSString stringWithFormat:@"<%@: %p; dispatchQueue = \"%s\">",
+			NSStringFromClass([self class]),
+			self,
+			dispatch_queue_get_label(self.dispatchQueue)];
 }
-
-- (void)dctInternal_applicationWillEnterForegroundNotification:(NSNotification *)notification {
-	
-	[self start];
-	
-	NSURL *archiveDirectoryURL = [[self class] dctInternal_archiveDirectory];
-	
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	
-	NSArray *archiveURLs = [fileManager contentsOfDirectoryAtURL:archiveDirectoryURL 
-									  includingPropertiesForKeys:nil
-														 options:(NSDirectoryEnumerationSkipsSubdirectoryDescendants | NSDirectoryEnumerationSkipsHiddenFiles | NSDirectoryEnumerationSkipsPackageDescendants) 
-														   error:nil];
-	
-	[archiveURLs enumerateObjectsUsingBlock:^(NSURL *archiveURL, NSUInteger idx, BOOL *stop) {
-		DCTConnectionController *cc = [NSKeyedUnarchiver unarchiveObjectWithFile:[archiveURL path]];
-		[fileManager removeItemAtURL:archiveURL error:nil];
-		[cc connectOnQueue:self];
-		NSLog(@"%@ UNARCHIVING from: %@\n\n%@", self, archiveURL, [cc fullDescription]);
-	}];
-}
-
-+ (NSURL *)dctInternal_archiveDirectory {
-	NSURL *docs = [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
-	NSURL *archive = [docs URLByAppendingPathComponent:@".DCTConnectionControllerArchive"];
-	[[NSFileManager defaultManager] createDirectoryAtURL:archive withIntermediateDirectories:YES attributes:nil error:nil];
-	return archive;
-}
-
-#endif
 
 @end

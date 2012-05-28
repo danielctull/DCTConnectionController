@@ -35,7 +35,7 @@
  */
 
 #import <Foundation/Foundation.h>
-#import "DCTConnectionController.h"
+@class DCTConnectionController;
 
 extern NSString *const DCTConnectionQueueConnectionCountChangedNotification;
 extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotification;
@@ -45,66 +45,14 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotificat
 
 @interface DCTConnectionQueue : NSObject
 
-/// @name Queue Settings
++ (DCTConnectionQueue *)defaultConnectionQueue;
+- (id)initWithName:(NSString *)name;
+@property (nonatomic, readonly) dispatch_queue_t dispatchQueue;
 
-/** The maximum number of simultaneous connections allowed at once. */
 @property (nonatomic, assign) NSUInteger maxConnections;
 
-/// @name Managing the queue
-
-/** Stops the conneciton queue. */
-- (void)stop;
-
-/** Starts the conneciton queue. */
-- (void)start;
-
-
-/// @name Accessing Connection Controllers
-
-/** Returns all the connection controllers currently in progress and queued. */
 @property (nonatomic, readonly) NSArray *connectionControllers;
-
-/** Returns all the connection controllers currently in progress. */
-@property (nonatomic, readonly) NSArray *activeConnectionControllers;
-
-/** Returns all the connection controllers currently queued. */
-@property (nonatomic, readonly) NSArray *queuedConnectionControllers;
-
-/** The priority threshold to archive connections at. This will archive connections on 
- this queue with a priority of this value or higher and resume them on relaunch.
- 
- Default value is DCTConnectionControllerPriorityVeryHigh.
- */
-@property (nonatomic, assign) DCTConnectionControllerPriority archivePriorityThreshold;
-
-#ifdef TARGET_OS_IPHONE
-/** The priority threshold to run a connection in the background. This will run connections
- on this queue with a priority of this value or higher when the app moves to the background.
- 
- For instance, setting this to DCTConnectionControllerPriorityVeryLow will cause every 
- connection controller to continue to run when the app is put in the background.
- 
- Default value is DCTConnectionControllerPriorityHigh.
- 
- */
-@property (nonatomic, assign) DCTConnectionControllerPriority backgroundPriorityThreshold;
-#endif
-
-/**
- Add a connection controller to the queue. This method causes the connection queue to
- find the next connection and run it.
- 
- @param connectionController The connection controller to add to the queue.
- */
 - (void)addConnectionController:(DCTConnectionController *)connectionController;
-
-/**
- Remove the given connection controller from the queue.
- 
- @param connectionController The connection controller to remove.
- */
 - (void)removeConnectionController:(DCTConnectionController *)connectionController;
 
 @end
-
-#import "DCTConnectionQueue+Deprecated.h"

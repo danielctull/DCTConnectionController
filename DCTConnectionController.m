@@ -35,7 +35,7 @@
  */
 
 #import "DCTConnectionController.h"
-#import "DCTConnectionQueue+Singleton.h"
+#import "DCTConnectionQueue.h"
 #import "DCTConnectionController+Equality.h"
 #import "DCTConnectionController+UsefulChecks.h"
 #import "DCTRESTConnectionController.h"
@@ -76,79 +76,72 @@ NSString *const DCTConnectionControllerDidReceiveResponseNotification = @"DCTCon
 NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectionControllerWasCancelledNotification";
 NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnectionControllerStatusChangedNotification";
 
-typedef void (^DCTConnectionControllerStatusBlock) (DCTConnectionControllerStatus status);
-typedef void (^DCTConnectionControllerPercentBlock) (NSNumber *percentDownloaded);
-
-@interface DCTConnectionController () <NSURLConnectionDelegate, NSURLConnectionDataDelegate>
-- (void)dctInternal_reset;
-
-@property (nonatomic, readwrite) DCTConnectionControllerStatus status;
-@property (nonatomic, readonly) NSString *dctInternal_downloadPath;
-
-- (void)dctInternal_nilURLConnection;
-- (void)dctInternal_calculatePercentDownloaded;
-@end
-
 @implementation DCTConnectionController {
-	__strong NSString *dctInternal_downloadPath;
-	__strong NSMutableSet *dependencies;
-	__strong NSMutableArray *statusChangeBlocks;
-	__strong NSMutableArray *percentChangeBlocks;
-	__strong NSFileHandle *fileHandle;
-	float contentLength;
-	float downloadedLength;
+	__weak DCTConnectionQueue *_connectionQueue;
+	dispatch_queue_t _dispatchQueue;
+	__strong NSMutableSet *_statusChangeBlocks;
+	__strong NSFileHandle *_fileHandle;
+	__strong NSURLConnection *_URLConnection;
+	BOOL _isReturnedObjectLoaded;
 }
 
-@synthesize queue;
-@synthesize status = _status;
-@synthesize type;
-@synthesize priority;
-@synthesize percentDownloaded;
-@synthesize returnedObject;
-@synthesize returnedError;
-@synthesize returnedResponse;
-@synthesize URL;
-@synthesize URLRequest;
-@synthesize URLConnection;
-@synthesize maximumCacheDuration;
+@synthesize returnedObject = _returnedObject;
+@synthesize returnedError = _returnedError;
+@synthesize returnedResponse = _returnedResponse;
+@synthesize downloadPath = _downloadPath;
 
-#pragma mark - NSObject
-
-- (void)dealloc {
-	
-	dct_nil(queue);
-	
-	NSFileManager *fileManager = [NSFileManager defaultManager];
-	NSError *error = nil;
-	if ([fileManager fileExistsAtPath:self.dctInternal_downloadPath] && ![fileManager removeItemAtPath:self.dctInternal_downloadPath error:&error])
-		NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), error);
-}
+#pragma mark - NSCoding
 
 - (id)initWithCoder:(NSCoder *)coder {
-	
 	if (!(self = [self init])) return nil;
-	
-	self.URL = [coder decodeObjectForKey:NSStringFromSelector(@selector(URL))];
-	self.type = [coder decodeIntegerForKey:NSStringFromSelector(@selector(type))];
-	self.priority = [coder decodeIntegerForKey:NSStringFromSelector(@selector(priority))];
-	
-	NSSet *codedDependencies = [coder decodeObjectForKey:NSStringFromSelector(@selector(dependencies))];
-	[dependencies addObjectsFromArray:[codedDependencies allObjects]];
-	
+	_type = [coder decodeIntegerForKey:NSStringFromSelector(@selector(type))];
+	_priority = [coder decodeIntegerForKey:NSStringFromSelector(@selector(priority))];
 	return self;
 }
 
 - (void)encodeWithCoder:(NSCoder *)coder {
-	[coder encodeObject:self.URL forKey:NSStringFromSelector(@selector(URL))];
 	[coder encodeInteger:self.type forKey:NSStringFromSelector(@selector(type))];
 	[coder encodeInteger:self.priority forKey:NSStringFromSelector(@selector(priority))];
-	[coder encodeObject:self.dependencies forKey:NSStringFromSelector(@selector(dependencies))];
+}
+
+- (id)initWithURL:(NSURL *)URL {
+	if (!(self = [self init])) return nil;
+	NSMutableURLRequest *request = [NSMutableURLRequest new];
+	[request setURL:URL];
+	[request setHTTPMethod:DCTInternalConnectionControllerTypeString[self.type]];
+	_URLRequest = request;
+	return self;
+}
+
+- (void)performBlock:(void(^)())block {
+	dispatch_async(_dispatchQueue, block);
+}
+
+- (NSString *)downloadPath {
+	
+	if (!_downloadPath) {
+		NSString *temporaryDirectory = NSTemporaryDirectory();
+		temporaryDirectory = [temporaryDirectory stringByAppendingPathComponent:@"DCTConnectionController"];
+		
+		NSError *error = nil;
+		if (![[NSFileManager defaultManager] createDirectoryAtPath:temporaryDirectory
+									   withIntermediateDirectories:YES
+														attributes:nil
+															 error:&error])
+			NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), error);
+		
+		_downloadPath = [temporaryDirectory stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+	}
+	
+	return _downloadPath;
 }
 
 - (id)init {
 	if (!(self = [super init])) return nil;
 	
-	// Send notifications on status change
+	_priority = DCTConnectionControllerPriorityMedium;
+	_statusChangeBlocks = [NSMutableSet new];
+	
 	__dct_weak DCTConnectionController *weakSelf = self;
 	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 	[self addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
@@ -177,20 +170,217 @@ typedef void (^DCTConnectionControllerPercentBlock) (NSNumber *percentDownloaded
 		}
 	}];
 	
-	priority = DCTConnectionControllerPriorityMedium;
-	percentDownloaded = [[NSNumber alloc] initWithInteger:0];
-	dependencies = [NSMutableSet new];
-	
-	return self;
+    return self;
 }
 
-- (BOOL)isEqual:(id)object {
-	
-	if (![object isKindOfClass:[DCTConnectionController class]]) return NO;
-	
-	return [self isEqualToConnectionController:object];
+- (void)connect {
+	[self connectOnQueue:[DCTConnectionQueue defaultConnectionQueue]];
 }
 
+- (void)connectOnQueue:(DCTConnectionQueue *)connectionQueue {
+	
+	if (self.status > DCTConnectionControllerStatusNotStarted) return;
+	
+	_connectionQueue = connectionQueue;
+	_dispatchQueue = _connectionQueue.dispatchQueue;
+	
+	dispatch_async(_dispatchQueue, ^{
+				
+		NSUInteger existingConnectionControllerIndex = [_connectionQueue.connectionControllers indexOfObject:self];
+		
+		if (existingConnectionControllerIndex == NSNotFound) {
+			[_connectionQueue addConnectionController:self];
+			[self setStatus:DCTConnectionControllerStatusQueued];
+			return;
+		}
+		
+		DCTConnectionController *existingConnectionController = [_connectionQueue.connectionControllers objectAtIndex:existingConnectionControllerIndex];
+		
+		// If it's the exact same object, lets not add it again. This could happen if -connectOnQueue: is called more than once.
+		if (existingConnectionController == self) return;
+				
+		// Not sure why it's this way around.
+		if (existingConnectionController.priority > self.priority)
+			existingConnectionController.priority = self.priority;
+		
+		self.status = existingConnectionController.status;
+		
+		__dct_weak DCTConnectionController *weakExistingConnectionController = existingConnectionController;
+		[existingConnectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
+			
+			__strong DCTConnectionController *strongExistingConnectionController = weakExistingConnectionController;
+			
+			switch (status) {
+					
+				case DCTConnectionControllerStatusResponded:
+					_returnedResponse = weakExistingConnectionController.returnedResponse;
+					break;
+					
+				case DCTConnectionControllerStatusFinished:
+					_downloadPath = weakExistingConnectionController.downloadPath;
+					if (strongExistingConnectionController->_isReturnedObjectLoaded)
+						_returnedObject = weakExistingConnectionController.returnedObject;
+					break;
+					
+				case DCTConnectionControllerStatusFailed:
+					_returnedError = weakExistingConnectionController.returnedError;
+					break;
+					
+				default:
+					break;
+			}
+			
+			[self setStatus:status];
+		}];
+	});
+}
+
+- (void)start {
+	
+	if (self.status >= DCTConnectionControllerStatusStarted) return;
+	self.status = DCTConnectionControllerStatusStarted;
+	
+	dispatch_async(dispatch_get_main_queue(), ^{
+				
+		_URLConnection = [[NSURLConnection alloc] initWithRequest:self.URLRequest delegate:self startImmediately:YES];
+		
+		if (!_URLConnection)
+			dispatch_async(_dispatchQueue, ^{
+				// TODO: GENERATE ERROR
+				[self connectionDidFail];
+			});
+	});
+}
+
+- (NSURLRequest *)URLRequest {
+	
+	if (!_URLRequest) [self loadURLRequest];
+	
+	return _URLRequest;
+}
+
+#pragma mark - Subclass Methods
+
+- (void)loadURLRequest {
+	NSMutableURLRequest *request = [NSMutableURLRequest new];
+	[request setHTTPMethod:DCTInternalConnectionControllerTypeString[self.type]];	
+	self.URLRequest = request;
+}
+
+- (void)connectionDidFinishLoading {
+	[self setStatus:DCTConnectionControllerStatusFinished];
+}
+
+- (void)connectionDidReceiveResponse {
+	[self setStatus:DCTConnectionControllerStatusResponded];
+}
+
+- (void)connectionDidFail {
+	[self setStatus:DCTConnectionControllerStatusFailed];
+}
+
+- (id)returnedObject {
+	
+	if (!_returnedObject) {
+		_returnedObject = [[NSData alloc] initWithContentsOfFile:self.downloadPath];
+		_isReturnedObjectLoaded = YES;
+	}
+	return _returnedObject;
+}
+
+- (void)setStatus:(DCTConnectionControllerStatus)status {
+	
+	if (status <= _status
+		&& status != DCTConnectionControllerStatusNotStarted
+		&& status != DCTConnectionControllerStatusQueued)
+		return;
+	
+	if (self.ended) return;
+	
+	[self willChangeValueForKey:@"status"];
+	_status = status;
+	[self didChangeValueForKey:@"status"];
+	
+	[_statusChangeBlocks enumerateObjectsUsingBlock:^(void(^block)(DCTConnectionControllerStatus), BOOL *stop) {
+		block(_status);
+	}];
+}
+
+- (void)addStatusChangeHandler:(void(^)(DCTConnectionControllerStatus status))handler {
+	dispatch_queue_t callingQueue = dispatch_get_current_queue();
+	[_statusChangeBlocks addObject:^(DCTConnectionControllerStatus status) {
+		dispatch_async(callingQueue, ^{
+			handler(status);
+		});
+	}];
+}
+
+#pragma mark - NSURLConnectionDelegate
+
+- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
+	dispatch_async(_dispatchQueue, ^{
+		_returnedResponse = response;
+		[self connectionDidReceiveResponse];
+	});
+}
+
+- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
+	
+	dispatch_async(_dispatchQueue, ^{
+		
+		if (!_fileHandle) {
+			
+			NSString *downloadPath = self.downloadPath;
+			
+			NSFileManager *fileManager = [NSFileManager new];
+			
+			if ([fileManager fileExistsAtPath:downloadPath])
+				[fileManager removeItemAtPath:downloadPath error:nil];
+			
+			[fileManager createFileAtPath:downloadPath
+								 contents:nil
+							   attributes:nil];
+			
+			_fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:downloadPath];
+		}
+		
+		[_fileHandle seekToEndOfFile];
+		[_fileHandle writeData:data];
+	});
+}
+
+- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
+	
+	dispatch_async(_dispatchQueue, ^{
+		
+		[_fileHandle closeFile];
+		_fileHandle = nil;
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[_URLConnection cancel];
+			_URLConnection = nil;
+		});
+		[self connectionDidFinishLoading];
+		NSFileManager *fileManager = [NSFileManager new];
+		[fileManager removeItemAtPath:self.downloadPath error:nil];
+	});
+}
+
+- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
+	dispatch_async(_dispatchQueue, ^{
+		[_fileHandle closeFile];
+		_fileHandle = nil;
+		_returnedError = error;
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[_URLConnection cancel];
+			_URLConnection = nil;
+		});
+		[self connectionDidFail];
+		NSFileManager *fileManager = [NSFileManager new];
+		[fileManager removeItemAtPath:self.downloadPath error:nil];
+	});
+}
+
+#pragma mark - Internal
 
 - (NSString *)fullDescription {
 	
@@ -211,10 +401,10 @@ typedef void (^DCTConnectionControllerPercentBlock) (NSNumber *percentDownloaded
 			bodyString = [NSString stringWithFormat:@"\n    body = \n        %@", body];
 	}
 	
-	return [NSString stringWithFormat:@"\n<%@: %p;\n    url = \"%@\";\n    type = %@;%@%@\n    status = %@;\n    priority = %@\n>", 
+	return [NSString stringWithFormat:@"\n<%@: %p;\n    URL = \"%@\";\n    type = %@;%@%@\n    status = %@;\n    priority = %@\n>", 
 			NSStringFromClass([self class]),
 			self,
-			[self.URLRequest URL],
+			self.URLRequest.URL,
 			DCTInternalConnectionControllerTypeString[self.type],
 			headersString,
 			bodyString,
@@ -223,318 +413,17 @@ typedef void (^DCTConnectionControllerPercentBlock) (NSNumber *percentDownloaded
 }
 
 - (NSString *)description {
-	return [NSString stringWithFormat:@"<%@: %p; url = \"%@\"; type = %@; status = %@; priority = %@>", 
+	return [NSString stringWithFormat:@"<%@: %p; URL = \"%@\"; type = %@; status = %@; priority = %@>", 
 			NSStringFromClass([self class]),
 			self,
-			self.URL,
+			self.URLRequest.URL,
 			DCTInternalConnectionControllerTypeString[self.type],
 			DCTInternalConnectionControllerStatusString[self.status],
 			DCTInternalConnectionControllerPriorityString[self.priority]];
 }
 
-#pragma mark - DCTConnectionController: Managing the connection
-
-- (void)connectOnQueue:(DCTConnectionQueue *)theQueue {
-	
-	queue = theQueue;
-	
-	NSUInteger existingConnectionControllerIndex = [queue.connectionControllers indexOfObject:self];
-	
-	if (existingConnectionControllerIndex == NSNotFound) {
-		[queue addConnectionController:self];
-		self.status = DCTConnectionControllerStatusQueued;
-		return;	
-	}
-	
-	DCTConnectionController *existingConnectionController = [queue.connectionControllers objectAtIndex:existingConnectionControllerIndex];
-		
-	// If it's the exact same object, lets not add it again. This could happen if -connectOnQueue: is called more than once.
-	if (existingConnectionController == self) return;
-	
-	// Not sure why it's this way around.
-	if (existingConnectionController.priority > self.priority)
-		existingConnectionController.priority = self.priority;
-	
-	self.status = existingConnectionController.status;
-	
-	__dct_weak DCTConnectionController *weakExistingConnectionController = existingConnectionController;
-	[existingConnectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
-		
-		switch (status) {
-				
-			case DCTConnectionControllerStatusResponded:
-				self.returnedResponse = weakExistingConnectionController.returnedResponse;
-				break;
-				
-			case DCTConnectionControllerStatusFinished:
-				dctInternal_downloadPath = weakExistingConnectionController.dctInternal_downloadPath;
-				if ([weakExistingConnectionController isReturnedObjectLoaded]) 
-					self.returnedObject = weakExistingConnectionController.returnedObject;
-				break;
-				
-			case DCTConnectionControllerStatusFailed:
-				self.returnedError = weakExistingConnectionController.returnedError;
-				break;
-				
-			default:
-				break;
-		}
-		
-		self.status = status;
-	}];
-}
-
-- (void)requeue {
-	[queue removeConnectionController:self];
-	[self dctInternal_reset];
-	[self connectOnQueue:queue];
-}
-
-- (void)cancel {
-	[self dctInternal_nilURLConnection];
-	self.status = DCTConnectionControllerStatusCancelled;
-}
-
-- (void)start {
-	if (self.started || URLConnection) return;
-	
-	URLConnection = [[NSURLConnection alloc] initWithRequest:self.URLRequest delegate:self];
-	
-	self.status = DCTConnectionControllerStatusStarted;
-	
-	if (!URLConnection) {
-		// TODO: GENERATE ERROR
-		[self connectionDidFail];
-	}
-}
-
-#pragma mark - DCTConnectionController: Dependency
-
-- (NSArray *)dependencies {
-	return [dependencies allObjects];
-}
-
-- (void)addDependency:(DCTConnectionController *)connectionController {
-	
-	NSAssert(connectionController != nil, @"connectionController is nil");
-	
-	[dependencies addObject:connectionController];
-	
-	__weak DCTConnectionController *weakCC = connectionController;
-	[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
-		if (weakCC.ended)
-			[self removeDependency:weakCC];
-	}];
-}
-
-- (void)removeDependency:(DCTConnectionController *)connectionController {
-	
-	NSAssert(connectionController != nil, @"connectionController is nil");
-	
-	if (![dependencies containsObject:connectionController]) return;
-	
-	[dependencies removeObject:connectionController];
-}
-
-#pragma mark - DCTConnectionController: Subclass methods
-
-- (void)loadURLRequest {
-	NSMutableURLRequest *request = [[NSMutableURLRequest alloc] init];
-	[request setURL:self.URL];
-	[request setHTTPMethod:DCTInternalConnectionControllerTypeString[self.type]];	
-	self.URLRequest = request;
-}
-
-- (void)connectionDidFinishLoading {
-	self.status = DCTConnectionControllerStatusFinished;
-}
-
-- (void)connectionDidReceiveResponse {
-	self.status = DCTConnectionControllerStatusResponded;
-}
-
-- (void)connectionDidFail {
-	self.status = DCTConnectionControllerStatusFailed;
-}
-
-#pragma mark - DCTConnectionController: Setters
-
-- (void)setURLRequest:(NSURLRequest *)newURLRequest {
-	
-	if (self.started) return;
-	
-	if (newURLRequest == URLRequest) return; // If you use isEqual: it will match for a similar set of parameters
-	
-	URLRequest = [newURLRequest copy];
-	self.URL = URLRequest.URL;
-}
-
-- (void)setURL:(NSURL *)newURL {
-	
-	if (self.started) return;
-	
-	URL = newURL;
-}
-
-#pragma mark - DCTConnectionController: Getters
-
-- (BOOL)isReturnedObjectLoaded {
-	return (returnedObject != nil);
-}
-
-- (NSURLRequest *)URLRequest {
-	
-	if (!URLRequest) [self loadURLRequest];
-	
-	return URLRequest;
-}
-
-- (id)returnedObject {
-	
-	if (!returnedObject)
-		returnedObject = [[NSData alloc] initWithContentsOfFile:self.dctInternal_downloadPath];
-	
-	return returnedObject;
-}
-
-- (NSString *)dctInternal_downloadPath {
-	
-	if (!dctInternal_downloadPath) {
-		NSString *temporaryDirectory = NSTemporaryDirectory();
-		temporaryDirectory = [temporaryDirectory stringByAppendingPathComponent:@"DCTConnectionController"];
-		
-		NSError *error = nil;
-		if (![[NSFileManager defaultManager] createDirectoryAtPath:temporaryDirectory
-									   withIntermediateDirectories:YES
-														attributes:nil
-															 error:&error])
-			NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), error);
-		
-		dctInternal_downloadPath = [temporaryDirectory stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
-	}
-	
-	return dctInternal_downloadPath;
-}
-
-#pragma mark - DCTConnectionController: Status
-
-- (void)setStatus:(DCTConnectionControllerStatus)status {
-	
-	if (status <= _status
-		&& status != DCTConnectionControllerStatusNotStarted
-		&& status != DCTConnectionControllerStatusQueued)
-		return;
-	
-	if (self.ended) return;
-	
-	[self willChangeValueForKey:@"status"];
-	_status = status;
-	[self didChangeValueForKey:@"status"];
-	
-	for (DCTConnectionControllerStatusBlock block in statusChangeBlocks)
-		block(status);
-}
-
-- (void)addStatusChangeHandler:(DCTConnectionControllerStatusBlock)handler {
-	
-	NSAssert(handler != nil, @"Handler should not be nil.");
-	
-	if (!statusChangeBlocks) statusChangeBlocks = [[NSMutableArray alloc] initWithCapacity:1];
-	
-	[statusChangeBlocks addObject:[handler copy]];
-}
-
-#pragma mark - NSURLConnectionDelegate
-
-- (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-	
-	contentLength = (float)[response expectedContentLength];
-	
-	self.returnedResponse = response;
-    [self connectionDidReceiveResponse];
-}
-
-- (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
-		
-	if (contentLength > 0) {
-		downloadedLength += (float)[data length];
-		[self dctInternal_calculatePercentDownloaded];
-	}
-	
-	if (!fileHandle) {
-		
-		NSFileManager *fileManager = [NSFileManager defaultManager];
-		
-		if ([fileManager fileExistsAtPath:self.dctInternal_downloadPath])
-			[fileManager removeItemAtPath:self.dctInternal_downloadPath error:nil];
-		
-		[fileManager createFileAtPath:self.dctInternal_downloadPath
-							 contents:nil
-						   attributes:nil];
-		
-		fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:self.dctInternal_downloadPath];	
-	}
-	
-	[fileHandle seekToEndOfFile];
-	[fileHandle writeData:data];
-}
-
-- (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-	
-	if ([self.percentDownloaded integerValue] < 1.0) {
-		downloadedLength = contentLength;
-		[self dctInternal_calculatePercentDownloaded];
-	}
-	
-	[fileHandle closeFile];
-	
-	
-	
-	
-	[self dctInternal_nilURLConnection];
-	[self connectionDidFinishLoading];
-}
-
-- (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-	self.returnedError = error;
-	[self dctInternal_nilURLConnection];
-    [self connectionDidFail];
-}
-
-#pragma mark - Internal methods
-
-- (void)dctInternal_nilURLConnection {
-	[self.URLConnection cancel];
-	URLConnection = nil;
-}
-
-- (void)dctInternal_reset {
-	[self.URLConnection cancel];
-	URLConnection = nil;
-	self.returnedResponse = nil;
-	self.returnedError = nil;
-	self.returnedObject = nil;
-	self.status = DCTConnectionControllerStatusNotStarted;
-}
-
-- (void)dctInternal_calculatePercentDownloaded {
-	
-	if (downloadedLength > contentLength) downloadedLength = contentLength;
-	
-	[self willChangeValueForKey:@"percentDownloaded"];
-	percentDownloaded = [[NSNumber alloc] initWithFloat:(downloadedLength / contentLength)];
-	[self didChangeValueForKey:@"percentDownloaded"];
-	
-	for (DCTConnectionControllerPercentBlock block in percentChangeBlocks)
-		block(percentDownloaded);
-}
-
-- (void)addPercentDownloadedChangeHandler:(DCTConnectionControllerPercentBlock)handler {
-	NSAssert(handler != nil, @"Handler should not be nil.");
-	
-	if (!percentChangeBlocks) percentChangeBlocks = [[NSMutableArray alloc] initWithCapacity:1];
-	
-	[percentChangeBlocks addObject:[handler copy]];
+- (BOOL)isEqual:(id)object {
+	return [self isEqualToConnectionController:object];
 }
 
 @end
