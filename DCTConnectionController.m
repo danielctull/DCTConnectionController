@@ -307,11 +307,9 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 }
 
 - (void)addStatusChangeHandler:(void(^)(DCTConnectionControllerStatus status))handler {
-	dispatch_queue_t callingQueue = dispatch_get_current_queue();
+	NSAssert(handler != NULL, @"Handler is NULL.");
 	[_statusChangeBlocks addObject:^(DCTConnectionControllerStatus status) {
-		dispatch_async(callingQueue, ^{
-			handler(status);
-		});
+		handler(status);
 	}];
 }
 
