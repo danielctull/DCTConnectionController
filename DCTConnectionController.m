@@ -308,9 +308,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 - (void)addStatusChangeHandler:(void(^)(DCTConnectionControllerStatus status))handler {
 	NSAssert(handler != NULL, @"Handler is NULL.");
-	[_statusChangeBlocks addObject:^(DCTConnectionControllerStatus status) {
-		handler(status);
-	}];
+	[_statusChangeBlocks addObject:handler];
 }
 
 #pragma mark - NSURLConnectionDelegate
