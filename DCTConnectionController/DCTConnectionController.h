@@ -157,3 +157,6 @@ extern NSString *const DCTConnectionControllerTypeString[];
 - (void)start;
 
 @end
+
+#import "DCTConnectionController+BlockHandlers.h"
+#import "DCTRESTConnectionController.h"
