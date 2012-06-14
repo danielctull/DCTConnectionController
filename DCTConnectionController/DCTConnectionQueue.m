@@ -104,8 +104,8 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	
 	dispatch_async(_dispatchQueue, ^{
 		
-		__dct_weak DCTConnectionController *weakConnectionController = connectionController;
-		__dct_weak DCTConnectionQueue *weakSelf = self;
+		__unsafe_unretained DCTConnectionController *weakConnectionController = connectionController;
+		__unsafe_unretained DCTConnectionQueue *weakSelf = self;
 		
 		[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
 			if (status <= DCTConnectionControllerStatusResponded) return;

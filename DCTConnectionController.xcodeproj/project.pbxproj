@@ -14,7 +14,6 @@
 		24F6EC54158A2BD200CEDD41 /* libDCTConnectionController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC3C158A2BD100CEDD41 /* libDCTConnectionController.a */; };
 		24F6EC5A158A2BD200CEDD41 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 24F6EC58158A2BD200CEDD41 /* InfoPlist.strings */; };
 		24F6EC5D158A2BD200CEDD41 /* DCTConnectionControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC5C158A2BD200CEDD41 /* DCTConnectionControllerTests.m */; };
-		24F6EC79158A2C3000CEDD41 /* dct_weak.h in Headers */ = {isa = PBXBuildFile; fileRef = 24F6EC66158A2C3000CEDD41 /* dct_weak.h */; };
 		24F6EC7A158A2C3000CEDD41 /* DCTConnectionController.h in Headers */ = {isa = PBXBuildFile; fileRef = 24F6EC67158A2C3000CEDD41 /* DCTConnectionController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		24F6EC7B158A2C3000CEDD41 /* DCTConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC68158A2C3000CEDD41 /* DCTConnectionController.m */; };
 		24F6EC7C158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.h in Headers */ = {isa = PBXBuildFile; fileRef = 24F6EC69158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -55,7 +54,6 @@
 		24F6EC59158A2BD200CEDD41 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		24F6EC5B158A2BD200CEDD41 /* DCTConnectionControllerTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DCTConnectionControllerTests.h; sourceTree = "<group>"; };
 		24F6EC5C158A2BD200CEDD41 /* DCTConnectionControllerTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionControllerTests.m; sourceTree = "<group>"; };
-		24F6EC66158A2C3000CEDD41 /* dct_weak.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = dct_weak.h; sourceTree = "<group>"; };
 		24F6EC67158A2C3000CEDD41 /* DCTConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionController.h; sourceTree = "<group>"; };
 		24F6EC68158A2C3000CEDD41 /* DCTConnectionController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionController.m; sourceTree = "<group>"; };
 		24F6EC69158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionController+BlockHandlers.h"; sourceTree = "<group>"; };
@@ -131,7 +129,6 @@
 		24F6EC41158A2BD100CEDD41 /* DCTConnectionController */ = {
 			isa = PBXGroup;
 			children = (
-				24F6EC66158A2C3000CEDD41 /* dct_weak.h */,
 				24F6EC67158A2C3000CEDD41 /* DCTConnectionController.h */,
 				24F6EC68158A2C3000CEDD41 /* DCTConnectionController.m */,
 				24F6EC69158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.h */,
@@ -180,7 +177,6 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				24F6EC79158A2C3000CEDD41 /* dct_weak.h in Headers */,
 				24F6EC7A158A2C3000CEDD41 /* DCTConnectionController.h in Headers */,
 				24F6EC7C158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.h in Headers */,
 				24F6EC7E158A2C3000CEDD41 /* DCTConnectionController+Equality.h in Headers */,
@@ -454,6 +450,7 @@
 				24F6EC62158A2BD200CEDD41 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		24F6EC63158A2BD200CEDD41 /* Build configuration list for PBXNativeTarget "DCTConnectionControllerTests" */ = {
 			isa = XCConfigurationList;
@@ -462,6 +459,7 @@
 				24F6EC65158A2BD200CEDD41 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

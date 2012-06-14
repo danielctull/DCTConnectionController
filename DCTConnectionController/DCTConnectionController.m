@@ -142,7 +142,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	_priority = DCTConnectionControllerPriorityMedium;
 	_statusChangeBlocks = [NSMutableSet new];
 	
-	__dct_weak DCTConnectionController *weakSelf = self;
+	__unsafe_unretained DCTConnectionController *weakSelf = self;
 	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 	[self addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
 		
@@ -205,7 +205,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		
 		self.status = existingConnectionController.status;
 		
-		__dct_weak DCTConnectionController *weakExistingConnectionController = existingConnectionController;
+		__unsafe_unretained DCTConnectionController *weakExistingConnectionController = existingConnectionController;
 		[existingConnectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
 			
 			__strong DCTConnectionController *strongExistingConnectionController = weakExistingConnectionController;

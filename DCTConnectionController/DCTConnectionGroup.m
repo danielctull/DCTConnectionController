@@ -74,7 +74,7 @@
 	
 	[self.dctInternal_connectionControllers addObject:connectionController];
 	
-	__dct_weak DCTConnectionGroup *weakself = self;
+	__unsafe_unretained DCTConnectionGroup *weakself = self;
 	
 	[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
 		[weakself dctInternal_checkControllers];
@@ -188,7 +188,7 @@
 	
 	[groups addObject:connectionGroup];
 	
-	__dct_weak DCTConnectionGroup *group = connectionGroup;
+	__unsafe_unretained DCTConnectionGroup *group = connectionGroup;
 	
 	[connectionGroup addCompletionHandler:^(NSArray *finishedConnectionControllers, NSArray *failedConnectionControllers, NSArray *cancelledConnectionControllers) {
 		[groups removeObject:group];
