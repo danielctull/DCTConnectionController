@@ -22,7 +22,7 @@
 	
 	__weak DCTConnectionController *weakSelf = self;
 	
-	[self addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
+	[self addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
 		if (status == DCTConnectionControllerStatusResponded)
 			handler(weakSelf.returnedResponse);
 	}];
@@ -37,7 +37,7 @@
 		return;
 	}
 	
-	[self addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
+	[self addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
 		if (status == DCTConnectionControllerStatusFinished)
 			handler();
 	}];
@@ -54,7 +54,7 @@
 	
 	__weak DCTConnectionController *weakSelf = self;
 	
-	[self addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
+	[self addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
 		if (status == DCTConnectionControllerStatusFailed)
 			handler(weakSelf.returnedError);
 	}];
@@ -69,7 +69,7 @@
 		return;
 	}
 	
-	[self addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
+	[self addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
 		if (status == DCTConnectionControllerStatusCancelled)
 			handler();		
 	}];	

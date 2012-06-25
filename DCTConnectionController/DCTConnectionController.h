@@ -99,11 +99,6 @@ extern NSString *const DCTConnectionControllerWasCancelledNotification;
 
 extern NSString *const DCTConnectionControllerStatusChangedNotification;
 
-typedef void (^DCTConnectionControllerResponseBlock) (NSURLResponse *response);
-typedef void (^DCTConnectionControllerFailureBlock) (NSError *error);
-typedef void (^DCTConnectionControllerCancelationBlock) ();
-typedef void (^DCTConnectionControllerFinishBlock) ();
-
 extern NSString *const DCTConnectionControllerTypeString[];
 
 @interface DCTConnectionController : NSObject <NSCoding,NSURLConnectionDelegate, NSURLConnectionDataDelegate>
@@ -132,11 +127,11 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 @property (nonatomic, strong) id returnedObject;
 @property (nonatomic, strong) NSError *returnedError;
-@property (nonatomic, strong, readonly) NSURLResponse *returnedResponse;
-@property (nonatomic, strong, readonly) NSString *downloadPath;
+@property (nonatomic, readonly) NSURLResponse *returnedResponse;
+@property (nonatomic, readonly) NSString *downloadPath;
 
 @property (nonatomic, readonly) DCTConnectionControllerStatus status;
-- (void)addStatusChangeHandler:(void(^)(DCTConnectionControllerStatus status))handler;
+- (void)addStatusChangeHandler:(void(^)(DCTConnectionController *connectionController, DCTConnectionControllerStatus status))handler;
 
 - (NSString *)fullDescription;
 

@@ -78,18 +78,31 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 @implementation DCTConnectionController {
 	__weak DCTConnectionQueue *_connectionQueue;
-	dispatch_queue_t _dispatchQueue;
 	__strong NSOperationQueue *_operationQueue;
 	__strong NSMutableSet *_statusChangeBlocks;
 	__strong NSFileHandle *_fileHandle;
+	__strong NSFileManager *_fileManager;
 	__strong NSURLConnection *_URLConnection;
+	__strong NSString *_downloadPath;
+	__strong NSURLResponse *_returnedResponse;
 	BOOL _isReturnedObjectLoaded;
 }
 
-@synthesize returnedObject = _returnedObject;
-@synthesize returnedError = _returnedError;
-@synthesize returnedResponse = _returnedResponse;
-@synthesize downloadPath = _downloadPath;
++ (NSString *)path {
+	NSString *temporaryDirectory = NSTemporaryDirectory();
+	return [temporaryDirectory stringByAppendingPathComponent:@"DCTConnectionController"];
+}
+
++ (void)load {
+	@autoreleasepool {
+		NSError *error = nil;
+		if (![[NSFileManager defaultManager] createDirectoryAtPath:[self path]
+									   withIntermediateDirectories:YES
+														attributes:nil
+															 error:&error])
+					NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), [error localizedDescription]);
+	}
+}
 
 #pragma mark - NSCoding
 
@@ -115,60 +128,50 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 }
 
 - (void)performBlock:(void(^)())block {
-	dispatch_async(_dispatchQueue, block);
-}
-
-- (NSString *)downloadPath {
-	
-	if (!_downloadPath) {
-		NSString *temporaryDirectory = NSTemporaryDirectory();
-		temporaryDirectory = [temporaryDirectory stringByAppendingPathComponent:@"DCTConnectionController"];
-		
-		NSError *error = nil;
-		if (![[NSFileManager defaultManager] createDirectoryAtPath:temporaryDirectory
-									   withIntermediateDirectories:YES
-														attributes:nil
-															 error:&error])
-			NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), error);
-		
-		_downloadPath = [temporaryDirectory stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
-	}
-	
-	return _downloadPath;
+	[_operationQueue addOperationWithBlock:block];
 }
 
 - (id)init {
 	if (!(self = [super init])) return nil;
 	
 	_priority = DCTConnectionControllerPriorityMedium;
-	_statusChangeBlocks = [NSMutableSet new];
+	_operationQueue = [NSOperationQueue new];
+	[_operationQueue setMaxConcurrentOperationCount:1];
 	
-	__unsafe_unretained DCTConnectionController *weakSelf = self;
-	NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
-	[self addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
+	[self performBlock:^{
+		_statusChangeBlocks = [NSMutableSet new];
+		_fileManager = [NSFileManager new];
+	}];
 		
-		[notificationCenter postNotificationName:DCTConnectionControllerStatusChangedNotification object:weakSelf];
+	[self addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
 		
-		switch (status) {
-			case DCTConnectionControllerStatusResponded:
-				[notificationCenter postNotificationName:DCTConnectionControllerDidReceiveResponseNotification object:weakSelf];
-				break;
-				
-			case DCTConnectionControllerStatusCancelled:
-				[notificationCenter postNotificationName:DCTConnectionControllerWasCancelledNotification object:weakSelf];
-				break;
-				
-			case DCTConnectionControllerStatusFinished:
-				[notificationCenter postNotificationName:DCTConnectionControllerDidFinishNotification object:weakSelf];
-				break;
-				
-			case DCTConnectionControllerStatusFailed:
-				[notificationCenter postNotificationName:DCTConnectionControllerDidFailNotification object:weakSelf];
-				break;
-				
-			default:
-				break;
-		}
+		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+		
+			NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
+			
+			[notificationCenter postNotificationName:DCTConnectionControllerStatusChangedNotification object:connectionController];
+			
+			switch (status) {
+				case DCTConnectionControllerStatusResponded:
+					[notificationCenter postNotificationName:DCTConnectionControllerDidReceiveResponseNotification object:connectionController];
+					break;
+					
+				case DCTConnectionControllerStatusCancelled:
+					[notificationCenter postNotificationName:DCTConnectionControllerWasCancelledNotification object:connectionController];
+					break;
+					
+				case DCTConnectionControllerStatusFinished:
+					[notificationCenter postNotificationName:DCTConnectionControllerDidFinishNotification object:connectionController];
+					break;
+					
+				case DCTConnectionControllerStatusFailed:
+					[notificationCenter postNotificationName:DCTConnectionControllerDidFailNotification object:connectionController];
+					break;
+					
+				default:
+					break;
+			}
+		}];
 	}];
 	
     return self;
@@ -183,7 +186,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	if (self.status > DCTConnectionControllerStatusNotStarted) return;
 	
 	_connectionQueue = connectionQueue;
-	_dispatchQueue = _connectionQueue.dispatchQueue;
 	
 	[self performBlock:^{
 					
@@ -206,25 +208,22 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		
 		self.status = existingConnectionController.status;
 		
-		__unsafe_unretained DCTConnectionController *weakExistingConnectionController = existingConnectionController;
-		[existingConnectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
-			
-			__strong DCTConnectionController *strongExistingConnectionController = weakExistingConnectionController;
-			
+		[existingConnectionController addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
+						
 			switch (status) {
 					
 				case DCTConnectionControllerStatusResponded:
-					_returnedResponse = weakExistingConnectionController.returnedResponse;
+					_returnedResponse = connectionController.returnedResponse;
 					break;
 					
 				case DCTConnectionControllerStatusFinished:
-					_downloadPath = weakExistingConnectionController.downloadPath;
-					if (strongExistingConnectionController->_isReturnedObjectLoaded)
-						_returnedObject = weakExistingConnectionController.returnedObject;
+					_downloadPath = connectionController.downloadPath;
+					if (connectionController->_isReturnedObjectLoaded)
+						_returnedObject = connectionController.returnedObject;
 					break;
 					
 				case DCTConnectionControllerStatusFailed:
-					_returnedError = weakExistingConnectionController.returnedError;
+					_returnedError = connectionController.returnedError;
 					break;
 					
 				default:
@@ -239,10 +238,10 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 - (void)start {
 	
 	if (self.status >= DCTConnectionControllerStatusStarted) return;
-	self.status = DCTConnectionControllerStatusStarted;
+	[self setStatus:DCTConnectionControllerStatusStarted];
 	
 	[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-				
+			
 		_URLConnection = [[NSURLConnection alloc] initWithRequest:self.URLRequest delegate:self startImmediately:YES];
 		
 		if (!_URLConnection)
@@ -289,6 +288,18 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	return _returnedObject;
 }
 
+- (NSString *)downloadPath {
+	
+	if (!_downloadPath)
+		_downloadPath = [[[self class] path] stringByAppendingPathComponent:[[NSProcessInfo processInfo] globallyUniqueString]];
+	
+	return _downloadPath;
+}
+
+- (NSURLResponse *)returnedResponse {
+	return _returnedResponse;
+}
+
 - (void)setStatus:(DCTConnectionControllerStatus)status {
 	
 	if (status <= _status
@@ -302,14 +313,18 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	_status = status;
 	[self didChangeValueForKey:@"status"];
 	
-	[_statusChangeBlocks enumerateObjectsUsingBlock:^(void(^block)(DCTConnectionControllerStatus), BOOL *stop) {
-		block(_status);
+	[self performBlock:^{
+		[_statusChangeBlocks enumerateObjectsUsingBlock:^(void(^block)(DCTConnectionController *connectionController, DCTConnectionControllerStatus), BOOL *stop) {
+			block(self, _status);
+		}];
 	}];
 }
 
-- (void)addStatusChangeHandler:(void(^)(DCTConnectionControllerStatus status))handler {
+- (void)addStatusChangeHandler:(void(^)(DCTConnectionController *connectionController, DCTConnectionControllerStatus status))handler {
 	NSAssert(handler != NULL, @"Handler is NULL.");
-	[_statusChangeBlocks addObject:handler];
+	[self performBlock:^{
+		[_statusChangeBlocks addObject:handler];
+	}];
 }
 
 #pragma mark - NSURLConnectionDelegate
@@ -324,20 +339,18 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
 	
 	[self performBlock:^{
-		
+				
 		if (!_fileHandle) {
 			
 			NSString *downloadPath = self.downloadPath;
 			
-			NSFileManager *fileManager = [NSFileManager new];
+			if ([_fileManager fileExistsAtPath:downloadPath])
+				[_fileManager removeItemAtPath:downloadPath error:nil];
 			
-			if ([fileManager fileExistsAtPath:downloadPath])
-				[fileManager removeItemAtPath:downloadPath error:nil];
-			
-			[fileManager createFileAtPath:downloadPath
-								 contents:nil
-							   attributes:nil];
-			
+			[_fileManager createFileAtPath:downloadPath
+								  contents:nil
+								attributes:nil];
+						
 			_fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:downloadPath];
 		}
 		
@@ -349,16 +362,16 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	
 	[self performBlock:^{
-		
 		[_fileHandle closeFile];
 		_fileHandle = nil;
+		[self connectionDidFinishLoading];
+		[_fileManager removeItemAtPath:self.downloadPath error:nil];
+		_fileManager = nil;
+		
 		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 			[_URLConnection cancel];
 			_URLConnection = nil;
 		}];
-		[self connectionDidFinishLoading];
-		NSFileManager *fileManager = [NSFileManager new];
-		[fileManager removeItemAtPath:self.downloadPath error:nil];
 	}];
 }
 
@@ -367,13 +380,14 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		[_fileHandle closeFile];
 		_fileHandle = nil;
 		_returnedError = error;
+		[self connectionDidFail];
+		[_fileManager removeItemAtPath:self.downloadPath error:nil];
+		_fileManager = nil;
+		
 		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 			[_URLConnection cancel];
 			_URLConnection = nil;
 		}];
-		[self connectionDidFail];
-		NSFileManager *fileManager = [NSFileManager new];
-		[fileManager removeItemAtPath:self.downloadPath error:nil];
 	}];
 }
 
@@ -421,6 +435,18 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 
 - (BOOL)isEqual:(id)object {
 	return [self isEqualToConnectionController:object];
+}
+
+- (NSString *)_domainStringFromURL:(NSURL *)URL {
+	NSString *urlString = [URL absoluteString];
+	urlString = [urlString stringByReplacingOccurrencesOfString:@"http://" withString:@""];
+	urlString = [urlString stringByReplacingOccurrencesOfString:@"www." withString:@""];
+	urlString = [urlString stringByReplacingOccurrencesOfString:@".com/" withString:@""];
+	urlString = [urlString stringByReplacingOccurrencesOfString:@".co.uk/" withString:@""];
+	urlString = [urlString stringByReplacingOccurrencesOfString:@".com" withString:@""];
+	urlString = [urlString stringByReplacingOccurrencesOfString:@".co.uk" withString:@""];
+	return urlString;
+	
 }
 
 @end

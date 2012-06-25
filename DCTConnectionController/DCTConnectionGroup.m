@@ -76,7 +76,7 @@
 	
 	__unsafe_unretained DCTConnectionGroup *weakself = self;
 	
-	[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
+	[connectionController addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
 		[weakself dctInternal_checkControllers];
 	}];
 	

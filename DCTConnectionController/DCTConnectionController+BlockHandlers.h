@@ -8,6 +8,11 @@
 
 #import "DCTConnectionController.h"
 
+typedef void (^DCTConnectionControllerResponseBlock) (NSURLResponse *response);
+typedef void (^DCTConnectionControllerFailureBlock) (NSError *error);
+typedef void (^DCTConnectionControllerCancelationBlock) ();
+typedef void (^DCTConnectionControllerFinishBlock) ();
+
 @interface DCTConnectionController (BlockHandlers)
 
 /// @name Event Blocks
