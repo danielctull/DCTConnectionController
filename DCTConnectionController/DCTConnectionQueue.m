@@ -85,24 +85,35 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	return [self initWithName:@"defaultConnectionQueue"];
 }
 
+- (void)_performBlock:(void(^)())block {
+	dispatch_async(_dispatchQueue, block);
+}
+
+- (void)_performBlockAndWait:(void(^)())block {
+	
+	dispatch_queue_t callingQueue = dispatch_get_current_queue();
+	
+	if (callingQueue == _dispatchQueue) {
+		block();
+		return;
+	}
+	
+	dispatch_sync(_dispatchQueue, block);
+}
+
 #pragma mark - DCTConnectionQueue
 
 - (NSArray *)connectionControllers {
-	dispatch_queue_t callingQueue = dispatch_get_current_queue();
-	
-	if (callingQueue == _dispatchQueue)
-		return [_connectionControllers copy];
-	
 	__block NSArray *connectionControllers = nil;
-	dispatch_sync(_dispatchQueue, ^{
+	[self _performBlockAndWait:^{
 		connectionControllers = [_connectionControllers copy];
-	});
+	}];
 	return connectionControllers;
 }
 
 - (void)addConnectionController:(DCTConnectionController *)connectionController {
 	
-	dispatch_async(_dispatchQueue, ^{
+	[self _performBlock:^{
 		
 		__unsafe_unretained DCTConnectionController *weakConnectionController = connectionController;
 		__unsafe_unretained DCTConnectionQueue *weakSelf = self;
@@ -118,14 +129,14 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 		[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountIncreasedNotification object:self];
 		[_connectionControllers addObject:connectionController];
 		[self _runNextConnection];
-	});
+	}];
 }
 
 - (void)removeConnectionController:(DCTConnectionController *)connectionController {
-	dispatch_async(_dispatchQueue, ^{
+	[self _performBlock:^{
 		[_connectionControllers removeObject:connectionController];
 		[self _runNextConnection];
-	});
+	}];
 }
 
 #pragma mark - Internals

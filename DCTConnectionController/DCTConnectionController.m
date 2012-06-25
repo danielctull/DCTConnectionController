@@ -79,6 +79,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 @implementation DCTConnectionController {
 	__weak DCTConnectionQueue *_connectionQueue;
 	dispatch_queue_t _dispatchQueue;
+	__strong NSOperationQueue *_operationQueue;
 	__strong NSMutableSet *_statusChangeBlocks;
 	__strong NSFileHandle *_fileHandle;
 	__strong NSURLConnection *_URLConnection;
@@ -184,8 +185,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	_connectionQueue = connectionQueue;
 	_dispatchQueue = _connectionQueue.dispatchQueue;
 	
-	dispatch_async(_dispatchQueue, ^{
-				
+	[self performBlock:^{
+					
 		NSUInteger existingConnectionControllerIndex = [_connectionQueue.connectionControllers indexOfObject:self];
 		
 		if (existingConnectionControllerIndex == NSNotFound) {
@@ -232,7 +233,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 			
 			[self setStatus:status];
 		}];
-	});
+	}];
 }
 
 - (void)start {
@@ -240,16 +241,16 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	if (self.status >= DCTConnectionControllerStatusStarted) return;
 	self.status = DCTConnectionControllerStatusStarted;
 	
-	dispatch_async(dispatch_get_main_queue(), ^{
+	[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 				
 		_URLConnection = [[NSURLConnection alloc] initWithRequest:self.URLRequest delegate:self startImmediately:YES];
 		
 		if (!_URLConnection)
-			dispatch_async(_dispatchQueue, ^{
+			[self performBlock:^{
 				// TODO: GENERATE ERROR
 				[self connectionDidFail];
-			});
-	});
+			}];
+	}];
 }
 
 - (NSURLRequest *)URLRequest {
@@ -314,15 +315,15 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 #pragma mark - NSURLConnectionDelegate
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-	dispatch_async(_dispatchQueue, ^{
+	[self performBlock:^{
 		_returnedResponse = response;
 		[self connectionDidReceiveResponse];
-	});
+	}];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
 	
-	dispatch_async(_dispatchQueue, ^{
+	[self performBlock:^{
 		
 		if (!_fileHandle) {
 			
@@ -342,38 +343,38 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		
 		[_fileHandle seekToEndOfFile];
 		[_fileHandle writeData:data];
-	});
+	}];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
 	
-	dispatch_async(_dispatchQueue, ^{
+	[self performBlock:^{
 		
 		[_fileHandle closeFile];
 		_fileHandle = nil;
-		dispatch_async(dispatch_get_main_queue(), ^{
+		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 			[_URLConnection cancel];
 			_URLConnection = nil;
-		});
+		}];
 		[self connectionDidFinishLoading];
 		NSFileManager *fileManager = [NSFileManager new];
 		[fileManager removeItemAtPath:self.downloadPath error:nil];
-	});
+	}];
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-	dispatch_async(_dispatchQueue, ^{
+	[self performBlock:^{
 		[_fileHandle closeFile];
 		_fileHandle = nil;
 		_returnedError = error;
-		dispatch_async(dispatch_get_main_queue(), ^{
+		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 			[_URLConnection cancel];
 			_URLConnection = nil;
-		});
+		}];
 		[self connectionDidFail];
 		NSFileManager *fileManager = [NSFileManager new];
 		[fileManager removeItemAtPath:self.downloadPath error:nil];
-	});
+	}];
 }
 
 #pragma mark - Internal
