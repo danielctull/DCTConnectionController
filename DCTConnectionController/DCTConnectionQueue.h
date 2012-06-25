@@ -47,7 +47,8 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotificat
 
 + (DCTConnectionQueue *)defaultConnectionQueue;
 - (id)initWithName:(NSString *)name;
-@property (nonatomic, readonly) dispatch_queue_t dispatchQueue;
+
+@property (nonatomic, readonly) NSString *name;
 
 @property (nonatomic, assign) NSUInteger maxConnections;
 

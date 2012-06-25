@@ -60,8 +60,9 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 
 @implementation DCTConnectionQueue {
 	__strong NSMutableArray *_connectionControllers;
+	__strong NSOperationQueue *_operationQueue;
+	__strong NSString *_name;
 }
-@synthesize dispatchQueue = _dispatchQueue;
 
 + (DCTConnectionQueue *)defaultConnectionQueue {
 	static DCTConnectionQueue *sharedInstance = nil;
@@ -76,8 +77,10 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	if (!(self = [super init])) return nil;
 	_connectionControllers = [NSMutableArray new];
 	_maxConnections = 5;
-	NSString *queueName = [NSString stringWithFormat:@"uk.co.danieltull.DCTConnectionQueue.%@", name];
-	_dispatchQueue = dispatch_queue_create([queueName cStringUsingEncoding:NSUTF8StringEncoding], DISPATCH_QUEUE_SERIAL);
+	_name = [name copy];
+	_operationQueue = [NSOperationQueue new];
+	[_operationQueue setMaxConcurrentOperationCount:1];
+	[_operationQueue setName:[NSString stringWithFormat:@"uk.co.danieltull.DCTConnectionQueue.%@", _name]];
 	return self;
 }
 
@@ -86,29 +89,13 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 }
 
 - (void)_performBlock:(void(^)())block {
-	dispatch_async(_dispatchQueue, block);
-}
-
-- (void)_performBlockAndWait:(void(^)())block {
-	
-	dispatch_queue_t callingQueue = dispatch_get_current_queue();
-	
-	if (callingQueue == _dispatchQueue) {
-		block();
-		return;
-	}
-	
-	dispatch_sync(_dispatchQueue, block);
+	[_operationQueue addOperationWithBlock:block];
 }
 
 #pragma mark - DCTConnectionQueue
 
 - (NSArray *)connectionControllers {
-	__block NSArray *connectionControllers = nil;
-	[self _performBlockAndWait:^{
-		connectionControllers = [_connectionControllers copy];
-	}];
-	return connectionControllers;
+	return [_connectionControllers copy];
 }
 
 - (void)addConnectionController:(DCTConnectionController *)connectionController {
@@ -157,10 +144,10 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 }
 
 - (NSString *)description {
-	return [NSString stringWithFormat:@"<%@: %p; dispatchQueue = \"%s\">",
+	return [NSString stringWithFormat:@"<%@: %p; name = \"%@\">",
 			NSStringFromClass([self class]),
 			self,
-			dispatch_queue_get_label(self.dispatchQueue)];
+			self.name];
 }
 
 @end
