@@ -7,6 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		249D6E3C159890F300FE9A23 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC4F158A2BD200CEDD41 /* UIKit.framework */; };
+		249D6E3D159890F300FE9A23 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC3F158A2BD100CEDD41 /* Foundation.framework */; };
+		249D6E3F159890F300FE9A23 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 249D6E3E159890F300FE9A23 /* CoreGraphics.framework */; };
+		249D6E45159890F300FE9A23 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 249D6E43159890F300FE9A23 /* InfoPlist.strings */; };
+		249D6E47159890F300FE9A23 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 249D6E46159890F300FE9A23 /* main.m */; };
+		249D6E4B159890F300FE9A23 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 249D6E4A159890F300FE9A23 /* AppDelegate.m */; };
+		249D6E5C159891AD00FE9A23 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 249D6E55159891AD00FE9A23 /* ViewController.xib */; };
+		249D6E5D159891AD00FE9A23 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 249D6E57159891AD00FE9A23 /* ViewController.m */; };
+		249D6E5E159891AD00FE9A23 /* DCTConnectionController+StatusString.m in Sources */ = {isa = PBXBuildFile; fileRef = 249D6E59159891AD00FE9A23 /* DCTConnectionController+StatusString.m */; };
+		249D6E5F159891AD00FE9A23 /* NSURL+DomainString.m in Sources */ = {isa = PBXBuildFile; fileRef = 249D6E5B159891AD00FE9A23 /* NSURL+DomainString.m */; };
+		249D6E601598920700FE9A23 /* libDCTConnectionController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC3C158A2BD100CEDD41 /* libDCTConnectionController.a */; };
 		24F6EC40158A2BD100CEDD41 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC3F158A2BD100CEDD41 /* Foundation.framework */; };
 		24F6EC4E158A2BD200CEDD41 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC4D158A2BD200CEDD41 /* SenTestingKit.framework */; };
 		24F6EC50158A2BD200CEDD41 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC4F158A2BD200CEDD41 /* UIKit.framework */; };
@@ -45,6 +56,21 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		249D6E3A159890F300FE9A23 /* DCTConnectionControllerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DCTConnectionControllerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		249D6E3E159890F300FE9A23 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		249D6E42159890F300FE9A23 /* DCTConnectionControllerDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DCTConnectionControllerDemo-Info.plist"; sourceTree = "<group>"; };
+		249D6E44159890F300FE9A23 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		249D6E46159890F300FE9A23 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		249D6E48159890F300FE9A23 /* DCTConnectionControllerDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionControllerDemo-Prefix.pch"; sourceTree = "<group>"; };
+		249D6E49159890F300FE9A23 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		249D6E4A159890F300FE9A23 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		249D6E55159891AD00FE9A23 /* ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = ViewController.xib; path = ../../../../../../../../../Desktop/DCTConnectionController/DCTConnectionControllerDemo/ViewController.xib; sourceTree = "<group>"; };
+		249D6E56159891AD00FE9A23 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ViewController.h; path = ../../../../../../../../../Desktop/DCTConnectionController/DCTConnectionControllerDemo/ViewController.h; sourceTree = "<group>"; };
+		249D6E57159891AD00FE9A23 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ViewController.m; path = ../../../../../../../../../Desktop/DCTConnectionController/DCTConnectionControllerDemo/ViewController.m; sourceTree = "<group>"; };
+		249D6E58159891AD00FE9A23 /* DCTConnectionController+StatusString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "DCTConnectionController+StatusString.h"; path = "../../../../../../../../../Desktop/DCTConnectionController/DCTConnectionControllerDemo/DCTConnectionController+StatusString.h"; sourceTree = "<group>"; };
+		249D6E59159891AD00FE9A23 /* DCTConnectionController+StatusString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "DCTConnectionController+StatusString.m"; path = "../../../../../../../../../Desktop/DCTConnectionController/DCTConnectionControllerDemo/DCTConnectionController+StatusString.m"; sourceTree = "<group>"; };
+		249D6E5A159891AD00FE9A23 /* NSURL+DomainString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURL+DomainString.h"; path = "../../../../../../../../../Desktop/DCTConnectionController/DCTConnectionControllerDemo/NSURL+DomainString.h"; sourceTree = "<group>"; };
+		249D6E5B159891AD00FE9A23 /* NSURL+DomainString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURL+DomainString.m"; path = "../../../../../../../../../Desktop/DCTConnectionController/DCTConnectionControllerDemo/NSURL+DomainString.m"; sourceTree = "<group>"; };
 		24F6EC3C158A2BD100CEDD41 /* libDCTConnectionController.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDCTConnectionController.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		24F6EC3F158A2BD100CEDD41 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		24F6EC4C158A2BD200CEDD41 /* DCTConnectionControllerTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DCTConnectionControllerTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -75,6 +101,17 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		249D6E37159890F300FE9A23 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				249D6E601598920700FE9A23 /* libDCTConnectionController.a in Frameworks */,
+				249D6E3C159890F300FE9A23 /* UIKit.framework in Frameworks */,
+				249D6E3D159890F300FE9A23 /* Foundation.framework in Frameworks */,
+				249D6E3F159890F300FE9A23 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		24F6EC39158A2BD100CEDD41 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -97,11 +134,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		249D6E40159890F300FE9A23 /* DCTConnectionControllerDemo */ = {
+			isa = PBXGroup;
+			children = (
+				249D6E49159890F300FE9A23 /* AppDelegate.h */,
+				249D6E4A159890F300FE9A23 /* AppDelegate.m */,
+				249D6E55159891AD00FE9A23 /* ViewController.xib */,
+				249D6E56159891AD00FE9A23 /* ViewController.h */,
+				249D6E57159891AD00FE9A23 /* ViewController.m */,
+				249D6E58159891AD00FE9A23 /* DCTConnectionController+StatusString.h */,
+				249D6E59159891AD00FE9A23 /* DCTConnectionController+StatusString.m */,
+				249D6E5A159891AD00FE9A23 /* NSURL+DomainString.h */,
+				249D6E5B159891AD00FE9A23 /* NSURL+DomainString.m */,
+				249D6E41159890F300FE9A23 /* Supporting Files */,
+			);
+			path = DCTConnectionControllerDemo;
+			sourceTree = "<group>";
+		};
+		249D6E41159890F300FE9A23 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				249D6E42159890F300FE9A23 /* DCTConnectionControllerDemo-Info.plist */,
+				249D6E43159890F300FE9A23 /* InfoPlist.strings */,
+				249D6E46159890F300FE9A23 /* main.m */,
+				249D6E48159890F300FE9A23 /* DCTConnectionControllerDemo-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		24F6EC31158A2BD100CEDD41 = {
 			isa = PBXGroup;
 			children = (
 				24F6EC41158A2BD100CEDD41 /* DCTConnectionController */,
 				24F6EC55158A2BD200CEDD41 /* DCTConnectionControllerTests */,
+				249D6E40159890F300FE9A23 /* DCTConnectionControllerDemo */,
 				24F6EC3E158A2BD100CEDD41 /* Frameworks */,
 				24F6EC3D158A2BD100CEDD41 /* Products */,
 			);
@@ -112,6 +178,7 @@
 			children = (
 				24F6EC3C158A2BD100CEDD41 /* libDCTConnectionController.a */,
 				24F6EC4C158A2BD200CEDD41 /* DCTConnectionControllerTests.octest */,
+				249D6E3A159890F300FE9A23 /* DCTConnectionControllerDemo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -122,6 +189,7 @@
 				24F6EC3F158A2BD100CEDD41 /* Foundation.framework */,
 				24F6EC4D158A2BD200CEDD41 /* SenTestingKit.framework */,
 				24F6EC4F158A2BD200CEDD41 /* UIKit.framework */,
+				249D6E3E159890F300FE9A23 /* CoreGraphics.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -192,6 +260,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		249D6E39159890F300FE9A23 /* DCTConnectionControllerDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 249D6E4E159890F300FE9A23 /* Build configuration list for PBXNativeTarget "DCTConnectionControllerDemo" */;
+			buildPhases = (
+				249D6E36159890F300FE9A23 /* Sources */,
+				249D6E37159890F300FE9A23 /* Frameworks */,
+				249D6E38159890F300FE9A23 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DCTConnectionControllerDemo;
+			productName = DCTConnectionControllerDemo;
+			productReference = 249D6E3A159890F300FE9A23 /* DCTConnectionControllerDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
 		24F6EC3B158A2BD100CEDD41 /* DCTConnectionController */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 24F6EC60158A2BD200CEDD41 /* Build configuration list for PBXNativeTarget "DCTConnectionController" */;
@@ -251,11 +336,21 @@
 			targets = (
 				24F6EC3B158A2BD100CEDD41 /* DCTConnectionController */,
 				24F6EC4B158A2BD200CEDD41 /* DCTConnectionControllerTests */,
+				249D6E39159890F300FE9A23 /* DCTConnectionControllerDemo */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		249D6E38159890F300FE9A23 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				249D6E45159890F300FE9A23 /* InfoPlist.strings in Resources */,
+				249D6E5C159891AD00FE9A23 /* ViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		24F6EC49158A2BD200CEDD41 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -283,6 +378,18 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		249D6E36159890F300FE9A23 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				249D6E47159890F300FE9A23 /* main.m in Sources */,
+				249D6E4B159890F300FE9A23 /* AppDelegate.m in Sources */,
+				249D6E5D159891AD00FE9A23 /* ViewController.m in Sources */,
+				249D6E5E159891AD00FE9A23 /* DCTConnectionController+StatusString.m in Sources */,
+				249D6E5F159891AD00FE9A23 /* NSURL+DomainString.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		24F6EC38158A2BD100CEDD41 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -318,6 +425,14 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
+		249D6E43159890F300FE9A23 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				249D6E44159890F300FE9A23 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
 		24F6EC58158A2BD200CEDD41 /* InfoPlist.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -329,6 +444,49 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		249D6E4C159890F300FE9A23 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode45-DP1.app/Contents/Developer/Library/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "DCTConnectionControllerDemo/DCTConnectionControllerDemo-Prefix.pch";
+				INFOPLIST_FILE = "DCTConnectionControllerDemo/DCTConnectionControllerDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		249D6E4D159890F300FE9A23 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode45-DP1.app/Contents/Developer/Library/Frameworks\"",
+				);
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "DCTConnectionControllerDemo/DCTConnectionControllerDemo-Prefix.pch";
+				INFOPLIST_FILE = "DCTConnectionControllerDemo/DCTConnectionControllerDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
 		24F6EC5E158A2BD200CEDD41 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -434,6 +592,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		249D6E4E159890F300FE9A23 /* Build configuration list for PBXNativeTarget "DCTConnectionControllerDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				249D6E4C159890F300FE9A23 /* Debug */,
+				249D6E4D159890F300FE9A23 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		24F6EC36158A2BD100CEDD41 /* Build configuration list for PBXProject "DCTConnectionController" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
