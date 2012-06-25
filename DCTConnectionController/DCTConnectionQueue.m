@@ -109,7 +109,7 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 			if (status <= DCTConnectionControllerStatusResponded) return;
 			
 			[self _performBlock:^{
-				[weakSelf removeConnectionController:connectionController];
+				[_connectionControllers removeObject:connectionController];
 				[weakSelf _runNextConnection];
 				[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountDecreasedNotification object:self];
 			}];
@@ -117,13 +117,6 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 		
 		[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountIncreasedNotification object:self];
 		[_connectionControllers addObject:connectionController];
-		[self _runNextConnection];
-	}];
-}
-
-- (void)removeConnectionController:(DCTConnectionController *)connectionController {
-	[self _performBlock:^{
-		[_connectionControllers removeObject:connectionController];
 		[self _runNextConnection];
 	}];
 }

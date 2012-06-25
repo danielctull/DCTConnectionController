@@ -54,6 +54,5 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotificat
 
 @property (nonatomic, readonly) NSArray *connectionControllers;
 - (void)addConnectionController:(DCTConnectionController *)connectionController;
-- (void)removeConnectionController:(DCTConnectionController *)connectionController;
 
 @end
