@@ -301,19 +301,19 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 }
 
 - (void)setStatus:(DCTConnectionControllerStatus)status {
-	
-	if (status <= _status
-		&& status != DCTConnectionControllerStatusNotStarted
-		&& status != DCTConnectionControllerStatusQueued)
-		return;
-	
-	if (self.ended) return;
-	
-	[self willChangeValueForKey:@"status"];
-	_status = status;
-	[self didChangeValueForKey:@"status"];
-	
+
 	[self performBlock:^{
+		if (status <= _status
+			&& status != DCTConnectionControllerStatusNotStarted
+			&& status != DCTConnectionControllerStatusQueued)
+			return;
+		
+		if (self.ended) return;
+		
+		[self willChangeValueForKey:@"status"];
+		_status = status;
+		[self didChangeValueForKey:@"status"];
+
 		[_statusChangeBlocks enumerateObjectsUsingBlock:^(void(^block)(DCTConnectionController *connectionController, DCTConnectionControllerStatus), BOOL *stop) {
 			block(self, _status);
 		}];
