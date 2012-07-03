@@ -93,7 +93,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	return [temporaryDirectory stringByAppendingPathComponent:@"DCTConnectionController"];
 }
 
-+ (void)load {
++ (void)initialize {
 	@autoreleasepool {
 		NSError *error = nil;
 		if (![[NSFileManager defaultManager] createDirectoryAtPath:[self path]
