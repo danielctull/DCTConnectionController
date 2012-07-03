@@ -104,6 +104,11 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	}
 }
 
+- (void)dealloc {
+	[_fileManager removeItemAtPath:self.downloadPath error:nil];
+	_fileManager = nil;
+}
+
 #pragma mark - NSCoding
 
 - (id)initWithCoder:(NSCoder *)coder {
@@ -364,9 +369,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	[self performBlock:^{
 		[_fileHandle closeFile];
 		_fileHandle = nil;
+		
 		[self connectionDidFinishLoading];
-		[_fileManager removeItemAtPath:self.downloadPath error:nil];
-		_fileManager = nil;
 		
 		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 			[_URLConnection cancel];
@@ -380,9 +384,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		[_fileHandle closeFile];
 		_fileHandle = nil;
 		_returnedError = error;
+		
 		[self connectionDidFail];
-		[_fileManager removeItemAtPath:self.downloadPath error:nil];
-		_fileManager = nil;
 		
 		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 			[_URLConnection cancel];
