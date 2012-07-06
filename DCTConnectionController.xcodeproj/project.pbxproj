@@ -38,8 +38,6 @@
 		24F6EC7F158A2C3000CEDD41 /* DCTConnectionController+Equality.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC6C158A2C3000CEDD41 /* DCTConnectionController+Equality.m */; };
 		24F6EC82158A2C3000CEDD41 /* DCTConnectionControllerDisplay.h in Headers */ = {isa = PBXBuildFile; fileRef = 24F6EC6F158A2C3000CEDD41 /* DCTConnectionControllerDisplay.h */; };
 		24F6EC83158A2C3000CEDD41 /* DCTConnectionControllerDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC70158A2C3000CEDD41 /* DCTConnectionControllerDisplay.m */; };
-		24F6EC84158A2C3000CEDD41 /* DCTConnectionGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 24F6EC71158A2C3000CEDD41 /* DCTConnectionGroup.h */; };
-		24F6EC85158A2C3000CEDD41 /* DCTConnectionGroup.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC72158A2C3000CEDD41 /* DCTConnectionGroup.m */; };
 		24F6EC86158A2C3000CEDD41 /* DCTConnectionQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 24F6EC73158A2C3000CEDD41 /* DCTConnectionQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		24F6EC87158A2C3000CEDD41 /* DCTConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC74158A2C3000CEDD41 /* DCTConnectionQueue.m */; };
 		24F6EC88158A2C3000CEDD41 /* DCTRESTConnectionController.h in Headers */ = {isa = PBXBuildFile; fileRef = 24F6EC75158A2C3000CEDD41 /* DCTRESTConnectionController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -100,8 +98,6 @@
 		24F6EC6C158A2C3000CEDD41 /* DCTConnectionController+Equality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionController+Equality.m"; sourceTree = "<group>"; };
 		24F6EC6F158A2C3000CEDD41 /* DCTConnectionControllerDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionControllerDisplay.h; sourceTree = "<group>"; };
 		24F6EC70158A2C3000CEDD41 /* DCTConnectionControllerDisplay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionControllerDisplay.m; sourceTree = "<group>"; };
-		24F6EC71158A2C3000CEDD41 /* DCTConnectionGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionGroup.h; sourceTree = "<group>"; };
-		24F6EC72158A2C3000CEDD41 /* DCTConnectionGroup.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionGroup.m; sourceTree = "<group>"; };
 		24F6EC73158A2C3000CEDD41 /* DCTConnectionQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionQueue.h; sourceTree = "<group>"; };
 		24F6EC74158A2C3000CEDD41 /* DCTConnectionQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionQueue.m; sourceTree = "<group>"; };
 		24F6EC75158A2C3000CEDD41 /* DCTRESTConnectionController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTRESTConnectionController.h; sourceTree = "<group>"; };
@@ -257,8 +253,6 @@
 				24F6EC6C158A2C3000CEDD41 /* DCTConnectionController+Equality.m */,
 				24F6EC6F158A2C3000CEDD41 /* DCTConnectionControllerDisplay.h */,
 				24F6EC70158A2C3000CEDD41 /* DCTConnectionControllerDisplay.m */,
-				24F6EC71158A2C3000CEDD41 /* DCTConnectionGroup.h */,
-				24F6EC72158A2C3000CEDD41 /* DCTConnectionGroup.m */,
 				24F6EC73158A2C3000CEDD41 /* DCTConnectionQueue.h */,
 				24F6EC74158A2C3000CEDD41 /* DCTConnectionQueue.m */,
 				24F6EC75158A2C3000CEDD41 /* DCTRESTConnectionController.h */,
@@ -299,7 +293,6 @@
 				24F6EC7C158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.h in Headers */,
 				24F6EC7E158A2C3000CEDD41 /* DCTConnectionController+Equality.h in Headers */,
 				24F6EC82158A2C3000CEDD41 /* DCTConnectionControllerDisplay.h in Headers */,
-				24F6EC84158A2C3000CEDD41 /* DCTConnectionGroup.h in Headers */,
 				24F6EC86158A2C3000CEDD41 /* DCTConnectionQueue.h in Headers */,
 				24F6EC88158A2C3000CEDD41 /* DCTRESTConnectionController.h in Headers */,
 				24F6EC8A158A2C3000CEDD41 /* NSString+DCTURLEncoding.h in Headers */,
@@ -482,7 +475,6 @@
 				24F6EC7D158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.m in Sources */,
 				24F6EC7F158A2C3000CEDD41 /* DCTConnectionController+Equality.m in Sources */,
 				24F6EC83158A2C3000CEDD41 /* DCTConnectionControllerDisplay.m in Sources */,
-				24F6EC85158A2C3000CEDD41 /* DCTConnectionGroup.m in Sources */,
 				24F6EC87158A2C3000CEDD41 /* DCTConnectionQueue.m in Sources */,
 				24F6EC89158A2C3000CEDD41 /* DCTRESTConnectionController.m in Sources */,
 				24F6EC8B158A2C3000CEDD41 /* NSString+DCTURLEncoding.m in Sources */,
