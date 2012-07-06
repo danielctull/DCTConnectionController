@@ -37,7 +37,6 @@
 #import "DCTConnectionController.h"
 #import "DCTConnectionQueue.h"
 #import "DCTConnectionController+Equality.h"
-#import "DCTConnectionController+UsefulChecks.h"
 #import "DCTRESTConnectionController.h"
 
 NSString * const DCTInternalConnectionControllerStatusString[] = {

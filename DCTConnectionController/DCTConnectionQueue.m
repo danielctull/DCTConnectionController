@@ -36,7 +36,6 @@
 
 #import "DCTConnectionQueue.h"
 #import "DCTConnectionController.h"
-#import "DCTConnectionController+UsefulChecks.h"
 #import "DCTConnectionGroup.h"
 
 NSString *const DCTConnectionQueueConnectionCountChangedNotification = @"DCTConnectionQueueConnectionCountChangedNotification";

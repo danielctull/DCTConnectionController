@@ -35,7 +35,6 @@
  */
 
 #import "DCTConnectionGroup.h"
-#import "DCTConnectionController+UsefulChecks.h"
 #import "DCTConnectionQueue.h"
 #import <objc/runtime.h>
 
@@ -102,7 +101,7 @@
 - (void)dctInternal_checkControllers {
 	
 	for (DCTConnectionController *cc in self.dctInternal_connectionControllers)
-		if (!cc.ended)
+		if (cc.status <= DCTConnectionControllerStatusResponded)
 			return;
 	
 	hasFinished = YES;

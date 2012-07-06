@@ -7,7 +7,6 @@
 //
 
 #import "DCTConnectionController+BlockHandlers.h"
-#import "DCTConnectionController+UsefulChecks.h"
 
 @implementation DCTConnectionController (BlockHandlers)
 
@@ -15,7 +14,7 @@
 	
 	NSAssert(responseHandler != nil, @"Handler should not be nil.");
 	
-	if (self.didReceiveResponse) {
+	if (self.status >= DCTConnectionControllerStatusResponded) {
 		responseHandler(self.returnedResponse);
 		return;
 	}
@@ -30,7 +29,7 @@
 	
 	NSAssert(finishHandler != nil, @"Handler should not be nil.");
 	
-	if (self.finished) {
+	if (self.status == DCTConnectionControllerStatusFinished) {
 		finishHandler();
 		return;
 	}
@@ -45,7 +44,7 @@
 	
 	NSAssert(failureHandler != nil, @"Handler should not be nil.");
 	
-	if (self.failed) {
+	if (self.status == DCTConnectionControllerStatusFailed) {
 		failureHandler(self.returnedError);
 		return;
 	}
@@ -60,7 +59,7 @@
 	
 	NSAssert(cancelationHandler != nil, @"Handler should not be nil.");
 	
-	if (self.cancelled) {
+	if (self.status == DCTConnectionControllerStatusCancelled) {
 		cancelationHandler();
 		return;
 	}
