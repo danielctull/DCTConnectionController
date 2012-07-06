@@ -36,8 +36,6 @@
 		24F6EC7D158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC6A158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.m */; };
 		24F6EC7E158A2C3000CEDD41 /* DCTConnectionController+Equality.h in Headers */ = {isa = PBXBuildFile; fileRef = 24F6EC6B158A2C3000CEDD41 /* DCTConnectionController+Equality.h */; };
 		24F6EC7F158A2C3000CEDD41 /* DCTConnectionController+Equality.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC6C158A2C3000CEDD41 /* DCTConnectionController+Equality.m */; };
-		24F6EC80158A2C3000CEDD41 /* DCTConnectionController+UsefulChecks.h in Headers */ = {isa = PBXBuildFile; fileRef = 24F6EC6D158A2C3000CEDD41 /* DCTConnectionController+UsefulChecks.h */; };
-		24F6EC81158A2C3000CEDD41 /* DCTConnectionController+UsefulChecks.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC6E158A2C3000CEDD41 /* DCTConnectionController+UsefulChecks.m */; };
 		24F6EC82158A2C3000CEDD41 /* DCTConnectionControllerDisplay.h in Headers */ = {isa = PBXBuildFile; fileRef = 24F6EC6F158A2C3000CEDD41 /* DCTConnectionControllerDisplay.h */; };
 		24F6EC83158A2C3000CEDD41 /* DCTConnectionControllerDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC70158A2C3000CEDD41 /* DCTConnectionControllerDisplay.m */; };
 		24F6EC84158A2C3000CEDD41 /* DCTConnectionGroup.h in Headers */ = {isa = PBXBuildFile; fileRef = 24F6EC71158A2C3000CEDD41 /* DCTConnectionGroup.h */; };
@@ -100,8 +98,6 @@
 		24F6EC6A158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionController+BlockHandlers.m"; sourceTree = "<group>"; };
 		24F6EC6B158A2C3000CEDD41 /* DCTConnectionController+Equality.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionController+Equality.h"; sourceTree = "<group>"; };
 		24F6EC6C158A2C3000CEDD41 /* DCTConnectionController+Equality.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionController+Equality.m"; sourceTree = "<group>"; };
-		24F6EC6D158A2C3000CEDD41 /* DCTConnectionController+UsefulChecks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionController+UsefulChecks.h"; sourceTree = "<group>"; };
-		24F6EC6E158A2C3000CEDD41 /* DCTConnectionController+UsefulChecks.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "DCTConnectionController+UsefulChecks.m"; sourceTree = "<group>"; };
 		24F6EC6F158A2C3000CEDD41 /* DCTConnectionControllerDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionControllerDisplay.h; sourceTree = "<group>"; };
 		24F6EC70158A2C3000CEDD41 /* DCTConnectionControllerDisplay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionControllerDisplay.m; sourceTree = "<group>"; };
 		24F6EC71158A2C3000CEDD41 /* DCTConnectionGroup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCTConnectionGroup.h; sourceTree = "<group>"; };
@@ -259,8 +255,6 @@
 				24F6EC6A158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.m */,
 				24F6EC6B158A2C3000CEDD41 /* DCTConnectionController+Equality.h */,
 				24F6EC6C158A2C3000CEDD41 /* DCTConnectionController+Equality.m */,
-				24F6EC6D158A2C3000CEDD41 /* DCTConnectionController+UsefulChecks.h */,
-				24F6EC6E158A2C3000CEDD41 /* DCTConnectionController+UsefulChecks.m */,
 				24F6EC6F158A2C3000CEDD41 /* DCTConnectionControllerDisplay.h */,
 				24F6EC70158A2C3000CEDD41 /* DCTConnectionControllerDisplay.m */,
 				24F6EC71158A2C3000CEDD41 /* DCTConnectionGroup.h */,
@@ -304,7 +298,6 @@
 				24F6EC7A158A2C3000CEDD41 /* DCTConnectionController.h in Headers */,
 				24F6EC7C158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.h in Headers */,
 				24F6EC7E158A2C3000CEDD41 /* DCTConnectionController+Equality.h in Headers */,
-				24F6EC80158A2C3000CEDD41 /* DCTConnectionController+UsefulChecks.h in Headers */,
 				24F6EC82158A2C3000CEDD41 /* DCTConnectionControllerDisplay.h in Headers */,
 				24F6EC84158A2C3000CEDD41 /* DCTConnectionGroup.h in Headers */,
 				24F6EC86158A2C3000CEDD41 /* DCTConnectionQueue.h in Headers */,
@@ -488,7 +481,6 @@
 				24F6EC7B158A2C3000CEDD41 /* DCTConnectionController.m in Sources */,
 				24F6EC7D158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.m in Sources */,
 				24F6EC7F158A2C3000CEDD41 /* DCTConnectionController+Equality.m in Sources */,
-				24F6EC81158A2C3000CEDD41 /* DCTConnectionController+UsefulChecks.m in Sources */,
 				24F6EC83158A2C3000CEDD41 /* DCTConnectionControllerDisplay.m in Sources */,
 				24F6EC85158A2C3000CEDD41 /* DCTConnectionGroup.m in Sources */,
 				24F6EC87158A2C3000CEDD41 /* DCTConnectionQueue.m in Sources */,
@@ -703,34 +695,40 @@
 		24F6EC61158A2BD200CEDD41 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				DSTROOT = /tmp/DCTConnectionController.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = "include/$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				VALID_ARCHS = "";
+				"VALID_ARCHS[sdk=iphoneos*]" = "armv7 armv6";
+				"VALID_ARCHS[sdk=macosx*]" = "i386 x86_64";
 			};
 			name = Debug;
 		};
 		24F6EC62158A2BD200CEDD41 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				DSTROOT = /tmp/DCTConnectionController.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
+				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = "include/$(TARGET_NAME)";
 				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = macosx;
+				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
+				VALID_ARCHS = "i386 x86_64 armv7 armv6";
+				"VALID_ARCHS[sdk=iphoneos*]" = "armv7 armv6";
+				"VALID_ARCHS[sdk=macosx*]" = "i386 x86_64";
 			};
 			name = Release;
 		};
@@ -783,6 +781,7 @@
 				24BE262B15A7410100161A59 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		24F6EC36158A2BD100CEDD41 /* Build configuration list for PBXProject "DCTConnectionController" */ = {
 			isa = XCConfigurationList;
