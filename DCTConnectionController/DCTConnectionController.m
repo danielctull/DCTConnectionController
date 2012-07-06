@@ -142,7 +142,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	_priority = DCTConnectionControllerPriorityMedium;
 	_operationQueue = [NSOperationQueue new];
 	[_operationQueue setMaxConcurrentOperationCount:1];
-	
+	[_operationQueue setName:@"DCTConnectionController Queue"];
+
 	[self performBlock:^{
 		_statusChangeBlocks = [NSMutableSet new];
 		_fileManager = [NSFileManager new];
@@ -245,9 +246,11 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	if (self.status >= DCTConnectionControllerStatusStarted) return;
 	[self setStatus:DCTConnectionControllerStatusStarted];
 	
-	[[NSOperationQueue mainQueue] addOperationWithBlock:^{
+	[self performBlock:^{
 			
-		_URLConnection = [[NSURLConnection alloc] initWithRequest:self.URLRequest delegate:self startImmediately:YES];
+		_URLConnection = [[NSURLConnection alloc] initWithRequest:self.URLRequest delegate:self startImmediately:NO];
+		[_URLConnection setDelegateQueue:_operationQueue];
+		[_URLConnection start];
 		
 		if (!_URLConnection)
 			[self performBlock:^{
@@ -335,63 +338,50 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 #pragma mark - NSURLConnectionDelegate
 
 - (void)connection:(NSURLConnection *)connection didReceiveResponse:(NSURLResponse *)response {
-	[self performBlock:^{
-		_returnedResponse = response;
-		[self connectionDidReceiveResponse];
-	}];
+	_returnedResponse = response;
+	[self connectionDidReceiveResponse];
 }
 
 - (void)connection:(NSURLConnection *)connection didReceiveData:(NSData *)data {
 	
-	[self performBlock:^{
-				
-		if (!_fileHandle) {
-			
-			NSString *downloadPath = self.downloadPath;
-			
-			if ([_fileManager fileExistsAtPath:downloadPath])
-				[_fileManager removeItemAtPath:downloadPath error:nil];
-			
-			[_fileManager createFileAtPath:downloadPath
-								  contents:nil
-								attributes:nil];
-						
-			_fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:downloadPath];
-		}
+	if (!_fileHandle) {
 		
-		[_fileHandle seekToEndOfFile];
-		[_fileHandle writeData:data];
-	}];
+		NSString *downloadPath = self.downloadPath;
+		
+		if ([_fileManager fileExistsAtPath:downloadPath])
+			[_fileManager removeItemAtPath:downloadPath error:nil];
+		
+		[_fileManager createFileAtPath:downloadPath
+							  contents:nil
+							attributes:nil];
+					
+		_fileHandle = [NSFileHandle fileHandleForUpdatingAtPath:downloadPath];
+	}
+	
+	[_fileHandle seekToEndOfFile];
+	[_fileHandle writeData:data];
 }
 
 - (void)connectionDidFinishLoading:(NSURLConnection *)connection {
-	
-	[self performBlock:^{
-		[_fileHandle closeFile];
-		_fileHandle = nil;
+
+	[_fileHandle closeFile];
+	_fileHandle = nil;
 		
-		[self connectionDidFinishLoading];
-		
-		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-			[_URLConnection cancel];
-			_URLConnection = nil;
-		}];
-	}];
+	[self connectionDidFinishLoading];
+
+	[_URLConnection cancel];
+	_URLConnection = nil;
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
-	[self performBlock:^{
-		[_fileHandle closeFile];
-		_fileHandle = nil;
-		_returnedError = error;
+
+	[_fileHandle closeFile];
+	_fileHandle = nil;
+	_returnedError = error;
 		
-		[self connectionDidFail];
-		
-		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
-			[_URLConnection cancel];
-			_URLConnection = nil;
-		}];
-	}];
+	[self connectionDidFail];
+	[_URLConnection cancel];
+	_URLConnection = nil;
 }
 
 #pragma mark - Internal
