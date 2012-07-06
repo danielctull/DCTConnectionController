@@ -43,16 +43,13 @@ extern NSString *const DCTConnectionQueueActiveConnectionCountChangedNotificatio
 extern NSString *const DCTConnectionQueueActiveConnectionCountIncreasedNotification;
 extern NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification;
 
-@interface DCTConnectionQueue : NSObject
+@interface DCTConnectionQueue : NSOperationQueue
 
 + (DCTConnectionQueue *)defaultConnectionQueue;
 - (id)initWithName:(NSString *)name;
 
-@property (nonatomic, readonly) NSString *name;
-
 @property (nonatomic, assign) NSUInteger maxConnections;
 
 @property (nonatomic, readonly) NSArray *connectionControllers;
-- (void)addConnectionController:(DCTConnectionController *)connectionController;
 
 @end

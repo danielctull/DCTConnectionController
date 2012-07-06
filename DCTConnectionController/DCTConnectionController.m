@@ -76,10 +76,23 @@ NSString *const DCTConnectionControllerDidReceiveResponseNotification = @"DCTCon
 NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectionControllerWasCancelledNotification";
 NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnectionControllerStatusChangedNotification";
 
+BOOL DCTConnectionControllerStatusIsExecuting(DCTConnectionControllerStatus status) {
+	return (status >= DCTConnectionControllerStatusStarted && status <= DCTConnectionControllerStatusResponded);
+}
+
+BOOL DCTConnectionControllerStatusIsFinished(DCTConnectionControllerStatus status) {
+	return (status > DCTConnectionControllerStatusResponded);
+}
+
+BOOL DCTConnectionControllerStatusIsQueued(DCTConnectionControllerStatus status) {
+	return (status == DCTConnectionControllerStatusQueued);
+}
+
 @implementation DCTConnectionController {
 	__weak DCTConnectionQueue *_connectionQueue;
 	__strong NSOperationQueue *_operationQueue;
 	__strong NSMutableSet *_statusChangeBlocks;
+	__strong NSMutableSet *_statusWillChangeBlocks;
 	__strong NSFileHandle *_fileHandle;
 	__strong NSFileManager *_fileManager;
 	__strong NSURLConnection *_URLConnection;
@@ -109,12 +122,32 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	_fileManager = nil;
 }
 
+- (void)setPriority:(DCTConnectionControllerPriority)priority {
+	self.queuePriority = priority;
+}
+
+- (DCTConnectionControllerPriority)priority {
+	return self.queuePriority;
+}
+
+- (BOOL)isConcurrent {
+	return YES;
+}
+
+- (BOOL)isExecuting {
+	return DCTConnectionControllerStatusIsExecuting(self.status);
+}
+
+- (BOOL)isFinished {
+	return DCTConnectionControllerStatusIsFinished(self.status);
+}
+
 #pragma mark - NSCoding
 
 - (id)initWithCoder:(NSCoder *)coder {
 	if (!(self = [self init])) return nil;
-	_type = [coder decodeIntegerForKey:NSStringFromSelector(@selector(type))];
-	_priority = [coder decodeIntegerForKey:NSStringFromSelector(@selector(priority))];
+	self.type = [coder decodeIntegerForKey:NSStringFromSelector(@selector(type))];
+	self.priority = [coder decodeIntegerForKey:NSStringFromSelector(@selector(priority))];
 	return self;
 }
 
@@ -124,7 +157,8 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 }
 
 - (id)initWithURL:(NSURL *)URL {
-	if (!(self = [self init])) return nil;
+	self = [self init];
+	if (!self) return nil;
 	NSMutableURLRequest *request = [NSMutableURLRequest new];
 	[request setURL:URL];
 	[request setHTTPMethod:DCTInternalConnectionControllerTypeString[self.type]];
@@ -139,7 +173,6 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 - (id)init {
 	if (!(self = [super init])) return nil;
 	
-	_priority = DCTConnectionControllerPriorityMedium;
 	_operationQueue = [NSOperationQueue new];
 	[_operationQueue setMaxConcurrentOperationCount:1];
 	[_operationQueue setName:@"DCTConnectionController Queue"];
@@ -158,6 +191,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 			[notificationCenter postNotificationName:DCTConnectionControllerStatusChangedNotification object:connectionController];
 			
 			switch (status) {
+
 				case DCTConnectionControllerStatusResponded:
 					[notificationCenter postNotificationName:DCTConnectionControllerDidReceiveResponseNotification object:connectionController];
 					break;
@@ -198,7 +232,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 		NSUInteger existingConnectionControllerIndex = [_connectionQueue.connectionControllers indexOfObject:self];
 		
 		if (existingConnectionControllerIndex == NSNotFound) {
-			[_connectionQueue addConnectionController:self];
+			[_connectionQueue addOperation:self];
 			[self setStatus:DCTConnectionControllerStatusQueued];
 			return;
 		}
@@ -247,7 +281,7 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	[self setStatus:DCTConnectionControllerStatusStarted];
 	
 	[self performBlock:^{
-			
+
 		_URLConnection = [[NSURLConnection alloc] initWithRequest:self.URLRequest delegate:self startImmediately:NO];
 		[_URLConnection setDelegateQueue:_operationQueue];
 		[_URLConnection start];
@@ -308,19 +342,38 @@ NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnecti
 	return _returnedResponse;
 }
 
-- (void)setStatus:(DCTConnectionControllerStatus)status {
+- (void)setStatus:(DCTConnectionControllerStatus)newStatus {
 
 	[self performBlock:^{
-		if (status <= _status
-			&& status != DCTConnectionControllerStatusNotStarted
-			&& status != DCTConnectionControllerStatusQueued)
+		
+		DCTConnectionControllerStatus oldStatus = _status;
+
+		if (newStatus <= oldStatus
+			&& newStatus != DCTConnectionControllerStatusNotStarted
+			&& newStatus != DCTConnectionControllerStatusQueued)
 			return;
 		
-		if (self.ended) return;
-		
+		if (DCTConnectionControllerStatusIsFinished(oldStatus)) return;
+
+		if (DCTConnectionControllerStatusIsQueued(oldStatus) && DCTConnectionControllerStatusIsExecuting(newStatus))
+			[self willChangeValueForKey:@"isExecuting"];
+
+		if (DCTConnectionControllerStatusIsFinished(newStatus)) {
+			[self willChangeValueForKey:@"isExecuting"];
+			[self willChangeValueForKey:@"isFinished"];
+		}
+
 		[self willChangeValueForKey:@"status"];
-		_status = status;
+		_status = newStatus;
 		[self didChangeValueForKey:@"status"];
+
+		if (DCTConnectionControllerStatusIsQueued(oldStatus) && DCTConnectionControllerStatusIsExecuting(newStatus))
+			[self didChangeValueForKey:@"isExecuting"];
+
+		if (DCTConnectionControllerStatusIsFinished(newStatus)) {
+			[self didChangeValueForKey:@"isExecuting"];
+			[self didChangeValueForKey:@"isFinished"];
+		}
 
 		[_statusChangeBlocks enumerateObjectsUsingBlock:^(void(^block)(DCTConnectionController *connectionController, DCTConnectionControllerStatus), BOOL *stop) {
 			block(self, _status);

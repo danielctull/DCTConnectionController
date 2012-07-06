@@ -49,7 +49,7 @@
 
 /** Specifies the type of connection to use.
  */
-typedef enum {
+typedef enum : NSInteger {
 	DCTConnectionControllerTypeGet = 0,		/**< Uses a GET connection. */
 	DCTConnectionControllerTypePost,		/**< Uses a POST connection. */
 	DCTConnectionControllerTypePut,			/**< Uses a PUT connection. */
@@ -63,7 +63,7 @@ typedef enum {
 
 /** Specifies the different stages of a connection.
  */
-typedef enum {
+typedef enum : NSInteger {
 	DCTConnectionControllerStatusNotStarted = 0,	/**< The connection has not begun yet, and has not been given to the DTConnectionManager object to perform. */
 	DCTConnectionControllerStatusQueued,			/**< The connection has been placed in a queue and is awaiting a free slot to perform. */
 	DCTConnectionControllerStatusStarted,			/**< The request has been sent and a response is being awaited. */
@@ -75,12 +75,12 @@ typedef enum {
 
 /** Specifies the possible priorities for a connection.
  */
-typedef enum {
-	DCTConnectionControllerPriorityVeryHigh = 0,
-	DCTConnectionControllerPriorityHigh,
-	DCTConnectionControllerPriorityMedium,
-	DCTConnectionControllerPriorityLow,
-	DCTConnectionControllerPriorityVeryLow
+typedef enum : NSInteger {
+	DCTConnectionControllerPriorityVeryHigh = NSOperationQueuePriorityVeryHigh,
+	DCTConnectionControllerPriorityHigh = NSOperationQueuePriorityHigh,
+	DCTConnectionControllerPriorityMedium = NSOperationQueuePriorityNormal,
+	DCTConnectionControllerPriorityLow = NSOperationQueuePriorityLow,
+	DCTConnectionControllerPriorityVeryLow = NSOperationQueuePriorityVeryLow
 } DCTConnectionControllerPriority;
 
 /** Name of the notification sent out when the connection has successfully completed.
@@ -101,7 +101,7 @@ extern NSString *const DCTConnectionControllerStatusChangedNotification;
 
 extern NSString *const DCTConnectionControllerTypeString[];
 
-@interface DCTConnectionController : NSObject <NSCoding,NSURLConnectionDelegate, NSURLConnectionDataDelegate>
+@interface DCTConnectionController : NSOperation <NSCoding, NSURLConnectionDelegate, NSURLConnectionDataDelegate>
 
 @property (nonatomic, assign) DCTConnectionControllerType type;
 @property (nonatomic, assign) DCTConnectionControllerPriority priority;
@@ -145,9 +145,6 @@ extern NSString *const DCTConnectionControllerTypeString[];
 */
 
 @property (nonatomic, readonly) DCTConnectionQueue *connectionQueue;
-
-/// @name For the queue's use only
-- (void)start;
 
 @end
 
