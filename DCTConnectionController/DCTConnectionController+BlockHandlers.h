@@ -8,57 +8,44 @@
 
 #import "DCTConnectionController.h"
 
-typedef void (^DCTConnectionControllerResponseBlock) (NSURLResponse *response);
-typedef void (^DCTConnectionControllerFailureBlock) (NSError *error);
-typedef void (^DCTConnectionControllerCancelationBlock) ();
-typedef void (^DCTConnectionControllerFinishBlock) ();
-
 @interface DCTConnectionController (BlockHandlers)
 
 /// @name Event Blocks
 
-/** Adds a response block.
+/** Adds a block that is called when the connection controller receives a response.
  
- DCTConnectionControllerResponseBlock is defined as such:
- 
- `typedef void (^DCTConnectionControllerResponseBlock) (NSURLResponse *response);`
+ If the connection controller has already received a response, this block is called 
+ straight away.
  
  @param responseHandler The response block to add.
  */
-- (void)addResponseHandler:(DCTConnectionControllerResponseBlock)responseHandler;
+- (void)addResponseHandler:(void(^)(NSURLResponse *response))responseHandler;
 
-/** Adds a finish block.
+/** Adds a block that is called when the connection controller successfully finishes.
  
- DCTConnectionControllerFinishBlock is defined as such:
- 
- `typedef void (^DCTConnectionControllerFinishBlock) ();`
+ If the connection controller has already finished, this block is called
+ straight away.
  
  @param finishHandler The completion block to add.
  */
-- (void)addFinishHandler:(DCTConnectionControllerFinishBlock)finishHandler;
+- (void)addFinishHandler:(void(^)())finishHandler;
 
-
-
-/** Adds a failure block.
+/** Adds a block that is called when the connection controller fails.
  
- DCTConnectionControllerFailureBlock is defined as such:
- 
- `typedef void (^DCTConnectionControllerFailureBlock) (NSError *error);`
+ If the connection controller has already failed, this block is called
+ straight away.
  
  @param failureHandler The failure block to add.
  */
-- (void)addFailureHandler:(DCTConnectionControllerFailureBlock)failureHandler;
+- (void)addFailureHandler:(void(^)(NSError *error))failureHandler;
 
-/** Adds a completion block.
+/** Adds a block that is called when the connection controller is cancelled.
  
- DCTConnectionControllerCancelationBlock is defined as such:
- 
- `typedef void (^DCTConnectionControllerCancelationBlock) ();`
+ If the connection controller has already been cancelled, this block is called
+ straight away.
  
  @param cancelationHandler The cancelation block to add.
  */
-- (void)addCancelationHandler:(DCTConnectionControllerCancelationBlock)cancelationHandler;
-
-
+- (void)addCancelationHandler:(void(^)())cancelationHandler;
 
 @end

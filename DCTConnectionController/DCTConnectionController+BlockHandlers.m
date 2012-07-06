@@ -11,70 +11,64 @@
 
 @implementation DCTConnectionController (BlockHandlers)
 
-- (void)addResponseHandler:(DCTConnectionControllerResponseBlock)handler {
+- (void)addResponseHandler:(void (^)(NSURLResponse *))responseHandler {
 	
-	NSAssert(handler != nil, @"Handler should not be nil.");
+	NSAssert(responseHandler != nil, @"Handler should not be nil.");
 	
 	if (self.didReceiveResponse) {
-		handler(self.returnedResponse);
+		responseHandler(self.returnedResponse);
 		return;
 	}
 	
-	__weak DCTConnectionController *weakSelf = self;
-	
 	[self addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
 		if (status == DCTConnectionControllerStatusResponded)
-			handler(weakSelf.returnedResponse);
+			responseHandler(connectionController.returnedResponse);
 	}];
 }
 
-- (void)addFinishHandler:(DCTConnectionControllerFinishBlock)handler {
+- (void)addFinishHandler:(void (^)())finishHandler {
 	
-	NSAssert(handler != nil, @"Handler should not be nil.");
+	NSAssert(finishHandler != nil, @"Handler should not be nil.");
 	
 	if (self.finished) {
-		handler();
+		finishHandler();
 		return;
 	}
 	
 	[self addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
 		if (status == DCTConnectionControllerStatusFinished)
-			handler();
+			finishHandler();
 	}];
 }
 
-- (void)addFailureHandler:(DCTConnectionControllerFailureBlock)handler {
+- (void)addFailureHandler:(void (^)(NSError *))failureHandler {
 	
-	NSAssert(handler != nil, @"Handler should not be nil.");
+	NSAssert(failureHandler != nil, @"Handler should not be nil.");
 	
 	if (self.failed) {
-		handler(self.returnedError);
+		failureHandler(self.returnedError);
 		return;
 	}
-	
-	__weak DCTConnectionController *weakSelf = self;
-	
+		
 	[self addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
 		if (status == DCTConnectionControllerStatusFailed)
-			handler(weakSelf.returnedError);
+			failureHandler(connectionController.returnedError);
 	}];
 }
 
-- (void)addCancelationHandler:(DCTConnectionControllerCancelationBlock)handler {
+- (void)addCancelationHandler:(void (^)())cancelationHandler {
 	
-	NSAssert(handler != nil, @"Handler should not be nil.");
+	NSAssert(cancelationHandler != nil, @"Handler should not be nil.");
 	
 	if (self.cancelled) {
-		handler();
+		cancelationHandler();
 		return;
 	}
 	
 	[self addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
 		if (status == DCTConnectionControllerStatusCancelled)
-			handler();		
+			cancelationHandler();		
 	}];	
 }
-
-
 
 @end
