@@ -64,9 +64,6 @@ NSString * const ViewControllerStatusString[] = {
 				self.queuedAmountLabel.text = [NSString stringWithFormat:@"%i", [queued count]];
 
 				[self log:@"%@ %@", domain, ViewControllerStatusString[status]];
-				
-				if (status == DCTConnectionControllerStatusFinished)
-					NSLog(@"%@:%@ %@", self, NSStringFromSelector(_cmd), connectionController.returnedObject?@"YES":@"NO");
 			}];
 		}];
 		[connectionController connect];
