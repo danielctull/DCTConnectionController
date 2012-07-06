@@ -16,6 +16,13 @@
 		249D6E47159890F300FE9A23 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 249D6E46159890F300FE9A23 /* main.m */; };
 		249D6E4B159890F300FE9A23 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 249D6E4A159890F300FE9A23 /* AppDelegate.m */; };
 		249D6E601598920700FE9A23 /* libDCTConnectionController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC3C158A2BD100CEDD41 /* libDCTConnectionController.a */; };
+		24BE261215A7410100161A59 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24BE261115A7410100161A59 /* Cocoa.framework */; };
+		24BE261C15A7410100161A59 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 24BE261A15A7410100161A59 /* InfoPlist.strings */; };
+		24BE261E15A7410100161A59 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BE261D15A7410100161A59 /* main.m */; };
+		24BE262215A7410100161A59 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 24BE262015A7410100161A59 /* Credits.rtf */; };
+		24BE262515A7410100161A59 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BE262415A7410100161A59 /* AppDelegate.m */; };
+		24BE262815A7410100161A59 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24BE262615A7410100161A59 /* MainMenu.xib */; };
+		24BE262C15A7410A00161A59 /* libDCTConnectionController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC3C158A2BD100CEDD41 /* libDCTConnectionController.a */; };
 		24F6EC40158A2BD100CEDD41 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC3F158A2BD100CEDD41 /* Foundation.framework */; };
 		24F6EC4E158A2BD200CEDD41 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC4D158A2BD200CEDD41 /* SenTestingKit.framework */; };
 		24F6EC50158A2BD200CEDD41 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC4F158A2BD200CEDD41 /* UIKit.framework */; };
@@ -65,6 +72,19 @@
 		249D6E48159890F300FE9A23 /* DCTConnectionControllerDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionControllerDemo-Prefix.pch"; sourceTree = "<group>"; };
 		249D6E49159890F300FE9A23 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		249D6E4A159890F300FE9A23 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		24BE260F15A7410100161A59 /* Mac Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mac Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		24BE261115A7410100161A59 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
+		24BE261415A7410100161A59 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		24BE261515A7410100161A59 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		24BE261615A7410100161A59 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		24BE261915A7410100161A59 /* Mac Demo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Mac Demo-Info.plist"; sourceTree = "<group>"; };
+		24BE261B15A7410100161A59 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
+		24BE261D15A7410100161A59 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		24BE261F15A7410100161A59 /* Mac Demo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Mac Demo-Prefix.pch"; sourceTree = "<group>"; };
+		24BE262115A7410100161A59 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.rtf; name = en; path = en.lproj/Credits.rtf; sourceTree = "<group>"; };
+		24BE262315A7410100161A59 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		24BE262415A7410100161A59 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		24BE262715A7410100161A59 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
 		24F6EC3C158A2BD100CEDD41 /* libDCTConnectionController.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDCTConnectionController.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		24F6EC3F158A2BD100CEDD41 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		24F6EC4C158A2BD200CEDD41 /* DCTConnectionControllerTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DCTConnectionControllerTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,6 +123,15 @@
 				249D6E3C159890F300FE9A23 /* UIKit.framework in Frameworks */,
 				249D6E3D159890F300FE9A23 /* Foundation.framework in Frameworks */,
 				249D6E3F159890F300FE9A23 /* CoreGraphics.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		24BE260C15A7410100161A59 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				24BE262C15A7410A00161A59 /* libDCTConnectionController.a in Frameworks */,
+				24BE261215A7410100161A59 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,12 +181,46 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		24BE261315A7410100161A59 /* Other Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				24BE261415A7410100161A59 /* AppKit.framework */,
+				24BE261515A7410100161A59 /* CoreData.framework */,
+				24BE261615A7410100161A59 /* Foundation.framework */,
+			);
+			name = "Other Frameworks";
+			sourceTree = "<group>";
+		};
+		24BE261715A7410100161A59 /* Mac Demo */ = {
+			isa = PBXGroup;
+			children = (
+				24BE262315A7410100161A59 /* AppDelegate.h */,
+				24BE262415A7410100161A59 /* AppDelegate.m */,
+				24BE262615A7410100161A59 /* MainMenu.xib */,
+				24BE261815A7410100161A59 /* Supporting Files */,
+			);
+			path = "Mac Demo";
+			sourceTree = "<group>";
+		};
+		24BE261815A7410100161A59 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				24BE261915A7410100161A59 /* Mac Demo-Info.plist */,
+				24BE261A15A7410100161A59 /* InfoPlist.strings */,
+				24BE261D15A7410100161A59 /* main.m */,
+				24BE261F15A7410100161A59 /* Mac Demo-Prefix.pch */,
+				24BE262015A7410100161A59 /* Credits.rtf */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		24F6EC31158A2BD100CEDD41 = {
 			isa = PBXGroup;
 			children = (
 				24F6EC41158A2BD100CEDD41 /* DCTConnectionController */,
 				24F6EC55158A2BD200CEDD41 /* DCTConnectionControllerTests */,
 				249D6E40159890F300FE9A23 /* DCTConnectionControllerDemo */,
+				24BE261715A7410100161A59 /* Mac Demo */,
 				24F6EC3E158A2BD100CEDD41 /* Frameworks */,
 				24F6EC3D158A2BD100CEDD41 /* Products */,
 			);
@@ -169,6 +232,7 @@
 				24F6EC3C158A2BD100CEDD41 /* libDCTConnectionController.a */,
 				24F6EC4C158A2BD200CEDD41 /* DCTConnectionControllerTests.octest */,
 				249D6E3A159890F300FE9A23 /* DCTConnectionControllerDemo.app */,
+				24BE260F15A7410100161A59 /* Mac Demo.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -180,6 +244,8 @@
 				24F6EC4D158A2BD200CEDD41 /* SenTestingKit.framework */,
 				24F6EC4F158A2BD200CEDD41 /* UIKit.framework */,
 				249D6E3E159890F300FE9A23 /* CoreGraphics.framework */,
+				24BE261115A7410100161A59 /* Cocoa.framework */,
+				24BE261315A7410100161A59 /* Other Frameworks */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -267,6 +333,23 @@
 			productReference = 249D6E3A159890F300FE9A23 /* DCTConnectionControllerDemo.app */;
 			productType = "com.apple.product-type.application";
 		};
+		24BE260E15A7410100161A59 /* Mac Demo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 24BE262915A7410100161A59 /* Build configuration list for PBXNativeTarget "Mac Demo" */;
+			buildPhases = (
+				24BE260B15A7410100161A59 /* Sources */,
+				24BE260C15A7410100161A59 /* Frameworks */,
+				24BE260D15A7410100161A59 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Mac Demo";
+			productName = "Mac Demo";
+			productReference = 24BE260F15A7410100161A59 /* Mac Demo.app */;
+			productType = "com.apple.product-type.application";
+		};
 		24F6EC3B158A2BD100CEDD41 /* DCTConnectionController */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 24F6EC60158A2BD200CEDD41 /* Build configuration list for PBXNativeTarget "DCTConnectionController" */;
@@ -327,6 +410,7 @@
 				24F6EC3B158A2BD100CEDD41 /* DCTConnectionController */,
 				24F6EC4B158A2BD200CEDD41 /* DCTConnectionControllerTests */,
 				249D6E39159890F300FE9A23 /* DCTConnectionControllerDemo */,
+				24BE260E15A7410100161A59 /* Mac Demo */,
 			);
 		};
 /* End PBXProject section */
@@ -338,6 +422,16 @@
 			files = (
 				249D6E45159890F300FE9A23 /* InfoPlist.strings in Resources */,
 				247CBC951598FD960006A011 /* ViewController.xib in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		24BE260D15A7410100161A59 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				24BE261C15A7410100161A59 /* InfoPlist.strings in Resources */,
+				24BE262215A7410100161A59 /* Credits.rtf in Resources */,
+				24BE262815A7410100161A59 /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -375,6 +469,15 @@
 				249D6E47159890F300FE9A23 /* main.m in Sources */,
 				249D6E4B159890F300FE9A23 /* AppDelegate.m in Sources */,
 				247CBC941598FD960006A011 /* ViewController.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		24BE260B15A7410100161A59 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				24BE261E15A7410100161A59 /* main.m in Sources */,
+				24BE262515A7410100161A59 /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,6 +522,30 @@
 				249D6E44159890F300FE9A23 /* en */,
 			);
 			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		24BE261A15A7410100161A59 /* InfoPlist.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				24BE261B15A7410100161A59 /* en */,
+			);
+			name = InfoPlist.strings;
+			sourceTree = "<group>";
+		};
+		24BE262015A7410100161A59 /* Credits.rtf */ = {
+			isa = PBXVariantGroup;
+			children = (
+				24BE262115A7410100161A59 /* en */,
+			);
+			name = Credits.rtf;
+			sourceTree = "<group>";
+		};
+		24BE262615A7410100161A59 /* MainMenu.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				24BE262715A7410100161A59 /* en */,
+			);
+			name = MainMenu.xib;
 			sourceTree = "<group>";
 		};
 		24F6EC58158A2BD200CEDD41 /* InfoPlist.strings */ = {
@@ -475,6 +602,58 @@
 			};
 			name = Release;
 		};
+		24BE262A15A7410100161A59 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode45-DP2.app/Contents/Developer/Library/Frameworks\"",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Mac Demo/Mac Demo-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				INFOPLIST_FILE = "Mac Demo/Mac Demo-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Debug;
+		};
+		24BE262B15A7410100161A59 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SYSTEM_APPS_DIR)/Xcode45-DP2.app/Contents/Developer/Library/Frameworks\"",
+				);
+				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "Mac Demo/Mac Demo-Prefix.pch";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				INFOPLIST_FILE = "Mac Demo/Mac Demo-Info.plist";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_LDFLAGS = (
+					"-all_load",
+					"-ObjC",
+				);
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				WRAPPER_EXTENSION = app;
+			};
+			name = Release;
+		};
 		24F6EC5E158A2BD200CEDD41 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -524,6 +703,7 @@
 		24F6EC61158A2BD200CEDD41 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				DSTROOT = /tmp/DCTConnectionController.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -531,13 +711,16 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = "include/$(TARGET_NAME)";
+				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = macosx;
 			};
 			name = Debug;
 		};
 		24F6EC62158A2BD200CEDD41 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ARCHS = "$(NATIVE_ARCH_ACTUAL)";
 				DSTROOT = /tmp/DCTConnectionController.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -545,7 +728,9 @@
 				OTHER_LDFLAGS = "-ObjC";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PUBLIC_HEADERS_FOLDER_PATH = "include/$(TARGET_NAME)";
+				SDKROOT = macosx;
 				SKIP_INSTALL = YES;
+				SUPPORTED_PLATFORMS = macosx;
 			};
 			name = Release;
 		};
@@ -590,6 +775,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		24BE262915A7410100161A59 /* Build configuration list for PBXNativeTarget "Mac Demo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				24BE262A15A7410100161A59 /* Debug */,
+				24BE262B15A7410100161A59 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		24F6EC36158A2BD100CEDD41 /* Build configuration list for PBXProject "DCTConnectionController" */ = {
 			isa = XCConfigurationList;
