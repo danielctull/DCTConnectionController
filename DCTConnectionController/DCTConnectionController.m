@@ -76,6 +76,16 @@ NSString *const DCTConnectionControllerDidReceiveResponseNotification = @"DCTCon
 NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectionControllerWasCancelledNotification";
 NSString *const DCTConnectionControllerStatusChangedNotification = @"DCTConnectionControllerStatusChangedNotification";
 
+BOOL DCTConnectionControllerCanSetDelegateQueue() {
+
+	Class collectionViewClass = NSClassFromString(@"UICollectionView");
+	Class tableViewClass = NSClassFromString(@"UITableView");
+
+	if (tableViewClass && !collectionViewClass) return NO;
+
+	return YES;
+}
+
 BOOL DCTConnectionControllerStatusIsExecuting(DCTConnectionControllerStatus status) {
 	return (status >= DCTConnectionControllerStatusStarted && status <= DCTConnectionControllerStatusResponded);
 }
@@ -283,8 +293,14 @@ BOOL DCTConnectionControllerStatusIsQueued(DCTConnectionControllerStatus status)
 	[self performBlock:^{
 
 		_URLConnection = [[NSURLConnection alloc] initWithRequest:self.URLRequest delegate:self startImmediately:NO];
-		[_URLConnection setDelegateQueue:_operationQueue];
+
+		if (DCTConnectionControllerCanSetDelegateQueue())
+			[_URLConnection setDelegateQueue:_operationQueue];
+
 		[_URLConnection start];
+
+		if (!DCTConnectionControllerCanSetDelegateQueue())
+			CFRunLoopRun();
 		
 		if (!_URLConnection)
 			[self performBlock:^{
@@ -424,6 +440,9 @@ BOOL DCTConnectionControllerStatusIsQueued(DCTConnectionControllerStatus status)
 
 	[_URLConnection cancel];
 	_URLConnection = nil;
+
+	if (!DCTConnectionControllerCanSetDelegateQueue())
+		CFRunLoopStop(CFRunLoopGetCurrent());
 }
 
 - (void)connection:(NSURLConnection *)connection didFailWithError:(NSError *)error {
@@ -435,6 +454,9 @@ BOOL DCTConnectionControllerStatusIsQueued(DCTConnectionControllerStatus status)
 	[self connectionDidFail];
 	[_URLConnection cancel];
 	_URLConnection = nil;
+
+	if (!DCTConnectionControllerCanSetDelegateQueue())
+		CFRunLoopStop(CFRunLoopGetCurrent());
 }
 
 #pragma mark - Internal
