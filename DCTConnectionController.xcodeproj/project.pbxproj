@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		24477ECE15B48A44005A314B /* _DCTConnectionQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 24477ECD15B48A43005A314B /* _DCTConnectionQueue.h */; };
 		247CBC941598FD960006A011 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 247CBC921598FD960006A011 /* ViewController.m */; };
 		247CBC951598FD960006A011 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 247CBC931598FD960006A011 /* ViewController.xib */; };
 		249D6E3C159890F300FE9A23 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC4F158A2BD200CEDD41 /* UIKit.framework */; };
@@ -57,6 +58,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		24477ECD15B48A43005A314B /* _DCTConnectionQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DCTConnectionQueue.h; sourceTree = "<group>"; };
 		247CBC911598FD960006A011 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		247CBC921598FD960006A011 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		247CBC931598FD960006A011 /* ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 				24F6EC70158A2C3000CEDD41 /* DCTConnectionControllerDisplay.m */,
 				24F6EC73158A2C3000CEDD41 /* DCTConnectionQueue.h */,
 				24F6EC74158A2C3000CEDD41 /* DCTConnectionQueue.m */,
+				24477ECD15B48A43005A314B /* _DCTConnectionQueue.h */,
 				24F6EC75158A2C3000CEDD41 /* DCTRESTConnectionController.h */,
 				24F6EC76158A2C3000CEDD41 /* DCTRESTConnectionController.m */,
 				24F6EC77158A2C3000CEDD41 /* NSString+DCTURLEncoding.h */,
@@ -296,6 +299,7 @@
 				24F6EC86158A2C3000CEDD41 /* DCTConnectionQueue.h in Headers */,
 				24F6EC88158A2C3000CEDD41 /* DCTRESTConnectionController.h in Headers */,
 				24F6EC8A158A2C3000CEDD41 /* NSString+DCTURLEncoding.h in Headers */,
+				24477ECE15B48A44005A314B /* _DCTConnectionQueue.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

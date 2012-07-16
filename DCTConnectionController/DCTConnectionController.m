@@ -35,9 +35,9 @@
  */
 
 #import "DCTConnectionController.h"
-#import "DCTConnectionQueue.h"
 #import "DCTConnectionController+Equality.h"
 #import "DCTRESTConnectionController.h"
+#import "_DCTConnectionQueue.h"
 
 NSString * const DCTInternalConnectionControllerStatusString[] = {
 	@"NotStarted",
@@ -241,7 +241,7 @@ BOOL DCTConnectionControllerStatusIsQueued(DCTConnectionControllerStatus status)
 		NSUInteger existingConnectionControllerIndex = [_connectionQueue.connectionControllers indexOfObject:self];
 		
 		if (existingConnectionControllerIndex == NSNotFound) {
-			[_connectionQueue addOperation:self];
+			[_connectionQueue _addOperation:self];
 			[self setStatus:DCTConnectionControllerStatusQueued];
 			return;
 		}

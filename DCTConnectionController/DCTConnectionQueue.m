@@ -73,20 +73,23 @@ NSString *const DCTConnectionQueueActiveConnectionCountDecreasedNotification = @
 	return self.operations;
 }
 
-- (void)addOperation:(DCTConnectionController *)connectionController {
-
+- (void)_addOperation:(DCTConnectionController *)connectionController {
 	__unsafe_unretained DCTConnectionQueue *weakSelf = self;
-		
+
 	[connectionController addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
 
 		if (status <= DCTConnectionControllerStatusResponded) return;
-			
+
 		[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountDecreasedNotification
 															object:weakSelf];
 	}];
-		
+
 	[[NSNotificationCenter defaultCenter] postNotificationName:DCTConnectionQueueActiveConnectionCountIncreasedNotification object:self];
 	[super addOperation:connectionController];
+}
+
+- (void)addOperation:(DCTConnectionController *)connectionController {
+	[connectionController enqueueOnQueue:self];
 }
 
 - (NSString *)description {
