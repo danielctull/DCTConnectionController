@@ -28,7 +28,7 @@
  
  @param finishHandler The completion block to add.
  */
-- (void)addFinishHandler:(void(^)())finishHandler;
+- (void)addCompletionHandler:(void(^)())completionHandler;
 
 /** Adds a block that is called when the connection controller fails.
  

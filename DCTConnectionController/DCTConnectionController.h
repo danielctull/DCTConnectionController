@@ -68,7 +68,7 @@ typedef enum : NSInteger {
 	DCTConnectionControllerStatusQueued,			/**< The connection has been placed in a queue and is awaiting a free slot to perform. */
 	DCTConnectionControllerStatusStarted,			/**< The request has been sent and a response is being awaited. */
 	DCTConnectionControllerStatusResponded,			/**< A response has been received by the server and the connection is awaiting completion. */
-	DCTConnectionControllerStatusFinished,			/**< The connection completed without any errors. */
+	DCTConnectionControllerStatusCompleted,			/**< The connection completed without any errors. */
 	DCTConnectionControllerStatusFailed,			/**< The connection failed. */
 	DCTConnectionControllerStatusCancelled,			/**< The connection was cancelled. */
 } DCTConnectionControllerStatus;
@@ -85,7 +85,7 @@ typedef enum : NSInteger {
 
 /** Name of the notification sent out when the connection has successfully completed.
  */
-extern NSString *const DCTConnectionControllerDidFinishNotification;
+extern NSString *const DCTConnectionControllerDidCompleteNotification;
 
 /** Name of the notification sent out when the connection has failed.
  */
@@ -120,7 +120,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 - (void)loadURLRequest;
 - (void)connectionDidReceiveResponse;
-- (void)connectionDidFinishLoading;
+- (void)connectionDidComplete;
 - (void)connectionDidFail;
 
 #pragma mark - Connection Status
@@ -131,7 +131,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 @property (nonatomic, readonly) NSString *downloadPath;
 
 @property (nonatomic, readonly) DCTConnectionControllerStatus status;
-- (void)addStatusChangeHandler:(void(^)(DCTConnectionController *connectionController, DCTConnectionControllerStatus status))handler;
+- (void)addStatusChangeHandler:(void(^)(DCTConnectionControllerStatus status))handler;
 
 - (NSString *)fullDescription;
 

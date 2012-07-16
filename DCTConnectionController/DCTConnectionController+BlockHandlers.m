@@ -18,25 +18,27 @@
 		responseHandler(self.returnedResponse);
 		return;
 	}
-	
-	[self addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
+
+	__weak DCTConnectionController *weakSelf = self;
+
+	[self addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
 		if (status == DCTConnectionControllerStatusResponded)
-			responseHandler(connectionController.returnedResponse);
+			responseHandler(weakSelf.returnedResponse);
 	}];
 }
 
-- (void)addFinishHandler:(void (^)())finishHandler {
+- (void)addCompletionHandler:(void (^)())completionHandler {
 	
-	NSAssert(finishHandler != nil, @"Handler should not be nil.");
+	NSAssert(completionHandler != NULL, @"Handler should not be nil.");
 	
-	if (self.status == DCTConnectionControllerStatusFinished) {
-		finishHandler();
+	if (self.status == DCTConnectionControllerStatusCompleted) {
+		completionHandler();
 		return;
 	}
-	
-	[self addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
-		if (status == DCTConnectionControllerStatusFinished)
-			finishHandler();
+
+	[self addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
+		if (status == DCTConnectionControllerStatusCompleted)
+			completionHandler();
 	}];
 }
 
@@ -48,10 +50,12 @@
 		failureHandler(self.returnedError);
 		return;
 	}
-		
-	[self addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
+
+	__weak DCTConnectionController *weakSelf = self;
+
+	[self addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
 		if (status == DCTConnectionControllerStatusFailed)
-			failureHandler(connectionController.returnedError);
+			failureHandler(weakSelf.returnedError);
 	}];
 }
 
@@ -64,7 +68,7 @@
 		return;
 	}
 	
-	[self addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
+	[self addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
 		if (status == DCTConnectionControllerStatusCancelled)
 			cancelationHandler();		
 	}];	

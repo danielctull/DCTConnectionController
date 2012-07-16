@@ -46,7 +46,7 @@ NSString * const ViewControllerStatusString[] = {
 		DCTConnectionController *connectionController = [[DCTConnectionController alloc] initWithURL:URL];		
 		NSString *domain = [self _domainStringFromURL:connectionController.URLRequest.URL];
 		
-		[connectionController addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
+		[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
 			[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 				
 				NSArray *connectionControllers = [[DCTConnectionQueue defaultConnectionQueue] connectionControllers];

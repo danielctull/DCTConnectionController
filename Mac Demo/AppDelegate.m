@@ -14,7 +14,7 @@ NSString * const ViewControllerStatusString[] = {
 	@"Queued",
 	@"Started",
 	@"Responded",
-	@"Finished",
+	@"Completed",
 	@"Failed",
 	@"Cancelled"
 };

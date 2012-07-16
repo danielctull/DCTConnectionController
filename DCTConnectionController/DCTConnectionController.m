@@ -69,7 +69,7 @@ NSString * const DCTInternalConnectionControllerTypeString[] = {
 	@"PATCH"
 };
 
-NSString *const DCTConnectionControllerDidFinishNotification = @"DCTConnectionControllerDidFinishNotification";
+NSString *const DCTConnectionControllerDidCompleteNotification = @"DCTConnectionControllerDidCompleteNotification";
 NSString *const DCTConnectionControllerDidFailNotification = @"DCTConnectionControllerDidFailNotification";
 NSString *const DCTConnectionControllerDidReceiveResponseNotification = @"DCTConnectionControllerDidReceiveResponseNotification";
 NSString *const DCTConnectionControllerWasCancelledNotification = @"DCTConnectionControllerWasCancelledNotification";
@@ -190,31 +190,33 @@ BOOL DCTConnectionControllerStatusIsQueued(DCTConnectionControllerStatus status)
 		_statusChangeBlocks = [NSMutableSet new];
 		_fileManager = [NSFileManager new];
 	}];
-		
-	[self addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
+
+	__weak DCTConnectionController *weakSelf = self;
+
+	[self addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
 		
 		[[NSOperationQueue mainQueue] addOperationWithBlock:^{
 		
 			NSNotificationCenter *notificationCenter = [NSNotificationCenter defaultCenter];
 			
-			[notificationCenter postNotificationName:DCTConnectionControllerStatusChangedNotification object:connectionController];
+			[notificationCenter postNotificationName:DCTConnectionControllerStatusChangedNotification object:weakSelf];
 			
 			switch (status) {
 
 				case DCTConnectionControllerStatusResponded:
-					[notificationCenter postNotificationName:DCTConnectionControllerDidReceiveResponseNotification object:connectionController];
+					[notificationCenter postNotificationName:DCTConnectionControllerDidReceiveResponseNotification object:weakSelf];
 					break;
 					
 				case DCTConnectionControllerStatusCancelled:
-					[notificationCenter postNotificationName:DCTConnectionControllerWasCancelledNotification object:connectionController];
+					[notificationCenter postNotificationName:DCTConnectionControllerWasCancelledNotification object:weakSelf];
 					break;
 					
-				case DCTConnectionControllerStatusFinished:
-					[notificationCenter postNotificationName:DCTConnectionControllerDidFinishNotification object:connectionController];
+				case DCTConnectionControllerStatusCompleted:
+					[notificationCenter postNotificationName:DCTConnectionControllerDidCompleteNotification object:weakSelf];
 					break;
 					
 				case DCTConnectionControllerStatusFailed:
-					[notificationCenter postNotificationName:DCTConnectionControllerDidFailNotification object:connectionController];
+					[notificationCenter postNotificationName:DCTConnectionControllerDidFailNotification object:weakSelf];
 					break;
 					
 				default:
@@ -256,23 +258,27 @@ BOOL DCTConnectionControllerStatusIsQueued(DCTConnectionControllerStatus status)
 			existingConnectionController.priority = self.priority;
 		
 		self.status = existingConnectionController.status;
-		
-		[existingConnectionController addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
-						
+
+		__weak DCTConnectionController *weakExistingConnectionController = existingConnectionController;
+
+		[existingConnectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
+
+			__strong DCTConnectionController *strongExistingConnectionController = weakExistingConnectionController;
+
 			switch (status) {
 					
 				case DCTConnectionControllerStatusResponded:
-					_returnedResponse = connectionController.returnedResponse;
+					_returnedResponse = strongExistingConnectionController.returnedResponse;
 					break;
 					
-				case DCTConnectionControllerStatusFinished:
-					_downloadPath = connectionController.downloadPath;
-					if (connectionController->_isReturnedObjectLoaded)
-						_returnedObject = connectionController.returnedObject;
+				case DCTConnectionControllerStatusCompleted:
+					_downloadPath = strongExistingConnectionController.downloadPath;
+					if (strongExistingConnectionController->_isReturnedObjectLoaded)
+						_returnedObject = strongExistingConnectionController.returnedObject;
 					break;
 					
 				case DCTConnectionControllerStatusFailed:
-					_returnedError = connectionController.returnedError;
+					_returnedError = strongExistingConnectionController.returnedError;
 					break;
 					
 				default:
@@ -324,8 +330,8 @@ BOOL DCTConnectionControllerStatusIsQueued(DCTConnectionControllerStatus status)
 	self.URLRequest = request;
 }
 
-- (void)connectionDidFinishLoading {
-	[self setStatus:DCTConnectionControllerStatusFinished];
+- (void)connectionDidComplete {
+	[self setStatus:DCTConnectionControllerStatusCompleted];
 }
 
 - (void)connectionDidReceiveResponse {
@@ -396,7 +402,7 @@ BOOL DCTConnectionControllerStatusIsQueued(DCTConnectionControllerStatus status)
 	}];
 }
 
-- (void)addStatusChangeHandler:(void(^)(DCTConnectionController *connectionController, DCTConnectionControllerStatus status))handler {
+- (void)addStatusChangeHandler:(void(^)(DCTConnectionControllerStatus status))handler {
 	NSAssert(handler != NULL, @"Handler is NULL.");
 	[self performBlock:^{
 		[_statusChangeBlocks addObject:handler];
@@ -435,7 +441,7 @@ BOOL DCTConnectionControllerStatusIsQueued(DCTConnectionControllerStatus status)
 	[_fileHandle closeFile];
 	_fileHandle = nil;
 		
-	[self connectionDidFinishLoading];
+	[self connectionDidComplete];
 
 	[_URLConnection cancel];
 	_URLConnection = nil;
