@@ -113,8 +113,8 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 #pragma mark - Managing the Connection
 
-- (void)connect;
-- (void)connectOnQueue:(DCTConnectionQueue *)queue;
+- (void)enqueue;
+- (void)enqueueOnQueue:(DCTConnectionQueue *)queue;
 
 #pragma mark - Methods to use in Subclasses
 

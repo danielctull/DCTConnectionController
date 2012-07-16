@@ -4,8 +4,7 @@
  
  Created by Daniel Tull on 8.8.2010.
  
- 
- 
+  
  Copyright (c) 2010 Daniel Tull. All rights reserved.
  
  Redistribution and use in source and binary forms, with or without
@@ -57,7 +56,9 @@
  
  This should be overridden by subclasses to give properties to be automatically used in a body form.
  */
-+ (NSArray *)bodyProperties;
++ (NSArray *)bodyFormProperties;
+
+- (NSData *)bodyData;
 
 /** Returns the header properties implemented in each subclass.
  

@@ -226,11 +226,11 @@ BOOL DCTConnectionControllerStatusIsQueued(DCTConnectionControllerStatus status)
     return self;
 }
 
-- (void)connect {
-	[self connectOnQueue:[DCTConnectionQueue defaultConnectionQueue]];
+- (void)enqueue {
+	[self enqueueOnQueue:[DCTConnectionQueue defaultConnectionQueue]];
 }
 
-- (void)connectOnQueue:(DCTConnectionQueue *)connectionQueue {
+- (void)enqueueOnQueue:(DCTConnectionQueue *)connectionQueue {
 	
 	if (self.status > DCTConnectionControllerStatusNotStarted) return;
 	

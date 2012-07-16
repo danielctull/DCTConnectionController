@@ -66,7 +66,7 @@ NSString * const ViewControllerStatusString[] = {
 				[self log:@"%@ %@", domain, ViewControllerStatusString[status]];
 			}];
 		}];
-		[connectionController connect];
+		[connectionController enqueue];
 	}
 	
 	/*
