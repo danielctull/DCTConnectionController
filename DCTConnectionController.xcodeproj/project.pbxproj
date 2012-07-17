@@ -70,7 +70,7 @@
 		249D6E48159890F300FE9A23 /* DCTConnectionControllerDemo-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionControllerDemo-Prefix.pch"; sourceTree = "<group>"; };
 		249D6E49159890F300FE9A23 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		249D6E4A159890F300FE9A23 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		24BE260F15A7410100161A59 /* Mac Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Mac Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		24BE260F15A7410100161A59 /* DCTConnectionController.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DCTConnectionController.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		24BE261115A7410100161A59 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
 		24BE261415A7410100161A59 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		24BE261515A7410100161A59 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -226,7 +226,7 @@
 				24F6EC3C158A2BD100CEDD41 /* libDCTConnectionController.a */,
 				24F6EC4C158A2BD200CEDD41 /* DCTConnectionControllerTests.octest */,
 				249D6E3A159890F300FE9A23 /* iPhone Demo.app */,
-				24BE260F15A7410100161A59 /* Mac Demo.app */,
+				24BE260F15A7410100161A59 /* DCTConnectionController.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -337,7 +337,7 @@
 			);
 			name = "Mac Demo";
 			productName = "Mac Demo";
-			productReference = 24BE260F15A7410100161A59 /* Mac Demo.app */;
+			productReference = 24BE260F15A7410100161A59 /* DCTConnectionController.app */;
 			productType = "com.apple.product-type.application";
 		};
 		24F6EC3B158A2BD100CEDD41 /* DCTConnectionController */ = {
@@ -610,7 +610,7 @@
 					"-all_load",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = DCTConnectionController;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
@@ -636,7 +636,7 @@
 					"-all_load",
 					"-ObjC",
 				);
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = DCTConnectionController;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
