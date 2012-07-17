@@ -62,7 +62,7 @@
 		247CBC911598FD960006A011 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		247CBC921598FD960006A011 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		247CBC931598FD960006A011 /* ViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
-		249D6E3A159890F300FE9A23 /* DCTConnectionControllerDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DCTConnectionControllerDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		249D6E3A159890F300FE9A23 /* iPhone Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "iPhone Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		249D6E3E159890F300FE9A23 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		249D6E42159890F300FE9A23 /* DCTConnectionControllerDemo-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "DCTConnectionControllerDemo-Info.plist"; sourceTree = "<group>"; };
 		249D6E44159890F300FE9A23 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
@@ -151,7 +151,7 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		249D6E40159890F300FE9A23 /* DCTConnectionControllerDemo */ = {
+		249D6E40159890F300FE9A23 /* iPhone Demo */ = {
 			isa = PBXGroup;
 			children = (
 				249D6E49159890F300FE9A23 /* AppDelegate.h */,
@@ -161,7 +161,7 @@
 				247CBC931598FD960006A011 /* ViewController.xib */,
 				249D6E41159890F300FE9A23 /* Supporting Files */,
 			);
-			path = DCTConnectionControllerDemo;
+			path = "iPhone Demo";
 			sourceTree = "<group>";
 		};
 		249D6E41159890F300FE9A23 /* Supporting Files */ = {
@@ -213,7 +213,7 @@
 			children = (
 				24F6EC41158A2BD100CEDD41 /* DCTConnectionController */,
 				24F6EC55158A2BD200CEDD41 /* DCTConnectionControllerTests */,
-				249D6E40159890F300FE9A23 /* DCTConnectionControllerDemo */,
+				249D6E40159890F300FE9A23 /* iPhone Demo */,
 				24BE261715A7410100161A59 /* Mac Demo */,
 				24F6EC3E158A2BD100CEDD41 /* Frameworks */,
 				24F6EC3D158A2BD100CEDD41 /* Products */,
@@ -225,7 +225,7 @@
 			children = (
 				24F6EC3C158A2BD100CEDD41 /* libDCTConnectionController.a */,
 				24F6EC4C158A2BD200CEDD41 /* DCTConnectionControllerTests.octest */,
-				249D6E3A159890F300FE9A23 /* DCTConnectionControllerDemo.app */,
+				249D6E3A159890F300FE9A23 /* iPhone Demo.app */,
 				24BE260F15A7410100161A59 /* Mac Demo.app */,
 			);
 			name = Products;
@@ -306,9 +306,9 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		249D6E39159890F300FE9A23 /* DCTConnectionControllerDemo */ = {
+		249D6E39159890F300FE9A23 /* iPhone Demo */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 249D6E4E159890F300FE9A23 /* Build configuration list for PBXNativeTarget "DCTConnectionControllerDemo" */;
+			buildConfigurationList = 249D6E4E159890F300FE9A23 /* Build configuration list for PBXNativeTarget "iPhone Demo" */;
 			buildPhases = (
 				249D6E36159890F300FE9A23 /* Sources */,
 				249D6E37159890F300FE9A23 /* Frameworks */,
@@ -318,9 +318,9 @@
 			);
 			dependencies = (
 			);
-			name = DCTConnectionControllerDemo;
+			name = "iPhone Demo";
 			productName = DCTConnectionControllerDemo;
-			productReference = 249D6E3A159890F300FE9A23 /* DCTConnectionControllerDemo.app */;
+			productReference = 249D6E3A159890F300FE9A23 /* iPhone Demo.app */;
 			productType = "com.apple.product-type.application";
 		};
 		24BE260E15A7410100161A59 /* Mac Demo */ = {
@@ -399,7 +399,7 @@
 			targets = (
 				24F6EC3B158A2BD100CEDD41 /* DCTConnectionController */,
 				24F6EC4B158A2BD200CEDD41 /* DCTConnectionControllerTests */,
-				249D6E39159890F300FE9A23 /* DCTConnectionControllerDemo */,
+				249D6E39159890F300FE9A23 /* iPhone Demo */,
 				24BE260E15A7410100161A59 /* Mac Demo */,
 			);
 		};
@@ -556,8 +556,8 @@
 					"\"$(SYSTEM_APPS_DIR)/Xcode45-DP1.app/Contents/Developer/Library/Frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "DCTConnectionControllerDemo/DCTConnectionControllerDemo-Prefix.pch";
-				INFOPLIST_FILE = "DCTConnectionControllerDemo/DCTConnectionControllerDemo-Info.plist";
+				GCC_PREFIX_HEADER = "iPhone Demo/DCTConnectionControllerDemo-Prefix.pch";
+				INFOPLIST_FILE = "iPhone Demo/DCTConnectionControllerDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_LDFLAGS = (
 					"-all_load",
@@ -577,8 +577,8 @@
 					"\"$(SYSTEM_APPS_DIR)/Xcode45-DP1.app/Contents/Developer/Library/Frameworks\"",
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "DCTConnectionControllerDemo/DCTConnectionControllerDemo-Prefix.pch";
-				INFOPLIST_FILE = "DCTConnectionControllerDemo/DCTConnectionControllerDemo-Info.plist";
+				GCC_PREFIX_HEADER = "iPhone Demo/DCTConnectionControllerDemo-Prefix.pch";
+				INFOPLIST_FILE = "iPhone Demo/DCTConnectionControllerDemo-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				OTHER_CFLAGS = "-DNS_BLOCK_ASSERTIONS=1";
 				OTHER_LDFLAGS = (
@@ -783,7 +783,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		249D6E4E159890F300FE9A23 /* Build configuration list for PBXNativeTarget "DCTConnectionControllerDemo" */ = {
+		249D6E4E159890F300FE9A23 /* Build configuration list for PBXNativeTarget "iPhone Demo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				249D6E4C159890F300FE9A23 /* Debug */,
