@@ -120,7 +120,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 
 - (void)loadURLRequest;
 - (void)connectionDidReceiveResponse;
-- (void)connectionDidComplete;
+- (void)connectionDidFinishLoading;
 - (void)connectionDidFail;
 
 #pragma mark - Connection Status

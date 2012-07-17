@@ -330,7 +330,7 @@ BOOL DCTConnectionControllerStatusIsQueued(DCTConnectionControllerStatus status)
 	self.URLRequest = request;
 }
 
-- (void)connectionDidComplete {
+- (void)connectionDidFinishLoading {
 	[self setStatus:DCTConnectionControllerStatusCompleted];
 }
 
@@ -441,7 +441,7 @@ BOOL DCTConnectionControllerStatusIsQueued(DCTConnectionControllerStatus status)
 	[_fileHandle closeFile];
 	_fileHandle = nil;
 		
-	[self connectionDidComplete];
+	[self connectionDidFinishLoading];
 
 	[_URLConnection cancel];
 	_URLConnection = nil;
