@@ -89,7 +89,7 @@
 	
 	NSMutableArray *array = [[NSMutableArray alloc] init];
 	
-	NSUInteger outCount;
+	unsigned int outCount;
 	
 	objc_property_t *properties = class_copyPropertyList(class, &outCount);
 	

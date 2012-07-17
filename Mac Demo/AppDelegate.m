@@ -38,10 +38,10 @@ NSString * const ViewControllerStatusString[] = {
 		DCTConnectionController *connectionController = [[DCTConnectionController alloc] initWithURL:URL];
 		NSString *domain = [self _domainStringFromURL:connectionController.URLRequest.URL];
 
-		[connectionController addStatusChangeHandler:^(DCTConnectionController *connectionController, DCTConnectionControllerStatus status) {
+		[connectionController addStatusChangeHandler:^(DCTConnectionControllerStatus status) {
 			NSLog(@"%@:%@ %@ %@", self, NSStringFromSelector(_cmd), domain, ViewControllerStatusString[status]);
 		}];
-		[connectionController connect];
+		[connectionController enqueue];
 	}
 }
 

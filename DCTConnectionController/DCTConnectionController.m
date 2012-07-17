@@ -396,8 +396,8 @@ BOOL DCTConnectionControllerStatusIsQueued(DCTConnectionControllerStatus status)
 			[self didChangeValueForKey:@"isFinished"];
 		}
 
-		[_statusChangeBlocks enumerateObjectsUsingBlock:^(void(^block)(DCTConnectionController *connectionController, DCTConnectionControllerStatus), BOOL *stop) {
-			block(self, _status);
+		[_statusChangeBlocks enumerateObjectsUsingBlock:^(void(^block)(DCTConnectionControllerStatus), BOOL *stop) {
+			block(_status);
 		}];
 	}];
 }
