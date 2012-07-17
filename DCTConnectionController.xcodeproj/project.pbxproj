@@ -382,7 +382,7 @@
 		24F6EC33158A2BD100CEDD41 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0440;
+				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "Daniel Tull";
 			};
 			buildConfigurationList = 24F6EC36158A2BD100CEDD41 /* Build configuration list for PBXProject "DCTConnectionController" */;
@@ -697,6 +697,7 @@
 				);
 				"ARCHS[sdk=iphoneos*]" = armv7;
 				"ARCHS[sdk=macosx*]" = x86_64;
+				COMBINE_HIDPI_IMAGES = YES;
 				DSTROOT = /tmp/DCTConnectionController.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
@@ -723,6 +724,7 @@
 				);
 				"ARCHS[sdk=iphoneos*]" = armv7;
 				"ARCHS[sdk=macosx*]" = x86_64;
+				COMBINE_HIDPI_IMAGES = YES;
 				DSTROOT = /tmp/DCTConnectionController.dst;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "";
