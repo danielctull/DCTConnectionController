@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		2437B5DD15B9771F00750117 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC3F158A2BD100CEDD41 /* Foundation.framework */; };
-		2437B5E215B9771F00750117 /* DCTConnectionController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2437B5E115B9771F00750117 /* DCTConnectionController.h */; };
-		2437B5E415B9771F00750117 /* DCTConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2437B5E315B9771F00750117 /* DCTConnectionController.m */; };
 		2437B5E815B9772900750117 /* DCTConnectionController+BlockHandlers.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 24F6EC69158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.h */; };
 		2437B5E915B9773300750117 /* DCTConnectionQueue.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 24F6EC73158A2C3000CEDD41 /* DCTConnectionQueue.h */; };
 		2437B5EA15B9773A00750117 /* DCTRESTConnectionController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 24F6EC75158A2C3000CEDD41 /* DCTRESTConnectionController.h */; };
@@ -20,6 +18,8 @@
 		2437B5EF15B9775800750117 /* DCTConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC74158A2C3000CEDD41 /* DCTConnectionQueue.m */; };
 		2437B5F015B9775D00750117 /* DCTRESTConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC76158A2C3000CEDD41 /* DCTRESTConnectionController.m */; };
 		2437B5F115B9776100750117 /* NSString+DCTURLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC78158A2C3000CEDD41 /* NSString+DCTURLEncoding.m */; };
+		2437B66C15B97B3500750117 /* DCTConnectionController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 24F6EC67158A2C3000CEDD41 /* DCTConnectionController.h */; };
+		2437B66D15B97B4400750117 /* DCTConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC68158A2C3000CEDD41 /* DCTConnectionController.m */; };
 		247CBC941598FD960006A011 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 247CBC921598FD960006A011 /* ViewController.m */; };
 		247CBC951598FD960006A011 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 247CBC931598FD960006A011 /* ViewController.xib */; };
 		249D6E3C159890F300FE9A23 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC4F158A2BD200CEDD41 /* UIKit.framework */; };
@@ -48,7 +48,7 @@
 			dstPath = "include/${PRODUCT_NAME}";
 			dstSubfolderSpec = 16;
 			files = (
-				2437B5E215B9771F00750117 /* DCTConnectionController.h in CopyFiles */,
+				2437B66C15B97B3500750117 /* DCTConnectionController.h in CopyFiles */,
 				2437B5E815B9772900750117 /* DCTConnectionController+BlockHandlers.h in CopyFiles */,
 				2437B5E915B9773300750117 /* DCTConnectionQueue.h in CopyFiles */,
 				2437B5EA15B9773A00750117 /* DCTRESTConnectionController.h in CopyFiles */,
@@ -60,9 +60,6 @@
 
 /* Begin PBXFileReference section */
 		2437B5DC15B9771F00750117 /* libDCTConnectionController.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDCTConnectionController.a; sourceTree = BUILT_PRODUCTS_DIR; };
-		2437B5E015B9771F00750117 /* DCTConnectionController-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionController-Prefix.pch"; sourceTree = "<group>"; };
-		2437B5E115B9771F00750117 /* DCTConnectionController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DCTConnectionController.h; sourceTree = "<group>"; };
-		2437B5E315B9771F00750117 /* DCTConnectionController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionController.m; sourceTree = "<group>"; };
 		24477ECD15B48A43005A314B /* _DCTConnectionQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DCTConnectionQueue.h; sourceTree = "<group>"; };
 		247CBC911598FD960006A011 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		247CBC921598FD960006A011 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
@@ -152,24 +149,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2437B5DE15B9771F00750117 /* DCTConnectionController */ = {
-			isa = PBXGroup;
-			children = (
-				2437B5E115B9771F00750117 /* DCTConnectionController.h */,
-				2437B5E315B9771F00750117 /* DCTConnectionController.m */,
-				2437B5DF15B9771F00750117 /* Supporting Files */,
-			);
-			path = DCTConnectionController;
-			sourceTree = "<group>";
-		};
-		2437B5DF15B9771F00750117 /* Supporting Files */ = {
-			isa = PBXGroup;
-			children = (
-				2437B5E015B9771F00750117 /* DCTConnectionController-Prefix.pch */,
-			);
-			name = "Supporting Files";
-			sourceTree = "<group>";
-		};
 		249D6E40159890F300FE9A23 /* iPhone Demo */ = {
 			isa = PBXGroup;
 			children = (
@@ -234,7 +213,6 @@
 				24F6EC55158A2BD200CEDD41 /* DCTConnectionControllerTests */,
 				249D6E40159890F300FE9A23 /* iPhone Demo */,
 				24BE261715A7410100161A59 /* Mac Demo */,
-				2437B5DE15B9771F00750117 /* DCTConnectionController */,
 				24F6EC3E158A2BD100CEDD41 /* Frameworks */,
 				24F6EC3D158A2BD100CEDD41 /* Products */,
 			);
@@ -457,7 +435,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2437B5E415B9771F00750117 /* DCTConnectionController.m in Sources */,
+				2437B66D15B97B4400750117 /* DCTConnectionController.m in Sources */,
 				2437B5EC15B9774C00750117 /* DCTConnectionController+BlockHandlers.m in Sources */,
 				2437B5ED15B9775000750117 /* DCTConnectionController+Equality.m in Sources */,
 				2437B5EE15B9775400750117 /* DCTConnectionControllerDisplay.m in Sources */,
