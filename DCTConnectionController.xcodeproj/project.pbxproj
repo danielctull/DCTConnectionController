@@ -7,7 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		24477ECE15B48A44005A314B /* _DCTConnectionQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 24477ECD15B48A43005A314B /* _DCTConnectionQueue.h */; };
+		2437B5DD15B9771F00750117 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC3F158A2BD100CEDD41 /* Foundation.framework */; };
+		2437B5E215B9771F00750117 /* DCTConnectionController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 2437B5E115B9771F00750117 /* DCTConnectionController.h */; };
+		2437B5E415B9771F00750117 /* DCTConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2437B5E315B9771F00750117 /* DCTConnectionController.m */; };
+		2437B5E815B9772900750117 /* DCTConnectionController+BlockHandlers.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 24F6EC69158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.h */; };
+		2437B5E915B9773300750117 /* DCTConnectionQueue.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 24F6EC73158A2C3000CEDD41 /* DCTConnectionQueue.h */; };
+		2437B5EA15B9773A00750117 /* DCTRESTConnectionController.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 24F6EC75158A2C3000CEDD41 /* DCTRESTConnectionController.h */; };
+		2437B5EB15B9773D00750117 /* NSString+DCTURLEncoding.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 24F6EC77158A2C3000CEDD41 /* NSString+DCTURLEncoding.h */; };
+		2437B5EC15B9774C00750117 /* DCTConnectionController+BlockHandlers.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC6A158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.m */; };
+		2437B5ED15B9775000750117 /* DCTConnectionController+Equality.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC6C158A2C3000CEDD41 /* DCTConnectionController+Equality.m */; };
+		2437B5EE15B9775400750117 /* DCTConnectionControllerDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC70158A2C3000CEDD41 /* DCTConnectionControllerDisplay.m */; };
+		2437B5EF15B9775800750117 /* DCTConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC74158A2C3000CEDD41 /* DCTConnectionQueue.m */; };
+		2437B5F015B9775D00750117 /* DCTRESTConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC76158A2C3000CEDD41 /* DCTRESTConnectionController.m */; };
+		2437B5F115B9776100750117 /* NSString+DCTURLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC78158A2C3000CEDD41 /* NSString+DCTURLEncoding.m */; };
 		247CBC941598FD960006A011 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 247CBC921598FD960006A011 /* ViewController.m */; };
 		247CBC951598FD960006A011 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 247CBC931598FD960006A011 /* ViewController.xib */; };
 		249D6E3C159890F300FE9A23 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC4F158A2BD200CEDD41 /* UIKit.framework */; };
@@ -16,48 +28,41 @@
 		249D6E45159890F300FE9A23 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 249D6E43159890F300FE9A23 /* InfoPlist.strings */; };
 		249D6E47159890F300FE9A23 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 249D6E46159890F300FE9A23 /* main.m */; };
 		249D6E4B159890F300FE9A23 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 249D6E4A159890F300FE9A23 /* AppDelegate.m */; };
-		249D6E601598920700FE9A23 /* libDCTConnectionController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC3C158A2BD100CEDD41 /* libDCTConnectionController.a */; };
 		24BE261215A7410100161A59 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24BE261115A7410100161A59 /* Cocoa.framework */; };
 		24BE261C15A7410100161A59 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 24BE261A15A7410100161A59 /* InfoPlist.strings */; };
 		24BE261E15A7410100161A59 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BE261D15A7410100161A59 /* main.m */; };
 		24BE262215A7410100161A59 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 24BE262015A7410100161A59 /* Credits.rtf */; };
 		24BE262515A7410100161A59 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 24BE262415A7410100161A59 /* AppDelegate.m */; };
 		24BE262815A7410100161A59 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 24BE262615A7410100161A59 /* MainMenu.xib */; };
-		24BE262C15A7410A00161A59 /* libDCTConnectionController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC3C158A2BD100CEDD41 /* libDCTConnectionController.a */; };
-		24F6EC40158A2BD100CEDD41 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC3F158A2BD100CEDD41 /* Foundation.framework */; };
 		24F6EC4E158A2BD200CEDD41 /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC4D158A2BD200CEDD41 /* SenTestingKit.framework */; };
 		24F6EC50158A2BD200CEDD41 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC4F158A2BD200CEDD41 /* UIKit.framework */; };
 		24F6EC51158A2BD200CEDD41 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC3F158A2BD100CEDD41 /* Foundation.framework */; };
-		24F6EC54158A2BD200CEDD41 /* libDCTConnectionController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC3C158A2BD100CEDD41 /* libDCTConnectionController.a */; };
 		24F6EC5A158A2BD200CEDD41 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 24F6EC58158A2BD200CEDD41 /* InfoPlist.strings */; };
 		24F6EC5D158A2BD200CEDD41 /* DCTConnectionControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC5C158A2BD200CEDD41 /* DCTConnectionControllerTests.m */; };
-		24F6EC7A158A2C3000CEDD41 /* DCTConnectionController.h in Headers */ = {isa = PBXBuildFile; fileRef = 24F6EC67158A2C3000CEDD41 /* DCTConnectionController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		24F6EC7B158A2C3000CEDD41 /* DCTConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC68158A2C3000CEDD41 /* DCTConnectionController.m */; };
-		24F6EC7C158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.h in Headers */ = {isa = PBXBuildFile; fileRef = 24F6EC69158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		24F6EC7D158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC6A158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.m */; };
-		24F6EC7E158A2C3000CEDD41 /* DCTConnectionController+Equality.h in Headers */ = {isa = PBXBuildFile; fileRef = 24F6EC6B158A2C3000CEDD41 /* DCTConnectionController+Equality.h */; };
-		24F6EC7F158A2C3000CEDD41 /* DCTConnectionController+Equality.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC6C158A2C3000CEDD41 /* DCTConnectionController+Equality.m */; };
-		24F6EC82158A2C3000CEDD41 /* DCTConnectionControllerDisplay.h in Headers */ = {isa = PBXBuildFile; fileRef = 24F6EC6F158A2C3000CEDD41 /* DCTConnectionControllerDisplay.h */; };
-		24F6EC83158A2C3000CEDD41 /* DCTConnectionControllerDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC70158A2C3000CEDD41 /* DCTConnectionControllerDisplay.m */; };
-		24F6EC86158A2C3000CEDD41 /* DCTConnectionQueue.h in Headers */ = {isa = PBXBuildFile; fileRef = 24F6EC73158A2C3000CEDD41 /* DCTConnectionQueue.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		24F6EC87158A2C3000CEDD41 /* DCTConnectionQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC74158A2C3000CEDD41 /* DCTConnectionQueue.m */; };
-		24F6EC88158A2C3000CEDD41 /* DCTRESTConnectionController.h in Headers */ = {isa = PBXBuildFile; fileRef = 24F6EC75158A2C3000CEDD41 /* DCTRESTConnectionController.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		24F6EC89158A2C3000CEDD41 /* DCTRESTConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC76158A2C3000CEDD41 /* DCTRESTConnectionController.m */; };
-		24F6EC8A158A2C3000CEDD41 /* NSString+DCTURLEncoding.h in Headers */ = {isa = PBXBuildFile; fileRef = 24F6EC77158A2C3000CEDD41 /* NSString+DCTURLEncoding.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		24F6EC8B158A2C3000CEDD41 /* NSString+DCTURLEncoding.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC78158A2C3000CEDD41 /* NSString+DCTURLEncoding.m */; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		24F6EC52158A2BD200CEDD41 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 24F6EC33158A2BD100CEDD41 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 24F6EC3B158A2BD100CEDD41;
-			remoteInfo = DCTConnectionController;
+/* Begin PBXCopyFilesBuildPhase section */
+		2437B5DA15B9771F00750117 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/${PRODUCT_NAME}";
+			dstSubfolderSpec = 16;
+			files = (
+				2437B5E215B9771F00750117 /* DCTConnectionController.h in CopyFiles */,
+				2437B5E815B9772900750117 /* DCTConnectionController+BlockHandlers.h in CopyFiles */,
+				2437B5E915B9773300750117 /* DCTConnectionQueue.h in CopyFiles */,
+				2437B5EA15B9773A00750117 /* DCTRESTConnectionController.h in CopyFiles */,
+				2437B5EB15B9773D00750117 /* NSString+DCTURLEncoding.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
 		};
-/* End PBXContainerItemProxy section */
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2437B5DC15B9771F00750117 /* libDCTConnectionController.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDCTConnectionController.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		2437B5E015B9771F00750117 /* DCTConnectionController-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DCTConnectionController-Prefix.pch"; sourceTree = "<group>"; };
+		2437B5E115B9771F00750117 /* DCTConnectionController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DCTConnectionController.h; sourceTree = "<group>"; };
+		2437B5E315B9771F00750117 /* DCTConnectionController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DCTConnectionController.m; sourceTree = "<group>"; };
 		24477ECD15B48A43005A314B /* _DCTConnectionQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _DCTConnectionQueue.h; sourceTree = "<group>"; };
 		247CBC911598FD960006A011 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
 		247CBC921598FD960006A011 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
@@ -83,7 +88,6 @@
 		24BE262315A7410100161A59 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		24BE262415A7410100161A59 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		24BE262715A7410100161A59 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		24F6EC3C158A2BD100CEDD41 /* libDCTConnectionController.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libDCTConnectionController.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		24F6EC3F158A2BD100CEDD41 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		24F6EC4C158A2BD200CEDD41 /* DCTConnectionControllerTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DCTConnectionControllerTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		24F6EC4D158A2BD200CEDD41 /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
@@ -109,11 +113,18 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2437B5D915B9771F00750117 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2437B5DD15B9771F00750117 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		249D6E37159890F300FE9A23 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				249D6E601598920700FE9A23 /* libDCTConnectionController.a in Frameworks */,
 				249D6E3C159890F300FE9A23 /* UIKit.framework in Frameworks */,
 				249D6E3D159890F300FE9A23 /* Foundation.framework in Frameworks */,
 				249D6E3F159890F300FE9A23 /* CoreGraphics.framework in Frameworks */,
@@ -124,16 +135,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				24BE262C15A7410A00161A59 /* libDCTConnectionController.a in Frameworks */,
 				24BE261215A7410100161A59 /* Cocoa.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		24F6EC39158A2BD100CEDD41 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				24F6EC40158A2BD100CEDD41 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,13 +146,30 @@
 				24F6EC4E158A2BD200CEDD41 /* SenTestingKit.framework in Frameworks */,
 				24F6EC50158A2BD200CEDD41 /* UIKit.framework in Frameworks */,
 				24F6EC51158A2BD200CEDD41 /* Foundation.framework in Frameworks */,
-				24F6EC54158A2BD200CEDD41 /* libDCTConnectionController.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2437B5DE15B9771F00750117 /* DCTConnectionController */ = {
+			isa = PBXGroup;
+			children = (
+				2437B5E115B9771F00750117 /* DCTConnectionController.h */,
+				2437B5E315B9771F00750117 /* DCTConnectionController.m */,
+				2437B5DF15B9771F00750117 /* Supporting Files */,
+			);
+			path = DCTConnectionController;
+			sourceTree = "<group>";
+		};
+		2437B5DF15B9771F00750117 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				2437B5E015B9771F00750117 /* DCTConnectionController-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		249D6E40159890F300FE9A23 /* iPhone Demo */ = {
 			isa = PBXGroup;
 			children = (
@@ -215,6 +234,7 @@
 				24F6EC55158A2BD200CEDD41 /* DCTConnectionControllerTests */,
 				249D6E40159890F300FE9A23 /* iPhone Demo */,
 				24BE261715A7410100161A59 /* Mac Demo */,
+				2437B5DE15B9771F00750117 /* DCTConnectionController */,
 				24F6EC3E158A2BD100CEDD41 /* Frameworks */,
 				24F6EC3D158A2BD100CEDD41 /* Products */,
 			);
@@ -223,10 +243,10 @@
 		24F6EC3D158A2BD100CEDD41 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				24F6EC3C158A2BD100CEDD41 /* libDCTConnectionController.a */,
 				24F6EC4C158A2BD200CEDD41 /* DCTConnectionControllerTests.octest */,
 				249D6E3A159890F300FE9A23 /* iPhone Demo.app */,
 				24BE260F15A7410100161A59 /* DCTConnectionController.app */,
+				2437B5DC15B9771F00750117 /* libDCTConnectionController.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -287,25 +307,24 @@
 		};
 /* End PBXGroup section */
 
-/* Begin PBXHeadersBuildPhase section */
-		24F6EC3A158A2BD100CEDD41 /* Headers */ = {
-			isa = PBXHeadersBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				24F6EC7A158A2C3000CEDD41 /* DCTConnectionController.h in Headers */,
-				24F6EC7C158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.h in Headers */,
-				24F6EC7E158A2C3000CEDD41 /* DCTConnectionController+Equality.h in Headers */,
-				24F6EC82158A2C3000CEDD41 /* DCTConnectionControllerDisplay.h in Headers */,
-				24F6EC86158A2C3000CEDD41 /* DCTConnectionQueue.h in Headers */,
-				24F6EC88158A2C3000CEDD41 /* DCTRESTConnectionController.h in Headers */,
-				24F6EC8A158A2C3000CEDD41 /* NSString+DCTURLEncoding.h in Headers */,
-				24477ECE15B48A44005A314B /* _DCTConnectionQueue.h in Headers */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-/* End PBXHeadersBuildPhase section */
-
 /* Begin PBXNativeTarget section */
+		2437B5DB15B9771F00750117 /* DCTConnectionController */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 2437B5E515B9771F00750117 /* Build configuration list for PBXNativeTarget "DCTConnectionController" */;
+			buildPhases = (
+				2437B5D815B9771F00750117 /* Sources */,
+				2437B5D915B9771F00750117 /* Frameworks */,
+				2437B5DA15B9771F00750117 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DCTConnectionController;
+			productName = DCTConnectionController;
+			productReference = 2437B5DC15B9771F00750117 /* libDCTConnectionController.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		249D6E39159890F300FE9A23 /* iPhone Demo */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 249D6E4E159890F300FE9A23 /* Build configuration list for PBXNativeTarget "iPhone Demo" */;
@@ -340,23 +359,6 @@
 			productReference = 24BE260F15A7410100161A59 /* DCTConnectionController.app */;
 			productType = "com.apple.product-type.application";
 		};
-		24F6EC3B158A2BD100CEDD41 /* DCTConnectionController */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 24F6EC60158A2BD200CEDD41 /* Build configuration list for PBXNativeTarget "DCTConnectionController" */;
-			buildPhases = (
-				24F6EC38158A2BD100CEDD41 /* Sources */,
-				24F6EC39158A2BD100CEDD41 /* Frameworks */,
-				24F6EC3A158A2BD100CEDD41 /* Headers */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = DCTConnectionController;
-			productName = DCTConnectionController;
-			productReference = 24F6EC3C158A2BD100CEDD41 /* libDCTConnectionController.a */;
-			productType = "com.apple.product-type.library.static";
-		};
 		24F6EC4B158A2BD200CEDD41 /* DCTConnectionControllerTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 24F6EC63158A2BD200CEDD41 /* Build configuration list for PBXNativeTarget "DCTConnectionControllerTests" */;
@@ -369,7 +371,6 @@
 			buildRules = (
 			);
 			dependencies = (
-				24F6EC53158A2BD200CEDD41 /* PBXTargetDependency */,
 			);
 			name = DCTConnectionControllerTests;
 			productName = DCTConnectionControllerTests;
@@ -397,7 +398,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				24F6EC3B158A2BD100CEDD41 /* DCTConnectionController */,
+				2437B5DB15B9771F00750117 /* DCTConnectionController */,
 				24F6EC4B158A2BD200CEDD41 /* DCTConnectionControllerTests */,
 				249D6E39159890F300FE9A23 /* iPhone Demo */,
 				24BE260E15A7410100161A59 /* Mac Demo */,
@@ -452,6 +453,20 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		2437B5D815B9771F00750117 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2437B5E415B9771F00750117 /* DCTConnectionController.m in Sources */,
+				2437B5EC15B9774C00750117 /* DCTConnectionController+BlockHandlers.m in Sources */,
+				2437B5ED15B9775000750117 /* DCTConnectionController+Equality.m in Sources */,
+				2437B5EE15B9775400750117 /* DCTConnectionControllerDisplay.m in Sources */,
+				2437B5EF15B9775800750117 /* DCTConnectionQueue.m in Sources */,
+				2437B5F015B9775D00750117 /* DCTRESTConnectionController.m in Sources */,
+				2437B5F115B9776100750117 /* NSString+DCTURLEncoding.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		249D6E36159890F300FE9A23 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -471,20 +486,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		24F6EC38158A2BD100CEDD41 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				24F6EC7B158A2C3000CEDD41 /* DCTConnectionController.m in Sources */,
-				24F6EC7D158A2C3000CEDD41 /* DCTConnectionController+BlockHandlers.m in Sources */,
-				24F6EC7F158A2C3000CEDD41 /* DCTConnectionController+Equality.m in Sources */,
-				24F6EC83158A2C3000CEDD41 /* DCTConnectionControllerDisplay.m in Sources */,
-				24F6EC87158A2C3000CEDD41 /* DCTConnectionQueue.m in Sources */,
-				24F6EC89158A2C3000CEDD41 /* DCTRESTConnectionController.m in Sources */,
-				24F6EC8B158A2C3000CEDD41 /* NSString+DCTURLEncoding.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		24F6EC47158A2BD200CEDD41 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -494,14 +495,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		24F6EC53158A2BD200CEDD41 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 24F6EC3B158A2BD100CEDD41 /* DCTConnectionController */;
-			targetProxy = 24F6EC52158A2BD200CEDD41 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		249D6E43159890F300FE9A23 /* InfoPlist.strings */ = {
@@ -547,6 +540,34 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		2437B5E615B9771F00750117 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
+				DSTROOT = /tmp/DCTConnectionController.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		2437B5E715B9771F00750117 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
+				DSTROOT = /tmp/DCTConnectionController.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
 		249D6E4C159890F300FE9A23 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -688,60 +709,6 @@
 			};
 			name = Release;
 		};
-		24F6EC61158A2BD200CEDD41 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					x86_64,
-					armv7,
-				);
-				"ARCHS[sdk=iphoneos*]" = armv7;
-				"ARCHS[sdk=macosx*]" = x86_64;
-				COMBINE_HIDPI_IMAGES = YES;
-				DSTROOT = /tmp/DCTConnectionController.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "include/$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
-				VALID_ARCHS = "";
-				"VALID_ARCHS[sdk=iphoneos*]" = "armv7 armv6";
-				"VALID_ARCHS[sdk=macosx*]" = "i386 x86_64";
-			};
-			name = Debug;
-		};
-		24F6EC62158A2BD200CEDD41 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ARCHS = (
-					x86_64,
-					armv7,
-				);
-				"ARCHS[sdk=iphoneos*]" = armv7;
-				"ARCHS[sdk=macosx*]" = x86_64;
-				COMBINE_HIDPI_IMAGES = YES;
-				DSTROOT = /tmp/DCTConnectionController.dst;
-				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
-				ONLY_ACTIVE_ARCH = NO;
-				OTHER_LDFLAGS = "-ObjC";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PUBLIC_HEADERS_FOLDER_PATH = "include/$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SKIP_INSTALL = YES;
-				SUPPORTED_PLATFORMS = "iphonesimulator iphoneos macosx";
-				VALID_ARCHS = "";
-				"VALID_ARCHS[sdk=iphoneos*]" = "armv7 armv6";
-				"VALID_ARCHS[sdk=macosx*]" = "i386 x86_64";
-			};
-			name = Release;
-		};
 		24F6EC64158A2BD200CEDD41 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -775,6 +742,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		2437B5E515B9771F00750117 /* Build configuration list for PBXNativeTarget "DCTConnectionController" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2437B5E615B9771F00750117 /* Debug */,
+				2437B5E715B9771F00750117 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		249D6E4E159890F300FE9A23 /* Build configuration list for PBXNativeTarget "iPhone Demo" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -798,15 +773,6 @@
 			buildConfigurations = (
 				24F6EC5E158A2BD200CEDD41 /* Debug */,
 				24F6EC5F158A2BD200CEDD41 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		24F6EC60158A2BD200CEDD41 /* Build configuration list for PBXNativeTarget "DCTConnectionController" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				24F6EC61158A2BD200CEDD41 /* Debug */,
-				24F6EC62158A2BD200CEDD41 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
