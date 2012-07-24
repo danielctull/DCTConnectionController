@@ -115,7 +115,7 @@ BOOL DCTConnectionControllerStatusIsQueued(DCTConnectionControllerStatus status)
 	return [temporaryDirectory stringByAppendingPathComponent:@"DCTConnectionController"];
 }
 
-+ (void)initialize {
++ (void)load {
 	@autoreleasepool {
 		NSError *error = nil;
 		if (![[NSFileManager defaultManager] createDirectoryAtPath:[self path]
