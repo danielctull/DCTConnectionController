@@ -165,13 +165,10 @@ BOOL DCTConnectionControllerStatusIsQueued(DCTConnectionControllerStatus status)
 	[coder encodeInteger:self.priority forKey:NSStringFromSelector(@selector(priority))];
 }
 
-- (id)initWithURL:(NSURL *)URL {
+- (id)initWithURLRequest:(NSURLRequest *)URLRequest {
 	self = [self init];
 	if (!self) return nil;
-	NSMutableURLRequest *request = [NSMutableURLRequest new];
-	[request setURL:URL];
-	[request setHTTPMethod:DCTInternalConnectionControllerTypeString[self.type]];
-	_URLRequest = request;
+	_URLRequest = [URLRequest copy];
 	return self;
 }
 

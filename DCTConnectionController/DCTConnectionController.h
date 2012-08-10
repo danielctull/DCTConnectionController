@@ -107,7 +107,7 @@ extern NSString *const DCTConnectionControllerTypeString[];
 @property (nonatomic, assign) DCTConnectionControllerPriority priority;
 @property (nonatomic, strong) NSURLRequest *URLRequest;
 
-- (id)initWithURL:(NSURL *)URL;
+- (id)initWithURLRequest:(NSURLRequest *)URLRequest;
 
 - (void)performBlock:(void(^)())block;
 

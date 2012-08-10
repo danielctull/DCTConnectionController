@@ -22,6 +22,7 @@
 		2437B66D15B97B4400750117 /* DCTConnectionController.m in Sources */ = {isa = PBXBuildFile; fileRef = 24F6EC68158A2C3000CEDD41 /* DCTConnectionController.m */; };
 		247CBC941598FD960006A011 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 247CBC921598FD960006A011 /* ViewController.m */; };
 		247CBC951598FD960006A011 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 247CBC931598FD960006A011 /* ViewController.xib */; };
+		248DBAC915D51FE700710CB0 /* libDCTConnectionController.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 2437B5DC15B9771F00750117 /* libDCTConnectionController.a */; };
 		249D6E3C159890F300FE9A23 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC4F158A2BD200CEDD41 /* UIKit.framework */; };
 		249D6E3D159890F300FE9A23 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 24F6EC3F158A2BD100CEDD41 /* Foundation.framework */; };
 		249D6E3F159890F300FE9A23 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 249D6E3E159890F300FE9A23 /* CoreGraphics.framework */; };
@@ -122,6 +123,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				248DBAC915D51FE700710CB0 /* libDCTConnectionController.a in Frameworks */,
 				249D6E3C159890F300FE9A23 /* UIKit.framework in Frameworks */,
 				249D6E3D159890F300FE9A23 /* Foundation.framework in Frameworks */,
 				249D6E3F159890F300FE9A23 /* CoreGraphics.framework in Frameworks */,
@@ -727,6 +729,7 @@
 				2437B5E715B9771F00750117 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		249D6E4E159890F300FE9A23 /* Build configuration list for PBXNativeTarget "iPhone Demo" */ = {
 			isa = XCConfigurationList;
