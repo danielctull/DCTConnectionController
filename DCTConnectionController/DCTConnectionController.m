@@ -132,11 +132,11 @@ BOOL DCTConnectionControllerStatusIsQueued(DCTConnectionControllerStatus status)
 }
 
 - (void)setPriority:(DCTConnectionControllerPriority)priority {
-	self.queuePriority = priority;
+	self.queuePriority = (NSOperationQueuePriority)priority;
 }
 
 - (DCTConnectionControllerPriority)priority {
-	return self.queuePriority;
+	return (DCTConnectionControllerPriority)self.queuePriority;
 }
 
 - (BOOL)isConcurrent {
